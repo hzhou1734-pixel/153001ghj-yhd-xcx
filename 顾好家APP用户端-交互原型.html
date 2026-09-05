@@ -142,6 +142,47 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .code-btn{padding:7px 13px;border-radius:9px;background:var(--brand);color:#fff;font-size:13px;font-weight:600;
      border:none;cursor:pointer;flex-shrink:0;letter-spacing:-.1px;}
 .code-btn.off{background:#E9E9EA;color:var(--label3);}
+/* 启动欢迎页 */
+.welcome{min-height:100%;display:flex;flex-direction:column;padding:0 30px 26px;}
+.welcome .wl{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:30px;}
+.welcome .logo{width:94px;height:94px;border-radius:26px;background:linear-gradient(145deg,#5AD1B5,#17A88A);
+  display:flex;align-items:center;justify-content:center;box-shadow:0 12px 26px rgba(23,168,138,.32);}
+.welcome .nm{font-size:29px;font-weight:700;letter-spacing:-.6px;margin-top:20px;}
+.welcome .sl{font-size:14px;color:var(--label2);margin-top:7px;letter-spacing:.2px;}
+.welcome .feat{display:flex;flex-direction:column;gap:13px;padding:26px 6px 28px;}
+.welcome .f{display:flex;align-items:center;gap:11px;font-size:14px;color:var(--label);}
+.welcome .wb{display:flex;flex-direction:column;gap:11px;}
+.welcome .wb .btn{display:flex;align-items:center;justify-content:center;gap:7px;margin:0;}
+.welcome .wl-agree{text-align:center;font-size:12px;color:var(--label3);margin-top:16px;line-height:1.6;}
+.welcome .wl-agree a{color:var(--brand);text-decoration:none;}
+/* 密码明文切换按钮 */
+.eye-btn{border:none;background:transparent;padding:2px;cursor:pointer;display:flex;align-items:center;flex-shrink:0;}
+/* 顶部认证状态提示条 */
+.cert-bar{display:flex;align-items:center;gap:9px;margin:0 var(--pad) 12px;padding:11px 13px;border-radius:12px;
+  background:linear-gradient(135deg,#FFF3E0,#FFE0B2);}
+.cert-bar.pd{background:linear-gradient(135deg,#EAF7F2,#D2F0E4);}
+.cert-bar .cbt{flex:1;font-size:12.5px;line-height:1.5;color:#8A5300;}
+.cert-bar.pd .cbt{color:#0F7A5F;}
+.cert-bar .cb-btn{padding:5px 11px;border-radius:8px;background:#F2642A;color:#fff;font-size:12px;font-weight:600;flex-shrink:0;}
+.cert-bar.pd .cb-btn{background:var(--brand);}
+.cert-bar .cb-x{color:#8A5300;opacity:.55;display:flex;flex-shrink:0;}
+/* 未认证拦截页 */
+.nocert{padding:54px 34px 0;text-align:center;}
+.nocert .nci{width:94px;height:94px;border-radius:28px;background:linear-gradient(145deg,#FFE3D3,#FFC9A9);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 22px;color:#F2642A;}
+.nocert .nct{font-size:19px;font-weight:700;letter-spacing:-.3px;}
+.nocert .ncs{font-size:13.5px;color:var(--label2);line-height:1.75;margin-top:11px;}
+/* 认证引导：权益清单 */
+.cg-row{display:flex;gap:13px;align-items:flex-start;padding:13px 0;}
+.cg-row .cg-s{font-size:12.5px;color:var(--label2);line-height:1.6;margin-top:3px;}
+/* 步骤条 */
+.steps{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 var(--pad) 18px;}
+.steps .sp{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--label3);}
+.steps .sp .n{width:20px;height:20px;border-radius:10px;background:#E9E9EA;color:var(--label3);
+  display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;}
+.steps .sp.on{color:var(--brand);font-weight:600;}
+.steps .sp.on .n{background:var(--brand);color:#fff;}
+.steps .ln{width:26px;height:1px;background:#E9E9EA;}
 
 .sw{width:51px;height:31px;border-radius:16px;background:#E9E9EA;position:relative;flex:0 0 51px;cursor:pointer;transition:background .25s;}
 .sw i{position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;
@@ -363,7 +404,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.4';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.5';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-05';
 
@@ -444,6 +485,32 @@ function ic(n,s,c,w){var sz=s||20,wd=w||2;var style=c?'stroke:'+c:'stroke:curren
 
 /* ================= 全局状态 ================= */
 var hist=[],cur='home',lastTab='home',S={},agreeOn={};
+/* 原型演示用：当前账号的业主认证状态 ok=已认证 / pending=审核中 / none=未认证 */
+var CERT='ok';
+var CERT_TXT={ok:'已认证',pending:'审核中',none:'未认证'};
+function setCert(v){CERT=v;toast('演示状态已切换为：'+CERT_TXT[v]);render();}
+/* 访问「需业主认证」功能的统一拦截：已认证放行，未认证 / 审核中引导至认证页 */
+function needCert(id){if(CERT==='ok'){go(id);}else{go('certBlock');}}
+/* 验证码 60 秒倒计时：局部更新按钮文本，不触发整页重绘 */
+function sendCode(b){
+  if(b.getAttribute('data-busy'))return;
+  var n=60;b.setAttribute('data-busy','1');b.classList.add('off');b.innerText=n+'s 后重发';
+  toast('验证码已发送，请注意查收短信');
+  var t=setInterval(function(){n--;
+    if(n<=0){clearInterval(t);b.classList.remove('off');b.innerText='获取验证码';b.removeAttribute('data-busy');}
+    else b.innerText=n+'s 后重发';},1000);
+}
+/* 密码明文 / 密文切换 */
+function eyeToggle(btn){
+  var i=btn.parentNode.querySelector('input');
+  if(i.type==='password'){i.type='text';btn.innerHTML=ic('eye',19,'var(--brand)');}
+  else{i.type='password';btn.innerHTML=ic('eyeOff',19,'var(--label3)');}
+}
+/* 提交前校验协议勾选 */
+function chkAgree(k){
+  if(!agreeOn[k]){toast('请先阅读并同意《用户协议》和《隐私政策》');return false;}
+  return true;
+}
 function toast(m){var t=document.getElementById('toast');t.innerText=m;t.style.opacity='1';setTimeout(function(){t.style.opacity='0';},1500);}
 function go(id){hist.push(cur);cur=id;if(S[id]&&S[id].tab)lastTab=S[id].tab;render();}
 function back(){if(hist.length){cur=hist.pop();if(S[cur]&&S[cur].tab)lastTab=S[cur].tab;render();}}
@@ -515,6 +582,7 @@ var pickState={    /* 各下拉框当前选中值: pickState['key']='xxx'（含�
 var openPick=null;  /* 当前打开的下拉框 key */
 var PICKERS={
   certCommunity:{t:'选择小区',o:['阳光花园','江畔雅苑','金色家园','翠湖小区','保利广场','万科城']},
+  regCommunity:{t:'选择小区',o:['阳光花园','江畔雅苑','金色家园','翠湖小区','保利广场','万科城']},
   certBuilding:{t:'选择楼栋',o:['1栋','2栋','3栋1单元','3栋2单元','5栋','8栋','12栋']},
   certRoom:{t:'选择房号',o:['1802','1801','1702','1102','1001','0903','0805']},
   helpType:{t:'选择帮助类型',o:['上门维修','代购代送','物业咨询','老人陪护','送餐服务','其它']},
@@ -584,6 +652,7 @@ function dlg(icn,t,s,ok,okFn,no){return '<div class="dialog-mask"><div class="di
 /* ================= 首页 ================= */
 S.home={tab:'home',title:'首页',nav:false,render:function(){
   return topLg('首页','',[['bell','','noticeList','2'],['sCall','','emergencyCall','']])
+  + certBar()
   +'<div class="row between" style="margin:0 var(--pad) 12px;cursor:pointer" onclick="go(\'communitySwitch\')">'
   +'<div class="row" style="gap:7px">'+ic('pin',17,'var(--brand)')+'<span class="bold" style="font-size:15px">阳光花园 · 3栋2单元</span></div>'
   +'<div class="row" style="gap:1px;color:var(--label2);font-size:13px">切换'+ic('chevR',14,'var(--label4)')+'</div></div>'
@@ -598,9 +667,9 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'<div class="nx">本周六小区供水检修，请提前储水…</div><div class="nt">09-04</div></div>'
   +'<div class="sect"><div class="t">社区服务</div></div>'
   +'<div class="card"><div class="grid">'
-  + svc('sHealth','健康小屋','healthHome','g')+svc('sEscort','陪诊服务','escortDetail','o')
-  + svc('sTrust','托管服务','trusteeship','b')+svc('sMeal','健康膳食','meal','p')
-  + svc('sProp','物业服务','property','')+svc('sHelper','生活帮手','helper','y')
+  + svc('sHealth','健康小屋','healthHome','g')+svc('sEscort','陪诊服务','escortDetail','o',1)
+  + svc('sTrust','托管服务','trusteeship','b',1)+svc('sMeal','健康膳食','meal','p',1)
+  + svc('sProp','物业服务','property','',1)+svc('sHelper','生活帮手','helper','y',1)
   + svc('sCall','一键呼叫','emergencyCall','r')+svc('sMore','全部服务','community','')
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
@@ -618,36 +687,120 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
 }};
 function slide(i,t,s,bg){return '<div class="sl" style="background:'+bg+'"><div class="em">'+ic(i,32,'#fff',1.9)+'</div>'
   +'<div class="tx"><div class="t">'+t+'</div><div class="s">'+s+'</div></div></div>';}
-function svc(i,t,id,cls){return '<div class="svc" onclick="go(\''+id+'\')"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
+/* need=true 时该服务需业主认证，未认证自动引导至认证页 */
+function svc(i,t,id,cls,need){return '<div class="svc" onclick="'+(need?'needCert(\''+id+'\')':'go(\''+id+'\')')+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
 
 /* ================= 注册登录 ================= */
+/* 启动欢迎页：未登录时的落地页 */
+S.welcome={title:'',nav:false,render:function(){
+  return '<div class="welcome">'
+  +'<div class="wl">'
+  +'<div class="logo">'+ic('home2',44,'#fff',1.7)+'</div>'
+  +'<div class="nm">顾好家</div>'
+  +'<div class="sl">社区服务，从家开始</div>'
+  +'</div>'
+  +'<div class="feat">'
+  +'<div class="f">'+ic('sMeal',19,'var(--brand)')+'<span>适老营养餐 · 暑期托管 · 陪诊服务</span></div>'
+  +'<div class="f">'+ic('sHealth',19,'var(--brand)')+'<span>健康小屋，手环数据实时同步</span></div>'
+  +'<div class="f">'+ic('sHelper',19,'var(--brand)')+'<span>邻里互助、生活帮手就近响应</span></div>'
+  +'</div>'
+  +'<div class="wb">'
+  +'<button class="btn" onclick="go(\'wechatLogin\')">'+ic('wechat',19,'#fff',1.8)+'微信快捷登录</button>'
+  +'<button class="btn sec" onclick="go(\'login\')">手机号登录 / 注册</button>'
+  +'</div>'
+  +'<div class="wl-agree">登录即代表已阅读并同意<a href="javascript:void(0)" onclick="go(\'agreement\')">《用户协议》</a>和<a href="javascript:void(0)" onclick="go(\'privacy\')">《隐私政策》</a></div>'
+  +'</div>';
+}};
+/* 步骤条 */
+function stepsBar(cur,items){
+  var h='<div class="steps">';
+  items.forEach(function(t,i){
+    if(i)h+='<div class="ln"></div>';
+    h+='<div class="sp'+(i<=cur?' on':'')+'"><span class="n">'+(i+1)+'</span>'+t+'</div>';
+  });
+  return h+'</div>';
+}
 S.register={title:'账号注册',render:function(){
   return '<div class="pad">'
   +'<div class="hero"><div class="h1">欢迎注册顾好家</div><div class="h2">社区服务，从家开始</div></div></div>'
   +'<div class="grp">'
   +'<div class="inp-row"><input placeholder="请输入手机号码" type="tel"></div>'
   +'<div class="sep full"></div>'
-  +'<div class="inp-row"><input placeholder="请输入验证码" type="tel"><button class="code-btn" onclick="toast(\'验证码已发送，60秒后可重发\')">获取验证码</button></div>'
+  +'<div class="inp-row"><input placeholder="请输入验证码" type="tel"><button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
+  +'</div>'
+  +'<div class="grp">'
+  +'<div class="inp-row"><input placeholder="请设置登录密码（6-20 位）" type="password"><button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="inp-row"><input placeholder="你的昵称（注册后可修改）"></div>'
+  +'</div>'
+  + grpT('邀请码（选填）')
+  +'<div class="grp">'
+  +'<div class="inp-row"><input placeholder="输入邀请码，注册双方各得 10 元券"></div>'
   +'</div>'
   + agree('reg')
-  + btn('注册','go(\'wechatBind\')');
+  +'<div class="pad"><button class="btn" onclick="doReg()">注册</button></div>'
+  +'<div class="row" style="justify-content:center;gap:5px;font-size:13px;color:var(--label2);margin-top:4px">已有账号？'
+  +'<span style="color:var(--brand);font-weight:600;cursor:pointer" onclick="go(\'login\')">立即登录</span></div>';
+}};
+function doReg(){if(!chkAgree('reg'))return;go('regProfile');}
+/* 注册成功 → 完善资料 → 引导认证 */
+S.regProfile={title:'完善资料',render:function(){
+  return '<div class="pad">'+hint('完善基本信息，让邻里与楼栋管家更好地认识你')+'</div>'
+  +'<div class="grp"><div class="cell tap" onclick="toast(\'可上传头像\')">'
+  +'<div class="cell-bd"><div class="cell-t">头像</div></div>'
+  +'<div class="cell-ic" style="width:52px;height:52px;flex:0 0 52px;border-radius:26px;background:linear-gradient(145deg,#5AD1B5,#17A88A)">'+ic('me',28,'#fff',1.7)+'</div>'
+  +'<div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'<div class="sep"></div>'
+  +'<div class="field"><span class="lb">昵称</span><input placeholder="请输入昵称"></div>'
+  +'</div>'
+  + grpT('所在小区')
+  +'<div class="grp">'+ pfield('小区','regCommunity','请选择') +'</div>'
+  +'<div class="pad"><button class="btn" onclick="go(\'certGuide\')">下一步</button></div>'
+  +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="go(\'home\')">跳过，先逛逛</button></div>'
+  +'<div class="pad">'+hint('未认证也可浏览社区内容；使用报餐、托管等服务需完成业主认证')+'</div>';
 }};
 S.wechatBind={title:'绑定微信',nav:false,render:function(){
-  return dlg('share','绑定微信','绑定后可使用微信快捷登录，也可在个人中心再次绑定','授权绑定','go(\'home\')','以后再说');
+  return dlg('share','绑定微信','绑定后可使用微信快捷登录，也可在个人中心再次绑定','授权绑定','go(\'regProfile\')','以后再说');
 }};
 S.login={title:'账号登录',render:function(){
+  var m=segState.loginMode||0;   /* 0=验证码登录 1=密码登录 */
   return '<div class="pad">'
   +'<div class="hero o"><div class="h1">登录顾好家</div><div class="h2">欢迎回来</div></div></div>'
+  + seg(['验证码登录','密码登录'],'loginMode')
   +'<div class="grp">'
   +'<div class="inp-row"><input placeholder="请输入手机号码" type="tel"></div>'
   +'<div class="sep full"></div>'
-  +'<div class="inp-row"><input placeholder="请输入验证码" type="tel"><button class="code-btn" onclick="toast(\'验证码已发送，60秒后可重发\')">获取验证码</button></div>'
+  +(m===0
+    ? '<div class="inp-row"><input placeholder="请输入验证码" type="tel"><button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
+    : '<div class="inp-row"><input placeholder="请输入登录密码" type="password"><button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>')
   +'</div>'
+  +(m===1?'<div class="row" style="justify-content:flex-end;margin:0 var(--pad) 12px">'
+    +'<span style="font-size:13px;color:var(--brand);font-weight:600;cursor:pointer" onclick="segState.findStep=0;go(\'findPwd\')">忘记密码？</span></div>':'')
   + agree('log')
-  + btn('登录','go(\'home\')')
-  +'<div class="pad"><button class="btn sec" onclick="go(\'wechatLogin\')">使用微信授权登录</button></div>'
+  +'<div class="pad"><button class="btn" onclick="doLogin()">登录</button></div>'
+  +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="go(\'wechatLogin\')">使用微信授权登录</button></div>'
   +'<div class="row" style="justify-content:center;gap:5px;font-size:13px;color:var(--label2);margin-top:6px">还没有账号？'
   +'<span style="color:var(--brand);font-weight:600;cursor:pointer" onclick="go(\'register\')">立即注册</span></div>';
+}};
+function doLogin(){if(!chkAgree('log'))return;go('home');}
+/* 找回密码：两步——验证手机号 → 设置新密码 */
+S.findPwd={title:'找回密码',render:function(){
+  var st=segState.findStep||0;
+  return stepsBar(st,['验证手机号','设置新密码'])
+  +(st===0
+    ? '<div class="grp">'
+      +'<div class="inp-row"><input placeholder="请输入注册手机号" type="tel"></div>'
+      +'<div class="sep full"></div>'
+      +'<div class="inp-row"><input placeholder="请输入验证码" type="tel"><button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
+      +'</div>'
+      +'<div class="pad"><button class="btn" onclick="segState.findStep=1;render()">下一步</button></div>'
+    : '<div class="grp">'
+      +'<div class="inp-row"><input placeholder="请设置新密码（6-20 位）" type="password"><button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>'
+      +'<div class="sep full"></div>'
+      +'<div class="inp-row"><input placeholder="请再次输入新密码" type="password"><button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>'
+      +'</div>'
+      +'<div class="pad"><button class="btn" onclick="toast(\'密码重置成功，请重新登录\');segState.findStep=0;go(\'login\')">完成</button></div>')
+  +'<div class="pad">'+hint(st===0?'验证码将发送至注册手机号，5 分钟内有效':'密码需 6-20 位，建议字母与数字组合')+'</div>';
 }};
 S.wechatLogin={title:'微信授权登录',render:function(){
   return '<div class="pad" style="padding-top:46px;text-align:center">'
@@ -658,6 +811,60 @@ S.wechatLogin={title:'微信授权登录',render:function(){
   +'<div class="pad"><button class="btn sec" onclick="go(\'login\')">返回验证码登录</button></div>'
   +'<div class="pad">'+hint('若该微信未绑定已注册账号，将提示暂未绑定账号无法登录')+'</div>';
 }};
+
+/* ================= 未认证状态 ================= */
+/* 认证引导页：说明认证用途与认证后可享权益 */
+function cgRow(i,t,s){
+  return '<div class="cell"><div class="cell-ic bg-br">'+ic(i,18)+'</div>'
+  +'<div class="cell-bd"><div class="cell-t">'+t+'</div><div class="cell-s">'+s+'</div></div></div>';
+}
+S.certGuide={title:'业主认证',render:function(){
+  return '<div class="nocert">'
+  +'<div class="nci">'+ic('shield',40,'#F2642A',1.7)+'</div>'
+  +'<div class="nct">完成业主认证</div>'
+  +'<div class="ncs">认证用于确认你的房屋归属，让社区服务、账单与通知<br>准确匹配到所在楼栋与房号</div></div>'
+  +'<div class="pad" style="padding-top:24px">'+grpT('认证后可享')+'</div>'
+  +'<div class="grp">'
+  + cgRow('sMeal','适老营养餐','按本小区菜单在线报餐，账单自动归集')
+  +'<div class="sep"></div>'
+  + cgRow('sTrust','暑期托管','本小区专属名额，优先报名与缴费')
+  +'<div class="sep"></div>'
+  + cgRow('sEscort','陪诊服务','就近匹配陪诊员，服务记录可追溯')
+  +'<div class="sep"></div>'
+  + cgRow('butler','专属楼栋管家','自动匹配管家，一键联系与上门求助')
+  +'<div class="sep"></div>'
+  + cgRow('wallet','小区钱袋子','查看小区公共收益与可提现余额')
+  +'</div>'
+  +'<div class="pad"><button class="btn" onclick="go(\'certify\')">立即认证</button></div>'
+  +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="go(\'home\')">稍后再说</button></div>'
+  +'<div class="pad">'+hint('认证由物业后台人工审核，通常 1 个工作日内完成 · 信息仅用于服务匹配，不对外公开')+'</div>';
+}};
+/* 未认证 / 审核中 访问受限功能时的统一拦截页 */
+S.certBlock={title:'',nav:false,render:function(){
+  var pd=CERT==='pending';
+  return '<div class="nocert">'
+  +'<div class="nci" style="'+(pd?'background:linear-gradient(145deg,#DFF3EC,#BEE7D8);color:#0F7A5F':'')+'">'
+  +ic(pd?'clock':'shield',40,pd?'#0F7A5F':'#F2642A',1.7)+'</div>'
+  +'<div class="nct">'+(pd?'认证审核中':'需要业主认证')+'</div>'
+  +'<div class="ncs">'+(pd
+    ? '你的认证申请已提交，物业审核通过后即可使用<br>通常 1 个工作日内完成，请耐心等待'
+    : '该功能需确认房屋归属后开放<br>完成业主认证即可使用全部社区服务')+'</div></div>'
+  +'<div class="pad" style="padding-top:30px">'
+  +'<button class="btn" onclick="go(\''+(pd?'certList':'certify')+'\')">'+(pd?'查看审核进度':'立即认证')+'</button></div>'
+  +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="back()">返回</button></div>'
+  +'<div class="pad">'+hint('未认证也可浏览社区活动、邻里贴吧与精彩内容')+'</div>';
+}};
+/* 首页顶部认证状态提示条 */
+function certBar(){
+  if(CERT==='ok')return '';
+  var pd=CERT==='pending';
+  return '<div class="cert-bar'+(pd?' pd':'')+'">'
+  +'<span style="color:'+(pd?'#0F7A5F':'#F2642A')+';display:flex;flex-shrink:0">'+ic(pd?'clock':'shield',18)+'</span>'
+  +'<div class="cbt">'+(pd?'认证审核中，通过后即可使用全部服务':'完成业主认证，解锁全部社区服务')+'</div>'
+  +'<div class="cb-btn" onclick="go(\''+(pd?'certList':'certGuide')+'\')">'+(pd?'查看进度':'去认证')+'</div>'
+  +'<div class="cb-x" onclick="event.stopPropagation();toast(\'可在「设置 - 原型演示」重新开启提示\')">'+ic('x',15)+'</div>'
+  +'</div>';
+}
 
 /* ================= 账号认证 ================= */
 S.certify={title:'房屋认证',render:function(){
@@ -1390,11 +1597,14 @@ S.refund={title:'退款申请',render:function(){
 /* ================= 我的（Tab）· 按业务场景分区 ================= */
 S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   return topLg('我的','',[['bell','','messages','2'],['gear','','settings','']])
+  + certBar()
   /* ① 账户信息 */
   +'<div class="grp"><div class="cell tap" onclick="go(\'personInfo\')">'
   +'<div class="cell-ic" style="width:56px;height:56px;flex:0 0 56px;border-radius:28px;background:linear-gradient(145deg,#5AD1B5,#17A88A)">'+ic('me',30,'#fff',1.7)+'</div>'
   +'<div class="cell-bd"><div class="cell-t" style="font-size:18px;font-weight:700;letter-spacing:-.3px">顾家小林</div>'
-  +'<div class="cell-s" style="margin-top:4px">阳光花园 3栋2单元-1802 · 已认证</div></div>'
+  +'<div class="cell-s" style="margin-top:4px">'
+  +(CERT==='ok'?'阳光花园 3栋2单元-1802 · 已认证':(CERT==='pending'?'认证审核中 · 通过后开放全部服务':'未认证 · 点击完成业主认证'))
+  +'</div></div>'
   +'<div class="cell-ar">'+ic('chevR',16)+'</div></div></div>'
   /* ② 资产概览 */
   +'<div class="stat3">'
@@ -1407,20 +1617,20 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
     {ic:'yen',icls:'bg-o',t:'我的账单',s:'报餐 / 托管 / 陪诊三类账单',ar:1,on:'go(\'bill\')'},
     {ic:'signup',icls:'bg-y',t:'我的报名',s:'社区活动报名记录',ar:1,on:'go(\'mySignup\')'},
     {ic:'post',icls:'bg-in',t:'我的帖子',s:'我发布的邻里帖子与互动',ar:1,on:'go(\'myPosts\')'},
-    {ic:'sHelper',icls:'bg-br',t:'我的需求',s:'生活帮手需求进度跟进',ar:1,on:'go(\'myHelper\')'}
+    {ic:'sHelper',icls:'bg-br',t:'我的需求',s:'生活帮手需求进度跟进',ar:1,on:'needCert(\'myHelper\')'}
   ],'我的服务')
   /* ④ 家庭与设备 */
   + grp([
-    {ic:'family',icls:'bg-b',t:'我的家庭',s:'2 个房号 · 4 位家庭成员',ar:1,on:'go(\'family\')'},
-    {ic:'butler',icls:'bg-p',t:'我的管家',s:'李婷 · 3栋楼栋管家',ar:1,on:'go(\'butler\')'},
+    {ic:'family',icls:'bg-b',t:'我的家庭',s:'2 个房号 · 4 位家庭成员',ar:1,on:'needCert(\'family\')'},
+    {ic:'butler',icls:'bg-p',t:'我的管家',s:'李婷 · 3栋楼栋管家',ar:1,on:'needCert(\'butler\')'},
     {ic:'phone',icls:'bg-r',t:'一键呼叫',s:'紧急联系与常用号码',ar:1,on:'go(\'callMine\')'},
     {ic:'watch',icls:'bg-t',t:'我的手环',s:'已连接 · 数据同步中',ar:1,on:'go(\'myBand\')'}
   ],'家庭与设备')
   /* ⑤ 社区权益 */
   + grp([
-    {ic:'wallet',icls:'bg-g',t:'小区钱袋子',s:'可提现余额 ¥1,280.00',ar:1,on:'go(\'moneyBag\')'},
-    {ic:'hr',icls:'bg-t',t:'人力资源',s:'发布 / 查看邻里供需信息',ar:1,on:'go(\'hr\')'},
-    {ic:'shield',icls:'bg-br',t:'业主认证',s:'已认证 2 个房号',ar:1,on:'go(\'certList\')'}
+    {ic:'wallet',icls:'bg-g',t:'小区钱袋子',s:'可提现余额 ¥1,280.00',ar:1,on:'needCert(\'moneyBag\')'},
+    {ic:'hr',icls:'bg-t',t:'人力资源',s:'发布 / 查看邻里供需信息',ar:1,on:'needCert(\'hr\')'},
+    {ic:'shield',icls:'bg-br',t:'业主认证',s:CERT==='ok'?'已认证 2 个房号':(CERT==='pending'?'审核中 1 个 · 已认证 2 个':'未认证 · 认证后开放全部权益'),ar:1,on:'go(\'certList\')'}
   ],'社区权益')
   /* ⑥ 账户与安全 */
   + grp([
@@ -1439,7 +1649,7 @@ S.personInfo={title:'个人信息',render:function(){
   +'<div class="sep full"></div>'
   +'<div class="cell tap" onclick="go(\'changePhone\')"><div class="cell-bd"><div class="cell-t">手机号码</div></div><div class="cell-v">138****6688</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="go(\'certList\')"><div class="cell-bd"><div class="cell-t">认证状态</div></div><div class="cell-v" style="color:var(--green);font-weight:600">已认证</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'<div class="cell tap" onclick="go(\'certList\')"><div class="cell-bd"><div class="cell-t">认证状态</div></div><div class="cell-v" style="font-weight:600;color:'+(CERT==='ok'?'var(--green)':(CERT==='pending'?'var(--accent)':'var(--red)'))+'">'+CERT_TXT[CERT]+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'</div>'
   + grp([
     {ic:'doc',icls:'bg-gy',t:'用户协议',ar:1,on:'go(\'agreement\')'},
@@ -1759,15 +1969,29 @@ S.hrPublish={title:'发布信息',render:function(){
 }};
 
 /* ================= 系统设置 / 注销 ================= */
+/* 原型演示：切换当前账号的业主认证状态 */
+function certDemoRows(){
+  var o=[['ok','已认证','可正常使用全部社区服务'],
+         ['pending','审核中','认证已提交，受限功能引导查看进度'],
+         ['none','未认证','仅可浏览，使用服务时引导认证']];
+  return o.map(function(x){
+    var on=CERT===x[0];
+    return {ic:'shield',icls:on?'bg-br':'bg-gy',t:x[1],s:x[2],ar:0,
+      on:on?'toast(\'当前已是该状态\')':'setCert(\''+x[0]+'\')',
+      ctl:on?'<div class="cell-ar" style="color:var(--brand)">'+ic('check',19)+'</div>':'<div class="cell-ar">'+ic('chevR',16)+'</div>'};
+  });
+}
 S.settings={title:'系统设置',render:function(){
   return grp([
     {ic:'info',icls:'bg-gy',t:'关于我们',ar:1,on:'go(\'about\')'},
-    {ic:'doc',icls:'bg-gy',t:'版本号',v:'v1.0.0',ar:1,on:'go(\'version\')'},
+    {ic:'doc',icls:'bg-gy',t:'版本号',v:APP_VER,ar:1,on:'go(\'version\')'},
     {ic:'lock',icls:'bg-gy',t:'用户协议',ar:1,on:'go(\'agreement\')'},
     {ic:'shield',icls:'bg-gy',t:'隐私政策',ar:1,on:'go(\'privacy\')'}
   ])
+  + grp(certDemoRows(),'原型演示：认证状态')
+  +'<div class="pad">'+hint('切换后可查看首页提示条、个人中心状态与受限功能的引导效果（仅原型演示用，正式版不含此项）')+'</div>'
   + grp([
-    {ic:'logout',icls:'bg-o',t:'退出账号',ar:1,on:'toast(\'已退出账号\');go(\'login\')'},
+    {ic:'logout',icls:'bg-o',t:'退出账号',ar:1,on:'toast(\'已退出账号\');go(\'welcome\')'},
     {ic:'warn',icls:'bg-r',t:'注销账号',s:'需验证手机号且账单已结清',ar:1,on:'go(\'accountCancel\')'}
   ],'账号管理')
   + hint('版本热更新：APP 重新启动时检测版本，如为强制更新则必须更新后使用');
@@ -1784,7 +2008,7 @@ S.accountCancel={title:'注销账号',render:function(){
   +'<div class="inp-row"><input placeholder="请输入验证码" type="tel">'
   +'<button class="code-btn" onclick="toast(\'验证码已发送，60秒后可重发\')">获取验证码</button></div>'
   +'</div>'
-  +'<div class="pad"><button class="btn warn" onclick="toast(\'账号注销成功\');go(\'login\')">确认注销</button></div>';
+  +'<div class="pad"><button class="btn warn" onclick="toast(\'账号注销成功\');go(\'welcome\')">确认注销</button></div>';
 }};
 
 /* ================= 协议 / 关于 / 版本（补充页面） ================= */
@@ -2140,6 +2364,7 @@ if(_h){
     var k=p.split('=');
     if(k.length<2)return;
     if(k[0]==='_pick')openPick=k[1];
+    else if(k[0]==='_cert')CERT=k[1];      /* 演示用：#home&_cert=none 直达未认证状态 */
     else if(k[0]==='_panel')openPanel=k[1];
     else if(k[0]==='_chip')chipState[k[1]]=+k[2];
     else segState[k[0]]=+k[1];
