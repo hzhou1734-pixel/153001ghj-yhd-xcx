@@ -17,6 +17,7 @@ https://hzhou1734-pixel.github.io/153001ghj-yhd-xcx/
 - 形态：单文件 HTML（内联 CSS / JS，无外部依赖）
 - 设计语言：iOS 系统风格（分组列表、SF Symbols 风格线性 SVG 图标、薄荷绿 + 珊瑚橙配色）
 - 页面数：约 88 个
+- 当前版本：v1.0.1
 - 交互：支持页面路由跳转、底部 Tab 切换、分段控件数据筛选、底部弹窗选择
 
 ## 主要模块
@@ -43,3 +44,28 @@ https://hzhou1734-pixel.github.io/153001ghj-yhd-xcx/
   - `#页面ID` 直接打开指定页
   - `#healthReport&_chip=healthReport=4` 预设分段选中项
   - `#页面ID&_pick=key` 打开底部弹窗
+
+## 版本发布
+
+修改原型后，在项目资料目录执行：
+
+```bash
+python publish.py -m "修复顶部按钮点击事件"
+```
+
+脚本会自动完成以下操作：
+
+1. 递增 HTML 顶部 `APP_VER` 的 patch 号（`v1.0.0 -> v1.0.1`），并同步更新 `APP_BUILT` 为当天日期。
+2. 同步更新 README 中的"当前版本"字段。
+3. 通过 GitHub API 直接上传最新 HTML 与 README，无需本地 `git clone`。
+
+常用参数：
+
+```bash
+python publish.py -m "优化首页间距"                # 默认 patch +1
+python publish.py --ver v1.2.0 -m "大版本重构"     # 手动指定版本号
+python publish.py --token ghp_xxxxxxxx            # 指定 GitHub Token
+```
+
+Token 优先级：`--token` > `GITHUB_TOKEN` 环境变量 > `~/.ghj_publish_token` > 交互输入。首次运行会提示保存 Token，方便后续自动发布。
+
