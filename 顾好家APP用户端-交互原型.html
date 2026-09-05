@@ -362,6 +362,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 </div>
 
 <script>
+/* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
+var APP_VER='v1.0.1';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_NAME='顾好家用户端交互原型';
+var APP_BUILT='2026-09-05';
+
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
   chevR:'M9 5l7 7-7 7',chevL:'M15 5l-7 7 7 7',chevD:'M5 9l7 7 7-7',
@@ -1825,11 +1830,11 @@ S.version={title:'版本信息',render:function(){
   return '<div class="pad" style="padding-top:34px;text-align:center">'
   +'<div style="width:70px;height:70px;border-radius:20px;background:linear-gradient(145deg,#5AD1B5,#17A88A);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:#fff">'+ic('home2',38,'#fff',1.7)+'</div>'
   +'<div class="bold" style="font-size:19px">顾好家</div>'
-  +'<div class="sub" style="margin-top:6px">当前版本 v1.0.0</div>'
+  +'<div class="sub" style="margin-top:6px">当前版本 <span class="bold">'+APP_VER+'</span></div>'
   +'<div style="margin-top:14px"><span class="tag g" style="padding:5px 13px;font-size:13px">已是最新版本</span></div></div>'
   +'<div class="pad" style="padding-top:22px"><button class="btn sec" onclick="toast(\'正在检测新版本…\')">检测更新</button></div>'
   + grpT('更新内容')
-  +'<div class="card"><div class="sub" style="font-size:13.5px;line-height:1.9;color:var(--label)">v1.0.0（2026-09-01）<br>· 全新上线报餐、托管、陪诊三大服务<br>· 新增健康小屋，支持手环连接与数据同步<br>· 新增社区活动、邻里贴吧、小区通知<br>· 优化订单结算与账单管理流程</div></div>'
+  +'<div class="card"><div class="sub" style="font-size:13.5px;line-height:1.9;color:var(--label)">'+APP_VER+'（'+APP_BUILT+'）<br>· 全新上线报餐、托管、陪诊三大服务<br>· 新增健康小屋，支持手环连接与数据同步<br>· 新增社区活动、邻里贴吧、小区通知<br>· 优化订单结算与账单管理流程</div></div>'
   + hint('APP 重新启动时自动检测版本，如为强制更新则必须更新后使用');
 }};
 
