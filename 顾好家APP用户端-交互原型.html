@@ -142,19 +142,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .code-btn{padding:7px 13px;border-radius:9px;background:var(--brand);color:#fff;font-size:13px;font-weight:600;
      border:none;cursor:pointer;flex-shrink:0;letter-spacing:-.1px;}
 .code-btn.off{background:#E9E9EA;color:var(--label3);}
-/* 启动欢迎页 */
-.welcome{min-height:100%;display:flex;flex-direction:column;padding:0 30px 26px;}
-.welcome .wl{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:30px;}
-.welcome .logo{width:94px;height:94px;border-radius:26px;background:linear-gradient(145deg,#5AD1B5,#17A88A);
-  display:flex;align-items:center;justify-content:center;box-shadow:0 12px 26px rgba(23,168,138,.32);}
-.welcome .nm{font-size:29px;font-weight:700;letter-spacing:-.6px;margin-top:20px;}
-.welcome .sl{font-size:14px;color:var(--label2);margin-top:7px;letter-spacing:.2px;}
-.welcome .feat{display:flex;flex-direction:column;gap:13px;padding:26px 6px 28px;}
-.welcome .f{display:flex;align-items:center;gap:11px;font-size:14px;color:var(--label);}
-.welcome .wb{display:flex;flex-direction:column;gap:11px;}
-.welcome .wb .btn{display:flex;align-items:center;justify-content:center;gap:7px;margin:0;}
-.welcome .wl-agree{text-align:center;font-size:12px;color:var(--label3);margin-top:16px;line-height:1.6;}
-.welcome .wl-agree a{color:var(--brand);text-decoration:none;}
+/* ===== 统一认证页：登录 / 注册同页切换，底部微信快捷登录 ===== */
+.auth{min-height:100%;display:flex;flex-direction:column;padding-bottom:22px;}
+.au-hd{position:relative;overflow:hidden;padding:36px 26px 54px;color:#fff;
+  background:linear-gradient(135deg,#62DCC0 0%,#17A88A 58%,#0E9678 100%);}
+.au-hd::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.14);top:-94px;right:-60px;}
+.au-hd::after{content:'';position:absolute;width:138px;height:138px;border-radius:50%;background:rgba(255,255,255,.09);bottom:-70px;left:-44px;}
+.au-hd>*{position:relative;z-index:1;}
+.au-logo{width:56px;height:56px;border-radius:18px;background:rgba(255,255,255,.24);border:1px solid rgba(255,255,255,.34);
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.au-nm{font-size:26px;font-weight:700;letter-spacing:-.6px;}
+.au-sl{font-size:12.5px;opacity:.92;margin-top:5px;letter-spacing:.3px;}
+.au-card{margin:-38px 14px 0;position:relative;z-index:2;background:var(--card);border-radius:18px;
+  padding:2px 14px 16px;box-shadow:0 8px 26px rgba(14,120,100,.10);}
+.au-tabs{display:flex;gap:22px;padding:10px 2px 0;}
+.au-tabs .t{font-size:18px;color:var(--label3);padding-bottom:8px;cursor:pointer;position:relative;}
+.au-tabs .t.on{color:var(--brand-d);font-weight:700;}
+.au-tabs .t.on::after{content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:20px;height:3px;border-radius:2px;background:var(--brand);}
+.au-in{display:flex;align-items:center;gap:9px;padding:11px 12px;border-radius:11px;background:var(--fill);margin-top:8px;transition:box-shadow .15s,background .15s;}
+.au-in input{flex:1;border:none;background:transparent;font-size:16px;outline:none;font-family:inherit;color:var(--label);min-width:0;}
+.au-in input::placeholder{color:var(--label3);}
+.au-in:focus-within{background:#fff;box-shadow:0 0 0 2px rgba(43,196,160,.45);}
+.au-in .pre{display:flex;align-items:center;flex-shrink:0;color:var(--label3);}
+.au-seg{display:flex;background:var(--fill);border-radius:10px;padding:3px;margin:12px 0 2px;}
+.au-seg .s{flex:1;text-align:center;padding:7px 4px;border-radius:8px;font-size:14px;color:var(--label2);cursor:pointer;}
+.au-seg .s.on{background:#fff;color:var(--brand-d);font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.08);}
+.au-fp{text-align:right;font-size:13px;color:var(--brand-d);font-weight:600;margin:10px 2px 0;cursor:pointer;}
+.au-btn{display:block;width:100%;border:none;border-radius:14px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;
+  background:linear-gradient(135deg,#3FD3B0,#17A88A);color:#fff;letter-spacing:-.2px;margin-top:14px;}
+.au-btn:active{opacity:.82;}
+.au-oth{display:flex;align-items:center;gap:11px;margin:22px 14px 12px;font-size:12px;color:var(--label3);}
+.au-oth .ln{flex:1;height:1px;background:var(--sep);}
+.au-wx{display:flex;align-items:center;justify-content:center;gap:9px;margin:0 14px;padding:13px;border-radius:14px;
+  background:#fff;border:1px solid var(--sep);font-size:16px;font-weight:600;color:var(--label);cursor:pointer;}
+.au-wx:active{background:var(--fill);}
+.au-tip{text-align:center;font-size:12px;color:var(--label3);margin-top:14px;line-height:1.7;padding:0 26px;}
+.au-tip a{color:var(--brand-d);text-decoration:none;}
+.au-tip .b{color:var(--brand-d);font-weight:600;cursor:pointer;}
 /* 密码明文切换按钮 */
 .eye-btn{border:none;background:transparent;padding:2px;cursor:pointer;display:flex;align-items:center;flex-shrink:0;}
 /* 顶部认证状态提示条 */
@@ -404,7 +428,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.5';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.6';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-05';
 
@@ -691,26 +715,59 @@ function slide(i,t,s,bg){return '<div class="sl" style="background:'+bg+'"><div 
 function svc(i,t,id,cls,need){return '<div class="svc" onclick="'+(need?'needCert(\''+id+'\')':'go(\''+id+'\')')+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
 
 /* ================= 注册登录 ================= */
-/* 启动欢迎页：未登录时的落地页 */
-S.welcome={title:'',nav:false,render:function(){
-  return '<div class="welcome">'
-  +'<div class="wl">'
-  +'<div class="logo">'+ic('home2',44,'#fff',1.7)+'</div>'
-  +'<div class="nm">顾好家</div>'
-  +'<div class="sl">社区服务，从家开始</div>'
+/* 启动页即认证页：登录 / 注册同页切换，无需跳转即可输入账号密码或验证码 */
+/* tab: 0=登录 1=注册 */
+var AUTH_TIP=['未注册的手机号验证后将自动为你创建账号','注册完成可进一步完善资料，并解锁报餐、托管等服务'];
+function authPage(){
+  var tab=segState.authTab||0;                 /* 0=登录 1=注册 */
+  var m=segState.loginMode||0;                 /* 0=验证码登录 1=密码登录 */
+  var h='<div class="auth">'
+  /* 品牌头部 */
+  +'<div class="au-hd">'
+  +'<div class="au-logo">'+ic('home2',32,'#fff',1.7)+'</div>'
+  +'<div class="au-nm">顾好家</div>'
+  +'<div class="au-sl">社区服务，从家开始</div>'
   +'</div>'
-  +'<div class="feat">'
-  +'<div class="f">'+ic('sMeal',19,'var(--brand)')+'<span>适老营养餐 · 暑期托管 · 陪诊服务</span></div>'
-  +'<div class="f">'+ic('sHealth',19,'var(--brand)')+'<span>健康小屋，手环数据实时同步</span></div>'
-  +'<div class="f">'+ic('sHelper',19,'var(--brand)')+'<span>邻里互助、生活帮手就近响应</span></div>'
+  /* 表单卡片（上抬压住头部） */
+  +'<div class="au-card">'
+  +'<div class="au-tabs"><div class="t'+(tab===0?' on':'')+'" onclick="authTab(0)">登录</div>'
+  +'<div class="t'+(tab===1?' on':'')+'" onclick="authTab(1)">注册</div></div>'
+  +'<div class="au-in"><span class="pre">'+ic('phone',19)+'</span><input placeholder="请输入手机号码" type="tel"></div>';
+  if(tab===0){
+    /* 登录：验证码 / 密码 两种模式就地切换 */
+    h+='<div class="au-seg"><div class="s'+(m===0?' on':'')+'" onclick="segPick(\'loginMode\',0)">验证码登录</div>'
+      +'<div class="s'+(m===1?' on':'')+'" onclick="segPick(\'loginMode\',1)">密码登录</div></div>';
+    if(m===0){
+      h+='<div class="au-in"><span class="pre">'+ic('msg',19)+'</span><input placeholder="请输入验证码" type="tel">'
+        +'<button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>';
+    }else{
+      h+='<div class="au-in"><span class="pre">'+ic('lock',19)+'</span><input placeholder="请输入登录密码" type="password">'
+        +'<button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>'
+        +'<div class="au-fp" onclick="segState.findStep=0;go(\'findPwd\')">忘记密码？</div>';
+    }
+  }else{
+    /* 注册：验证码 + 密码 + 昵称 + 邀请码，同页一次填完 */
+    h+='<div class="au-in"><span class="pre">'+ic('msg',19)+'</span><input placeholder="请输入验证码" type="tel">'
+      +'<button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
+      +'<div class="au-in"><span class="pre">'+ic('lock',19)+'</span><input placeholder="请设置登录密码（6-20 位）" type="password">'
+      +'<button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>'
+      +'<div class="au-in"><span class="pre">'+ic('me',19)+'</span><input placeholder="你的昵称（注册后可修改）"></div>'
+      +'<div class="au-in"><span class="pre">'+ic('share',19)+'</span><input placeholder="邀请码（选填，双方各得 10 元券）"></div>';
+  }
+  h+= agree(tab===0?'log':'reg')
+  +'<button class="au-btn" onclick="'+(tab===0?'doLogin()':'doReg()')+'">'+(tab===0?'登录':'注册并登录')+'</button>'
   +'</div>'
-  +'<div class="wb">'
-  +'<button class="btn" onclick="go(\'wechatLogin\')">'+ic('wechat',19,'#fff',1.8)+'微信快捷登录</button>'
-  +'<button class="btn sec" onclick="go(\'login\')">手机号登录 / 注册</button>'
-  +'</div>'
-  +'<div class="wl-agree">登录即代表已阅读并同意<a href="javascript:void(0)" onclick="go(\'agreement\')">《用户协议》</a>和<a href="javascript:void(0)" onclick="go(\'privacy\')">《隐私政策》</a></div>'
+  /* 底部：其他登录方式 + 微信快捷登录 */
+  +'<div class="au-oth"><div class="ln"></div>其他登录方式<div class="ln"></div></div>'
+  +'<div class="au-wx" onclick="go(\'wechatLogin\')">'+ic('wechat',21,'#07C160',1.8)+'微信快捷登录</div>'
+  +'<div class="au-tip">'+AUTH_TIP[tab]
+  +'<br>登录即代表已阅读并同意<a href="javascript:void(0)" onclick="go(\'agreement\')">《用户协议》</a>'
+  +'和<a href="javascript:void(0)" onclick="go(\'privacy\')">《隐私政策》</a></div>'
   +'</div>';
-}};
+  return h;
+}
+function authTab(i){segState.authTab=i;render();}
+S.welcome={title:'',nav:false,render:authPage};
 /* 步骤条 */
 function stepsBar(cur,items){
   var h='<div class="steps">';
@@ -720,28 +777,6 @@ function stepsBar(cur,items){
   });
   return h+'</div>';
 }
-S.register={title:'账号注册',render:function(){
-  return '<div class="pad">'
-  +'<div class="hero"><div class="h1">欢迎注册顾好家</div><div class="h2">社区服务，从家开始</div></div></div>'
-  +'<div class="grp">'
-  +'<div class="inp-row"><input placeholder="请输入手机号码" type="tel"></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="inp-row"><input placeholder="请输入验证码" type="tel"><button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
-  +'</div>'
-  +'<div class="grp">'
-  +'<div class="inp-row"><input placeholder="请设置登录密码（6-20 位）" type="password"><button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="inp-row"><input placeholder="你的昵称（注册后可修改）"></div>'
-  +'</div>'
-  + grpT('邀请码（选填）')
-  +'<div class="grp">'
-  +'<div class="inp-row"><input placeholder="输入邀请码，注册双方各得 10 元券"></div>'
-  +'</div>'
-  + agree('reg')
-  +'<div class="pad"><button class="btn" onclick="doReg()">注册</button></div>'
-  +'<div class="row" style="justify-content:center;gap:5px;font-size:13px;color:var(--label2);margin-top:4px">已有账号？'
-  +'<span style="color:var(--brand);font-weight:600;cursor:pointer" onclick="go(\'login\')">立即登录</span></div>';
-}};
 function doReg(){if(!chkAgree('reg'))return;go('regProfile');}
 /* 注册成功 → 完善资料 → 引导认证 */
 S.regProfile={title:'完善资料',render:function(){
@@ -762,26 +797,9 @@ S.regProfile={title:'完善资料',render:function(){
 S.wechatBind={title:'绑定微信',nav:false,render:function(){
   return dlg('share','绑定微信','绑定后可使用微信快捷登录，也可在个人中心再次绑定','授权绑定','go(\'regProfile\')','以后再说');
 }};
-S.login={title:'账号登录',render:function(){
-  var m=segState.loginMode||0;   /* 0=验证码登录 1=密码登录 */
-  return '<div class="pad">'
-  +'<div class="hero o"><div class="h1">登录顾好家</div><div class="h2">欢迎回来</div></div></div>'
-  + seg(['验证码登录','密码登录'],'loginMode')
-  +'<div class="grp">'
-  +'<div class="inp-row"><input placeholder="请输入手机号码" type="tel"></div>'
-  +'<div class="sep full"></div>'
-  +(m===0
-    ? '<div class="inp-row"><input placeholder="请输入验证码" type="tel"><button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
-    : '<div class="inp-row"><input placeholder="请输入登录密码" type="password"><button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>')
-  +'</div>'
-  +(m===1?'<div class="row" style="justify-content:flex-end;margin:0 var(--pad) 12px">'
-    +'<span style="font-size:13px;color:var(--brand);font-weight:600;cursor:pointer" onclick="segState.findStep=0;go(\'findPwd\')">忘记密码？</span></div>':'')
-  + agree('log')
-  +'<div class="pad"><button class="btn" onclick="doLogin()">登录</button></div>'
-  +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="go(\'wechatLogin\')">使用微信授权登录</button></div>'
-  +'<div class="row" style="justify-content:center;gap:5px;font-size:13px;color:var(--label2);margin-top:6px">还没有账号？'
-  +'<span style="color:var(--brand);font-weight:600;cursor:pointer" onclick="go(\'register\')">立即注册</span></div>';
-}};
+/* 登录 / 注册页与启动页共用同一套认证界面，不再单独跳转输入 */
+S.login   ={title:'',nav:false,render:function(){segState.authTab=0;return authPage();}};
+S.register={title:'',nav:false,render:function(){segState.authTab=1;return authPage();}};
 function doLogin(){if(!chkAgree('log'))return;go('home');}
 /* 找回密码：两步——验证手机号 → 设置新密码 */
 S.findPwd={title:'找回密码',render:function(){
@@ -808,7 +826,7 @@ S.wechatLogin={title:'微信授权登录',render:function(){
   +'<div class="bold" style="font-size:19px">微信授权登录</div>'
   +'<div class="sub" style="margin-top:9px;line-height:1.7">正在使用微信账号登录顾好家<br>请确认授权以继续</div></div>'
   +'<div class="pad" style="padding-top:26px"><button class="btn" onclick="go(\'wechatFail\')">授权并登录</button></div>'
-  +'<div class="pad"><button class="btn sec" onclick="go(\'login\')">返回验证码登录</button></div>'
+  +'<div class="pad"><button class="btn sec" onclick="back()">返回登录</button></div>'
   +'<div class="pad">'+hint('若该微信未绑定已注册账号，将提示暂未绑定账号无法登录')+'</div>';
 }};
 
@@ -2108,8 +2126,8 @@ S.wechatFail={title:'微信登录',nav:false,render:function(){
   +'<div style="width:72px;height:72px;border-radius:23px;background:var(--fill);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--label3)">'+ic('warn',34)+'</div>'
   +'<div class="bold" style="font-size:19px">暂未绑定账号</div>'
   +'<div class="sub" style="margin-top:10px;line-height:1.75">该微信未绑定任何已注册账号<br>无法使用微信授权登录</div></div>'
-  +'<div class="pad" style="padding-top:28px"><button class="btn" onclick="go(\'register\')">注册新账号</button></div>'
-  +'<div class="pad"><button class="btn sec" onclick="go(\'login\')">使用手机号登录</button></div>'
+  +'<div class="pad" style="padding-top:28px"><button class="btn" onclick="segState.authTab=1;go(\'welcome\')">注册新账号</button></div>'
+  +'<div class="pad"><button class="btn sec" onclick="segState.authTab=0;go(\'welcome\')">使用手机号登录</button></div>'
   +'<div class="pad">'+hint('注册完成后可在绑定弹窗中授权绑定微信，即可使用微信授权登录；也可后续在个人中心绑定')+'</div>';
 }};
 
