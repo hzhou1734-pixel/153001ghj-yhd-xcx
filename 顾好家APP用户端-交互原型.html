@@ -159,15 +159,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .au-tabs .t{font-size:18px;color:var(--label3);padding-bottom:8px;cursor:pointer;position:relative;}
 .au-tabs .t.on{color:var(--brand-d);font-weight:700;}
 .au-tabs .t.on::after{content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:20px;height:3px;border-radius:2px;background:var(--brand);}
-.au-in{display:flex;align-items:center;gap:9px;padding:11px 12px;border-radius:11px;background:var(--fill);margin-top:8px;transition:box-shadow .15s,background .15s;}
+.au-in{display:flex;align-items:center;gap:9px;padding:11px 12px;border-radius:11px;background:var(--fill);margin-top:0;transition:box-shadow .15s,background .15s;}
 .au-in input{flex:1;border:none;background:transparent;font-size:16px;outline:none;font-family:inherit;color:var(--label);min-width:0;}
 .au-in input::placeholder{color:var(--label3);}
 .au-in:focus-within{background:#fff;box-shadow:0 0 0 2px rgba(43,196,160,.45);}
 .au-in .pre{display:flex;align-items:center;flex-shrink:0;color:var(--label3);}
-.au-seg{display:flex;background:var(--fill);border-radius:10px;padding:3px;margin:12px 0 2px;}
-.au-seg .s{flex:1;text-align:center;padding:7px 4px;border-radius:8px;font-size:14px;color:var(--label2);cursor:pointer;}
-.au-seg .s.on{background:#fff;color:var(--brand-d);font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.08);}
-.au-fp{text-align:right;font-size:13px;color:var(--brand-d);font-weight:600;margin:10px 2px 0;cursor:pointer;}
+/* pill + 动态输入栏 紧凑单元（保持切换同高度） */
+.au-slot{margin-top:8px;display:flex;flex-direction:column;gap:6px;}
+/* iOS 风滑动指示器 */
+.au-seg{position:relative;display:flex;background:var(--fill);border-radius:9px;padding:3px;margin:0;height:32px;}
+.au-seg::before{content:'';position:absolute;top:3px;left:3px;bottom:3px;width:calc(50% - 3px);background:#fff;border-radius:7px;
+  box-shadow:0 2px 6px rgba(0,0,0,.06);transition:transform .28s cubic-bezier(.4,.0,.2,1);}
+.au-seg[data-mode="1"]::before{transform:translateX(100%);}
+.au-seg .s{flex:1;text-align:center;padding:6px 4px;font-size:13px;color:var(--label2);cursor:pointer;
+  position:relative;z-index:1;transition:color .25s;line-height:1;}
+.au-seg .s.on{color:var(--brand-d);font-weight:600;}
+.au-fp{text-align:right;font-size:13px;color:var(--brand-d);font-weight:600;margin:2px 2px 0;cursor:pointer;line-height:20px;}
+.au-fp-spacer{height:22px;margin:2px 2px 0;}
 .au-btn{display:block;width:100%;border:none;border-radius:14px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;
   background:linear-gradient(135deg,#3FD3B0,#17A88A);color:#fff;letter-spacing:-.2px;margin-top:14px;}
 .au-btn:active{opacity:.82;}
@@ -428,7 +436,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.6';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.7';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-05';
 
@@ -734,17 +742,20 @@ function authPage(){
   +'<div class="t'+(tab===1?' on':'')+'" onclick="authTab(1)">注册</div></div>'
   +'<div class="au-in"><span class="pre">'+ic('phone',19)+'</span><input placeholder="请输入手机号码" type="tel"></div>';
   if(tab===0){
-    /* 登录：验证码 / 密码 两种模式就地切换 */
-    h+='<div class="au-seg"><div class="s'+(m===0?' on':'')+'" onclick="segPick(\'loginMode\',0)">验证码登录</div>'
-      +'<div class="s'+(m===1?' on':'')+'" onclick="segPick(\'loginMode\',1)">密码登录</div></div>';
+    /* 登录：验证码 / 密码 两种模式就地切换，紧凑 slot 高度不变 */
+    h+='<div class="au-slot" data-mode="'+m+'">'
+      +'<div class="au-seg"><span class="s'+(m===0?' on':'')+'" onclick="segPick(\'loginMode\',0)">验证码登录</span>'
+      +'<span class="s'+(m===1?' on':'')+'" onclick="segPick(\'loginMode\',1)">密码登录</span></div>';
     if(m===0){
       h+='<div class="au-in"><span class="pre">'+ic('msg',19)+'</span><input placeholder="请输入验证码" type="tel">'
-        +'<button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>';
+        +'<button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
+        +'<div class="au-fp-spacer"></div>';
     }else{
       h+='<div class="au-in"><span class="pre">'+ic('lock',19)+'</span><input placeholder="请输入登录密码" type="password">'
         +'<button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>'
         +'<div class="au-fp" onclick="segState.findStep=0;go(\'findPwd\')">忘记密码？</div>';
     }
+    h+='</div>';
   }else{
     /* 注册：验证码 + 密码 + 昵称 + 邀请码，同页一次填完 */
     h+='<div class="au-in"><span class="pre">'+ic('msg',19)+'</span><input placeholder="请输入验证码" type="tel">'
