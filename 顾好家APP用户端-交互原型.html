@@ -104,6 +104,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .bold{font-weight:600;}
 .price{color:var(--accent);font-weight:700;letter-spacing:-.2px;}
 .hint{font-size:12px;color:var(--label2);text-align:center;line-height:1.6;padding:2px 24px 4px;}
+/* 业主认证流程说明卡 */
+.cert-intro{margin:12px 14px 16px;background:linear-gradient(135deg,#E8FBF5 0%,#C9F2E5 100%);
+  border-radius:14px;padding:16px 18px 14px;position:relative;overflow:hidden;
+  box-shadow:0 4px 12px rgba(14,150,120,.06);}
+.cert-intro::before{content:'';position:absolute;width:130px;height:130px;border-radius:50%;
+  background:rgba(255,255,255,.45);top:-52px;right:-44px;}
+.cert-intro::after{content:'';position:absolute;width:80px;height:80px;border-radius:50%;
+  background:rgba(23,168,138,.08);bottom:-26px;left:18%;}
+.cert-intro>*{position:relative;z-index:1;}
+.cert-intro .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.cert-intro .h-l{display:flex;align-items:center;gap:9px;}
+.cert-intro .ic{width:30px;height:30px;border-radius:9px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--brand-d);
+  box-shadow:0 2px 6px rgba(14,150,120,.10);}
+.cert-intro .nm{font-size:15px;font-weight:700;color:var(--brand-d);letter-spacing:-.2px;}
+.cert-intro .badge{font-size:11px;color:var(--brand-d);background:#fff;padding:4px 9px;border-radius:11px;
+  font-weight:600;display:flex;align-items:center;gap:3px;box-shadow:0 2px 4px rgba(14,150,120,.08);}
+.cert-intro .steps{display:flex;flex-direction:column;gap:6px;margin-bottom:9px;}
+.cert-intro .steps .s{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#1F4A41;line-height:1.45;}
+.cert-intro .steps .n{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#3FD3B0,#17A88A);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:1px;}
+.cert-intro .tip{font-size:11.5px;color:var(--brand-d);display:flex;align-items:center;gap:5px;padding-top:9px;
+  border-top:1px dashed rgba(23,168,138,.28);font-weight:500;}
 .sect{display:flex;align-items:center;justify-content:space-between;margin:20px 20px 10px;}
 .sect .t{font-size:20px;font-weight:700;letter-spacing:-.4px;}
 .sect .m{font-size:14px;color:var(--brand);display:flex;align-items:center;gap:1px;cursor:pointer;}
@@ -436,7 +458,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.8';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.9';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-05';
 
@@ -906,7 +928,16 @@ function certBar(){
 
 /* ================= 账号认证 ================= */
 S.certify={title:'房屋认证',render:function(){
-  return '<div class="pad">'+hint('选择房屋信息并提交，等待物业后台审核；可同时提交多个小区的认证申请')+'</div>'
+  return '<div class="cert-intro">'
+  +'<div class="head"><div class="h-l"><div class="ic">'+ic('home2',17,'var(--brand-d)',1.8)+'</div><div class="nm">业主认证流程</div></div>'
+  +'<div class="badge">'+ic('clock',11,'var(--brand-d)',1.8)+'约 1 个工作日</div></div>'
+  +'<div class="steps">'
+  +'<div class="s"><span class="n">1</span><span>选择你所在的小区、楼栋与房号</span></div>'
+  +'<div class="s"><span class="n">2</span><span>补充业主姓名与联系号码</span></div>'
+  +'<div class="s"><span class="n">3</span><span>提交后由物业后台审核，结果会通知你</span></div>'
+  +'</div>'
+  +'<div class="tip">'+ic('info',12,'var(--brand-d)',1.8)+'多个小区可分别认证，互不影响使用</div>'
+  +'</div>'
   +'<div class="grp">'
   + pfield('小区','certCommunity','请选择')
   +'<div class="sep"></div>'
