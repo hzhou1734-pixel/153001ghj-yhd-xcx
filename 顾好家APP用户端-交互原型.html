@@ -436,7 +436,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.7';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.8';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-05';
 
@@ -523,6 +523,15 @@ var CERT_TXT={ok:'已认证',pending:'审核中',none:'未认证'};
 function setCert(v){CERT=v;toast('演示状态已切换为：'+CERT_TXT[v]);render();}
 /* 访问「需业主认证」功能的统一拦截：已认证放行，未认证 / 审核中引导至认证页 */
 function needCert(id){if(CERT==='ok'){go(id);}else{go('certBlock');}}
+/* 当前小区：name=小区名 detail=小区+楼栋副标题 */
+var CUR_COMMUNITY={name:'阳光花园',detail:'3栋2单元'};
+/* 切换小区：toast 提示 + 更新当前小区 + 返回首页 */
+function pickCommunity(name,detail){
+  CUR_COMMUNITY.name=name;
+  CUR_COMMUNITY.detail=detail;
+  toast('已切换至 '+name);
+  go('home');
+}
 /* 验证码 60 秒倒计时：局部更新按钮文本，不触发整页重绘 */
 function sendCode(b){
   if(b.getAttribute('data-busy'))return;
@@ -686,7 +695,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   return topLg('首页','',[['bell','','noticeList','2'],['sCall','','emergencyCall','']])
   + certBar()
   +'<div class="row between" style="margin:0 var(--pad) 12px;cursor:pointer" onclick="go(\'communitySwitch\')">'
-  +'<div class="row" style="gap:7px">'+ic('pin',17,'var(--brand)')+'<span class="bold" style="font-size:15px">阳光花园 · 3栋2单元</span></div>'
+  +'<div class="row" style="gap:7px">'+ic('pin',17,'var(--brand)')+'<span class="bold" style="font-size:15px">'+CUR_COMMUNITY.name+' · '+CUR_COMMUNITY.detail+'</span></div>'
   +'<div class="row" style="gap:1px;color:var(--label2);font-size:13px">切换'+ic('chevR',14,'var(--label4)')+'</div></div>'
   +'<div class="carousel"><div class="track">'
   + slide('sHealth','社区便民服务升级','家政、维修、代办一站式直达','linear-gradient(135deg,#4FD8BC,#17A88A)')
@@ -929,9 +938,19 @@ S.certList={title:'我的认证',rightLabel:'+添加',rightFn:'go(\'certify\')',
 
 /* ================= 小区切换 ================= */
 S.communitySwitch={title:'我的小区',render:function(){
+  var cur=CUR_COMMUNITY;
+  var isCur=function(n){return n===cur.name;};
+  /* 已认证可切换：阳光花园（当前）+ 金色家园；审核中：玫瑰新城 */
   return '<div class="grp">'
-  +'<div class="item noind" onclick="toast(\'已切换至 阳光花园\')">'+thumb('','home2',40,40,'')
-  +'<div class="it-bd"><div class="it-t">阳光花园</div><div class="it-s">3栋2单元-1802 · 已认证</div></div><span class="tag g">当前</span></div>'
+  +'<div class="item noind" onclick="pickCommunity(\'阳光花园\',\'3栋2单元\')">'+thumb('','home2',40,40,'')
+  +'<div class="it-bd"><div class="it-t">阳光花园</div><div class="it-s">3栋2单元-1802 · 已认证</div></div>'
+  +(isCur('阳光花园')?'<span class="tag g">当前</span>':'')
+  +'</div>'
+  +'<div class="sep full"></div>'
+  +'<div class="item noind" onclick="pickCommunity(\'金色家园\',\'7栋1单元\')">'+thumb('','home2',40,40,'')
+  +'<div class="it-bd"><div class="it-t">金色家园</div><div class="it-s">7栋1单元-0502 · 已认证</div></div>'
+  +(isCur('金色家园')?'<span class="tag g">当前</span>':'')
+  +'</div>'
   +'<div class="sep full"></div>'
   +'<div class="item noind" onclick="toast(\'该小区还在审核中，通过后才能切换哦\')">'+thumb('b','home2',40,40,'')
   +'<div class="it-bd"><div class="it-t">玫瑰新城</div><div class="it-s">5栋1单元-0903 · 审核中</div></div><span class="tag o">审核中</span></div>'
