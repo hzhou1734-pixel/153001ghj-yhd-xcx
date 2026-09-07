@@ -507,7 +507,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.16';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.17';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1175,7 +1175,6 @@ S.healthHome={title:'健康小屋',render:function(){
   + tile('risk','健康风险评估','每周自动更新评估结果','bg-o','healthRisk')
   +'</div>'
   +'<div class="pad"><button class="btn acc" onclick="go(\'emergencyCall\')">'+ic('phone',19)+' 一键呼叫紧急电话</button></div>'
-  + hint('数据每 30 分钟自动同步一次，异常数值以红色标注');
 }};
 function tile(i,t,s,cls,on){return '<div class="tile" onclick="go(\''+on+'\')"><div class="th '+cls+'">'+ic(i,19)+'</div>'
   +'<div class="tt">'+t+'</div><div class="ts">'+s+'</div></div>';}
@@ -1213,7 +1212,7 @@ S.healthData={title:'实时健康数据',render:function(){
   + metric('pulse','心率','78','次/分','正常范围 60 - 100 次/分',false,62)
   + metric('bp','血压','120/80','mmHg','收缩压 120 / 舒张压 80 · 正常',false,55)
   + metric('drop','血脂','5.2','mmol/L','总胆固醇 · 甘油三酯 1.6 偏高',true,80)
-  +'</div>'+hint('异常数据以红色标注，历史数据永久保存');
+  +'</div>';
 }};
 function metric(i,n,v,u,ref,ab,pct){
   return '<div class="metric tap" onclick="go(\'healthTrend\')"><div class="mh"><div class="mi" style="background:'+(ab?'var(--red)':'var(--brand)')+'">'+ic(i,15)+'</div>'
@@ -1240,7 +1239,7 @@ S.healthCompare={title:'健康数据对比',render:function(){
   +'<div class="row" style="gap:0"><div style="flex:1"><div class="sub">'+d.bp.l+'</div><div class="bold" style="font-size:19px">'+d.bp.n+'</div></div>'
   +'<div style="flex:1;text-align:center"><div class="sub">变化</div><div style="color:var(--'+(d.cls2==='g'?'green':'red')+');font-weight:700;font-size:19px">'+d.del2+'</div></div>'
   +'<div style="flex:1;text-align:right"><div class="sub">本次</div><div class="bold" style="font-size:19px">'+d.now2+'</div></div></div></div>'
-  +'<div class="pad">'+hint('上升以红色标注，下降以绿色标注')+'</div>';
+  +'<div class="pad"></div>';
 }};
 S.healthReport={title:'历史检测报告',render:function(){
   var TABS=['日报','周报','月报','年报','24小时','近七天','近30天'];
@@ -2423,7 +2422,6 @@ S.healthTrend={title:'健康趋势',render:function(){
   +'<div style="flex:1;text-align:right"><div class="sub">最低</div><div class="bold" style="font-size:19px;margin-top:3px">'+d.min+'</div></div></div></div>'
   + grpT('检测记录')
   +'<div class="grp">'+recs+'</div>'
-  + hint('数据每 30 分钟自动同步一次，历史数据永久保存');
 }};
 S.reportDetail={title:'报告详情',render:function(){
   var rp=pickState.reportPick||'2026-09-04 健康日报';
@@ -2449,7 +2447,6 @@ S.reportDetail={title:'报告详情',render:function(){
   + grpT('健康建议')
   +'<div class="card"><div class="sub" style="font-size:13.5px;line-height:1.9;color:var(--label)">· 心率与血压均在正常范围，请保持规律作息与适度运动。<br>· 甘油三酯略高于正常值，建议减少油炸与高糖食物摄入，增加膳食纤维。<br>· 近一周平均睡眠 6.2 小时，低于建议时长，建议提前 30 分钟入睡。<br>· 建议每周进行 3 次以上、每次 30 分钟的中等强度有氧运动。</div></div>'
   +'<div class="pad"><button class="btn sec" onclick="toast(\'报告已保存至相册\')">保存报告</button></div>'
-  + hint('日报 / 周报 / 月报 / 年报定时生成，24小时 / 近七天 / 近30天 实时生成<br>报告永久保存');
 }};
 S.riskReport={title:'完整评估报告',render:function(){
   return '<div class="pad">'
