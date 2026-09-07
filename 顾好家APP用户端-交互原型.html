@@ -403,6 +403,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .cover.y{background:linear-gradient(135deg,#FFE08A,#FFCC00);}
 .cover svg{width:38px;height:38px;}
 
+/* 富文本正文 */
+.rich{padding:0 var(--pad);font-size:15px;line-height:1.78;color:var(--label);}
+.rich p{margin:0 0 11px;}
+.rich h2{font-size:17px;font-weight:700;color:var(--label);margin:18px 0 9px;letter-spacing:-.2px;display:flex;align-items:center;gap:8px;}
+.rich h2::before{content:'';width:3px;height:15px;border-radius:2px;background:linear-gradient(180deg,#5AD1B5,#17A88A);}
+.rich h3{font-size:15px;font-weight:700;color:var(--label);margin:14px 0 7px;}
+.rich ul,.rich ol{padding-left:1.2em;margin:0 0 11px;}
+.rich li{margin-bottom:5px;line-height:1.65;}
+.rich li::marker{color:var(--brand);}
+.rich strong{color:var(--label);font-weight:700;}
+.rich em{color:var(--label2);font-style:normal;}
+.rich .callout{margin:12px 0;padding:10px 12px;background:var(--brand-fill);border-radius:9px;font-size:14px;color:var(--brand-d);line-height:1.7;display:flex;align-items:flex-start;gap:8px;}
+.rich .callout svg{flex-shrink:0;color:var(--brand);margin-top:3px;}
+.rich .quote{margin:14px 0;padding:11px 13px;background:#FFF8EC;border-left:3px solid #FFCC00;border-radius:0 9px 9px 0;font-size:14px;color:#7A5B00;line-height:1.7;}
+.rich .tag{display:inline-block;padding:2px 8px;border-radius:5px;background:var(--brand-fill);color:var(--brand-d);font-size:12px;margin-right:5px;font-weight:500;}
+.rich .hl{color:var(--accent);font-weight:700;}
+.rich .divider{text-align:center;color:var(--label3);margin:14px 0;font-size:12px;letter-spacing:4px;}
+.rich table{width:100%;border-collapse:collapse;margin:8px 0 12px;font-size:13px;}
+.rich table th{background:var(--fill);color:var(--label);font-weight:600;padding:8px 9px;text-align:left;border-bottom:.5px solid var(--sep);}
+.rich table td{padding:8px 9px;border-bottom:.5px solid var(--sep);color:var(--label2);}
+.rich .gallery{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:8px 0 12px;}
+.rich .gallery div{aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--fill);}
+.rich .gallery svg{width:100%;height:100%;display:block;}
+
 .carousel{height:158px;border-radius:var(--r);overflow:hidden;position:relative;margin:0 var(--pad) 12px;
           box-shadow:0 6px 18px rgba(43,196,160,.2);}
 .carousel .track{display:flex;height:100%;animation:slide 9s infinite;}
@@ -565,7 +589,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.29';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.30';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1387,28 +1411,54 @@ S.emergencyCall={title:'紧急呼叫',render:function(){
 
 /* ================= 陪诊服务 ================= */
 S.escortDetail={title:'陪诊服务',render:function(){
+  /* 富文本正文：服务详情 */
+  var rich='<div class="rich">'
+    +'<p>由<strong>物业认证陪诊员</strong>全程陪同就医，从出门到回家，老人安心、家人放心。支持挂<strong>三甲 / 专科医院</strong>，覆盖<span class="tag">内科</span><span class="tag">外科</span><span class="tag">眼科</span><span class="tag">口腔</span>等常规科室。</p>'
+    +'<h2>服务流程</h2>'
+    +'<ol>'
+      +'<li><strong>预约下单</strong>：选择日期、时段与服务时长，提交后陪诊员接单</li>'
+      +'<li><strong>上门接送</strong>：从已绑定房号出发，必要时提供轮椅 / 拐杖辅助</li>'
+      +'<li><strong>就诊陪同</strong>：协助挂号、排队、问诊沟通、取药取报告</li>'
+      +'<li><strong>送回返程</strong>：陪护回家，整理药盒与下次复诊提示</li>'
+    +'</ol>'
+    +'<div class="callout">'+ic('info',16)+'<div><strong>温馨提示</strong><br>预约后 <span class="hl">1 小时内</span>，陪诊员会主动电话确认；如需变更或取消，请提前 <span class="hl">2 小时</span>操作。</div></div>'
+    +'<h2>服务内容</h2>'
+    +'<table><thead><tr><th>项目</th><th>包含</th></tr></thead><tbody>'
+      +'<tr><td>挂号协助</td><td>线上 / 现场均可</td></tr>'
+      +'<tr><td>问诊陪同</td><td>全程记录医嘱</td></tr>'
+      +'<tr><td>取药代领</td><td>含处方核对</td></tr>'
+      +'<tr><td>报告解读</td><td>家属群同步</td></tr>'
+      +'<tr><td>复诊提醒</td><td>免费 1 次</td></tr>'
+    +'</tbody></table>'
+    +'<h2>适用人群</h2>'
+    +'<ul>'
+      +'<li><strong>独居 / 高龄老人</strong>，子女不在身边需协助就医</li>'
+      +'<li><strong>术后 / 慢病复诊</strong>，行动不便需全程陪同</li>'
+      +'<li><strong>异地家属</strong>，无法陪伴父母就诊时远程放心</li>'
+    +'</ul>'
+    +'<h2>陪诊员资质</h2>'
+    +'<p>所有陪诊员均经过物业统一培训，<em>持健康证与急救证书上岗</em>，月度服务满意度需达到 95% 以上。</p>'
+    +'<div class="quote">“老人腿脚不便，张师傅全程搀扶，跑前跑后帮忙取报告，把我们子女没想到的都想到了。”<br><span style="font-size:12px;color:#A38200;margin-top:4px;display:inline-block">—— 阳光花园 8 栋业主 · 2026-08</span></div>'
+    +'<h2>现场实拍</h2>'
+    +'<div class="gallery">'
+      +'<div><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFB59A"/><stop offset="100%" stop-color="#FF7A45"/></linearGradient></defs><rect width="100" height="100" fill="url(#gA)"/><circle cx="30" cy="35" r="14" fill="#fff" opacity=".6"/><path d="M14 86 L40 60 L60 72 L86 42 L86 100 L14 100 Z" fill="#fff" opacity=".5"/></svg></div>'
+      +'<div><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gB" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#9CCBF5"/><stop offset="100%" stop-color="#4FA8E0"/></linearGradient></defs><rect width="100" height="100" fill="url(#gB)"/><circle cx="30" cy="35" r="14" fill="#fff" opacity=".6"/><path d="M14 86 L40 60 L60 72 L86 42 L86 100 L14 100 Z" fill="#fff" opacity=".5"/></svg></div>'
+      +'<div><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gC" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5AD1B5"/><stop offset="100%" stop-color="#17A88A"/></linearGradient></defs><rect width="100" height="100" fill="url(#gC)"/><circle cx="30" cy="35" r="14" fill="#fff" opacity=".6"/><path d="M14 86 L40 60 L60 72 L86 42 L86 100 L14 100 Z" fill="#fff" opacity=".5"/></svg></div>'
+    +'</div>'
+    +'<div class="divider">· · ·</div>'
+    +'<p style="font-size:13px;color:var(--label3);text-align:center;margin:6px 0 4px">服务由各小区物业提供，最终解释权归物业所有</p>'
+    +'</div>';
   return '<div class="pad"><div class="cover o" style="height:168px">'+ic('sEscort',42,'#fff',1.7)+'</div></div>'
   +'<div class="pad">'
   +'<div class="row between" style="margin-bottom:6px"><div class="bold" style="font-size:21px;letter-spacing:-.4px">医院就诊全程陪诊</div>'
   +'<span class="tag br">热门</span></div>'
   +'<div class="sub">含挂号协助、问诊陪同、取药代领、报告解读</div>'
   +'<div class="row" style="gap:5px;margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">¥80</span><span class="sub">/ 小时</span></div></div>'
-  + grpT('服务项目')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-br">'+ic('check',17)+'</div><div class="cell-bd"><div class="cell-t">就诊前流程规划</div></div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-br">'+ic('check',17)+'</div><div class="cell-bd"><div class="cell-t">全程陪同就诊</div></div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-br">'+ic('check',17)+'</div><div class="cell-bd"><div class="cell-t">取药与报告代领</div></div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-br">'+ic('check',17)+'</div><div class="cell-bd"><div class="cell-t">后续注意事项提醒</div></div></div>'
-  +'</div>'
-  + grpT('用户评价')
-  +'<div class="grp"><div class="cell"><div class="cell-ic bg-y">'+ic('star',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">4.9 分 · 共 128 条评价</div>'
-  +'<div class="cell-s">“阿姨很耐心，全程帮着跑，省了不少事。”</div></div></div></div>'
-  +'<div class="pad"><button class="btn" onclick="go(\'escortBook\')">立即预约</button></div>'
-  + hint('服务内容由各小区物业后台配置，切换小区后服务与价格会变化');
+  +'<div class="pad">'+hint('点击「立即预约」开始下单 · 可同时申请多个小区')+'</div>'
+  + grp([{ic:'star',icls:'bg-y',t:'4.9 分 · 共 128 条评价',s:'点击查看用户真实评价',ar:true,on:'go(\'review\')'}])
+  + grp([{ic:'check',icls:'bg-br',t:'服务详情',s:'查看陪诊流程、内容、资质',ar:true,on:'toast(\'已展开详情\')'}])
+  +'<div style="margin-top:6px"><div class="grp-t">服务详情</div>'+rich+'</div>'
+  +'<div class="pad"><button class="btn" onclick="go(\'escortBook\')">立即预约</button></div>';
 }};
 S.escortBook={title:'服务预约',render:function(){
   var ds=['09-05','09-06','09-07','09-08','09-09','09-10','09-11'],ws=['周五','周六','周日','周一','周二','周三','周四'];
