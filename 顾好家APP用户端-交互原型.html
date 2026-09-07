@@ -315,13 +315,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   background:rgba(255,59,48,.08);font-size:11.5px;color:#C0392B;line-height:1.4;font-weight:500;}
 .rj-line svg{width:12px;height:12px;flex-shrink:0;}
 .rj-line span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-/* 驳回详情页：修改步骤 */
-.rj-fix{padding:2px 0;}
-.rj-fix .s{display:flex;gap:10px;align-items:flex-start;padding:10px 0;}
-.rj-fix .s+.s{border-top:.5px solid var(--sep);}
-.rj-fix .n{width:20px;height:20px;border-radius:10px;flex:0 0 20px;background:rgba(43,196,160,.16);color:var(--brand-d);
-  font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
-.rj-fix .tx{font-size:13.5px;color:var(--label);line-height:1.6;}
+/* 驳回详情页：驳回记录日志（时间线） */
+.rj-log{position:relative;padding:4px 0 2px;}
+.rj-log .l{position:relative;padding:0 0 17px 22px;}
+.rj-log .l:last-child{padding-bottom:2px;}
+.rj-log .l::before{content:'';position:absolute;left:2px;top:5px;width:10px;height:10px;border-radius:50%;
+  background:var(--red);box-shadow:0 0 0 3px rgba(255,59,48,.13);}
+.rj-log .l:not(:first-child)::before{width:8px;height:8px;left:3px;background:#fff;border:2px solid var(--red);box-shadow:none;}
+.rj-log .l::after{content:'';position:absolute;left:6.5px;top:19px;bottom:2px;width:1px;background:var(--sep);}
+.rj-log .l:last-child::after{display:none;}
+.rj-log .hd{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.rj-log .tm{font-size:11.5px;color:var(--label3);letter-spacing:-.1px;}
+.rj-log .no{font-size:10.5px;padding:2px 6px;border-radius:5px;background:rgba(255,59,48,.10);
+  color:#C0392B;font-weight:600;line-height:1.4;}
+.rj-log .r{font-size:13.5px;font-weight:600;color:#C0392B;margin-top:5px;line-height:1.45;letter-spacing:-.2px;}
+.rj-log .d{font-size:12px;color:var(--label2);margin-top:3px;line-height:1.6;}
+.rj-log .by{font-size:11.5px;color:var(--label3);margin-top:5px;}
 .avt{border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#5AD1B5,#2BC4A0);display:flex;
      align-items:center;justify-content:center;color:#fff;font-weight:600;overflow:hidden;}
 .avt svg{width:60%;height:60%;}
@@ -495,7 +504,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.14';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.15';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1070,27 +1079,23 @@ S.certList={title:'我的认证',rightLabel:'+添加',rightFn:'go(\'certify\')',
   + hint('被驳回的认证会显示具体原因，修改后可重新提交');
 }};
 
-/* 驳回原因详情：数据驱动，便于按不同驳回项复用 */
+/* 驳回原因详情：数据驱动，便于按不同驳回项复用。log 为驳回记录日志（最新在前） */
 var REJECTS={
   certReject:{
     c:'江畔雅苑',room:'2栋-1102',thumb:'gy',
     name:'林小雨',tel:'138****6721',sub:'08-28 14:20',aud:'08-29 09:35 · 物业 李工',
-    sum:'物业后台核对后发现，你提交的房号信息与登记信息不一致，请核对后重新提交。',
-    rs:[
-      {t:'房号信息与物业登记不一致',s:'登记房号为 2栋-1101，你填写的是 2栋-1102'},
-      {t:'联系电话无法接通',s:'审核期间多次拨打未接通，请确认号码准确'}
-    ],
-    fix:['核对不动产权证或购房合同上的房号','确认联系电话可正常接听','重新填写认证信息并提交，约 1 个工作日出结果']
+    log:[
+      {t:'08-29 09:35',r:'房号信息与物业登记不一致',d:'登记房号为 2栋-1101，你填写的是 2栋-1102',by:'物业 李工'},
+      {t:'08-25 16:40',r:'联系电话无法接通',d:'审核期间多次拨打未接通，请确认号码准确',by:'物业 李工'}
+    ]
   },
   certReject2:{
     c:'翠湖小区',room:'6栋1单元-0501',thumb:'p',
     name:'陈志远',tel:'139****3308',sub:'09-02 10:05',aud:'09-03 15:12 · 物业 王主管',
-    sum:'你填写的业主姓名与该房号产权人登记信息不一致，需由产权人本人提交或补充关系证明。',
-    rs:[
-      {t:'业主姓名与产权人不一致',s:'产权人登记为「陈志明」，你填写的是「陈志远」'},
-      {t:'缺少关系证明',s:'如为亲属，请补充户口本或委托书等关系证明材料'}
-    ],
-    fix:['由产权人本人提交认证，或补充亲属关系证明','确认姓名与证件完全一致，避免使用同音字','重新提交后约 1 个工作日出结果，可联系楼栋管家加急']
+    log:[
+      {t:'09-03 15:12',r:'业主姓名与产权人不一致',d:'产权人登记为「陈志明」，你填写的是「陈志远」',by:'物业 王主管'},
+      {t:'09-01 11:28',r:'缺少关系证明',d:'如为亲属，请补充户口本或委托书等关系证明材料',by:'物业 王主管'}
+    ]
   }
 };
 function rejectPage(k){
@@ -1099,7 +1104,7 @@ function rejectPage(k){
   +'<div class="card" style="background:rgba(255,59,48,.07)"><div class="row" style="gap:9px;align-items:flex-start">'
   +'<span style="color:var(--red);flex-shrink:0;margin-top:1px">'+ic('warn',18)+'</span>'
   +'<div><div class="bold" style="font-size:15px;color:#8A1C14">认证审核未通过</div>'
-  +'<div class="sub" style="color:#8A1C14;margin-top:6px;line-height:1.7">'+d.sum+'</div></div></div></div></div>'
+  +'<div class="sub" style="color:#8A1C14;margin-top:6px;line-height:1.7">该认证已累计被驳回 '+d.log.length+' 次，请在核对信息后重新提交，具体驳回原因见下方记录。</div></div></div></div></div>'
   + grpT('被驳回的认证')
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-ic bg-gy">'+ic('home2',17)+'</div>'
@@ -1113,17 +1118,15 @@ function rejectPage(k){
   +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">审核时间</div></div><div class="cell-v" style="font-size:12px;color:var(--label2)">'+d.aud+'</div></div>'
   +'</div>'
-  + grpT('驳回原因')
-  +'<div class="grp">'
-  + d.rs.map(function(r,i){
-      return (i?'<div class="sep full"></div>':'')
-        +'<div class="cell" style="align-items:flex-start"><span style="color:var(--red);flex-shrink:0;margin-top:2px">'+ic('warn',15)+'</span>'
-        +'<div class="cell-bd"><div class="cell-t" style="color:#C0392B">'+r.t+'</div><div class="cell-s">'+r.s+'</div></div></div>';
+  + grpT('驳回记录')
+  +'<div class="card"><div class="rj-log">'
+  + d.log.map(function(g,i){
+      return '<div class="l">'
+        +'<div class="hd"><span class="tm">'+g.t+'</span><span class="no">第 '+(d.log.length-i)+' 次驳回</span></div>'
+        +'<div class="r">'+g.r+'</div>'
+        +'<div class="d">'+g.d+'</div>'
+        +'<div class="by">审核人：'+g.by+'</div></div>';
     }).join('')
-  +'</div>'
-  + grpT('如何修改')
-  +'<div class="card"><div class="rj-fix">'
-  + d.fix.map(function(f,i){return '<div class="s"><span class="n">'+(i+1)+'</span><span class="tx">'+f+'</span></div>';}).join('')
   +'</div></div>'
   + btn('修改并重新提交','go(\'certify\')')
   +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="go(\'butler\')">联系楼栋管家</button></div>'
