@@ -267,11 +267,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .seg .s{flex:1;text-align:center;padding:7px 4px;border-radius:7px;font-size:14px;color:var(--label);
         cursor:pointer;transition:.2s;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .seg .s.on{background:#fff;font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04);}
-.step{display:flex;align-items:center;background:#E9E9EA;border-radius:9px;overflow:hidden;flex-shrink:0;}
-.step button{width:38px;height:32px;border:none;background:transparent;font-size:15px;color:var(--label);cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;}
-.step button:active{background:#DCDCDC;}
-.step .n{min-width:40px;text-align:center;font-size:16px;font-weight:600;height:32px;line-height:32px;
-        border-left:.5px solid rgba(60,60,67,.2);border-right:.5px solid rgba(60,60,67,.2);letter-spacing:-.2px;}
+.step{display:flex;align-items:center;background:var(--card);border:1px solid var(--brand);border-radius:10px;
+      overflow:hidden;flex-shrink:0;box-shadow:0 1px 3px rgba(43,196,160,.13);}
+.step button{width:36px;height:32px;border:none;background:transparent;font-size:15px;color:var(--brand);
+             cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.step button:active{background:rgba(43,196,160,.14);}
+.step .n{min-width:44px;text-align:center;font-size:16px;font-weight:600;height:32px;line-height:32px;color:var(--label);
+        border-left:1px solid var(--sep);border-right:1px solid var(--sep);letter-spacing:-.2px;}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:2px var(--pad) 12px;}
 .chips::-webkit-scrollbar{height:0;}
 .chip{flex:0 0 auto;padding:7px 15px;border-radius:18px;background:var(--card);font-size:13px;color:var(--label);
@@ -283,6 +285,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .pick .d .w{font-size:11px;color:var(--label2);}
 .pick .d.on .w{color:rgba(255,255,255,.85);}
 .pick .d .n{font-size:15px;font-weight:600;letter-spacing:-.2px;}
+/* 服务时段选择：3 列网格，选中为薄荷绿描边浅底 */
+.slot-hd{font-size:13px;color:var(--label2);font-weight:500;margin-top:16px;padding-top:14px;
+         border-top:.5px solid var(--sep);margin-bottom:10px;}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.slot{padding:10px 4px;border-radius:11px;background:var(--fill);text-align:center;cursor:pointer;
+      border:1px solid transparent;transition:.15s;}
+.slot:active{transform:scale(.97);}
+.slot.on{background:rgba(43,196,160,.12);border-color:var(--brand);}
+.slot .t{font-size:14px;font-weight:600;letter-spacing:-.2px;color:var(--label);}
+.slot .s{font-size:10.5px;color:var(--label3);margin-top:3px;}
+.slot.on .t{color:var(--brand-d);}
+.slot.on .s{color:var(--brand);}
 .stars{font-size:34px;color:var(--yellow);letter-spacing:7px;cursor:pointer;line-height:1;text-align:center;}
 
 .search{display:flex;align-items:center;gap:7px;background:#E9E9EA;border-radius:10px;padding:8px 11px;margin:0 var(--pad) 12px;}
@@ -507,7 +521,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.17';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.18';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1341,18 +1355,30 @@ S.escortDetail={title:'陪诊服务',render:function(){
   + hint('服务内容由各小区物业后台配置，切换小区后服务与价格会变化');
 }};
 S.escortBook={title:'服务预约',render:function(){
-  var ds=['09-05','09-06','09-07','09-08','09-09','09-10','09-11'],ws=['周五','周六','周日','周一','周二','周三','周四'],h='';
-  ds.forEach(function(d,i){h+='<div class="d'+(i===0?' on':'')+'"><div class="w">'+ws[i]+'</div><div class="n">'+d.slice(3)+'</div></div>';});
+  var ds=['09-05','09-06','09-07','09-08','09-09','09-10','09-11'],ws=['周五','周六','周日','周一','周二','周三','周四'];
+  var SL=[['6-9 点','清晨'],['9-12 点','上午'],['12-15 点','午间'],['15-18 点','下午'],['18-21 点','晚间']];
+  var di=(pickState.escortDate===undefined?0:pickState.escortDate);
+  var si=(pickState.escortSlot===undefined?-1:pickState.escortSlot);
+  var h='';
+  ds.forEach(function(d,i){h+='<div class="d'+(i===di?' on':'')+'" onclick="pickEscortDate('+i+')"><div class="w">'+ws[i]+'</div><div class="n">'+d.slice(3)+'</div></div>';});
+  var sh='';
+  SL.forEach(function(s,i){sh+='<div class="slot'+(i===si?' on':'')+'" onclick="pickEscortSlot('+i+')"><div class="t">'+s[0]+'</div><div class="s">'+s[1]+'</div></div>';});
   return grp([{ic:'clock',icls:'bg-br',t:'陪诊时长',s:'最少 1 小时，无上限 · ¥80 / 小时',ctl:step('3 小时')}])
   +'<div class="pad">'+hint('价格 = 时长 × 每小时单价；仅可选择未来 7 天内的日期')+'</div>'
   + grpT('陪诊日期')
-  +'<div class="card"><div class="pick">'+h+'</div></div>'
+  +'<div class="card"><div class="pick">'+h+'</div>'
+  +'<div class="slot-hd" style="display:flex;justify-content:space-between;align-items:center">'
+  +'<span>服务时段</span>'
+  +(si>=0?'<span style="color:var(--brand);font-weight:600">'+SL[si][0]+'</span>':'<span style="color:var(--label3)">未选择</span>')
+  +'</div><div class="slots">'+sh+'</div></div>'
   + grpT('陪诊地址')
   +'<div class="grp"><div class="field"><input value="阳光花园 3栋2单元1802" style="flex:1">'
   +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'可修改为医院等其他地点\')">修改'+ic('pencil',14)+'</span></div></div>'
   + grp([{t:'订单金额合计',v:'¥240.00',ctl:'<span class="price" style="font-size:20px">¥240.00</span>'}])
-  + btn('下一步','go(\'orderEscortDetail\')');
+  + btn('下一步',(si>=0?'go(\'orderEscortDetail\')':'toast(\'请选择服务时段\')'));
 }};
+function pickEscortDate(i){pickState.escortDate=i;render();}
+function pickEscortSlot(i){pickState.escortSlot=i;render();}
 
 /* ================= 托管服务 ================= */
 S.trusteeship={title:'托管服务',render:function(){
