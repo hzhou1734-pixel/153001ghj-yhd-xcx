@@ -589,7 +589,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.31';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.32';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1087,7 +1087,7 @@ S.certGuide={title:'业主认证',render:function(){
   +'<div class="ncs">认证用于确认你的房屋归属，让社区服务、账单与通知<br>准确匹配到所在楼栋与房号</div></div>'
   +'<div class="pad" style="padding-top:24px">'+grpT('认证后可享')+'</div>'
   +'<div class="grp">'
-  + cgRow('sMeal','适老营养餐','按本小区菜单在线报餐，账单自动归集')
+  +   +'<div class="cell tap" onclick="go(\'mealDetail\')"><div class="cell-ic bg-br">'+ic('sMeal',18)+'</div>'+'<div class="cell-bd"><div class="cell-t">适老营养餐</div><div class="cell-s">按本小区菜单在线报餐，账单自动归集</div></div></div>'
   +'<div class="sep"></div>'
   + cgRow('sTrust','暑期托管','本小区专属名额，优先报名与缴费')
   +'<div class="sep"></div>'
@@ -1539,23 +1539,79 @@ function openTrust(i){pickState.trustType=i;go('trustDetail');}
 S.meal={title:'健康膳食',render:function(){
   var mc=(pickState.mealCount===undefined?2:pickState.mealCount);
   mc=Math.max(1,Math.min(10,mc));
+  var needDelivery=(pickState.mealDelivery===undefined?true:pickState.mealDelivery);
+  var deliveryNote='<div class="pad" style="padding-top:0;font-size:12px;color:var(--label3);line-height:1.6">仅可提交明日报餐，报餐截止时间为当日 20:00</div>';
   return '<div class="sect"><div class="t">明日菜单</div><div class="m">9月5日 周六</div></div>'
   +'<div class="grp">'
-  +'<div class="item noind">'+thumb('','sMeal',54,54,'')
+  +'<div class="item noind" onclick="go(\'mealDetail\')">'+thumb('','sMeal',54,54,'')
   +'<div class="it-bd"><div class="it-t">清蒸鲈鱼 · 时蔬 · 米饭</div><div class="it-s">低油低盐 · 适老营养餐 · 约 520 kcal</div></div>'
   +'<span class="price" style="font-size:16px">¥18</span></div>'
   +'</div>'
   + grp([
     {ic:'sMeal',icls:'bg-y',t:'报餐份数',s:'1 - 10 份',ctl:step('mealCount',{def:2,min:1,max:10})},
-    {ic:'pin',icls:'bg-br',t:'是否需要送餐',s:'送餐至已绑定房号',ctl:sw(true,'toast(\'已切换送餐\')')}
+    {ic:'pin',icls:'bg-br',t:'是否需要送餐',s:'送餐至已绑定房号',ctl:sw(needDelivery,'toggleMealDelivery()')}
   ])
-  +'<div class="card"><div class="kv" style="padding:0"><span class="k">送餐地址</span></div>'
-  +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
-  +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'可添加备注\')">备注'+ic('chevR',14)+'</span></div></div>'
+  +(needDelivery
+    ?'<div class="card"><div class="kv" style="padding:0"><span class="k">送餐地址</span></div>'
+      +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
+      +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'可添加备注\')">备注'+ic('chevR',14)+'</span></div></div>'
+      +deliveryNote
+    :deliveryNote)
   + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+(18*mc)+'.00</span>'}])
-  + btn('提交报餐','toast(\'报餐成功\');go(\'orderMealDetail\')')
-  +'<div class="pad"><button class="btn warn" onclick="toast(\'已取消报餐，额度已退回\')">取消报餐</button></div>'
-  + hint('仅可提交明日报餐，报餐截止时间为当日 20:00<br>当日 20:00 前可取消，逾期不可取消');
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交报餐','toast(\'报餐成功\');go(\'orderMealDetail\')')+'</div>';
+}};
+function toggleMealDelivery(){pickState.mealDelivery=!pickState.mealDelivery;render();}
+
+S.mealDetail={title:'膳食详情',render:function(){
+  var rich='<div class="rich">'
+    +'<p>由<strong>营养师 + 三星酒店主厨</strong>联合研发的适老营养餐，针对老年人慢病调理、术后恢复与日常养生需求，提供<em>低油低盐、软烂易嚼、营养均衡</em>的搭配方案。</p>'
+    +'<h2>菜单组成</h2>'
+    +'<ul>'
+      +'<li><strong>主菜</strong>：清蒸鲈鱼 / 香菇滑鸡 / 红烧排骨 / 番茄炖牛腩（每日轮换）</li>'
+      +'<li><strong>配菜</strong>：清炒时蔬 2 份 / 凉拌木耳 / 蒜蓉西兰花</li>'
+      +'<li><strong>主食</strong>：软米饭 / 杂粮饭 / 小米粥（三选一）</li>'
+      +'<li><strong>汤品</strong>：紫菜蛋花汤 / 莲藕排骨汤 / 山药排骨汤</li>'
+    +'</ul>'
+    +'<div class="callout">'+ic('info',16)+'<div><strong>营养参考</strong><br>单餐热量控制在 <span class="hl">450 - 600 kcal</span>，蛋白质 ≥ 18g，钠 ≤ 800mg，适配高血压 / 糖尿病慢病食谱。</div></div>'
+    +'<h2>本周菜单</h2>'
+    +'<table><thead><tr><th>日期</th><th>主菜</th><th>主食</th><th>汤品</th></tr></thead><tbody>'
+      +'<tr><td>周一</td><td>香菇滑鸡</td><td>软米饭</td><td>紫菜蛋花汤</td></tr>'
+      +'<tr><td>周二</td><td>红烧排骨</td><td>杂粮饭</td><td>莲藕排骨汤</td></tr>'
+      +'<tr><td>周三</td><td>清蒸鲈鱼</td><td>软米饭</td><td>山药排骨汤</td></tr>'
+      +'<tr><td>周四</td><td>番茄炖牛腩</td><td>杂粮饭</td><td>紫菜蛋花汤</td></tr>'
+      +'<tr><td>周五</td><td>香菇滑鸡</td><td>小米粥</td><td>莲藕排骨汤</td></tr>'
+      +'<tr><td>周六</td><td>清蒸鲈鱼</td><td>软米饭</td><td>山药排骨汤</td></tr>'
+      +'<tr><td>周日</td><td>红烧排骨</td><td>杂粮饭</td><td>紫菜蛋花汤</td></tr>'
+    +'</tbody></table>'
+    +'<h2>食材溯源</h2>'
+    +'<p>所有食材均由<strong>物业直采</strong>，与本地有机农场签订长期协议，每天清晨 5:00 送达中央厨房。蔬菜、肉类、调料均经过农残检测与索证索票。</p>'
+    +'<h2>适用人群</h2>'
+    +'<ul>'
+      +'<li><strong>独居 / 高龄老人</strong>，日常就餐有困难</li>'
+      +'<li><strong>慢病调理人群</strong>（高血压 / 糖尿病 / 高血脂）</li>'
+      +'<li><strong>术后恢复期</strong>，需要精准营养支持</li>'
+      +'<li><strong>家属临时出差</strong>，需要有人按时送餐到家</li>'
+    +'</ul>'
+    +'<div class="quote">"自从订了营养餐，老伴儿的血糖控制得稳定多了，物业送餐到家还热乎。"<br><span style="font-size:12px;color:#A38200;margin-top:4px;display:inline-block">—— 阳光花园 5 栋业主 · 2026-08</span></div>'
+    +'<h2>出餐实拍</h2>'
+    +'<div class="gallery">'
+      +'<div><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="mA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFE08A"/><stop offset="100%" stop-color="#FFCC00"/></linearGradient></defs><rect width="100" height="100" fill="url(#mA)"/><circle cx="34" cy="40" r="16" fill="#fff" opacity=".65"/><path d="M16 80 L40 60 L58 70 L84 48 L84 100 L16 100 Z" fill="#fff" opacity=".5"/></svg></div>'
+      +'<div><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="mB" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFB59A"/><stop offset="100%" stop-color="#FF7A45"/></linearGradient></defs><rect width="100" height="100" fill="url(#mB)"/><circle cx="34" cy="40" r="16" fill="#fff" opacity=".65"/><path d="M16 80 L40 60 L58 70 L84 48 L84 100 L16 100 Z" fill="#fff" opacity=".5"/></svg></div>'
+      +'<div><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="mC" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5AD1B5"/><stop offset="100%" stop-color="#17A88A"/></linearGradient></defs><rect width="100" height="100" fill="url(#mC)"/><circle cx="34" cy="40" r="16" fill="#fff" opacity=".65"/><path d="M16 80 L40 60 L58 70 L84 48 L84 100 L16 100 Z" fill="#fff" opacity=".5"/></svg></div>'
+    +'</div>'
+    +'<div class="divider">· · ·</div>'
+    +'<p style="font-size:13px;color:var(--label3);text-align:center;margin:6px 0 4px">膳食由物业中央厨房统一出餐，每日菜单根据季节调整</p>'
+    +'</div>';
+  return '<div class="pad"><div class="cover y" style="height:168px">'+ic('sMeal',42,'#7A5B00',1.7)+'</div></div>'
+  +'<div class="pad">'
+  +'<div class="row between" style="margin-bottom:6px"><div class="bold" style="font-size:21px;letter-spacing:-.4px">适老营养餐</div>'
+  +'<span class="tag g">推荐</span></div>'
+  +'<div class="sub">由营养师 + 三星主厨联合研发 · 每日新鲜配送</div>'
+  +'<div class="row" style="gap:5px;margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">¥18</span><span class="sub">/ 份</span></div></div>'
+  +'<div class="pad">'+hint('点击「立即报餐」开始下单 · 截止时间为当日 20:00')+'</div>'
+  + grp([{ic:'star',icls:'bg-y',t:'4.8 分 · 共 96 条评价',s:'点击查看用户真实评价',ar:true,on:'go(\'review\')'}])
+  +'<div style="margin-top:6px"><div class="grp-t">膳食详情</div>'+rich+'</div>'
+  +'<div style="padding:4px var(--pad) 38px">'+btn('立即报餐','go(\'meal\')')+'</div>';
 }};
 
 /* ================= 物业服务 ================= */
