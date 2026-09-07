@@ -169,10 +169,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .field input::placeholder,.field textarea::placeholder{color:var(--label3);}
 .field textarea{resize:none;line-height:1.5;}
 .field .unit{font-size:15px;color:var(--label3);flex-shrink:0;}
-/* 只读展示值（替代 <input readonly>，规避原生控件黑框） */
-.field .fv{flex:1;font-size:16px;color:var(--label);letter-spacing:-.2px;font-family:inherit;line-height:1.35;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
-.field .fv.ph{color:var(--label3);}
+/* 联动字段自定结构（房屋认证：小区/楼栋/房号） */
+.df{display:flex;align-items:center;gap:12px;padding:11px 14px;min-height:48px;background:var(--card);}
+.df.df-off{background:#F7F8F9;cursor:not-allowed;}
+.df-lb{font-size:16px;color:var(--label);flex:0 0 78px;letter-spacing:-.2px;}
+.df-v{flex:1;font-size:16px;color:var(--label);letter-spacing:-.2px;line-height:1.35;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.df-v.df-ph{color:var(--label3);}
+.df-arrow{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
+  border-top:6px solid #C7C7CC;flex-shrink:0;display:block;}
+.df.df-off .df-arrow{border-top-color:#D8D8DC;}
 .inp-row{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--card);}
 .inp-row input{flex:1;border:none;font-size:16px;outline:none;background:transparent;font-family:inherit;}
 .code-btn{padding:7px 13px;border-radius:9px;background:var(--brand);color:#fff;font-size:13px;font-weight:600;
@@ -404,12 +410,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .pkr-grid .it{padding:12px 6px;background:var(--card);border:1px solid transparent;border-radius:10px;text-align:center;
   font-size:14px;color:var(--label);cursor:pointer;transition:background .15s,border-color .15s,color .15s;letter-spacing:-.2px;}
 .pkr-grid .it.on{background:rgba(43,196,160,.08);border-color:var(--brand);color:var(--brand-d);font-weight:700;}
-/* 联动表单字段：未达依赖条件时灰态 */
-.field.dpf{cursor:pointer;}
-.field.dpf input{cursor:pointer;}
-.field.dpf.dpf-off{background:#F7F8F9;cursor:not-allowed;}
-.field.dpf.dpf-off input{color:var(--label3);}
-.field.dpf.dpf-off .unit{opacity:.45;}
 .dialog-mask{position:absolute;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:50;}
 .dialog{width:270px;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-radius:14px;text-align:center;overflow:hidden;}
 .dialog .dc{padding:20px 18px 15px;}
@@ -483,7 +483,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.12';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.13';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -689,7 +689,7 @@ var DEP_PICK={
   certRoom:['certCommunity','certBuilding']
 };
 function canPick(k){
-  var d=DEP_PICK[k];if(!d)return true;
+  var d=DEP_PICK[k];if(!d)return '';
   if(!Array.isArray(d))d=[d];
   for(var i=0;i<d.length;i++)if(!pickState[d[i]])return d[i];
   return '';
@@ -709,12 +709,13 @@ function pfield(lb,key,ph){
     +'<span class="unit">'+ic('chevD',15,'var(--label4)')+'</span></div>';
 }
 /* 联动字段：未满足前置依赖时为灰态，提示先选上一项
-   注意：只读展示用 <div class="fv"> 而非 <input readonly>，避免各内核原生控件渲染成黑框 */
+   完全脱离 .field 容器，使用自定 .df 结构，规避原生控件与 .unit SVG 在不同内核下的渲染异常 */
 function dpfield(lb,key,ph){
   var v=pickState[key]||'',off=canPick(key);
-  return '<div class="field dpf'+(off?' dpf-off':'')+'" onclick="openPicker(\''+key+'\')"><span class="lb">'+lb+'</span>'
-    +'<div class="fv'+(v?'':' ph')+'">'+(v||ph)+'</div>'
-    +'<span class="unit">'+ic('chevD',15,'var(--label4)')+'</span></div>';
+  return '<div class="df'+(off?' df-off':'')+'" onclick="openPicker(\''+key+'\')">'
+    +'<div class="df-lb">'+lb+'</div>'
+    +'<div class="df-v'+(v?'':' df-ph')+'">'+(v||ph)+'</div>'
+    +'<i class="df-arrow"></i></div>';
 }
 function openPicker(k){
   /* 联动校验：选楼栋必须先有小区，选房号必须先有小区与楼栋 */
