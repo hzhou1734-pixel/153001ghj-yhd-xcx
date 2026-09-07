@@ -315,6 +315,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   background:rgba(255,59,48,.08);font-size:11.5px;color:#C0392B;line-height:1.4;font-weight:500;}
 .rj-line svg{width:12px;height:12px;flex-shrink:0;}
 .rj-line span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+/* 列表内的未读小圆点 */
+.dot-u{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);
+  margin-left:6px;vertical-align:middle;}
 /* 驳回详情页：驳回记录日志（时间线） */
 .rj-log{position:relative;padding:4px 0 2px;}
 .rj-log .l{position:relative;padding:0 0 17px 22px;}
@@ -504,7 +507,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.15';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.16';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -819,7 +822,7 @@ function dlg(icn,t,s,ok,okFn,no){return '<div class="dialog-mask"><div class="di
 
 /* ================= 首页 ================= */
 S.home={tab:'home',title:'首页',nav:false,render:function(){
-  return topLg('首页','',[['bell','','noticeList','2'],['sCall','','emergencyCall','']])
+  return topLg('首页','',[['bell','','noticeList',noticeBadge()],['sCall','','emergencyCall','']])
   + certBar()
   +'<div class="row between" style="margin:0 var(--pad) 12px;cursor:pointer" onclick="go(\'communitySwitch\')">'
   +'<div class="row" style="gap:7px">'+ic('pin',17,'var(--brand)')+'<span class="bold" style="font-size:15px">'+CUR_COMMUNITY.name+' · '+CUR_COMMUNITY.detail+'</span></div>'
@@ -1433,11 +1436,11 @@ S.helper={title:'提交需求',render:function(){
 
 /* ================= 社区（Tab） ================= */
 S.community={tab:'community',title:'社区',nav:false,render:function(){
-  return topLg('社区','',[['bell','','noticeList','2'],['plus','','postPublish','']])
+  return topLg('社区','',[['bell','','noticeList',noticeBadge()],['plus','','postPublish','']])
   + grp([
     {ic:'cal',icls:'bg-br',t:'社区活动',s:'报名邻里活动，查看最新动态',ar:1,on:'go(\'communityList\')'},
     {ic:'post',icls:'bg-b',t:'社区贴吧',s:'邻里交流、二手交易、求助问答',ar:1,on:'go(\'forumList\')'},
-    {ic:'bell',icls:'bg-o',t:'社区通知',s:'物业公告、停水停电提醒',ar:1,on:'go(\'noticeList\')',badge:'2'},
+    {ic:'bell',icls:'bg-o',t:'社区通知',s:'物业公告、停水停电提醒',ar:1,on:'go(\'noticeList\')',badge:noticeBadge()},
     {ic:'doc',icls:'bg-p',t:'精彩内容',s:'小区资讯、生活指南',ar:1,on:'go(\'featuredList\')'}
   ])
   + grp([
@@ -1606,24 +1609,49 @@ S.postPublish={title:'发布帖子',render:function(){
 }};
 
 /* ================= 社区通知 ================= */
+/* 通知数据：un=true 表示未读。角标数字 = 未读条数，点开详情后自动标记已读 */
+var NOTICES=[
+  {id:'n1',ic:'bell',cls:'bg-o',t:'关于本周六小区供水检修',s:'09-04 09:00 · 请提前储水',
+   a:'物业服务中心',d:'09-04 09:00',un:true,
+   h:'关于本周六小区供水检修的通知',
+   b:'各位业主：<br><br>因供水主管道例行检修，本周六（9月6日）上午 8:00 至下午 17:00 期间，小区将暂停供水。请各位业主提前储备生活用水，并关闭水龙头阀门，以免恢复供水时发生溢水。<br><br>检修完成后将立即恢复供水，如遇特殊情况将另行通知。给您带来不便，敬请谅解。'},
+  {id:'n2',ic:'info',cls:'bg-b',t:'电梯年检停梯通知',s:'09-02 16:00 · 3栋2单元',
+   a:'物业服务中心',d:'09-02 16:00',un:true,
+   h:'电梯年检停梯通知',
+   b:'各位业主：<br><br>按特种设备年检要求，3栋2单元电梯将于 9月8日（周二）9:00-16:00 进行年度检验，检验期间电梯暂停使用。<br><br>请高层住户提前安排出行，如需搬运大件物品或家中有行动不便的老人，请联系楼栋管家协助。'},
+  {id:'n3',ic:'cal',cls:'bg-br',t:'中秋节物业值班安排',s:'09-01 10:20',
+   a:'物业服务中心',d:'09-01 10:20',un:false,
+   h:'中秋节物业值班安排',
+   b:'各位业主：<br><br>中秋假期（9月13日-9月15日）期间，物业服务中心正常值班，时间为每天 8:30-20:00。<br><br>如遇紧急情况，请拨打 24 小时值班电话，或通过 APP 一键呼叫联系楼栋管家。'}
+];
+var curNotice='n1';
+function unreadN(){var n=0;for(var i=0;i<NOTICES.length;i++)if(NOTICES[i].un)n++;return n;}
+function noticeBadge(){var n=unreadN();return n>0?String(n):'';}
+function curN(){for(var i=0;i<NOTICES.length;i++)if(NOTICES[i].id===curNotice)return NOTICES[i];return NOTICES[0];}
+/* 打开通知：标记已读后跳转详情，角标数字随之减少 */
+function openNotice(id){
+  curNotice=id;
+  for(var i=0;i<NOTICES.length;i++)if(NOTICES[i].id===id)NOTICES[i].un=false;
+  go('noticeDetail');
+}
 S.noticeList={title:'社区通知',render:function(){
   return '<div class="pad">'+hint('下拉刷新 · 上拉加载更多历史通知 · 按发布时间倒序')+'</div>'
   +'<div class="grp">'
-  +'<div class="item noind" onclick="go(\'noticeDetail\')"><div class="cell-ic bg-o">'+ic('bell',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">关于本周六小区供水检修</div><div class="it-s">09-04 09:00 · 请提前储水</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'noticeDetail\')"><div class="cell-ic bg-b">'+ic('info',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">电梯年检停梯通知</div><div class="it-s">09-02 16:00 · 3栋2单元</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'noticeDetail\')"><div class="cell-ic bg-br">'+ic('cal',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">中秋节物业值班安排</div><div class="it-s">09-01 10:20</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
-  +'</div>';
+  + NOTICES.map(function(x,i){
+      return (i?'<div class="sep full"></div>':'')
+        +'<div class="item noind" onclick="openNotice(\''+x.id+'\')"><div class="cell-ic '+x.cls+'">'+ic(x.ic,17)+'</div>'
+        +'<div class="it-bd"><div class="it-t">'+x.t+(x.un?'<span class="dot-u"></span>':'')+'</div>'
+        +'<div class="it-s">'+x.s+'</div></div>'+ic('chevR',16,'var(--label4)')+'</div>';
+    }).join('')
+  +'</div>'
+  +(unreadN()?'':'<div class="pad">'+hint('全部通知已读')+'</div>');
 }};
 S.noticeDetail={title:'通知详情',render:function(){
+  var x=curN();
   return '<div class="card">'
-  +'<div class="bold" style="font-size:19px;letter-spacing:-.3px;line-height:1.4">关于本周六小区供水检修的通知</div>'
-  +'<div class="sub" style="margin:8px 0 14px">物业服务中心 · 09-04 09:00</div>'
-  +'<div class="sub" style="font-size:14px;line-height:1.8;color:var(--label)">各位业主：<br><br>因供水主管道例行检修，本周六（9月6日）上午 8:00 至下午 17:00 期间，小区将暂停供水。请各位业主提前储备生活用水，并关闭水龙头阀门，以免恢复供水时发生溢水。<br><br>检修完成后将立即恢复供水，如遇特殊情况将另行通知。给您带来不便，敬请谅解。</div>'
+  +'<div class="bold" style="font-size:19px;letter-spacing:-.3px;line-height:1.4">'+x.h+'</div>'
+  +'<div class="sub" style="margin:8px 0 14px">'+x.a+' · '+x.d+'</div>'
+  +'<div class="sub" style="font-size:14px;line-height:1.8;color:var(--label)">'+x.b+'</div>'
   +'</div>'+hint('左右滑动可切换其他通知');
 }};
 
