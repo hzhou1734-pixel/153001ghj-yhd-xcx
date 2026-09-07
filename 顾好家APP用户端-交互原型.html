@@ -589,7 +589,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.34';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.35';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -938,9 +938,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   + svc('sCall','一键呼叫','emergencyCall','r')+svc('sMore','全部服务','community','')
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
-  +'<div class="grp"><div class="item noind" onclick="go(\'activityDetail\')">'+thumb('','cal',58,58)
-  +'<div class="it-bd"><div class="it-t">中秋邻里联欢会</div><div class="it-s">9月28日 18:30 · 中心广场 · 已报 86/200</div></div>'
-  +'<span class="tag g">报名中</span></div></div>'
+  +'<div class="grp">'+actItems(ACTIVITIES)+'</div>'
   +'<div class="sect"><div class="t">社区贴吧</div><div class="m" onclick="go(\'forumList\')">去逛逛'+ic('chevR',14)+'</div></div>'
   +'<div class="grp"><div class="item noind" onclick="go(\'postDetail\')">'+avt(40)
   +'<div class="it-bd"><div class="it-t">出一台九成新婴儿车</div><div class="it-s">王阿姨 · 09-03 · 二手交易</div></div>'
@@ -1670,32 +1668,33 @@ S.community={tab:'community',title:'社区',nav:false,render:function(){
 }};
 
 /* ================= 社区活动 ================= */
+var ACTIVITIES=[
+  {n:'中秋邻里联欢会',when:'9月28日 18:30',s:'中心广场 · 已报 86/200',st:'报名中',sc:'g',c:'',ty:'节日庆典'},
+  {n:'少儿阅读营',when:'本周末 14:00',s:'阅览室 · 30/30 人',st:'名额已满',sc:'gy',c:'p',ty:'亲子活动'},
+  {n:'重阳节健康讲座',when:'9月29日 14:00',s:'活动中心 · 0/80 人',st:'即将开始',sc:'b',c:'b',ty:'健康讲座'},
+  {n:'邻里跳蚤市场',when:'9月12日 09:00',s:'西门广场 · 42/100 人',st:'报名中',sc:'g',c:'o',ty:'节日庆典'},
+  {n:'秋季健步走',when:'9月25日 09:00',s:'江畔绿道 · 18/60 人',st:'报名中',sc:'g',c:'y',ty:'健康讲座'},
+  {n:'重阳敬老慰问',when:'9月30日 10:00',s:'各楼栋 · 0/40 人',st:'即将开始',sc:'b',c:'p',ty:'志愿服务'},
+  {n:'暑期趣味运动会',when:'8月20日 已结束',s:'中央草坪 · 128 人参与',st:'已结束',sc:'gy',c:'gy',ty:'亲子活动'}
+];
+function actItem(a){
+  return '<div class="item noind" onclick="go(\'activityDetail\')">'+thumb(a.c,'cal',58,58)
+    +'<div class="it-bd"><div class="it-t">'+a.n+'</div><div class="it-s">'+a.when+' · '+a.s+'</div></div>'
+    +'<span class="tag '+a.sc+'">'+a.st+'</span></div>';
+}
+function actItems(list){
+  return list.map(function(a,i){return (i?'<div class="sep full"></div>':'')+actItem(a);}).join('');
+}
 S.communityList={title:'社区活动',render:function(){
   var TABS=['全部','即将开始','报名中','名额已满','已结束'];
   var cur=(chipState.communityList===undefined?0:chipState.communityList);
-  var A=[
-    {n:'中秋邻里联欢会',s:'报名至 9-20 · 中心广场 · 86/200 人',st:'报名中',sc:'g',c:'',ty:'节日庆典'},
-    {n:'少儿阅读营',s:'报名至 9-14 · 阅览室 · 30/30 人',st:'名额已满',sc:'gy',c:'p',ty:'亲子活动'},
-    {n:'重阳节健康讲座',s:'9-29 开始 · 活动中心 · 0/80 人',st:'即将开始',sc:'b',c:'b',ty:'健康讲座'},
-    {n:'暑期趣味运动会',s:'已于 8-20 结束 · 128 人参与',st:'已结束',sc:'gy',c:'gy',ty:'亲子活动'},
-    {n:'邻里跳蚤市场',s:'报名至 9-12 · 西门广场 · 42/100 人',st:'报名中',sc:'g',c:'o',ty:'节日庆典'},
-    {n:'秋季健步走',s:'报名至 9-25 · 江畔绿道 · 18/60 人',st:'报名中',sc:'g',c:'y',ty:'健康讲座'},
-    {n:'重阳敬老慰问',s:'9-30 开始 · 各楼栋 · 0/40 人',st:'即将开始',sc:'b',c:'p',ty:'志愿服务'}
-  ];
-  var list=cur?A.filter(function(x){return x.st===TABS[cur];}):A;
+  var list=cur?ACTIVITIES.filter(function(x){return x.st===TABS[cur];}):ACTIVITIES;
   var h='<div class="pad">'+searchBar('搜索活动名称或介绍','openPanel(\'activityFilter\')')+'</div>'
     + chips(TABS,'communityList');
   if(!list.length){
     h+='<div class="pad">'+empty('cal','暂无'+TABS[cur]+'的活动','看看其他状态的活动吧')+'</div>';
   }else{
-    h+='<div class="grp-t">共 '+list.length+' 场活动</div><div class="grp">';
-    list.forEach(function(a,i){
-      if(i)h+='<div class="sep full"></div>';
-      h+='<div class="item noind" onclick="go(\'activityDetail\')">'+thumb(a.c,'cal',62,62)
-        +'<div class="it-bd"><div class="it-t">'+a.n+'</div><div class="it-s">'+a.s+'</div></div>'
-        +'<span class="tag '+a.sc+'">'+a.st+'</span></div>';
-    });
-    h+='</div>';
+    h+='<div class="grp-t">共 '+list.length+' 场活动</div><div class="grp">'+actItems(list)+'</div>';
   }
   return h+hint('下拉刷新 · 上拉加载更多');
 }};
