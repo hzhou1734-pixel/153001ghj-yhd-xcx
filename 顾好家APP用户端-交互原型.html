@@ -521,7 +521,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.22';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.23';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1388,7 +1388,7 @@ S.escortBook={title:'服务预约',render:function(){
   + grpT('陪诊地址')
   +'<div class="grp"><div class="field"><input value="阳光花园 3栋2单元1802" style="flex:1"></div></div>'
   + grp([{t:'订单金额合计',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
-  + btn('立即结算',(si>=0?"go('orderEscortDetail')":"toast('请选择服务时段')"));
+  + btn('立即结算',(si>=0?"openEscortPay()":"toast('请选择服务时段')"));
 }};
 function pickEscortDate(i){pickState.escortDate=i;render();}
 function pickEscortSlot(i){pickState.escortSlot=i;render();}
@@ -1875,7 +1875,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="log">提交：09-03 16:00<br>支付：—<br>取消：—</div></div></div></div>'
   +'<div class="btn-row"><button class="btn sec" onclick="go(\'refund\')">申请退款</button>'
   +'<button class="btn warn" onclick="toast(\'取消需物业后台审核\')">取消订单</button></div>'
-  + btn('订单支付','go(\'payment\')')
+  + btn('订单支付','openEscortPay()')
   +'<div class="pad"><button class="btn acc" onclick="go(\'review\')">'+ic('star',18)+' 服务评价</button></div>'
   + hint('仅陪诊日期前可申请全额退款');
 }};
@@ -2400,38 +2400,58 @@ S.version={title:'版本信息',render:function(){
 }};
 
 /* ================= 支付流程（补充页面） ================= */
+/* 收银台订单上下文：金额/名称/单号/单数，由各结算入口写入 */
+var payCtx=null;
+var payMethod='alipay';   /* 当前选中支付方式 'alipay' | 'wechat' */
+function pickPay(m){payMethod=m;render();}
+function payNow(){go('payResult');}
+function openEscortPay(){
+  var hours=(pickState.escortHours===undefined?3:pickState.escortHours);
+  hours=Math.max(1,Math.min(99,hours));
+  var amount=hours*80;
+  payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+hours+' 小时',no:'PZ20250905-001',count:'1 单'};
+  payMethod='alipay';
+  go('payment');
+}
 S.payment={title:'收银台',render:function(){
+  var c=payCtx||{amount:54,label:'报餐单批量结算',sub:'报餐单批量结算 · 共 2 单',no:'BC20250904-001',count:'2 单'};
+  var amt=c.amount.toFixed(2);
+  var m=payMethod;
   return '<div class="pad" style="padding-top:22px;text-align:center">'
   +'<div class="sub">待支付金额</div>'
-  +'<div style="font-size:36px;font-weight:800;letter-spacing:-1.2px;margin-top:8px">¥54.00</div>'
-  +'<div class="sub" style="margin-top:7px">报餐单批量结算 · 共 2 单</div></div>'
+  +'<div style="font-size:36px;font-weight:800;letter-spacing:-1.2px;margin-top:8px">¥'+amt+'</div>'
+  +'<div class="sub" style="margin-top:7px">'+c.sub+'</div></div>'
   + grpT('订单明细')
   +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">报餐单 #BC20250904-001</div><div class="cell-s">09-05 · 2 份</div></div><div class="cell-v">¥36.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">报餐单 #BC20250901-008</div><div class="cell-s">09-02 · 1 份</div></div><div class="cell-v">¥18.00</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">'+c.label+' #'+c.no+'</div><div class="cell-s">'+c.sub+'</div></div><div class="cell-v">¥'+amt+'</div></div>'
   +'</div>'
   + grpT('支付方式')
   +'<div class="grp">'
-  +'<div class="cell tap" onclick="toast(\'已选择支付宝支付\')"><div class="cell-ic bg-b">'+ic('alipay',17)+'</div>'
+  +'<div class="cell tap" onclick="pickPay(\'alipay\')"><div class="cell-ic bg-b">'+ic('alipay',17)+'</div>'
   +'<div class="cell-bd"><div class="cell-t">支付宝支付</div></div>'
-  +'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell tap" onclick="toast(\'已选择微信支付\')"><div class="cell-ic bg-g">'+ic('wechat',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">微信支付</div></div></div>'
+  +(m==='alipay'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')
   +'</div>'
-  +'<div class="pad"><button class="btn" onclick="go(\'payResult\')">确认支付 ¥54.00</button></div>'
+  +'<div class="sep"></div>'
+  +'<div class="cell tap" onclick="pickPay(\'wechat\')"><div class="cell-ic bg-g">'+ic('wechat',17)+'</div>'
+  +'<div class="cell-bd"><div class="cell-t">微信支付</div></div>'
+  +(m==='wechat'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')
+  +'</div>'
+  +'</div>'
+  +'<div class="pad"><button class="btn" onclick="payNow()">确认支付 ¥'+amt+'</button></div>'
   + hint('支付由支付宝 / 微信提供担保交易，资金安全有保障');
 }};
 S.payResult={title:'支付结果',nav:false,render:function(){
+  var c=payCtx||{amount:54,label:'报餐单批量结算',sub:'报餐单批量结算 · 共 2 单',no:'20260905095000123456',count:'2 单'};
+  var amt=c.amount.toFixed(2);
+  var mName=(payMethod==='wechat')?'微信':'支付宝';
   return '<div class="pad" style="padding-top:70px;text-align:center">'
   +'<div style="width:76px;height:76px;border-radius:38px;background:var(--brand);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:#fff;box-shadow:0 10px 26px rgba(23,168,138,.34)">'+ic('check',40,'#fff',2.2)+'</div>'
   +'<div class="bold" style="font-size:22px;letter-spacing:-.3px">支付成功</div>'
-  +'<div class="sub" style="margin-top:8px">¥54.00 · 支付宝支付</div></div>'
+  +'<div class="sub" style="margin-top:8px">¥'+amt+' · '+mName+'支付</div></div>'
   +'<div class="grp" style="margin-top:22px">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">结算订单</div></div><div class="cell-v">2 单</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">结算订单</div></div><div class="cell-v">'+c.count+'</div></div>'
   +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">支付宝</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">'+mName+'</div></div>'
   +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付时间</div></div><div class="cell-v">09-05 09:50</div></div>'
   +'<div class="sep full"></div>'
