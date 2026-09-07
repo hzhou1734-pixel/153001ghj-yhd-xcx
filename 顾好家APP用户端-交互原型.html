@@ -310,6 +310,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
       display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .it-s{font-size:12px;color:var(--label2);margin-top:4px;line-height:1.45;
       display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+/* 列表内的驳回原因条 */
+.rj-line{display:flex;align-items:center;gap:5px;margin-top:6px;padding:5px 8px;border-radius:7px;
+  background:rgba(255,59,48,.08);font-size:11.5px;color:#C0392B;line-height:1.4;font-weight:500;}
+.rj-line svg{width:12px;height:12px;flex-shrink:0;}
+.rj-line span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+/* 驳回详情页：修改步骤 */
+.rj-fix{padding:2px 0;}
+.rj-fix .s{display:flex;gap:10px;align-items:flex-start;padding:10px 0;}
+.rj-fix .s+.s{border-top:.5px solid var(--sep);}
+.rj-fix .n{width:20px;height:20px;border-radius:10px;flex:0 0 20px;background:rgba(43,196,160,.16);color:var(--brand-d);
+  font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.rj-fix .tx{font-size:13.5px;color:var(--label);line-height:1.6;}
 .avt{border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#5AD1B5,#2BC4A0);display:flex;
      align-items:center;justify-content:center;color:#fff;font-weight:600;overflow:hidden;}
 .avt svg{width:60%;height:60%;}
@@ -483,7 +495,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.13';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.14';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1047,11 +1059,78 @@ S.certList={title:'我的认证',rightLabel:'+添加',rightFn:'go(\'certify\')',
   +'<div class="item noind">'+thumb('b','home2',40,40,'')
   +'<div class="it-bd"><div class="it-t">玫瑰新城</div><div class="it-s">5栋1单元-0903 · 提交于 09-01</div></div><span class="tag o">审核中</span></div>'
   +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'certify\')">'+thumb('gy','home2',40,40,'')
-  +'<div class="it-bd"><div class="it-t">江畔雅苑</div><div class="it-s">2栋-1102 · 驳回：房号信息与登记不符</div>'
-  +'<div class="it-s" style="color:var(--brand);font-weight:600;margin-top:3px">点击重新提交认证 ›</div></div><span class="tag r">已驳回</span></div>'
-  +'</div>';
+  +'<div class="item noind" onclick="go(\'certReject\')">'+thumb('gy','home2',40,40,'')
+  +'<div class="it-bd"><div class="it-t">江畔雅苑</div><div class="it-s">2栋-1102 · 提交于 08-28</div>'
+  +'<div class="rj-line">'+ic('warn',12)+'<span>驳回：房号信息与物业登记不一致</span></div></div><span class="tag r">已驳回</span></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="item noind" onclick="go(\'certReject2\')">'+thumb('p','home2',40,40,'')
+  +'<div class="it-bd"><div class="it-t">翠湖小区</div><div class="it-s">6栋1单元-0501 · 提交于 09-02</div>'
+  +'<div class="rj-line">'+ic('warn',12)+'<span>驳回：业主姓名与产权人不一致</span></div></div><span class="tag r">已驳回</span></div>'
+  +'</div>'
+  + hint('被驳回的认证会显示具体原因，修改后可重新提交');
 }};
+
+/* 驳回原因详情：数据驱动，便于按不同驳回项复用 */
+var REJECTS={
+  certReject:{
+    c:'江畔雅苑',room:'2栋-1102',thumb:'gy',
+    name:'林小雨',tel:'138****6721',sub:'08-28 14:20',aud:'08-29 09:35 · 物业 李工',
+    sum:'物业后台核对后发现，你提交的房号信息与登记信息不一致，请核对后重新提交。',
+    rs:[
+      {t:'房号信息与物业登记不一致',s:'登记房号为 2栋-1101，你填写的是 2栋-1102'},
+      {t:'联系电话无法接通',s:'审核期间多次拨打未接通，请确认号码准确'}
+    ],
+    fix:['核对不动产权证或购房合同上的房号','确认联系电话可正常接听','重新填写认证信息并提交，约 1 个工作日出结果']
+  },
+  certReject2:{
+    c:'翠湖小区',room:'6栋1单元-0501',thumb:'p',
+    name:'陈志远',tel:'139****3308',sub:'09-02 10:05',aud:'09-03 15:12 · 物业 王主管',
+    sum:'你填写的业主姓名与该房号产权人登记信息不一致，需由产权人本人提交或补充关系证明。',
+    rs:[
+      {t:'业主姓名与产权人不一致',s:'产权人登记为「陈志明」，你填写的是「陈志远」'},
+      {t:'缺少关系证明',s:'如为亲属，请补充户口本或委托书等关系证明材料'}
+    ],
+    fix:['由产权人本人提交认证，或补充亲属关系证明','确认姓名与证件完全一致，避免使用同音字','重新提交后约 1 个工作日出结果，可联系楼栋管家加急']
+  }
+};
+function rejectPage(k){
+  var d=REJECTS[k];if(!d)return '<div class="empty">暂无数据</div>';
+  return '<div class="pad">'
+  +'<div class="card" style="background:rgba(255,59,48,.07)"><div class="row" style="gap:9px;align-items:flex-start">'
+  +'<span style="color:var(--red);flex-shrink:0;margin-top:1px">'+ic('warn',18)+'</span>'
+  +'<div><div class="bold" style="font-size:15px;color:#8A1C14">认证审核未通过</div>'
+  +'<div class="sub" style="color:#8A1C14;margin-top:6px;line-height:1.7">'+d.sum+'</div></div></div></div></div>'
+  + grpT('被驳回的认证')
+  +'<div class="grp">'
+  +'<div class="cell"><div class="cell-ic bg-gy">'+ic('home2',17)+'</div>'
+  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">'+d.c+'</div><div class="cell-s">'+d.room+'</div></div><span class="tag r">已驳回</span></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">业主姓名</div></div><div class="cell-v">'+d.name+'</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">联系电话</div></div><div class="cell-v">'+d.tel+'</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">提交时间</div></div><div class="cell-v">'+d.sub+'</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">审核时间</div></div><div class="cell-v" style="font-size:12px;color:var(--label2)">'+d.aud+'</div></div>'
+  +'</div>'
+  + grpT('驳回原因')
+  +'<div class="grp">'
+  + d.rs.map(function(r,i){
+      return (i?'<div class="sep full"></div>':'')
+        +'<div class="cell" style="align-items:flex-start"><span style="color:var(--red);flex-shrink:0;margin-top:2px">'+ic('warn',15)+'</span>'
+        +'<div class="cell-bd"><div class="cell-t" style="color:#C0392B">'+r.t+'</div><div class="cell-s">'+r.s+'</div></div></div>';
+    }).join('')
+  +'</div>'
+  + grpT('如何修改')
+  +'<div class="card"><div class="rj-fix">'
+  + d.fix.map(function(f,i){return '<div class="s"><span class="n">'+(i+1)+'</span><span class="tx">'+f+'</span></div>';}).join('')
+  +'</div></div>'
+  + btn('修改并重新提交','go(\'certify\')')
+  +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="go(\'butler\')">联系楼栋管家</button></div>'
+  + hint('重新提交后由物业后台重新审核，结果会通过消息通知你');
+}
+S.certReject={title:'驳回原因',render:function(){return rejectPage('certReject');}};
+S.certReject2={title:'驳回原因',render:function(){return rejectPage('certReject2');}};
 
 /* ================= 小区切换 ================= */
 S.communitySwitch={title:'我的小区',render:function(){
