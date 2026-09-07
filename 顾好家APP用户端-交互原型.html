@@ -480,6 +480,95 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .tile .tt{font-size:14px;font-weight:600;letter-spacing:-.2px;}
 .tile .ts{font-size:11.5px;color:var(--label2);margin-top:3px;line-height:1.4;}
 
+/* ---------- 社区贴吧 · 小红书风格双列卡片 ---------- */
+.post-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 var(--pad);}
+.post-card{background:var(--card);border-radius:12px;overflow:hidden;cursor:pointer;
+  box-shadow:0 1px 3px rgba(20,40,35,.04);transition:transform .12s;}
+.post-card:active{transform:scale(.98);}
+.post-cover{width:100%;height:178px;position:relative;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#FFD9C7,#F2642A);color:#fff;overflow:hidden;}
+.post-cover svg{width:38px;height:38px;opacity:.85;stroke-width:1.7;}
+.post-cover .pc-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.42);color:#fff;
+  font-size:10.5px;padding:2px 7px;border-radius:8px;backdrop-filter:blur(2px);font-weight:500;}
+.post-cover .pc-count{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.42);color:#fff;
+  font-size:10px;padding:2px 7px;border-radius:8px;display:flex;align-items:center;gap:3px;backdrop-filter:blur(2px);}
+.post-cover .pc-count svg{width:11px;height:11px;opacity:1;stroke-width:2;}
+.post-info{padding:9px 10px 11px;}
+.post-info .ti{font-size:13px;line-height:1.42;color:var(--label);font-weight:500;letter-spacing:-.1px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  min-height:36px;}
+.post-meta{margin-top:7px;display:flex;align-items:center;justify-content:space-between;gap:4px;}
+.post-author{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--label3);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;}
+.post-author .avt-mini{width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  color:#fff;flex:0 0 18px;}
+.post-author .avt-mini svg{width:10px;height:10px;stroke-width:2.2;}
+.post-likes{font-size:11px;color:var(--label3);display:flex;align-items:center;gap:2px;flex:0 0 auto;}
+.post-likes svg{width:11px;height:11px;}
+
+/* ---------- 帖子详情 · 小红书风格 ---------- */
+.pd-cover{width:100%;height:300px;background:linear-gradient(135deg,#FFD9C7,#F2642A);position:relative;
+  display:flex;align-items:center;justify-content:center;color:#fff;overflow:hidden;}
+.pd-cover svg{width:64px;height:64px;opacity:.88;stroke-width:1.6;}
+.pd-cover .pd-dot{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+  display:flex;gap:5px;}
+.pd-cover .pd-dot i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5);}
+.pd-cover .pd-dot i.on{width:14px;background:#fff;border-radius:3px;}
+.pd-cover .pd-back{position:absolute;top:14px;left:14px;width:32px;height:32px;border-radius:16px;
+  background:rgba(0,0,0,.32);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.pd-cover .pd-back svg{width:18px;height:18px;opacity:1;}
+.pd-cover .pd-more{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:16px;
+  background:rgba(0,0,0,.32);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.pd-cover .pd-more svg{width:18px;height:18px;opacity:1;}
+.pd-head{padding:14px var(--pad) 12px;}
+.pd-head .ti{font-size:18px;font-weight:700;line-height:1.4;letter-spacing:-.3px;color:var(--label);}
+.pd-head .meta{margin-top:10px;display:flex;align-items:center;gap:8px;}
+.pd-head .avt{width:36px;height:36px;border-radius:18px;display:flex;align-items:center;justify-content:center;color:#fff;}
+.pd-head .avt svg{width:18px;height:18px;stroke-width:2.2;}
+.pd-head .info{flex:1;min-width:0;}
+.pd-head .info .nm{font-size:14px;font-weight:600;color:var(--label);display:flex;align-items:center;gap:6px;}
+.pd-head .info .nm svg{width:13px;height:13px;color:var(--brand);}
+.pd-head .info .sub{font-size:11.5px;color:var(--label3);margin-top:2px;}
+.pd-head .follow{background:var(--brand);color:#fff;font-size:12.5px;font-weight:500;
+  padding:6px 13px;border-radius:13px;cursor:pointer;flex:0 0 auto;}
+.pd-body{padding:0 var(--pad) 12px;font-size:14.5px;line-height:1.75;color:var(--label);letter-spacing:-.1px;}
+.pd-tags{padding:0 var(--pad) 14px;display:flex;flex-wrap:wrap;gap:6px;}
+.pd-tags .tg{font-size:11.5px;color:var(--brand);background:rgba(43,196,160,.1);padding:3px 9px;border-radius:9px;}
+.pd-date{padding:0 var(--pad) 14px;font-size:11.5px;color:var(--label3);display:flex;align-items:center;gap:6px;}
+.pd-bar{padding:10px var(--pad);display:flex;align-items:center;justify-content:space-between;
+  border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);background:var(--card);}
+.pd-bar .left{display:flex;align-items:center;gap:18px;}
+.pd-bar .act{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--label2);cursor:pointer;}
+.pd-bar .act.on{color:var(--red);}
+.pd-bar .act svg{width:20px;height:20px;stroke-width:1.9;}
+.pd-bar .right{display:flex;align-items:center;gap:14px;color:var(--label2);}
+.pd-bar .right svg{width:20px;height:20px;stroke-width:1.9;cursor:pointer;}
+.pd-cmt{padding:14px var(--pad) 4px;font-size:14px;font-weight:600;color:var(--label);
+  display:flex;align-items:center;justify-content:space-between;}
+.pd-cmt .sort{font-size:11.5px;color:var(--label3);font-weight:400;}
+.pd-citem{padding:11px var(--pad);display:flex;gap:10px;align-items:flex-start;border-bottom:.5px solid var(--sep);}
+.pd-citem:last-child{border-bottom:none;}
+.pd-citem .avt{width:32px;height:32px;border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 32px;}
+.pd-citem .avt svg{width:15px;height:15px;stroke-width:2.2;}
+.pd-citem .bd{flex:1;min-width:0;}
+.pd-citem .nm{font-size:13px;color:var(--label);font-weight:500;display:flex;align-items:center;gap:6px;}
+.pd-citem .nm svg{width:12px;height:12px;color:var(--brand);}
+.pd-citem .txt{font-size:13.5px;color:var(--label);line-height:1.5;margin-top:3px;letter-spacing:-.1px;}
+.pd-citem .meta{margin-top:6px;display:flex;align-items:center;gap:14px;color:var(--label3);font-size:11px;}
+.pd-citem .like{display:flex;align-items:center;gap:3px;cursor:pointer;}
+.pd-citem .like svg{width:12px;height:12px;}
+.pd-citem .reply{cursor:pointer;}
+.pd-input{position:sticky;bottom:0;left:0;right:0;background:var(--card);
+  padding:8px var(--pad) 10px;border-top:.5px solid var(--sep);
+  display:flex;align-items:center;gap:8px;z-index:5;}
+.pd-input .inp{flex:1;background:var(--fill);border-radius:18px;padding:8px 14px;
+  font-size:13px;color:var(--label3);cursor:pointer;}
+.pd-input .ic-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--label3);cursor:pointer;}
+.pd-input .ic-btn svg{width:20px;height:20px;stroke-width:1.9;}
+.pd-input .send{background:var(--brand);color:#fff;font-size:13px;font-weight:500;
+  padding:6px 14px;border-radius:14px;cursor:pointer;flex:0 0 auto;}
+
 .metric{background:var(--card);border-radius:var(--r);margin:0 var(--pad) 12px;overflow:hidden;}
 .metric.tap{cursor:pointer;transition:transform .12s,opacity .12s;}
 .metric.tap:active{transform:scale(.985);opacity:.86;}
@@ -589,7 +678,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.35';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.36';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -628,6 +717,9 @@ var P={
   sCall:'M6.6 3.6h2.9l1.5 3.9-2 1.5a11.2 11.2 0 0 0 5 5l1.5-2 3.9 1.5v2.9a2 2 0 0 1-2.2 2A16.6 16.6 0 0 1 4.6 5.8a2 2 0 0 1 2-2.2z',
   sMore:'M4.5 4.5h5.2v5.2H4.5zM14.3 4.5h5.2v5.2h-5.2zM4.5 14.3h5.2v5.2H4.5zM14.3 14.3h5.2v5.2h-5.2z',
   heart:'M12 20.2s-7-4.3-7-9.1A4 4 0 0 1 12 8.3a4 4 0 0 1 7 2.8c0 4.8-7 9.1-7 9.1z',
+  heartF:'M12 20.6s-7-4.3-7-9.1A4 4 0 0 1 12 8.3a4 4 0 0 1 7 2.8c0 4.8-7 9.1-7 9.1z',
+  bookmark:'M6.4 3.6h11.2v17l-5.6-3.8-5.6 3.8z',
+  moreH:'M5 12h.01M12 12h.01M19 12h.01',
   pulse:'M2.8 12.4h4.2l2.1-4.4 3.3 8.4 2.6-5.2 2 3.2h4.2',
   bp:'M4.4 18.4a8.6 8.6 0 1 1 15.2 0M12 14.2l3.8-4.4',
   drop:'M12 3.4s5.6 6.1 5.6 9.9a5.6 5.6 0 0 1-11.2 0C6.4 9.5 12 3.4 12 3.4z',
@@ -1746,69 +1838,137 @@ S.activitySignup={title:'活动报名',render:function(){
 }};
 
 /* ================= 社区贴吧 ================= */
+var POSTS=[
+  {id:'p1',cat:'二手交易',catC:'br',cv:'o',ti:'出一台九成新婴儿车',a:'王阿姨',ac:'o',d:'09-03',l:128,m:23,
+   body:'孩子长大了用不上，九成新，可折叠，带遮阳棚。小区内自提，价格好商量，有兴趣的邻居可以私信我。',
+   imgs:3},
+  {id:'p2',cat:'求助问答',catC:'b',cv:'b',ti:'求助：谁家有多余的梯子',a:'小李',ac:'b',d:'09-02',l:45,m:18,
+   body:'家里换灯泡需要借梯子用半天，明天中午还，麻烦有的话私信一下，谢谢！',
+   imgs:1},
+  {id:'p3',cat:'邻里话题',catC:'o',cv:'o',ti:'小区西门早点摊搬哪里了？',a:'张叔',ac:'p',d:'09-01',l:212,m:54,
+   body:'连着两天没看到那个卖煎饼的大叔了，邻居们有消息吗？',
+   imgs:2},
+  {id:'p4',cat:'公告',catC:'gy',cv:'gy',ti:'关于中秋期间电梯检修的通知',a:'物业中心',ac:'gy',d:'08-31',l:331,m:16,
+   body:'按年度检修计划，3栋2单元电梯将于 9月8日 9:00-16:00 停梯检验，请高层住户提前安排出行。',
+   imgs:1},
+  {id:'p5',cat:'二手交易',catC:'br',cv:'p',ti:'转让儿童自行车一辆',a:'刘女士',ac:'p',d:'08-30',l:89,m:12,
+   body:'12寸儿童自行车，原价 380，现 80 转让，车况良好，附赠护具一套。',
+   imgs:1},
+  {id:'p6',cat:'公告',catC:'gy',cv:'br',ti:'9月社区健康义诊安排',a:'健康小屋',ac:'g',d:'08-29',l:472,m:31,
+   body:'本月15日、22日上午 9:00-11:30 在中心广场设义诊台，提供血压血糖免费测量。',
+   imgs:2},
+  {id:'p7',cat:'邻里话题',catC:'o',cv:'y',ti:'地下车库充电桩使用情况调查',a:'陈先生',ac:'y',d:'08-28',l:160,m:29,
+   body:'建议在 3栋负一层再增加 4 个充电桩，目前早晚高峰都排不上队。',
+   imgs:2},
+  {id:'p8',cat:'邻里话题',catC:'o',cv:'t',ti:'楼道堆的旧纸箱请尽快清理',a:'赵阿姨',ac:'o',d:'08-27',l:58,m:22,
+   body:'3栋一单元 18 楼，堆了好几个月了，容易引起火灾隐患，请尽快处理。',
+   imgs:1},
+  {id:'p9',cat:'二手交易',catC:'br',cv:'p',ti:'免费送几本育儿书籍',a:'孙老师',ac:'b',d:'08-26',l:241,m:35,
+   body:'《正面管教》《好妈妈胜过好老师》等共 8 本，自提免运费。',
+   imgs:3},
+  {id:'p10',cat:'公告',catC:'gy',cv:'b',ti:'垃圾分类督导员招募通知',a:'物业中心',ac:'gy',d:'08-25',l:312,m:18,
+   body:'每周二、四、六 7:00-9:00 在垃圾投放点值守，每位志愿者每月补贴 200 元。',
+   imgs:1}
+];
+var curPostId='p1';
+function openPost(id){curPostId=id;go('postDetail');}
+function postCard(p){
+  return '<div class="post-card" onclick="openPost(\''+p.id+'\')">'
+    +'<div class="post-cover bg-'+p.cv+'">'
+      + ic('img',38,'rgba(255,255,255,.9)',1.6)
+      +'<span class="pc-badge">'+p.cat+'</span>'
+      +(p.imgs>1?'<span class="pc-count">'+ic('img',11)+' '+p.imgs+'</span>':'')
+    +'</div>'
+    +'<div class="post-info">'
+      +'<div class="ti">'+p.ti+'</div>'
+      +'<div class="post-meta">'
+        +'<div class="post-author">'
+          +'<div class="avt-mini bg-'+p.ac+'">'+ic('me',10)+'</div>'
+          + p.a
+        +'</div>'
+        +'<div class="post-likes">'+ic('heart',11)+' '+p.l+'</div>'
+      +'</div>'
+    +'</div>'
+  +'</div>';
+}
+function postCards(list){
+  return '<div class="post-grid">'
+    + list.map(function(p){return postCard(p);}).join('')
+  +'</div>';
+}
+
 S.forumList={title:'社区贴吧',rightLabel:'发布',rightFn:'go(\'postPublish\')',render:function(){
   var TABS=['全部','二手交易','求助问答','邻里话题','公告'];
   var cur=(chipState.forumList===undefined?0:chipState.forumList);
-  var P=[
-    {c:'二手交易',cc:'br',t:'出一台九成新婴儿车',a:'王阿姨',d:'09-03 14:20',l:'12',m:'3'},
-    {c:'求助问答',cc:'b',t:'求助：谁家有多余的梯子',a:'小李',d:'09-02 20:15',l:'5',m:'8'},
-    {c:'邻里话题',cc:'o',t:'小区西门早点摊搬哪里了？',a:'张叔',d:'09-01 08:40',l:'21',m:'14'},
-    {c:'公告',cc:'gy',t:'关于中秋期间电梯检修的通知',a:'物业中心',d:'08-31 10:05',l:'33',m:'6'},
-    {c:'二手交易',cc:'br',t:'转让儿童自行车一辆',a:'刘女士',d:'08-30 16:42',l:'9',m:'2'},
-    {c:'公告',cc:'gy',t:'9 月社区健康义诊安排',a:'健康小屋',d:'08-29 09:00',l:'47',m:'11'},
-    {c:'邻里话题',cc:'o',t:'地下车库充电桩使用情况调查',a:'陈先生',d:'08-28 21:12',l:'16',m:'9'}
-  ];
-  var list=cur?P.filter(function(x){return x.c===TABS[cur];}):P;
+  var list=cur?POSTS.filter(function(x){return x.cat===TABS[cur];}):POSTS;
   var h='<div class="pad">'+searchBar('搜索帖子标题或内容','')+'</div>'+chips(TABS,'forumList');
   if(!list.length){
     h+='<div class="pad">'+empty('post','暂无'+TABS[cur]+'的帖子','换个分类看看')+'</div>';
   }else{
-    h+='<div class="grp-t">共 '+list.length+' 条帖子</div><div class="grp">';
-    list.forEach(function(x,i){
-      if(i)h+='<div class="sep full"></div>';
-      h+='<div class="item noind" onclick="go(\'postDetail\')">'+avt(42)
-        +'<div class="it-bd"><div class="row" style="gap:6px;margin-bottom:3px"><span class="tag '+x.cc+'">'+x.c+'</span></div>'
-        +'<div class="it-t">'+x.t+'</div><div class="it-s">'+x.a+' · '+x.d+'</div></div>'
-        +'<div class="row" style="gap:11px;color:var(--label3);font-size:12px"><span>♥ '+x.l+'</span><span>💬 '+x.m+'</span></div></div>';
-    });
-    h+='</div>';
+    h+='<div class="grp-t">共 '+list.length+' 条帖子</div>'+postCards(list);
   }
   return h+hint('下拉刷新 · 上拉加载更多历史帖子 · 仅认证用户可发布')
     + fab('go(\'postPublish\')');
 }};
 
 S.postDetail={title:'帖子详情',render:function(){
-  return '<div class="grp">'
-  +'<div class="cell" style="padding:14px"><div class="cell-ic" style="background:none">'+avt(40)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">王阿姨</div><div class="cell-s">09-03 14:20 · 阳光花园</div></div>'
-  +'<span class="tag br">二手交易</span></div></div>'
-  +'<div class="card"><div class="bold" style="font-size:18px;letter-spacing:-.3px;line-height:1.4">出一台九成新婴儿车</div>'
-  +'<div class="sub" style="font-size:14px;line-height:1.7;color:var(--label);margin-top:10px">孩子长大了用不上，九成新，可折叠，带遮阳棚。小区内自提，价格好商量，有兴趣的邻居可以私信我。</div>'
-  +'<div class="row" style="gap:9px;margin-top:13px">'
-  +'<div class="cover" style="width:104px;height:104px;flex:0 0 104px">'+ic('img',28,'#fff',1.7)+'</div>'
-  +'<div class="cover o" style="width:104px;height:104px;flex:0 0 104px">'+ic('img',28,'#fff',1.7)+'</div>'
-  +'<div class="cover b" style="width:104px;height:104px;flex:0 0 104px">'+ic('video',28,'#fff',1.7)+'</div></div>'
-  +'<div class="row" style="gap:20px;margin-top:14px;padding-top:12px;border-top:.5px solid var(--sep)">'
-  +'<span class="row" style="gap:5px;color:var(--label2);font-size:13px;cursor:pointer" onclick="toast(\'已点赞\')">♥ 12 点赞</span>'
-  +'<span class="row" style="gap:5px;color:var(--label2);font-size:13px">💬 3 评论</span></div></div>'
-  + grpT('评论 3')
-  +'<div class="grp">'
-  +'<div class="cell" style="align-items:flex-start;padding:13px 14px"><div class="cell-ic" style="background:none;margin-top:2px">'+avt(32)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:13.5px">小李</div>'
-  +'<div class="cell-s" style="font-size:14px;color:var(--label);margin-top:3px">想要，怎么联系？</div>'
-  +'<div class="cell-s">09-03 15:00 · 回复</div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell" style="align-items:flex-start;padding:10px 14px 10px 68px"><div class="cell-ic" style="background:none;margin-top:2px">'+avt(26)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:13px">王阿姨</div>'
-  +'<div class="cell-s" style="font-size:13.5px;color:var(--label);margin-top:3px">私信你啦~</div>'
-  +'<div class="cell-s">09-03 15:10</div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell" style="align-items:flex-start;padding:13px 14px"><div class="cell-ic" style="background:none;margin-top:2px">'+avt(32)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:13.5px">张叔</div>'
-  +'<div class="cell-s" style="font-size:14px;color:var(--label);margin-top:3px">这个牌子不错，值得入手。</div>'
-  +'<div class="cell-s">09-03 16:22 · 回复</div></div></div>'
-  +'</div>'+hint('支持二级评论，禁止三级及以上评论<br>违规内容由后台敏感词库自动屏蔽')
-  +'<div style="height:8px"></div>';
+  var p=POSTS.find(function(x){return x.id===curPostId;})||POSTS[0];
+  var comments=[
+    {a:'小李',ac:'b',t:'想要，怎么联系？',d:'09-03 15:00',l:3,auth:true},
+    {a:'王阿姨',ac:'o',t:'私信你啦~',d:'09-03 15:10',l:0,reply:true},
+    {a:'张叔',ac:'p',t:'这个牌子不错，值得入手。',d:'09-03 16:22',l:5,auth:false}
+  ];
+  return '<div class="pd-cover bg-'+p.cv+'">'
+    + ic('img',64,'rgba(255,255,255,.92)',1.6)
+    +'<div class="pd-back" onclick="back()">'+ic('chevL',18,'#fff',2.2)+'</div>'
+    +'<div class="pd-more" onclick="toast(\'更多操作\')">'+ic('moreH',18,'#fff',2.4)+'</div>'
+    +'<div class="pd-dot">'+(p.imgs>1?'<i class="on"></i><i></i><i></i>':'<i class="on"></i>')+'</div>'
+  +'</div>'
+  +'<div class="pd-head">'
+    +'<div class="ti">'+p.ti+'</div>'
+    +'<div class="meta">'
+      +'<div class="avt bg-'+p.ac+'">'+ic('me',18)+'</div>'
+      +'<div class="info">'
+        +'<div class="nm">'+p.a+(p.cat==='公告'?' '+ic('shield',13):'')+'</div>'
+        +'<div class="sub">'+p.d+' · 阳光花园</div>'
+      +'</div>'
+      +(p.cat==='公告'?'':'<div class="follow" onclick="toast(\'已关注 '+p.a+'\')">+ 关注</div>')
+    +'</div>'
+  +'</div>'
+  +'<div class="pd-body">'+p.body+'</div>'
+  +'<div class="pd-tags"><span class="tg">#'+p.cat+'</span><span class="tg">#阳光花园</span><span class="tg">#邻里互助</span></div>'
+  +'<div class="pd-date">'+ic('clock',12)+' 发布于 '+p.d+' · '+p.a+'</div>'
+  +'<div class="pd-bar">'
+    +'<div class="left">'
+      +'<div class="act on" onclick="toast(\'已点赞\')">'+ic('heartF',20,'currentColor',2)+' '+p.l+'</div>'
+      +'<div class="act" onclick="toast(\'已收藏\')">'+ic('bookmark',20)+' 收藏</div>'
+    +'</div>'
+    +'<div class="right">'
+      + ic('msg',20,'currentColor')+' '+ic('share',20,'currentColor')+' '+ic('moreH',20,'currentColor')
+    +'</div>'
+  +'</div>'
+  +'<div class="pd-cmt"><span>评论 '+p.m+'</span><span class="sort">按热度</span></div>'
+  + comments.map(function(c){
+      return '<div class="pd-citem">'
+        +'<div class="avt bg-'+c.ac+'">'+ic('me',15)+'</div>'
+        +'<div class="bd">'
+          +'<div class="nm">'+c.a+'</div>'
+          +'<div class="txt">'+c.t+'</div>'
+          +'<div class="meta">'
+            +'<span>'+c.d+'</span>'
+            +(c.reply?'<span class="reply" style="color:var(--brand)">作者</span>':'')
+            +'<span class="like" onclick="toast(\'已点赞\')">'+ic('heart',12)+' '+(c.l||'')+'</span>'
+            +'<span class="reply">回复</span>'
+          +'</div>'
+        +'</div>'
+      +'</div>';
+    }).join('')
+  +'<div style="height:64px"></div>'
+  +'<div class="pd-input">'
+    +'<div class="inp" onclick="toast(\'打开评论输入\')">说点什么…</div>'
+    +'<div class="ic-btn" onclick="toast(\'表情\')">'+ic('heart',20,'currentColor')+'</div>'
+    +'<div class="send" onclick="toast(\'已发送\')">发送</div>'
+  +'</div>';
 }};
 S.postPublish={title:'发布帖子',render:function(){
   return '<div class="grp">'
