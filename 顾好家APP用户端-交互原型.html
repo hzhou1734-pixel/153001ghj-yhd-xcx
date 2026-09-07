@@ -299,6 +299,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .slot.on .s{color:var(--brand);}
 .stars{font-size:34px;color:var(--yellow);letter-spacing:7px;cursor:pointer;line-height:1;text-align:center;}
 
+/* 服务评价 - 商城评价风 */
+.rev-sum{background:linear-gradient(135deg,#5AD1B5 0%,#17A88A 100%);border-radius:14px;padding:16px 14px;color:#fff;display:flex;align-items:center;gap:14px;margin:0 var(--pad) 14px;box-shadow:0 6px 16px rgba(23,168,138,.18);}
+.rev-sum .l{flex:0 0 auto;text-align:center;border-right:1px solid rgba(255,255,255,.3);padding-right:14px;}
+.rev-sum .l .n{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1;}
+.rev-sum .l .u{font-size:11px;opacity:.85;margin-top:2px;}
+.rev-sum .r{flex:1;}
+.rev-sum .r .row1{display:flex;align-items:center;gap:6px;font-size:13px;line-height:1;}
+.rev-sum .r .row1 .n{margin-left:2px;font-weight:600;}
+.rev-sum .r .bar{display:flex;align-items:center;gap:5px;font-size:11px;margin-top:6px;}
+.rev-sum .r .bar .lbl{width:30px;color:rgba(255,255,255,.9);}
+.rev-sum .r .bar .b{flex:1;height:4px;background:rgba(255,255,255,.3);border-radius:2px;overflow:hidden;}
+.rev-sum .r .bar .b .f{height:100%;background:#FFD15C;border-radius:2px;}
+
+.rev-filter{display:flex;gap:8px;padding:0 var(--pad) 12px;overflow-x:auto;}
+.rev-filter::-webkit-scrollbar{display:none;}
+.rev-chip{flex-shrink:0;font-size:12px;padding:5px 12px;border-radius:14px;background:var(--fill);color:var(--label2);}
+.rev-chip.on{background:var(--brand);color:#fff;}
+.rev-chip .n{font-size:11px;opacity:.85;margin-left:3px;}
+
+.rev-card{padding:14px var(--pad);border-bottom:.5px solid var(--sep);}
+.rev-card:last-child{border-bottom:none;}
+.rev-card .hd{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.rev-card .ava{width:34px;height:34px;border-radius:17px;background:linear-gradient(145deg,#5AD1B5,#17A88A);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0;}
+.rev-card .hd .meta{flex:1;min-width:0;}
+.rev-card .hd .meta .nm{font-size:14px;font-weight:600;color:var(--label);}
+.rev-card .hd .meta .stars-s{font-size:12px;color:var(--yellow);letter-spacing:1px;line-height:1;margin-top:3px;}
+.rev-card .hd .meta .stars-s .g{color:var(--fill-3);}
+.rev-card .hd .time{font-size:11px;color:var(--label3);}
+.rev-card .tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;}
+.rev-card .tag-v{font-size:11px;color:var(--brand-d);background:var(--brand-fill);padding:2px 8px;border-radius:4px;}
+.rev-card .txt{font-size:14px;line-height:1.55;color:var(--label);}
+.rev-card .imgs{display:flex;gap:6px;margin-top:9px;}
+.rev-card .img{width:74px;height:74px;border-radius:8px;overflow:hidden;background:var(--fill);flex-shrink:0;position:relative;}
+.rev-card .img svg{width:100%;height:100%;display:block;}
+.rev-card .sku{margin-top:9px;padding-top:9px;border-top:.5px solid var(--sep);font-size:12px;color:var(--label3);display:flex;justify-content:space-between;align-items:center;}
+.rev-card .sku .lt{color:var(--label2);}
+.rev-card .sku .lt b{color:var(--label);font-weight:500;}
+.rev-card .merchant{margin-top:9px;padding:7px 10px;background:var(--fill);border-radius:8px;font-size:12px;color:var(--label2);display:flex;align-items:center;gap:5px;line-height:1.5;}
+.rev-card .merchant b{color:var(--label);font-weight:600;}
+.rev-card .merchant .reply{margin-left:auto;color:var(--brand);font-size:12px;flex-shrink:0;}
+.rev-card .helpful{margin-top:8px;display:flex;gap:14px;font-size:12px;color:var(--label3);}
+.rev-card .helpful span{display:inline-flex;align-items:center;gap:3px;cursor:pointer;}
+.rev-card .helpful svg{width:13px;height:13px;}
+
 .search{display:flex;align-items:center;gap:7px;background:#E9E9EA;border-radius:10px;padding:8px 11px;margin:0 var(--pad) 12px;}
 .search svg{width:15px;height:15px;color:var(--label3);flex-shrink:0;}
 .search input{flex:1;border:none;background:transparent;font-size:16px;outline:none;font-family:inherit;color:var(--label);}
@@ -521,7 +565,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.27';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.28';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1919,20 +1963,111 @@ S.orderSettlement={title:'订单结算',render:function(){
   + btn('立即结算','go(\'payment\')');
 }};
 S.review={title:'服务评价',render:function(){
-  return '<div class="pad" style="padding-top:16px">'
-  +'<div class="card" style="text-align:center;padding:20px 16px">'
-  +'<div class="bold" style="font-size:15px">服务评分</div>'
-  +'<div class="stars" style="margin-top:14px" onclick="toast(\'已选择 5 星\')">★★★★★</div>'
-  +'<div class="sub" style="margin-top:8px">非常满意</div></div></div>'
-  + grpT('评价内容')
-  +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-  +'<textarea rows="5" placeholder="说说您的体验…"></textarea></div></div>'
-  + grpT('上传图片')
-  +'<div class="card"><div class="row" style="gap:10px">'
-  +'<div class="upbox" onclick="toast(\'上传图片，最多 9 张\')">'+ic('camera',20)+'<span class="n">图片 0/9</span></div></div></div>'
-  + btn('提交评价','toast(\'评价提交成功\');back()')
-  + hint('报餐 / 托管：账单支付完成后开放评价入口<br>陪诊：陪诊日期次日自动开放 · 有效期 7 天，提交后不可修改');
+  /* 模拟评价数据（商城风格） */
+  var REVIEWS=[
+    {nm:'张**',t:'2026-09-04',score:5,
+      txt:'师傅非常专业，全程陪同我妈就诊，挂号取药一条龙，老人家特别感动。张师傅人也很耐心，问什么都细心解答，强烈推荐！',
+      tags:['专业耐心','准时可靠','服务周到'],sku:'医院就诊全程陪诊 · 3 小时',
+      imgs:['#5AD1B5','#17A88A','#FFD15C'],
+      merchant:true,reply:'感谢您的好评，张师傅会继续用心服务每一位业主！',
+      helpful:8,date:'09-04'},
+    {nm:'李**',t:'2026-09-03',score:5,
+      txt:'第一次预约陪诊，本来还有点担心，结果出乎意料的好。师傅提前 10 分钟到，还帮忙准备了轮椅，省了很大力气。',
+      tags:['准时到达','设备齐全','细心体贴'],sku:'体检陪诊 · 2 小时',
+      imgs:['#FF8C7A','#FFC1B3'],
+      merchant:true,reply:'感谢您的反馈，轮椅服务已纳入陪诊标配，欢迎再次预约。',
+      helpful:12,date:'09-03'},
+    {nm:'王**',t:'2026-08-29',score:4,
+      txt:'整体不错，师傅服务态度好，就是到了医院排队时间比较久，希望后续能提前帮忙预约号源。',
+      tags:['态度好'],sku:'医院就诊全程陪诊 · 3 小时',
+      imgs:[],
+      merchant:true,reply:'您好，已记录您的建议，后续会与医院协调代挂号服务。',
+      helpful:3,date:'08-29'},
+    {nm:'赵**',t:'2026-08-25',score:5,
+      txt:'老人腿脚不便，师傅全程搀扶，跑前跑后帮忙取报告，效率很高。值得信赖！',
+      tags:['专业耐心','体贴周到'],sku:'复诊陪诊 · 2 小时',
+      imgs:['#5AD1B5'],
+      merchant:false,reply:'',
+      helpful:5,date:'08-25'},
+    {nm:'陈**',t:'2026-08-22',score:5,
+      txt:'陪着老人家做了全套体检，每个科室都陪同，最后把报告整理好发给我，省心。',
+      tags:['高效省心','细致认真'],sku:'体检陪诊 · 4 小时',
+      imgs:['#17A88A','#FFD15C','#FF8C7A','#5AD1B5'],
+      merchant:true,reply:'感谢认可，张师傅团队的细致服务是物业培训的核心要求。',
+      helpful:15,date:'08-22'}
+  ];
+  /* 平均评分与分布 */
+  var allScore=0, dist=[0,0,0,0,0];
+  REVIEWS.forEach(function(r){allScore+=r.score;dist[r.score-1]++;});
+  var avg=(allScore/REVIEWS.length).toFixed(1);
+  var pct=[5,4,3,2,1].map(function(s){return Math.round(dist[s-1]/REVIEWS.length*100);});
+
+  /* 头像取首字 */
+  function ava(nm){return nm.charAt(0);}
+  /* 星级 */
+  function starsS(n){var h='';for(var i=0;i<5;i++)h+=i<n?'★':'☆';return h;}
+  /* 标签占位图片：用 SVG 渐变模拟"现场照" */
+  function imgSvg(c){return '<svg viewBox="0 0 74 74" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g'+c.slice(1)+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="'+c+'"/><stop offset="100%" stop-color="#fff"/></linearGradient></defs><rect width="74" height="74" fill="url(#g'+c.slice(1)+')"/><circle cx="22" cy="30" r="10" fill="#fff" opacity=".6"/><path d="M14 60 L32 38 L46 52 L60 32 L60 74 L14 74 Z" fill="#fff" opacity=".5"/></svg>';}
+
+  var html='<div class="rev-sum">'
+    +'<div class="l"><div class="n">'+avg+'</div><div class="u">综合评分</div></div>'
+    +'<div class="r">'
+    +'<div class="row1">'+starsS(Math.round(avg))+' <span class="n">'+REVIEWS.length+' 条评价</span></div>'
+    +'<div class="bar"><span class="lbl">5星</span><div class="b"><div class="f" style="width:'+pct[0]+'%"></div></div><span style="width:28px;text-align:right">'+pct[0]+'%</span></div>'
+    +'<div class="bar"><span class="lbl">4星</span><div class="b"><div class="f" style="width:'+pct[1]+'%"></div></div><span style="width:28px;text-align:right">'+pct[1]+'%</span></div>'
+    +'<div class="bar"><span class="lbl">3星</span><div class="b"><div class="f" style="width:'+pct[2]+'%"></div></div><span style="width:28px;text-align:right">'+pct[2]+'%</span></div>'
+    +'</div></div>';
+
+  /* 评价筛选 */
+  var filters=[{n:'全部',c:REVIEWS.length,on:true},{n:'好评',c:5},{n:'4-5星',c:5},{n:'有图',c:4},{n:'服务周到',c:3}];
+  var fhtml='<div class="rev-filter">';
+  filters.forEach(function(f,i){fhtml+='<div class="rev-chip'+(f.on?' on':'')+'" onclick="pickRevFilter(this,'+i+')">'+f.n+'<span class="n">'+f.c+'</span></div>';});
+  fhtml+='</div>';
+
+  /* 评价列表 */
+  var lhtml='';
+  REVIEWS.forEach(function(r){
+    var starsHtml='';for(var i=0;i<5;i++)starsHtml+=i<r.score?'<span>★</span>':'<span class="g">★</span>';
+    var imgsHtml='';
+    r.imgs.forEach(function(c){imgsHtml+='<div class="img" onclick="toast(\'查看图片\')">'+imgSvg(c)+'</div>';});
+    var tagsHtml='';
+    r.tags.forEach(function(tg){tagsHtml+='<span class="tag-v">'+tg+'</span>';});
+    var merchHtml='';
+    if(r.merchant){
+      merchHtml='<div class="merchant">'+ic('shop',13,'#17A88A')+' <b>物业陪诊服务中心</b><br>'+r.reply
+        +'<span class="reply" onclick="toast(\'已展开完整回复\')">展开</span></div>';
+    }
+    lhtml+='<div class="rev-card">'
+      +'<div class="hd">'
+        +'<div class="ava">'+ava(r.nm)+'</div>'
+        +'<div class="meta">'
+          +'<div class="nm">'+r.nm+'</div>'
+          +'<div class="stars-s">'+starsHtml+'</div>'
+        +'</div>'
+        +'<div class="time">'+r.t.substring(5)+'</div>'
+      +'</div>'
+      +(tagsHtml?'<div class="tags">'+tagsHtml+'</div>':'')
+      +'<div class="txt">'+r.txt+'</div>'
+      +(imgsHtml?'<div class="imgs">'+imgsHtml+'</div>':'')
+      +'<div class="sku"><span class="lt"><b>'+r.sku+'</b></span></div>'
+      +merchHtml
+      +'<div class="helpful">'
+        +'<span onclick="toast(\'已点赞\')">'+ic('thumb',13)+' 有用 ('+r.helpful+')</span>'
+        +'<span onclick="toast(\'已复制\')">'+ic('share',13)+' 分享</span>'
+      +'</div>'
+    +'</div>';
+  });
+
+  return html+fhtml+lhtml
+    +'<div class="pad"><button class="btn sec" onclick="toast(\'已加载更多评价\')">查看更多评价</button></div>'
+    +'<div class="pad">'+hint('评价真实反映了陪诊员的实际服务情况，作为后续服务质量考核的重要参考')+'</div>';
 }};
+/* 评价筛选切换 */
+function pickRevFilter(el){
+  var p=el.parentNode;var ch=p.querySelectorAll('.rev-chip');
+  for(var i=0;i<ch.length;i++)ch[i].classList.remove('on');
+  el.classList.add('on');
+}
 S.refund={title:'退款申请',render:function(){
   return '<div class="pad" style="padding-top:12px">'
   +'<div class="card" style="text-align:center;padding:18px 16px">'
