@@ -521,7 +521,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.25';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.26';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1867,9 +1867,19 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('receipt',17)+'</div>'
   +'<div class="cell-bd"><div class="cell-t">订单状态</div><div class="cell-s">#'+curEscortOrder+'</div></div><span class="tag '+(isPaid?'g':'o')+'">'+(isPaid?'已支付':'待支付')+'</span></div></div>'
   + grpT('陪诊信息')
-  +'<div class="grp"><div class="cell" style="align-items:flex-start">'
+  +'<div class="grp">'
+  +'<div class="cell" style="align-items:flex-start">'
   +'<div class="cell-bd"><div class="log" style="font-size:14px;color:var(--label);line-height:1.9">'
-  +'服务名称：医院就诊全程陪诊<br>陪诊日期：09-05<br>服务时长：3 小时<br>陪诊地址：市第一人民医院</div></div></div></div>'
+  +'服务名称：医院就诊全程陪诊<br>陪诊日期：09-05<br>服务时长：3 小时<br>陪诊地址：市第一人民医院</div></div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('me',17)+'</div>'
+  +'<div class="cell-bd"><div class="cell-t">张师傅</div><div class="cell-s">陪诊员 · 工号 #A2031</div></div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell tap" onclick="toast(\'正在呼叫 张师傅…\')">'
+  +'<div class="cell-ic bg-g">'+ic('phone',17)+'</div>'
+  +'<div class="cell-bd"><div class="cell-t">138 0000 0000</div><div class="cell-s">点击拨打陪诊员电话</div></div>'
+  +'<div style="color:var(--brand);display:flex">'+ic('chevR',16)+'</div></div>'
+  +'</div>'
   + grpT('支付信息')
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付金额</div></div><div class="cell-v" style="color:var(--accent);font-weight:700;font-size:17px">¥240.00</div></div>'
@@ -1879,7 +1889,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">'+(isPaid?'支付宝':'支付宝 / 微信')+'</div></div>'
   +'</div>'
   + grpT('订单日志')
-  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="log">提交：09-03 16:00<br>支付：'+(isPaid?'09-03 16:05':'—')+'<br>取消：—</div></div></div></div>'
+  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="log">提交：2026-09-03 16:00<br>支付：'+(isPaid?'2026-09-03 16:05':'—')+'<br>取消：—</div></div></div></div>'
   +(isPaid
     ?'<div class="pad"><button class="btn warn" onclick="go(\'refund\')">申请售后</button></div>'
     :'<div class="btn-row"><button class="btn warn" style="flex:1" onclick="toast(\'取消需物业后台审核\')">取消订单</button>'
