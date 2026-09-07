@@ -589,7 +589,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.30';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.31';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1514,6 +1514,7 @@ S.trustDetail={title:'托管详情',render:function(){
   var pk=TRUST[i];
   var cnt=(pickState.trustCount===undefined?1:pickState.trustCount);
   cnt=Math.max(1,Math.min(5,cnt));
+  var needPick=(pickState.trustPick===undefined?true:pickState.trustPick);
   return '<div class="pad"><div class="cover '+pk.cov+'" style="height:150px">'+ic(pk.ic,40,pk.dark?'#7A5B00':'#fff',1.7)+'</div></div>'
   +'<div class="pad">'
   +'<div class="row between"><div><div class="bold" style="font-size:20px">'+pk.n+'</div>'
@@ -1521,15 +1522,17 @@ S.trustDetail={title:'托管详情',render:function(){
   +'<div style="text-align:right"><span class="price" style="font-size:24px">¥'+pk.p+'</span><div class="sub">'+pk.u+'</div></div></div></div>'
   + grp([
     {ic:'family',icls:'bg-b',t:'托管人数',s:'1 - 5 人',ctl:step('trustCount',{def:1,min:1,max:5})},
-    {ic:'pin',icls:'bg-br',t:'是否需要接送',s:'从已绑定房号接送',ctl:sw(true,'toast(\'已切换接送\')')}
+    {ic:'pin',icls:'bg-br',t:'是否需要接送',s:'从已绑定房号接送',ctl:sw(needPick,'toggleTrustPick()')}
   ])
-  +'<div class="card"><div class="kv" style="padding:0"><span class="k">接送地址</span></div>'
-  +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
-  +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'仅可选择已绑定房号\')">更换'+ic('chevR',14)+'</span></div></div>'
+  +(needPick
+    ?'<div class="card"><div class="kv" style="padding:0"><span class="k">接送地址</span></div>'
+      +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
+      +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'仅可选择已绑定房号\')">更换'+ic('chevR',14)+'</span></div></div>'
+    :'')
   + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+(pk.p*cnt)+'.00</span>'}])
-  + btn('提交报名','toast(\'报名成功，已消耗顾家币额度\');go(\'orderTrustDetail\')')
-  + hint('额度不足时提示「额度不足，请先结算历史账单」<br>托管由物业线下执行，系统仅记录报名、账单与支付');
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交报名','toast(\'报名成功，已消耗顾家币额度\');go(\'orderTrustDetail\')')+'</div>';
 }};
+function toggleTrustPick(){pickState.trustPick=!pickState.trustPick;render();}
 function openTrust(i){pickState.trustType=i;go('trustDetail');}
 
 /* ================= 健康膳食 ================= */
