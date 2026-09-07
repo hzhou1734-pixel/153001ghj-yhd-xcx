@@ -521,7 +521,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.24';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.25';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1787,11 +1787,11 @@ S.ordersEscort={tab:'orders',title:'订单',nav:false,render:function(){
   +'<div class="seg" style="margin:0"><div class="s" onclick="go(\'orders\')">报餐单</div><div class="s" onclick="go(\'ordersTrust\')">托管单</div><div class="s on">陪诊单</div></div>'
   +'</div>'
   +'<div class="grp">'
-  +'<div class="item noind" onclick="go(\'orderEscortDetail\')"><div class="cell-ic bg-o">'+ic('sEscort',17)+'</div>'
+  +'<div class="item noind" onclick="openEscortDetail(\'PZ20250903-002\')"><div class="cell-ic bg-o">'+ic('sEscort',17)+'</div>'
   +'<div class="it-bd"><div class="it-t">医院就诊全程陪诊 · 3 小时</div><div class="it-s">#PZ20250903-002 · 09-05 · 提交 09-03 16:00</div></div>'
   +'<div style="text-align:right"><div class="price" style="font-size:16px">¥240.00</div><div style="margin-top:4px"><span class="tag o">待支付</span></div></div></div>'
   +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'orderEscortDetail\')"><div class="cell-ic bg-o">'+ic('sEscort',17)+'</div>'
+  +'<div class="item noind" onclick="openEscortDetail(\'PZ20250820-006\')"><div class="cell-ic bg-o">'+ic('sEscort',17)+'</div>'
   +'<div class="it-bd"><div class="it-t">体检陪诊 · 2 小时</div><div class="it-s">#PZ20250820-006 · 08-22 · 提交 08-20 10:30</div></div>'
   +'<div style="text-align:right"><div class="price" style="font-size:16px">¥160.00</div><div style="margin-top:4px"><span class="tag g">已支付</span></div></div></div>'
   +'</div>';
@@ -1855,10 +1855,17 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   + btn('订单结算','go(\'orderSettlement\')')
   +'<div class="pad"><button class="btn acc" onclick="go(\'review\')">'+ic('star',18)+' 服务评价</button></div>';
 }};
+/* 陪诊单状态：no -> 'unpaid' | 'paid' */
+var escortStatus={'PZ20250903-002':'unpaid','PZ20250820-006':'paid'};
+var curEscortOrder='PZ20250903-002';
+function openEscortDetail(no){curEscortOrder=no;go('orderEscortDetail');}
+
 S.orderEscortDetail={title:'陪诊单详情',render:function(){
+  var status=escortStatus[curEscortOrder]||'unpaid';
+  var isPaid=(status==='paid');
   return '<div class="grp">'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('receipt',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">订单状态</div><div class="cell-s">#PZ20250903-002</div></div><span class="tag o">待支付</span></div></div>'
+  +'<div class="cell-bd"><div class="cell-t">订单状态</div><div class="cell-s">#'+curEscortOrder+'</div></div><span class="tag '+(isPaid?'g':'o')+'">'+(isPaid?'已支付':'待支付')+'</span></div></div>'
   + grpT('陪诊信息')
   +'<div class="grp"><div class="cell" style="align-items:flex-start">'
   +'<div class="cell-bd"><div class="log" style="font-size:14px;color:var(--label);line-height:1.9">'
@@ -1867,17 +1874,16 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付金额</div></div><div class="cell-v" style="color:var(--accent);font-weight:700;font-size:17px">¥240.00</div></div>'
   +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付状态</div></div><div class="cell-v">待支付</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付状态</div></div><div class="cell-v">'+(isPaid?'已支付':'待支付')+'</div></div>'
   +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">支付宝 / 微信</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">'+(isPaid?'支付宝':'支付宝 / 微信')+'</div></div>'
   +'</div>'
   + grpT('订单日志')
-  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="log">提交：09-03 16:00<br>支付：—<br>取消：—</div></div></div></div>'
-  +'<div class="btn-row"><button class="btn sec" onclick="go(\'refund\')">申请退款</button>'
-  +'<button class="btn warn" onclick="toast(\'取消需物业后台审核\')">取消订单</button></div>'
-  + btn('订单支付','openEscortPay()')
-  +'<div class="pad"><button class="btn acc" onclick="go(\'review\')">'+ic('star',18)+' 服务评价</button></div>'
-  + hint('仅陪诊日期前可申请全额退款');
+  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="log">提交：09-03 16:00<br>支付：'+(isPaid?'09-03 16:05':'—')+'<br>取消：—</div></div></div></div>'
+  +(isPaid
+    ?'<div class="pad"><button class="btn warn" onclick="go(\'refund\')">申请售后</button></div>'
+    :'<div class="btn-row"><button class="btn warn" style="flex:1" onclick="toast(\'取消需物业后台审核\')">取消订单</button>'
+     +'<button class="btn" style="flex:1" onclick="openEscortPay()">订单支付</button></div>');
 }};
 
 /* ================= 结算 / 评价 / 退款 ================= */
@@ -2404,7 +2410,7 @@ S.version={title:'版本信息',render:function(){
 var payCtx=null;
 var payMethod='alipay';   /* 当前选中支付方式 'alipay' | 'wechat' */
 function pickPay(m){payMethod=m;render();}
-function payNow(){go('payResult');}
+function payNow(){if(payCtx&&payCtx.no)escortStatus[payCtx.no]='paid';go('payResult');}
 function openEscortPay(){
   var hours=(pickState.escortHours===undefined?3:pickState.escortHours);
   hours=Math.max(1,Math.min(99,hours));
