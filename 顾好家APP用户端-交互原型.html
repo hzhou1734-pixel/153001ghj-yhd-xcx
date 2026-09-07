@@ -625,6 +625,89 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .empty .et{font-size:15px;font-weight:600;color:var(--label);letter-spacing:-.2px;}
 .empty .es{font-size:13px;margin-top:5px;line-height:1.5;}
 
+/* ===== 订单列表（重构） ===== */
+.ord-sum{margin:0 var(--pad) 14px;background:linear-gradient(135deg,#34D2A8 0%,#17A88A 60%,#0F8E75 100%);
+  border-radius:18px;padding:18px 18px 16px;color:#fff;box-shadow:0 8px 24px rgba(23,168,138,.22);position:relative;overflow:hidden;}
+.ord-sum::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 70%);}
+.ord-sum::after{content:'';position:absolute;bottom:-40px;left:-20px;width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.12) 0%,rgba(255,255,255,0) 70%);}
+.ord-sum .os-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;position:relative;z-index:1;}
+.ord-sum .os-t{font-size:13px;opacity:.92;letter-spacing:-.1px;}
+.ord-sum .os-w{display:flex;align-items:center;gap:4px;font-size:13px;opacity:.92;cursor:pointer;}
+.ord-sum .os-w svg{width:13px;height:13px;}
+.ord-sum .os-b{font-size:11.5px;opacity:.78;margin-top:2px;letter-spacing:.2px;}
+.ord-sum .os-c{font-size:30px;font-weight:700;letter-spacing:-.8px;line-height:1.05;position:relative;z-index:1;
+  font-variant-numeric:tabular-nums;}
+.ord-sum .os-r{display:flex;gap:8px;margin-top:14px;position:relative;z-index:1;}
+.ord-sum .os-cd{flex:1;background:rgba(255,255,255,.16);border-radius:10px;padding:10px 8px;text-align:center;
+  backdrop-filter:blur(10px);cursor:pointer;transition:background .12s;}
+.ord-sum .os-cd:active{background:rgba(255,255,255,.26);}
+.ord-sum .os-cd.on{background:rgba(255,255,255,.28);}
+.ord-sum .os-cd .n{font-size:17px;font-weight:700;letter-spacing:-.4px;line-height:1.1;font-variant-numeric:tabular-nums;}
+.ord-sum .os-cd .l{font-size:11.5px;opacity:.88;margin-top:3px;}
+
+.ord-tabs{display:flex;margin:0 var(--pad) 12px;background:var(--card);border-radius:12px;padding:4px;}
+.ord-tabs .t{flex:1;text-align:center;padding:9px 0;font-size:14px;color:var(--label2);cursor:pointer;
+  border-radius:9px;transition:background .12s,color .12s;letter-spacing:-.1px;font-weight:500;}
+.ord-tabs .t.on{background:var(--brand);color:#fff;font-weight:600;box-shadow:0 3px 8px rgba(43,196,160,.28);}
+
+.ord-st{display:flex;gap:8px;padding:0 var(--pad) 12px;overflow-x:auto;}
+.ord-st::-webkit-scrollbar{display:none;}
+.ord-st .c{padding:6px 14px;background:var(--card);border-radius:15px;font-size:12.5px;color:var(--label2);
+  cursor:pointer;white-space:nowrap;transition:background .12s,color .12s;letter-spacing:-.1px;}
+.ord-st .c.on{background:rgba(43,196,160,.14);color:var(--brand-d);font-weight:600;}
+.ord-st .c:active{background:#E5E5EA;}
+
+.ord-card{margin:0 var(--pad) 12px;background:var(--card);border-radius:16px;overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.03);}
+.ord-card .hd{display:flex;align-items:center;justify-content:space-between;padding:13px 14px 9px;
+  border-bottom:.5px solid var(--sep);}
+.ord-card .hd .l{display:flex;align-items:center;gap:9px;}
+.ord-card .hd .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;}
+.ord-card .hd .ic.b{background:linear-gradient(135deg,#34D2A8,#17A88A);}
+.ord-card .hd .ic.o{background:linear-gradient(135deg,#FF9E73,#F2642A);}
+.ord-card .hd .ic.g{background:linear-gradient(135deg,#7FB6F0,#2585E6);}
+.ord-card .hd .ic svg{width:18px;height:18px;}
+.ord-card .hd .no{font-size:11.5px;color:var(--label3);font-variant-numeric:tabular-nums;letter-spacing:-.1px;}
+.ord-card .hd .st{font-size:11.5px;padding:3px 9px;border-radius:11px;font-weight:600;letter-spacing:-.1px;}
+.ord-card .hd .st.s-pending{background:rgba(255,122,69,.13);color:#F2642A;}
+.ord-card .hd .st.s-active{background:rgba(43,196,160,.13);color:var(--brand-d);}
+.ord-card .hd .st.s-done{background:rgba(0,0,0,.05);color:var(--label2);}
+.ord-card .hd .st.s-cancel{background:rgba(0,0,0,.05);color:var(--label3);}
+.ord-card .hd .st.s-refund{background:rgba(255,59,48,.13);color:#D62D1F;}
+.ord-card .bd{padding:13px 14px 11px;}
+.ord-card .ti{font-size:15.5px;font-weight:600;color:var(--label);letter-spacing:-.3px;line-height:1.3;}
+.ord-card .ti .qty{font-size:13px;color:var(--label3);font-weight:400;margin-left:6px;}
+.ord-card .meta{display:flex;flex-wrap:wrap;gap:5px 11px;margin-top:9px;font-size:12px;color:var(--label2);}
+.ord-card .meta .m{display:flex;align-items:center;gap:4px;}
+.ord-card .meta .m svg{width:11px;height:11px;color:var(--label3);}
+.ord-card .sum{display:flex;align-items:flex-end;justify-content:space-between;margin-top:12px;padding-top:11px;border-top:.5px dashed var(--sep);}
+.ord-card .sum .l{font-size:12px;color:var(--label2);}
+.ord-card .sum .l b{font-weight:600;color:var(--label);margin:0 2px;}
+.ord-card .sum .p{font-size:11.5px;color:var(--label3);text-decoration:line-through;margin-right:4px;}
+.ord-card .sum .p + .pn{font-size:18px;font-weight:700;color:var(--label);letter-spacing:-.4px;font-variant-numeric:tabular-nums;}
+.ord-card .sum .pn.pending{color:#F2642A;}
+.ord-card .sum .pn.cancel{color:var(--label3);}
+.ord-card .ft{display:flex;justify-content:flex-end;gap:8px;padding:0 14px 13px;}
+.ord-card .ft .ab{padding:6px 14px;border-radius:15px;font-size:13px;cursor:pointer;
+  transition:background .12s,opacity .12s;letter-spacing:-.1px;}
+.ord-card .ft .ab.sec{background:var(--fill);color:var(--label);}
+.ord-card .ft .ab.sec:active{background:#E5E5EA;}
+.ord-card .ft .ab.pri{background:var(--brand);color:#fff;font-weight:600;box-shadow:0 3px 8px rgba(43,196,160,.22);}
+.ord-card .ft .ab.pri:active{opacity:.85;}
+.ord-card .ft .ab.warm{background:#FFD9C7;color:#C2541A;font-weight:600;}
+.ord-card .ft .ab.warm:active{background:#FFC4A8;}
+.ord-card .timeline{padding:10px 14px;margin:0 14px 10px;background:var(--fill);border-radius:10px;display:flex;align-items:center;gap:4px;}
+.ord-card .timeline .sp{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10.5px;color:var(--label3);position:relative;}
+.ord-card .timeline .sp::before{content:'';position:absolute;left:50%;right:-50%;top:8px;height:1.5px;background:var(--sep);z-index:0;}
+.ord-card .timeline .sp:last-child::before{display:none;}
+.ord-card .timeline .sp.done{color:var(--brand-d);}
+.ord-card .timeline .sp.done::before{background:var(--brand);}
+.ord-card .timeline .sp .d{width:18px;height:18px;border-radius:50%;background:var(--sep);display:flex;align-items:center;justify-content:center;color:#fff;z-index:1;}
+.ord-card .timeline .sp.done .d{background:var(--brand);}
+.ord-card .timeline .sp .d svg{width:10px;height:10px;}
+
 .hero{height:112px;border-radius:var(--r);background:linear-gradient(135deg,#4FD8BC,#17A88A);color:#fff;
       padding:20px 22px;display:flex;flex-direction:column;justify-content:center;margin:0 var(--pad) 12px;}
 .hero.o{background:linear-gradient(135deg,#FF9E73,#F2642A);}
@@ -678,7 +761,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.36';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.37';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -2057,60 +2140,166 @@ S.articleDetail={title:'资讯详情',render:function(){
   +'</div>';
 }};
 
-/* ================= 订单（Tab） ================= */
+/* ================= 订单（Tab · 重构） ================= */
+/* 订单数据：type 1=报餐 2=托管 3=陪诊；status: pending待支付 / active进行中 / done已完成 / cancel已取消 / refund退款中 */
+var ORDERS=[
+  {id:'BC20250904-001',type:1,t1:'明日午餐',qty:2,price:36,oPrice:36,date:'09-05',sub:'09-04 10:20',st:'active',pay:'已确认',tags:['12:00送达','A套餐']},
+  {id:'BC20250902-008',type:1,t1:'昨日午餐',qty:1,price:18,oPrice:18,date:'09-03',sub:'09-02 11:05',st:'done',pay:'已结算',tags:['12:00送达','A套餐']},
+  {id:'BC20250903-004',type:1,t1:'午餐 · 1 份',qty:1,price:18,oPrice:18,date:'09-04',sub:'09-03 09:40',st:'cancel',pay:'已取消',tags:['12:00送达']},
+  {id:'BC20250901-002',type:1,t1:'今日晚餐',qty:2,price:36,oPrice:36,date:'09-01',sub:'08-31 17:30',st:'done',pay:'已结算',tags:['17:30送达','B套餐']},
+  {id:'TG20250901-003',type:2,t1:'学期日托',qty:1,price:1200,oPrice:1500,date:'10-01 至 12-31',sub:'09-01 09:00',st:'active',pay:'进行中',tags:['7岁·全日班','周一至周五']},
+  {id:'TG20250701-011',type:2,t1:'暑期托',qty:1,price:980,oPrice:980,date:'07-01 至 08-30',sub:'07-01 15:20',st:'cancel',pay:'已取消',tags:['8岁·全日班']},
+  {id:'TG20250601-005',type:2,t1:'周末半日托',qty:1,price:600,oPrice:720,date:'06-01 至 06-30',sub:'05-28 14:00',st:'done',pay:'已结算',tags:['周六半天']},
+  {id:'PZ20250903-002',type:3,t1:'医院就诊全程陪诊 · 3 小时',qty:3,price:240,oPrice:240,date:'09-05 09:00',sub:'09-03 16:00',st:'pending',pay:'待支付',tags:['陪诊员·李阿姨','北京协和医院']},
+  {id:'PZ20250820-006',type:3,t1:'体检陪诊 · 2 小时',qty:2,price:160,oPrice:180,date:'08-22 08:30',sub:'08-20 10:30',st:'done',pay:'已支付',tags:['陪诊员·王阿姨','301医院体检中心']},
+  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'refund',pay:'退款中',tags:['陪诊员·李阿姨','同济医院']}
+];
+var ordTypeLabels=['报餐单','托管单','陪诊单'];
+var ordTypeIcons={1:'sMeal',2:'sTrust',3:'sEscort'};
+var ordTypeCls={1:'b',2:'o',3:'g'};
+function ordSummary(type){
+  var list=type?ORDERS.filter(function(o){return o.type===type;}):ORDERS;
+  var total=list.length,p=0,a=0,d=0,c=0,r=0;
+  for(var i=0;i<list.length;i++){
+    var s=list[i].st;
+    if(s==='pending')p++;
+    else if(s==='active')a++;
+    else if(s==='done')d++;
+    else if(s==='cancel')c++;
+    else if(s==='refund')r++;
+  }
+  return {total:total,p:p,a:a,d:d,c:c,r:r};
+}
+function ordStatusText(s){return s==='pending'?'待支付':s==='active'?'进行中':s==='done'?'已完成':s==='cancel'?'已取消':s==='refund'?'退款中':'-';}
+function ordStatusCls(s){return s==='pending'?'pending':s==='active'?'active':s==='done'?'done':s==='cancel'?'cancel':'refund';}
+/* 订单详情跳转映射 */
+function openOrder(id){
+  var o=ORDERS.filter(function(x){return x.id===id;})[0];
+  if(!o)return;
+  if(o.type===1)go('orderMealDetail');
+  else if(o.type===2)go('orderTrustDetail');
+  else if(o.type===3){var sid=id.replace(/^PZ/,'PZ');openEscortDetail(sid);}
+}
+/* 统一订单卡片渲染 */
+function orderCard(o){
+  var stext=ordStatusText(o.st),scls=ordStatusCls(o.st);
+  var pnCls=o.st==='pending'?'pending':o.st==='cancel'?'cancel':'';
+  var timeline='';
+  if(o.st==='active'&&o.type===2){
+    timeline='<div class="timeline">'
+      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>报名</span></div>'
+      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>已确认</span></div>'
+      +'<div class="sp"><div class="d"></div><span>进行中</span></div>'
+      +'<div class="sp"><div class="d"></div><span>完成</span></div>'
+    +'</div>';
+  }else if(o.st==='active'&&o.type===1){
+    timeline='<div class="timeline">'
+      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>提交</span></div>'
+      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>已确认</span></div>'
+      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>制作中</span></div>'
+      +'<div class="sp"><div class="d"></div><span>已送达</span></div>'
+    +'</div>';
+  }
+  var actions='';
+  if(o.st==='pending'){
+    actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'订单已复制\')">取消订单</div>'
+      +'<div class="ab warm" onclick="event.stopPropagation();toast(\'打开支付\')">去支付</div>';
+  }else if(o.st==='active'){
+    actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'联系客服\')">联系管家</div>'
+      +'<div class="ab sec" onclick="event.stopPropagation();toast(\'查看进度\')">查看进度</div>';
+  }else if(o.st==='done'){
+    actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'删除订单\')">删除</div>'
+      +'<div class="ab sec" onclick="event.stopPropagation();toast(\'申请售后\')">申请售后</div>'
+      +'<div class="ab pri" onclick="event.stopPropagation();toast(\'再次预约\')">再次预约</div>';
+  }else if(o.st==='cancel'){
+    actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'订单已删除\')">删除</div>'
+      +'<div class="ab pri" onclick="event.stopPropagation();toast(\'重新预约\')">重新预约</div>';
+  }else if(o.st==='refund'){
+    actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'查看详情\')">退款详情</div>';
+  }
+  var html='<div class="ord-card" onclick="openOrder(\''+o.id+'\')">'
+    +'<div class="hd">'
+        +'<div class="l">'
+          +'<div class="ic '+ordTypeCls[o.type]+'">'+ic(ordTypeIcons[o.type],17)+'</div>'
+          +'<div><div>'+ordTypeLabels[o.type-1]+'</div><div class="no">'+o.id+'</div></div>'
+        +'</div>'
+        +'<div class="st s-'+scls+'">'+stext+'</div>'
+    +'</div>'
+    +'<div class="bd">'
+        +'<div class="ti">'+o.t1+(o.qty>1?'<span class="qty">× '+o.qty+'</span>':'')+'</div>'
+        +'<div class="meta">'
+          +'<div class="m">'+ic('clock',11)+' 配送 / 使用：'+o.date+'</div>'
+          +'<div class="m">'+ic('pin',11)+' 提交：'+o.sub+'</div>'
+        +'</div>'
+      +(timeline||'')
+        +'<div class="sum">'
+          +'<div class="l">共 <b>'+o.qty+'</b> 份订单</div>'
+          +'<div>'+(o.price<o.oPrice?'<span class="p">¥'+o.oPrice.toFixed(2)+'</span>':'')
+            +'<span class="pn '+pnCls+'">¥'+o.price.toFixed(2)+'</span></div>'
+        +'</div>'
+    +'</div>'
+    +(actions?'<div class="ft">'+actions+'</div>':'')
+  +'</div>';
+  return html;
+}
+function orderFilterChip(label,key,cur){
+  return '<div class="c'+(cur===key?' on':'')+'" onclick="setOrdFilter(\''+key+'\')">'+label+'</div>';
+}
+var ordCurFilter='all';
+function setOrdFilter(k){ordCurFilter=k;render();}
+function orderListHTML(type,sub,curTab){
+  var list=ORDERS.filter(function(o){return o.type===type;});
+  if(ordCurFilter!=='all')list=list.filter(function(o){return o.st===ordCurFilter;});
+  var sum=ordSummary(type);
+  var chips=[orderFilterChip('全部 '+sum.total,'all',ordCurFilter)];
+  if(sum.p)chips.push(orderFilterChip('待支付 '+sum.p,'pending',ordCurFilter));
+  if(sum.a)chips.push(orderFilterChip('进行中 '+sum.a,'active',ordCurFilter));
+  if(sum.d)chips.push(orderFilterChip('已完成 '+sum.d,'done',ordCurFilter));
+  if(sum.c)chips.push(orderFilterChip('已取消 '+sum.c,'cancel',ordCurFilter));
+  if(sum.r)chips.push(orderFilterChip('退款中 '+sum.r,'refund',ordCurFilter));
+  var pendingCount=sum.p;
+  var pendingAmt=ORDERS.filter(function(o){return o.type===type&&o.st==='pending';}).reduce(function(a,b){return a+b.price;},0);
+  return '<div class="ord-sum">'
+      +'<div class="os-h"><div><div class="os-t">'+sub+'</div><div class="os-b">本月服务订单 · 总计 '+sum.total+' 单</div></div>'
+        +'<div class="os-w" onclick="openPanel(\'orderSearch\')">筛选 '+ic('chevR',13)+'</div></div>'
+      +'<div class="os-c">'+sum.total+'</div>'
+      +'<div class="os-r">'
+        +'<div class="os-cd'+(ordCurFilter==='pending'?' on':'')+'" onclick="setOrdFilter(\'pending\')"><div class="n">'+sum.p+'</div><div class="l">待支付</div></div>'
+        +'<div class="os-cd'+(ordCurFilter==='active'?' on':'')+'" onclick="setOrdFilter(\'active\')"><div class="n">'+sum.a+'</div><div class="l">进行中</div></div>'
+        +'<div class="os-cd'+(ordCurFilter==='done'?' on':'')+'" onclick="setOrdFilter(\'done\')"><div class="n">'+sum.d+'</div><div class="l">已完成</div></div>'
+        +'<div class="os-cd'+(ordCurFilter==='cancel'?' on':'')+'" onclick="setOrdFilter(\'cancel\')"><div class="n">'+(sum.c+sum.r)+'</div><div class="l">取消/退款</div></div>'
+      +'</div>'
+    +'</div>'
+    +'<div class="ord-tabs">'
+      +'<div class="t'+(type===1?' on':'')+'" onclick="setOrdType(1)">报餐单</div>'
+      +'<div class="t'+(type===2?' on':'')+'" onclick="setOrdType(2)">托管单</div>'
+      +'<div class="t'+(type===3?' on':'')+'" onclick="setOrdType(3)">陪诊单</div>'
+    +'</div>'
+    +'<div class="ord-st">'+chips.join('')+'</div>'
+    +(list.length?list.map(orderCard).join(''):'<div class="pad">'+empty('post','暂无相关订单','切换其他分类或筛选试试')+'</div>')
+    +(pendingCount>1?'<div class="pad" style="padding-top:0"><div class="card" style="background:linear-gradient(135deg,#FFF2EA,#FFE3D2);border:1px solid #FFD9C7;padding:14px 16px">'
+        +'<div class="row between"><div><div class="bold" style="font-size:14.5px;color:#C2541A">批量结算待支付订单</div>'
+          +'<div class="sub" style="margin-top:4px">共 '+pendingCount+' 笔 · 合计 <b style="color:#C2541A">¥'+pendingAmt.toFixed(2)+'</b></div></div>'
+          +'<div style="background:#F2642A;color:#fff;padding:8px 16px;border-radius:18px;font-size:13px;font-weight:600;cursor:pointer" onclick="toast(\'打开收银台\');go(\'orderSettlement\')">去结算</div></div></div></div>':'')
+    +'<div style="height:24px"></div>';
+}
+function setOrdType(t){
+  ordCurFilter='all';
+  if(t===1)go('orders');
+  else if(t===2)go('ordersTrust');
+  else if(t===3)go('ordersEscort');
+}
 S.orders={tab:'orders',title:'订单',nav:false,render:function(){
-  return topLg('订单','本月 12 单 · 待支付 1 笔',[['wallet','','orderSettlement','']])
-  +'<div class="pad">'+searchBar('搜索订单编号','openPanel(\'orderSearch\')')+'</div>'
-  +'<div class="pad">'
-  +'<div class="seg" style="margin:0"><div class="s on" onclick="toast(\'报餐单\')">报餐单</div><div class="s" onclick="go(\'ordersTrust\')">托管单</div><div class="s" onclick="go(\'ordersEscort\')">陪诊单</div></div>'
-  +'</div>'
-  +'<div class="grp">'
-  +'<div class="item noind" onclick="go(\'orderMealDetail\')"><div class="cell-ic bg-br">'+ic('sMeal',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">明日午餐 · 2 份</div><div class="it-s">#BC20250904-001 · 09-05 · 提交 09-04 10:20</div></div>'
-  +'<div style="text-align:right"><div class="price" style="font-size:16px">¥36.00</div><div style="margin-top:4px"><span class="tag br">已确认</span></div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'orderMealDetail\')"><div class="cell-ic bg-br">'+ic('sMeal',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">昨日午餐 · 1 份</div><div class="it-s">#BC20250902-008 · 09-03 · 提交 09-02 11:05</div></div>'
-  +'<div style="text-align:right"><div class="price" style="font-size:16px">¥18.00</div><div style="margin-top:4px"><span class="tag g">已结算</span></div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'orderMealDetail\')"><div class="cell-ic bg-gy">'+ic('sMeal',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">午餐 · 1 份</div><div class="it-s">#BC20250903-004 · 09-04 · 提交 09-03 09:40</div></div>'
-  +'<div style="text-align:right"><div class="price" style="font-size:16px;color:var(--label3)">¥18.00</div><div style="margin-top:4px"><span class="tag gy">已取消</span></div></div></div>'
-  +'</div>'
-  + grp([{ic:'wallet',icls:'bg-o',t:'批量结算待结算订单',s:'共 2 笔 · 合计 ¥54.00',ar:1,on:'go(\'orderSettlement\')'}]);
+  return topLg('订单','所有订单',[['wallet','','orderSettlement','']])
+    + orderListHTML(1,'报餐订单 · 营养到家','orders');
 }};
 S.ordersTrust={tab:'orders',title:'订单',nav:false,render:function(){
-  return topLg('订单','进行中 1 笔 · 合计 ¥1200.00',[['wallet','','orderSettlement','']])
-  +'<div class="pad">'+searchBar('搜索订单编号','openPanel(\'orderSearch\')')+'</div>'
-  +'<div class="pad">'
-  +'<div class="seg" style="margin:0"><div class="s" onclick="go(\'orders\')">报餐单</div><div class="s on">托管单</div><div class="s" onclick="go(\'ordersEscort\')">陪诊单</div></div>'
-  +'</div>'
-  +'<div class="grp">'
-  +'<div class="item noind" onclick="go(\'orderTrustDetail\')"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">学期日托 · 1 人</div><div class="it-s">#TG20250901-003 · 提交 09-01 09:00</div></div>'
-  +'<div style="text-align:right"><div class="price" style="font-size:16px">¥1200.00</div><div style="margin-top:4px"><span class="tag br">进行中</span></div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'orderTrustDetail\')"><div class="cell-ic bg-gy">'+ic('sTrust',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">暑期托 · 1 人</div><div class="it-s">#TG20250701-011 · 提交 07-01 15:20</div></div>'
-  +'<div style="text-align:right"><div class="price" style="font-size:16px;color:var(--label3)">¥980.00</div><div style="margin-top:4px"><span class="tag gy">已取消</span></div></div></div>'
-  +'</div>'
-  + grp([{ic:'wallet',icls:'bg-o',t:'批量结算进行中托管单',s:'共 1 笔 · 合计 ¥1200.00',ar:1,on:'go(\'orderSettlement\')'}]);
+  return topLg('订单','所有订单',[['wallet','','orderSettlement','']])
+    + orderListHTML(2,'托管订单 · 安心托付','ordersTrust');
 }};
 S.ordersEscort={tab:'orders',title:'订单',nav:false,render:function(){
-  return topLg('订单','待支付 1 笔 · 已完成 1 笔',[['wallet','','orderSettlement','']])
-  +'<div class="pad">'+searchBar('搜索订单编号','openPanel(\'orderSearch\')')+'</div>'
-  +'<div class="pad">'
-  +'<div class="seg" style="margin:0"><div class="s" onclick="go(\'orders\')">报餐单</div><div class="s" onclick="go(\'ordersTrust\')">托管单</div><div class="s on">陪诊单</div></div>'
-  +'</div>'
-  +'<div class="grp">'
-  +'<div class="item noind" onclick="openEscortDetail(\'PZ20250903-002\')"><div class="cell-ic bg-o">'+ic('sEscort',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">医院就诊全程陪诊 · 3 小时</div><div class="it-s">#PZ20250903-002 · 09-05 · 提交 09-03 16:00</div></div>'
-  +'<div style="text-align:right"><div class="price" style="font-size:16px">¥240.00</div><div style="margin-top:4px"><span class="tag o">待支付</span></div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="openEscortDetail(\'PZ20250820-006\')"><div class="cell-ic bg-o">'+ic('sEscort',17)+'</div>'
-  +'<div class="it-bd"><div class="it-t">体检陪诊 · 2 小时</div><div class="it-s">#PZ20250820-006 · 08-22 · 提交 08-20 10:30</div></div>'
-  +'<div style="text-align:right"><div class="price" style="font-size:16px">¥160.00</div><div style="margin-top:4px"><span class="tag g">已支付</span></div></div></div>'
-  +'</div>';
+  return topLg('订单','所有订单',[['wallet','','orderSettlement','']])
+    + orderListHTML(3,'陪诊订单 · 暖心陪伴','ordersEscort');
 }};
 S.orderSearch={title:'订单搜索',nav:false,render:function(){
   return '<div class="mask"><div class="sheet">'
