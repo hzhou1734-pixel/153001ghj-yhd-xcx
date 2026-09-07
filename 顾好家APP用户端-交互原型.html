@@ -589,7 +589,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.32';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.33';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -934,7 +934,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'<div class="card"><div class="grid">'
   + svc('sHealth','健康小屋','healthHome','g')+svc('sEscort','陪诊服务','escortDetail','o',1)
   + svc('sTrust','托管服务','trusteeship','b',1)+svc('sMeal','健康膳食','meal','p',1)
-  + svc('sProp','物业服务','property','',1)+svc('sHelper','生活帮手','helper','y',1)
+  + svc('sProp','物业服务','物业服务系统','',0,'mini')+svc('sHelper','生活帮手','helper','y',1)
   + svc('sCall','一键呼叫','emergencyCall','r')+svc('sMore','全部服务','community','')
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
@@ -953,7 +953,10 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
 function slide(i,t,s,bg){return '<div class="sl" style="background:'+bg+'"><div class="em">'+ic(i,32,'#fff',1.9)+'</div>'
   +'<div class="tx"><div class="t">'+t+'</div><div class="s">'+s+'</div></div></div>';}
 /* need=true 时该服务需业主认证，未认证自动引导至认证页 */
-function svc(i,t,id,cls,need){return '<div class="svc" onclick="'+(need?'needCert(\''+id+'\')':'go(\''+id+'\')')+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
+function svc(i,t,id,cls,need,mode){var fn=mode==='mini'?'goMini(\''+(id||t)+'\')':(need?'needCert(\''+id+'\')':'go(\''+id+'\')');return '<div class="svc" onclick="'+fn+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
+
+/* 跳转第三方小程序：先 toast 提示，0.4s 后切换到 miniJump 占位页 */
+function goMini(name){var _n=name||'小程序';toast('正在打开 '+_n+' …');setTimeout(function(){curMiniName=_n;go('miniJump');},420);}
 
 /* ================= 注册登录 ================= */
 /* 启动页即认证页：登录 / 注册同页切换，无需跳转即可输入账号密码或验证码 */
@@ -1614,23 +1617,25 @@ S.mealDetail={title:'膳食详情',render:function(){
   +'<div style="padding:4px var(--pad) 38px">'+btn('立即报餐','go(\'meal\')')+'</div>';
 }};
 
-/* ================= 物业服务 ================= */
-S.property={title:'物业服务',render:function(){
-  return '<div class="pad">'+hint('点击后将打开第三方物业管理系统')+'</div>'
-  +'<div class="grp">'
-  +'<div class="cell tap" onclick="toast(\'即将跳转到物业管理系统\')"><div class="cell-ic bg-b">'+ic('build',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">物业报修</div><div class="cell-s">报修、投诉、咨询</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell tap" onclick="toast(\'即将跳转到物业管理系统\')"><div class="cell-ic bg-y">'+ic('yen',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">费用缴纳</div><div class="cell-s">物业费的线上缴纳</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell tap" onclick="toast(\'即将跳转到物业管理系统\')"><div class="cell-ic bg-br">'+ic('doc',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">物业公告</div><div class="cell-s">查看小区最新公告</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'</div>'
-  +'<div class="card" style="background:rgba(255,149,0,.08)"><div class="row" style="gap:9px;align-items:flex-start">'
-  +'<span style="color:var(--orange);flex-shrink:0;margin-top:1px">'+ic('info',18)+'</span>'
-  +'<div class="sub" style="color:#8A5300">本系统与第三方物业系统数据不互通，需在第三方系统中登录操作。</div></div></div>';
+/* ================= 跳转第三方小程序占位 ================= */
+var curMiniName='物业服务系统';
+S.miniJump={title:'跳转中',nav:false,render:function(){
+  var n=curMiniName||'第三方小程序';
+  return '<div class="pad" style="padding-top:54px;text-align:center">'
+  +'<div style="width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,#17A88A,#4FD8BC);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:#fff;box-shadow:0 10px 24px rgba(23,168,138,.28)">'+ic('build',36,'#fff',1.6)+'</div>'
+  +'<div class="bold" style="font-size:18px;letter-spacing:-.3px">已打开 '+n+'</div>'
+  +'<div class="sub" style="margin-top:8px">若小程序未自动弹出，可下拉通知栏手动进入</div></div>'
+  +'<div class="grp" style="margin-top:26px"><div class="cell"><div class="cell-bd"><div class="cell-t">小程序名称</div></div><div class="cell-v">'+n+'</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">打开方式</div></div><div class="cell-v">APP 内跳转</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">状态</div></div><div class="cell-v" style="color:var(--brand)">已成功跳转</div></div></div>'
+  +'<div class="pad" style="padding-top:18px"><button class="btn" onclick="go(\'home\')">返回 顾好家</button></div>'
+  +'<div class="pad"><button class="btn sec" onclick="toast(\'跳转记录已写入消息中心\')">查看跳转记录</button></div>';
 }};
+
+/* ================= 物业服务（入口已改为跳转到第三方小程序） ================= */
+/* 旧的 S.property 已迁移到 S.miniJump 占位页，保留 goMini 备用入口 */
 
 /* ================= 生活帮手 ================= */
 S.helper={title:'提交需求',render:function(){
@@ -1855,7 +1860,7 @@ S.noticeList={title:'社区通知',render:function(){
   +'<div class="grp">'
   + NOTICES.map(function(x,i){
       return (i?'<div class="sep full"></div>':'')
-        +'<div class="item noind" onclick="openNotice(\''+x.id+'\')"><div class="cell-ic '+x.cls+'">'+ic(x.ic,17)+'</div>'
+        +'<div class="item noind" onclick="openNotice(&apos;'+x.id+'&apos;)"><div class="cell-ic '+x.cls+'">'+ic(x.ic,17)+'</div>'
         +'<div class="it-bd"><div class="it-t">'+x.t+(x.un?'<span class="dot-u"></span>':'')+'</div>'
         +'<div class="it-s">'+x.s+'</div></div>'+ic('chevR',16,'var(--label4)')+'</div>';
     }).join('')
@@ -2447,7 +2452,7 @@ S.myPosts={title:'我的帖子',render:function(){
            +'<div class="cell tap" onclick="toast(\'帖子已删除\')"><div class="cell-ic bg-r">'+ic('trash',17)+'</div><div class="cell-bd"><div class="cell-t" style="color:var(--red)">删除帖子</div></div></div>';
   }
   var items=list.map(function(x){
-    var onclick=x.click?(' onclick="go(\\\''+x.click+'\\\')"'):'';
+    var onclick=x.click?(' onclick="go(\''+x.click+'\')"'):'';
     var tclass={g:'g',y:'y',r:'r'}[x.tag]||'g';
     return '<div class="item noind"'+onclick+'>'+thumb(x.i,'post',56,56)
       +'<div class="it-bd"><div class="it-t">'+x.t+'</div><div class="it-s">'+x.s+'</div></div><span class="tag '+tclass+'">'+x.tagT+'</span></div>';
@@ -2467,7 +2472,7 @@ S.messages={title:'系统消息',rightLabel:'一键已读',rightFn:'toast(\'已�
               {i:'gy',ic:'post',bg:'bg-gy',t:'帖子审核未通过',s:'驳回原因：含敏感词，请修改后重新提交',d:'09-02 10:30',tag:'',tagT:'',click:'postReject'},
               {i:'',ic:'post',bg:'bg-b',t:'收到新评论',s:'王阿姨 评论了你的帖子：「方便送货上门吗？」',d:'09-03 16:20',tag:'r',tagT:'未读',click:'postDetail'}]}[cur]||[];
   var items=data.map(function(x){
-    var onclick=x.click?(' onclick="go(\\\''+x.click+'\\\')"'):'';
+    var onclick=x.click?(' onclick="go(\''+x.click+'\')"'):'';
     return '<div class="item noind"'+onclick+'><div class="cell-ic '+x.bg+'">'+ic(x.ic,17)+'</div>'
       +'<div class="it-bd"><div class="it-t">'+x.t+'</div><div class="it-s">'+x.s+'</div><div class="it-s">'+x.d+'</div></div>'
       + (x.tag?'<span class="tag '+x.tag+'">'+x.tagT+'</span>':'')+'</div>';
