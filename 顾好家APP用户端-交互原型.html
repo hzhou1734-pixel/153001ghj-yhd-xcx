@@ -521,7 +521,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.18';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.19';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-07';
 
@@ -1381,15 +1381,35 @@ function pickEscortDate(i){pickState.escortDate=i;render();}
 function pickEscortSlot(i){pickState.escortSlot=i;render();}
 
 /* ================= 托管服务 ================= */
+/* 托管类型数据：列表页与详情页共用 */
+var TRUST=[
+  {n:'学期日托',d:'含午餐与课后看护 · 按月计费',p:1200,pc:1,m:'1 人',u:'/ 月',ic:'sTrust',cls:'bg-b',cov:'b',tag:'长期',tagc:'b'},
+  {n:'学期周末托',d:'仅周末两天 · 含午餐与看护',p:600,pc:1,m:'1 人',u:'/ 月',ic:'family',cls:'bg-p',cov:'p',tag:'周末',tagc:'p'},
+  {n:'寒假托',d:'寒假全时段看护 · 30 天套餐',p:2800,pc:30,m:'30 天',u:'/ 寒',ic:'cal',cls:'bg-t',cov:'o',tag:'假期',tagc:'o'},
+  {n:'暑假托',d:'暑假全时段看护 · 60 天套餐',p:5400,pc:60,m:'60 天',u:'/ 暑',ic:'sun',cls:'bg-o',cov:'y',tag:'假期',tagc:'o',dark:1}
+];
 S.trusteeship={title:'托管服务',render:function(){
-  var pk=[{n:'学期日托',d:'含午餐与课后看护 · 按月计费',p:1200,pc:1,m:'1 人',u:'/ 月'},
-          {n:'学期周末托',d:'仅周末两天 · 含午餐与看护',p:600,pc:1,m:'1 人',u:'/ 月'},
-          {n:'寒假托',d:'寒假全时段看护 · 30 天套餐',p:2800,pc:30,m:'30 天',u:'/ 寒'},
-          {n:'暑假托',d:'暑假全时段看护 · 60 天套餐',p:5400,pc:60,m:'60 天',u:'/ 暑'}][segState.trust||0];
-  return '<div class="pad">'+seg(['学期日托','学期周末托','寒假托','暑假托'],'trust')+'</div>'
-  +'<div class="card"><div class="row between"><div><div class="bold" style="font-size:17px">'+pk.n+'</div>'
-  +'<div class="sub" style="margin-top:4px">'+pk.d+'</div></div>'
-  +'<div style="text-align:right"><span class="price" style="font-size:22px">¥'+pk.p+'</span><div class="sub">'+pk.u+'</div></div></div></div>'
+  var h='';
+  TRUST.forEach(function(t,i){
+    h+='<div class="cell tap" onclick="openTrust('+i+')">'
+    +'<div class="cell-ic '+t.cls+'">'+ic(t.ic,17)+'</div>'
+    +'<div class="cell-bd"><div class="cell-t">'+t.n+'<span class="tag '+t.tagc+'" style="margin-left:7px">'+t.tag+'</span></div>'
+    +'<div class="cell-s">'+t.d+'</div></div>'
+    +'<div class="cell-v"><span class="price" style="font-size:16px">¥'+t.p+'</span><div class="sub" style="font-size:11px;margin-top:2px">'+t.u+'</div></div>'
+    +'<div class="cell-ar">'+ic('chevR',16)+'</div></div>';
+    if(i<TRUST.length-1)h+='<div class="sep"></div>';
+  });
+  return grpT('选择托管类型')
+  +'<div class="grp">'+h+'</div>';
+}};
+S.trustDetail={title:'托管详情',render:function(){
+  var i=(pickState.trustType===undefined?0:pickState.trustType);
+  var pk=TRUST[i];
+  return '<div class="pad"><div class="cover '+pk.cov+'" style="height:150px">'+ic(pk.ic,40,pk.dark?'#7A5B00':'#fff',1.7)+'</div></div>'
+  +'<div class="pad">'
+  +'<div class="row between"><div><div class="bold" style="font-size:20px">'+pk.n+'</div>'
+  +'<div class="sub" style="margin-top:5px">'+pk.d+'</div></div>'
+  +'<div style="text-align:right"><span class="price" style="font-size:24px">¥'+pk.p+'</span><div class="sub">'+pk.u+'</div></div></div></div>'
   + grp([
     {ic:'family',icls:'bg-b',t:'托管人数',s:'1 - 5 人',ctl:step(pk.m)},
     {ic:'pin',icls:'bg-br',t:'是否需要接送',s:'从已绑定房号接送',ctl:sw(true,'toast(\'已切换接送\')')}
@@ -1401,6 +1421,7 @@ S.trusteeship={title:'托管服务',render:function(){
   + btn('提交报名','toast(\'报名成功，已消耗顾家币额度\');go(\'orderTrustDetail\')')
   + hint('额度不足时提示「额度不足，请先结算历史账单」<br>托管由物业线下执行，系统仅记录报名、账单与支付');
 }};
+function openTrust(i){pickState.trustType=i;go('trustDetail');}
 
 /* ================= 健康膳食 ================= */
 S.meal={title:'健康膳食',render:function(){
