@@ -797,7 +797,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.45';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.46';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2431,7 +2431,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="ord-section"><div class="st">支付信息</div>'
   +'<div class="kv"><span class="k">支付金额</span><span class="v pr">¥240.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+(isPaid?'g':'o')+'">'+stext+'</span></div>'
-  +'<div class="kv"><span class="k">支付方式</span><span class="v">'+(isPaid?'支付宝':'—')+'</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">'+(isPaid?'支付宝':'顾家币额度')+'</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">提交：2026-09-03 16:00<br>支付：'+(isPaid?'2026-09-03 16:05':'—')+'<br>取消：—</div></div>'
