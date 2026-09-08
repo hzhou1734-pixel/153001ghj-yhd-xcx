@@ -848,7 +848,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.79';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.80';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2721,11 +2721,11 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   /* ② 资产概览 · 仅保留待结算 / 已结算统计 */
   +'<div class="stat3">'
   +'<div class="st" onclick="segState.bill=0;go(\'bill\')"><div class="n" style="color:var(--accent)">¥1,254.00</div><div class="l">待结算</div></div>'
-  +'<div class="st" onclick="segState.bill=1;go(\'bill\')"><div class="n" style="color:var(--green)">¥2,046.00</div><div class="l">已结算</div></div>'
+  +'<div class="st" onclick="segState.bill=1;go(\'bill\')"><div class="n" style="color:var(--green)">¥1,686.00</div><div class="l">已结算</div></div>'
   +'</div>'
   /* ③ 我的服务 */
   + grp([
-    {ic:'yen',icls:'bg-o',t:'我的账单',s:'报餐 / 托管 / 陪诊三类账单',ar:1,on:'go(\'bill\')'},
+    {ic:'yen',icls:'bg-o',t:'我的账单',s:'报餐 / 托管两类账单',ar:1,on:'go(\'bill\')'},
     {ic:'signup',icls:'bg-y',t:'我的报名',s:'社区活动报名记录',ar:1,on:'go(\'mySignup\')'},
     {ic:'post',icls:'bg-in',t:'我的帖子',s:'我发布的邻里帖子与互动',ar:1,on:'go(\'myPosts\')'},
     {ic:'sHelper',icls:'bg-br',t:'我的需求',s:'生活帮手需求进度跟进',ar:1,on:'needCert(\'myHelper\')'}
@@ -2775,21 +2775,13 @@ S.bill={title:'我的账单',render:function(){
     return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
     + grpT('已结算账单')
     +'<div class="grp">'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单</div><div class="cell-s">2026-08-01 已结清</div></div><div class="cell-v" style="color:var(--green)">已结 ¥1200.00</div></div>'
+    +'<div class="cell tap" onclick="segState.billDetail=0;go(\'billDetail\')"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单</div><div class="cell-s">2026-08-01 已结清</div></div><div class="cell-v" style="color:var(--green)">已结 ¥1200.00</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
     +'<div class="sep"></div>'
-    +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">8月报餐账单</div><div class="cell-s">2026-08-31 已结清</div></div><div class="cell-v" style="color:var(--green)">已结 ¥486.00</div></div>'
-    +'<div class="sep"></div>'
-    +'<div class="cell"><div class="cell-ic bg-p">'+ic('sEscort',17)+'</div><div class="cell-bd"><div class="cell-t">8月陪诊账单</div><div class="cell-s">2026-08-15 已结清</div></div><div class="cell-v" style="color:var(--green)">已结 ¥360.00</div></div>'
+    +'<div class="cell tap" onclick="segState.billDetail=1;go(\'billDetail\')"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">8月报餐账单</div><div class="cell-s">2026-08-31 已结清</div></div><div class="cell-v" style="color:var(--green)">已结 ¥486.00</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
     +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结算合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥2046.00</div></div>'
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结算合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥1686.00</div></div>'
     +'</div>'
-    + grpT('已结算明细')
-    +'<div class="grp">'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">08-30 12:10</div></div><div class="cell-v">¥18.00</div></div>'
-    +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">08-25 10:20</div></div><div class="cell-v">¥36.00</div></div>'
-    +'</div>'
-    + hint('已结算账单仅供查阅，不可再次操作');
+    + hint('仅托管与报餐产生账单，点击账单可查看结算明细');
   }
   return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
   +'<div class="grp">'
@@ -2810,6 +2802,41 @@ S.bill={title:'我的账单',render:function(){
   +'</div>'
   + btn('结算待结算账单','go(\'orderSettlement\')')
   + hint('账单明细默认收起，点击分组标题可展开 / 收起');
+}};
+
+/* ================= 账单详情（已结算二级页 · 托管/报餐分 tab） ================= */
+S.billDetail={title:'账单详情',render:function(){
+  var cur=segState.billDetail||0;
+  if(cur===0){
+    return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
+    + grpT('8月托管账单 · 已结清')
+    +'<div class="grp">'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">学期日托 · 8月账单</div><div class="cell-s">结算时间 2026-08-01</div></div><div class="cell-v" style="color:var(--green);font-weight:600">已结清 ¥1200.00</div></div>'
+    +'<div class="sep full"></div>'
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">账单合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥1200.00</div></div>'
+    +'</div>'
+    + grpT('结算明细')
+    +'<div class="grp">'
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">托管 · 学期日托（8月整月）</div><div class="cell-s">08-01 ~ 08-31 · 全月服务费</div></div><div class="cell-v">¥1200.00</div></div>'
+    +'</div>'
+    + hint('已结算账单仅供查阅，不可再次操作');
+  }
+  return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
+  + grpT('8月报餐账单 · 已结清')
+  +'<div class="grp">'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">健康膳食 · 8月账单</div><div class="cell-s">结算时间 2026-08-31</div></div><div class="cell-v" style="color:var(--green);font-weight:600">已结清 ¥486.00</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">账单合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥486.00</div></div>'
+  +'</div>'
+  + grpT('结算明细')
+  +'<div class="grp">'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">08-25 10:20</div></div><div class="cell-v">¥36.00</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">08-30 12:10</div></div><div class="cell-v">¥18.00</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份 × 14 天</div><div class="cell-s">08-01 ~ 08-14 · 午餐套餐</div></div><div class="cell-v">¥432.00</div></div>'
+  +'</div>'
+  + hint('已结算账单仅供查阅，不可再次操作');
 }};
 
 /* ================= 我的家庭 ================= */
