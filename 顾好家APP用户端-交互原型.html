@@ -81,6 +81,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .cell.tap:active{background:#E5E5EA;}
 .cell-ic{width:29px;height:29px;border-radius:7.5px;display:flex;align-items:center;justify-content:center;flex:0 0 29px;color:#fff;}
 .cell-ic svg{width:17px;height:17px;}
+.cell-call{width:30px;height:30px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:transform .12s;}
+.cell-call:active{transform:scale(.9);}
+.cell-call svg{width:15px;height:15px;}
 .cell-bd{flex:1;min-width:0;}
 .cell-t{font-size:16px;color:var(--label);letter-spacing:-.2px;line-height:1.3;}
 .cell-s{font-size:12px;color:var(--label2);margin-top:3px;line-height:1.4;}
@@ -800,7 +803,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.42';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.43';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2416,14 +2419,12 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="cell" style="align-items:flex-start">'
   +'<div class="cell-bd"><div class="log" style="font-size:14px;color:var(--label);line-height:1.9">'
   +'服务名称：医院就诊全程陪诊<br>陪诊日期：09-05<br>服务时长：3 小时<br>陪诊地址：市第一人民医院</div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('me',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">张师傅</div><div class="cell-s">陪诊员 · 工号 #A2031</div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="toast(\'正在呼叫 张师傅…\')">'
-  +'<div class="cell-ic bg-g">'+ic('phone',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">138 0000 0000</div><div class="cell-s">点击拨打陪诊员电话</div></div>'
-  +'<div style="color:var(--brand);display:flex">'+ic('chevR',16)+'</div></div>'
+  +(isPaid
+    ?'<div class="sep full"></div>'
+      +'<div class="cell"><div class="cell-ic bg-b">'+ic('me',17)+'</div>'
+      +'<div class="cell-bd"><div class="cell-t">张师傅</div><div class="cell-s">陪诊员</div></div>'
+      +'<div class="cell-call" onclick="event.stopPropagation();toast(\'正在呼叫 张师傅…\')">'+ic('phone',17,'#fff')+'</div>'
+    :'')
   +'</div>'
   + grpT('支付信息')
   +'<div class="grp">'
