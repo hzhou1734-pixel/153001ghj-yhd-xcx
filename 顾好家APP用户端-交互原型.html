@@ -848,7 +848,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.78';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.79';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2718,11 +2718,10 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   +(CERT==='ok'?'阳光花园 3栋2单元-1802 · 已认证':(CERT==='pending'?'认证审核中 · 通过后开放全部服务':'未认证 · 点击完成业主认证'))
   +'</div></div>'
   +'<div class="cell-ar">'+ic('chevR',16)+'</div></div></div>'
-  /* ② 资产概览 */
+  /* ② 资产概览 · 仅保留待结算 / 已结算统计 */
   +'<div class="stat3">'
-  +'<div class="st" onclick="go(\'moneyBag\')"><div class="n">¥1,280.00</div><div class="l">账户余额</div></div>'
-  +'<div class="st" onclick="go(\'bill\')"><div class="n" style="color:var(--accent)">¥1,254.00</div><div class="l">待结算</div></div>'
-  +'<div class="st" onclick="toast(\'暂无可用优惠券\')"><div class="n">6</div><div class="l">优惠券</div></div>'
+  +'<div class="st" onclick="segState.bill=0;go(\'bill\')"><div class="n" style="color:var(--accent)">¥1,254.00</div><div class="l">待结算</div></div>'
+  +'<div class="st" onclick="segState.bill=1;go(\'bill\')"><div class="n" style="color:var(--green)">¥2,046.00</div><div class="l">已结算</div></div>'
   +'</div>'
   /* ③ 我的服务 */
   + grp([
