@@ -842,7 +842,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.64';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.65';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2283,7 +2283,7 @@ function ordStatusCls(s){return s==='pending'?'pending':s==='active'?'active':s=
 function openOrder(id){
   var o=ORDERS.filter(function(x){return x.id===id;})[0];
   if(!o)return;
-  if(o.type===1)go('orderMealDetail');
+  if(o.type===1){mealDemoStatus=o.st;go('orderMealDetail');}
   else if(o.type===2)go('orderTrustDetail');
   else if(o.type===3){var sid=id.replace(/^PZ/,'PZ');openEscortDetail(sid);}
 }
@@ -2406,8 +2406,60 @@ S.orderSearch={title:'订单搜索',nav:false,render:function(){
   +'</div></div>';
 }};
 
+/* 报餐单详情状态演示：从订单列表进入时同步订单 st，页面内可切换 */
+var mealDemoStatus='pending';
+function setMealDemoStatus(s){mealDemoStatus=s;render();}
+function mealStatusChips(cur){
+  var labels=[['pending','未支付'],['active','进行中'],['done','已完成'],['cancel','已取消']];
+  var h='<div class="pad" style="padding-bottom:8px"><div class="chips">';
+  for(var i=0;i<labels.length;i++){
+    h+='<div class="chip'+(labels[i][0]===cur?' on':'')+'" onclick="setMealDemoStatus(&apos;'+labels[i][0]+'&apos;)">'+labels[i][1]+'</div>';
+  }
+  return h+'</div></div>';
+}
+
 /* ================= 订单详情 ================= */
 S.orderMealDetail={title:'报餐单详情',render:function(){
+  var st=mealDemoStatus;
+  var stext=ordStatusText(st),scls=ordStatusCls(st);
+  var payText={pending:'未支付',active:'未支付',done:'已结算',cancel:'已取消'}[st];
+  var payCls={pending:'o',active:'o',done:'g',cancel:'gy'}[st];
+
+  var btns='';
+  if(st==='pending'){
+    btns='<div class="btn-row"><button class="btn sec" onclick="toast(&apos;已取消报餐（当日 20:00 前）&apos;)">取消订单</button>'
+       +'<button class="btn" onclick="go(&apos;orderSettlement&apos;)">订单结算</button></div>'
+       +'<div class="pad"><button class="btn acc" onclick="openAddReview(1)">'+ic('star',18)+' 服务评价</button></div>';
+  }else if(st==='active'){
+    btns='<div class="btn-row"><button class="btn sec" onclick="toast(&apos;已取消报餐（当日 20:00 前）&apos;)">取消订单</button>'
+       +'<button class="btn" onclick="go(&apos;orderSettlement&apos;)">订单结算</button></div>';
+  }else if(st==='done'){
+    btns='<div class="pad"><button class="btn acc" onclick="openAddReview(1)">'+ic('star',18)+' 服务评价</button></div>';
+  }
+
+  return '<div class="ord-card" style="margin-top:12px">'
+  +'<div class="hd"><div class="l"><div class="ic b">'+ic('sMeal',18)+'</div>'
+  +'<div><div>报餐单</div><div class="no">#BC20250904-001</div></div></div>'
+  +'<div class="st s-'+scls+'">'+stext+'</div></div>'
+  +'<div class="bd">'
+  +'<div class="ti">明日午餐<span class="qty">× 2</span></div>'
+  +'<div class="meta"><div class="m">'+ic('clock',11)+'配送 / 使用：09-05</div><div class="m">'+ic('pin',11)+'提交：09-04 10:20</div></div>'
+  +'<div class="sum"><div class="l">共 <b>2</b> 份</div><div><span class="pn">¥36.00</span></div></div>'
+  +'</div></div>'
+  +'<div class="ord-section"><div class="st">菜单信息</div>'
+  +'<div class="kv"><span class="k">明日午餐</span><span class="v">¥18.00 × 2</span></div>'
+  +'<div class="kv"><span class="k">报餐日期</span><span class="v b">09-05</span></div>'
+  +'<div class="kv"><span class="k">套餐规格</span><span class="v">A套餐 · 12:00送达</span></div>'
+  +'</div>'
+  +'<div class="ord-section"><div class="st">支付信息</div>'
+  +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥36.00</span></div>'
+  +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">/</span></div>'
+  +'</div>'
+  +'<div class="ord-section"><div class="st">订单日志</div>'
+  +'<div class="log">提交：09-04 10:20<br>结算：—<br>取消：—</div></div>'
+  + mealStatusChips(st)
+  + btns;
   return '<div class="ord-card" style="margin-top:12px">'
   +'<div class="hd"><div class="l"><div class="ic b">'+ic('sMeal',18)+'</div>'
   +'<div><div>报餐单</div><div class="no">#BC20250904-001</div></div></div>'
