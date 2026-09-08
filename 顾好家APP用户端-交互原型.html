@@ -553,9 +553,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .pd-body{padding:0 var(--pad) 12px;font-size:14.5px;line-height:1.75;color:var(--label);letter-spacing:-.1px;}
 .pd-tags{padding:0 var(--pad) 14px;display:flex;flex-wrap:wrap;gap:6px;}
 .pd-tags .tg{font-size:11.5px;color:var(--brand);background:rgba(43,196,160,.1);padding:3px 9px;border-radius:9px;}
-.pd-cmt{padding:14px var(--pad) 4px;font-size:14px;font-weight:600;color:var(--label);
-  display:flex;align-items:center;justify-content:space-between;}
-.pd-cmt .sort{font-size:11.5px;color:var(--label3);font-weight:400;}
+.pd-cmt{padding:14px var(--pad) 4px;font-size:14px;font-weight:600;color:var(--label);}
 .pd-citem{padding:11px var(--pad);display:flex;gap:10px;align-items:flex-start;border-bottom:.5px solid var(--sep);}
 .pd-citem:last-child{border-bottom:none;}
 .pd-citem .avt{width:32px;height:32px;border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 32px;}
@@ -571,9 +569,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   display:flex;align-items:center;gap:8px;z-index:5;}
 .pd-input .inp{flex:1;background:var(--fill);border-radius:18px;padding:8px 14px;
   font-size:13px;color:var(--label3);cursor:pointer;}
-.pd-input .ic-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;
-  color:var(--label3);cursor:pointer;}
-.pd-input .ic-btn svg{width:20px;height:20px;stroke-width:1.9;}
 .pd-input .send{background:var(--brand);color:#fff;font-size:13px;font-weight:500;
   padding:6px 14px;border-radius:14px;cursor:pointer;flex:0 0 auto;}
 
@@ -797,7 +792,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.53';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.54';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2074,7 +2069,7 @@ S.postDetail={title:'帖子详情',render:function(){
   +'</div>'
   +'<div class="pd-body">'+p.body+'</div>'
   +'<div class="pd-tags"><span class="tg">#'+p.cat+'</span><span class="tg">#阳光花园</span><span class="tg">#邻里互助</span></div>'
-  +'<div class="pd-cmt"><span>评论 '+p.m+'</span><span class="sort">按热度</span></div>'
+  +'<div class="pd-cmt"><span>评论 '+p.m+'</span></div>'
   + comments.map(function(c){
       return '<div class="pd-citem">'
         +'<div class="avt bg-'+c.ac+'">'+ic('me',15)+'</div>'
@@ -2092,7 +2087,6 @@ S.postDetail={title:'帖子详情',render:function(){
   +'<div style="height:64px"></div>'
   +'<div class="pd-input">'
     +'<div class="inp" onclick="toast(\'打开评论输入\')">说点什么…</div>'
-    +'<div class="ic-btn" onclick="toast(\'表情\')">'+ic('heart',20,'currentColor')+'</div>'
     +'<div class="send" onclick="toast(\'已发送\')">发送</div>'
   +'</div>';
 }};
