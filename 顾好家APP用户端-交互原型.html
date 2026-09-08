@@ -842,7 +842,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.70';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.71';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -3155,8 +3155,7 @@ var hrDel={}; /* 信息删除状态：title -> true(已删除) */
 function toggleHrVis(t){hrVis[t]=(hrVis[t]!==false)?false:true;toast(hrVis[t]===false?'信息已隐藏':'信息已显示');render();}
 function delHr(t){hrDel[t]=true;toast('信息已删除');back();}
 S.hr={title:'人力资源',rightLabel:'我的发布',rightFn:'go(\'hrMyPosts\')',render:function(){
-  return '<div class="pad">'+hint('下拉刷新 · 上拉加载更多招聘信息 · 仅平台信息置顶')+'</div>'
-  +'<div class="grp">'
+  return '<div class="grp">'
   +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('','hr',62,62)
   +'<div class="it-bd"><div class="row" style="gap:6px;margin-bottom:3px"><span class="tag o">置顶</span></div>'
   +'<div class="it-t">退休教师兼职家教</div><div class="it-s">物业 · 09-02</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
