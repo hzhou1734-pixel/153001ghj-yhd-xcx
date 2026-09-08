@@ -559,12 +559,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   display:flex;gap:5px;}
 .pd-cover .pd-dot i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5);}
 .pd-cover .pd-dot i.on{width:14px;background:#fff;border-radius:3px;}
-.pd-cover .pd-back{position:absolute;top:14px;left:14px;width:32px;height:32px;border-radius:16px;
-  background:rgba(0,0,0,.32);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
-.pd-cover .pd-back svg{width:18px;height:18px;opacity:1;}
-.pd-cover .pd-more{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:16px;
-  background:rgba(0,0,0,.32);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
-.pd-cover .pd-more svg{width:18px;height:18px;opacity:1;}
 .pd-head{padding:14px var(--pad) 12px;}
 .pd-head .ti{font-size:18px;font-weight:700;line-height:1.4;letter-spacing:-.3px;color:var(--label);}
 .pd-head .meta{margin-top:10px;display:flex;align-items:center;gap:8px;}
@@ -574,28 +568,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .pd-head .info .nm{font-size:14px;font-weight:600;color:var(--label);display:flex;align-items:center;gap:6px;}
 .pd-head .info .nm svg{width:13px;height:13px;color:var(--brand);}
 .pd-head .info .sub{font-size:11.5px;color:var(--label3);margin-top:2px;}
-.pd-head .follow{background:var(--brand);color:#fff;font-size:12.5px;font-weight:500;
-  padding:6px 13px;border-radius:13px;cursor:pointer;flex:0 0 auto;}
+.pd-actions{display:flex;align-items:center;gap:12px;margin-left:auto;}
+.pd-like,.pd-fav{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--label3);cursor:pointer;transition:transform .12s;}
+.pd-like:active,.pd-fav:active{transform:scale(.9);}
+.pd-like.on{color:var(--red);}
+.pd-like svg,.pd-fav svg{width:15px;height:15px;stroke-width:2;}
 .pd-body{padding:0 var(--pad) 12px;font-size:14.5px;line-height:1.75;color:var(--label);letter-spacing:-.1px;}
 .pd-tags{padding:0 var(--pad) 14px;display:flex;flex-wrap:wrap;gap:6px;}
 .pd-tags .tg{font-size:11.5px;color:var(--brand);background:rgba(43,196,160,.1);padding:3px 9px;border-radius:9px;}
-.pd-date{padding:0 var(--pad) 14px;font-size:11.5px;color:var(--label3);display:flex;align-items:center;gap:6px;}
-.pd-bar{padding:14px var(--pad);background:var(--card);border-top:.5px solid var(--sep);
-  display:flex;align-items:center;justify-content:center;gap:10px;}
-.pd-bar-l{display:flex;align-items:center;gap:10px;}
-.pd-bk{display:flex;align-items:center;gap:6px;padding:7px 14px 7px 7px;background:var(--fill);
-  border-radius:22px;cursor:pointer;transition:background .12s,transform .12s;letter-spacing:-.1px;}
-.pd-bk:active{transform:scale(.96);}
-.pd-bk.on{background:linear-gradient(135deg,#FF6B6B,#FF4757);color:#fff;
-  box-shadow:0 4px 10px rgba(255,71,87,.22);}
-.pd-bk.on .bk-ic{background:rgba(255,255,255,.22);}
-.pd-bk.on .bk-book{background:rgba(0,0,0,.06);}
-.pd-bk .bk-ic{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.04);
-  display:flex;align-items:center;justify-content:center;color:var(--label3);transition:background .15s,color .15s;}
-.pd-bk .bk-ic svg{width:18px;height:18px;}
-.pd-bk:not(.on):active .bk-ic{background:rgba(0,0,0,.1);}
-.pd-bk span{font-size:13.5px;font-weight:600;color:var(--label);}
-.pd-bk.on span{color:#fff;}
 .pd-cmt{padding:14px var(--pad) 4px;font-size:14px;font-weight:600;color:var(--label);
   display:flex;align-items:center;justify-content:space-between;}
 .pd-cmt .sort{font-size:11.5px;color:var(--label3);font-weight:400;}
@@ -817,7 +797,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.44';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.45';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2082,8 +2062,6 @@ S.postDetail={title:'帖子详情',render:function(){
   ];
   return '<div class="pd-cover bg-'+p.cv+'">'
     + ic('img',64,'rgba(255,255,255,.92)',1.6)
-    +'<div class="pd-back" onclick="back()">'+ic('chevL',18,'#fff',2.2)+'</div>'
-    +'<div class="pd-more" onclick="toast(\'更多操作\')">'+ic('moreH',18,'#fff',2.4)+'</div>'
     +'<div class="pd-dot">'+(p.imgs>1?'<i class="on"></i><i></i><i></i>':'<i class="on"></i>')+'</div>'
   +'</div>'
   +'<div class="pd-head">'
@@ -2094,17 +2072,14 @@ S.postDetail={title:'帖子详情',render:function(){
         +'<div class="nm">'+p.a+(p.cat==='公告'?' '+ic('shield',13):'')+'</div>'
         +'<div class="sub">'+p.d+' · 阳光花园</div>'
       +'</div>'
+      +'<div class="pd-actions">'
+        +'<div class="pd-like on" onclick="event.stopPropagation();toast(\'已点赞\')">'+ic('heartF',14)+'<span>'+p.l+'</span></div>'
+        +'<div class="pd-fav" onclick="event.stopPropagation();toast(\'已收藏\')">'+ic('bookmark',14)+'</div>'
+      +'</div>'
     +'</div>'
   +'</div>'
   +'<div class="pd-body">'+p.body+'</div>'
   +'<div class="pd-tags"><span class="tg">#'+p.cat+'</span><span class="tg">#阳光花园</span><span class="tg">#邻里互助</span></div>'
-  +'<div class="pd-date">'+ic('clock',12)+' 发布于 '+p.d+' · '+p.a+'</div>'
-  +'<div class="pd-bar">'
-    +'<div class="pd-bar-l">'
-      +'<div class="pd-bk on" onclick="toast(\'已点赞\')"><div class="bk-ic">'+ic('heartF',22,'#fff',2)+'</div><span>点赞 '+p.l+'</span></div>'
-      +'<div class="pd-bk" onclick="toast(\'已收藏\')"><div class="bk-ic bk-book">'+ic('bookmark',22,'var(--label3)',2)+'</div><span>收藏</span></div>'
-    +'</div>'
-  +'</div>'
   +'<div class="pd-cmt"><span>评论 '+p.m+'</span><span class="sort">按热度</span></div>'
   + comments.map(function(c){
       return '<div class="pd-citem">'
