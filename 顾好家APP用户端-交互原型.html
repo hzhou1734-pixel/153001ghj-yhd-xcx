@@ -842,7 +842,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.73';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.74';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -930,7 +930,6 @@ var hist=[],cur='home',lastTab='home',S={},agreeOn={};
 /* 原型演示用：当前账号的业主认证状态 ok=已认证 / pending=审核中 / none=未认证 */
 var CERT='ok';
 var CERT_TXT={ok:'已认证',pending:'审核中',none:'未认证'};
-function setCert(v){CERT=v;toast('演示状态已切换为：'+CERT_TXT[v]);render();}
 /* 访问「需业主认证」功能的统一拦截：已认证放行，未认证 / 审核中引导至认证页 */
 function needCert(id){if(CERT==='ok'){go(id);}else{go('certBlock');}}
 /* 当前小区：name=小区名 detail=小区+楼栋副标题 */
@@ -1384,7 +1383,7 @@ function certBar(){
   +'<span style="color:'+(pd?'#0F7A5F':'#F2642A')+';display:flex;flex-shrink:0">'+ic(pd?'clock':'shield',18)+'</span>'
   +'<div class="cbt">'+(pd?'认证审核中，通过后即可使用全部服务':'完成业主认证，解锁全部社区服务')+'</div>'
   +'<div class="cb-btn" onclick="go(\''+(pd?'certList':'certGuide')+'\')">'+(pd?'查看进度':'去认证')+'</div>'
-  +'<div class="cb-x" onclick="event.stopPropagation();toast(\'可在「设置 - 原型演示」重新开启提示\')">'+ic('x',15)+'</div>'
+  +'<div class="cb-x" onclick="event.stopPropagation();toast(\'已隐藏，重启APP后重新显示\')">'+ic('x',15)+'</div>'
   +'</div>';
 }
 
@@ -3218,18 +3217,6 @@ S.hrPublish={title:'发布信息',render:function(){
 }};
 
 /* ================= 系统设置 / 注销 ================= */
-/* 原型演示：切换当前账号的业主认证状态 */
-function certDemoRows(){
-  var o=[['ok','已认证','可正常使用全部社区服务'],
-         ['pending','审核中','认证已提交，受限功能引导查看进度'],
-         ['none','未认证','仅可浏览，使用服务时引导认证']];
-  return o.map(function(x){
-    var on=CERT===x[0];
-    return {ic:'shield',icls:on?'bg-br':'bg-gy',t:x[1],s:x[2],ar:0,
-      on:on?'toast(\'当前已是该状态\')':'setCert(\''+x[0]+'\')',
-      ctl:on?'<div class="cell-ar" style="color:var(--brand)">'+ic('check',19)+'</div>':'<div class="cell-ar">'+ic('chevR',16)+'</div>'};
-  });
-}
 S.settings={title:'系统设置',render:function(){
   return grp([
     {ic:'info',icls:'bg-gy',t:'关于我们',ar:1,on:'go(\'about\')'},
@@ -3237,8 +3224,6 @@ S.settings={title:'系统设置',render:function(){
     {ic:'lock',icls:'bg-gy',t:'用户协议',ar:1,on:'go(\'agreement\')'},
     {ic:'shield',icls:'bg-gy',t:'隐私政策',ar:1,on:'go(\'privacy\')'}
   ])
-  + grp(certDemoRows(),'原型演示：认证状态')
-  +'<div class="pad">'+hint('切换后可查看首页提示条、个人中心状态与受限功能的引导效果（仅原型演示用，正式版不含此项）')+'</div>'
   + grp([
     {ic:'logout',icls:'bg-o',t:'退出账号',ar:1,on:'toast(\'已退出账号\');go(\'welcome\')'},
     {ic:'warn',icls:'bg-r',t:'注销账号',s:'需验证手机号且账单已结清',ar:1,on:'go(\'accountCancel\')'}
