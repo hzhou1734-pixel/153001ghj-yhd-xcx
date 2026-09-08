@@ -842,7 +842,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.63';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.64';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -3085,7 +3085,7 @@ S.moneyBag={title:'小区钱袋子',render:function(){
   }
   return h;
 }};
-S.hr={title:'人力资源',render:function(){
+S.hr={title:'人力资源',rightLabel:'我的发布',rightFn:'go(\'hrMyPosts\')',render:function(){
   return '<div class="pad">'+hint('下拉刷新 · 上拉加载更多招聘信息 · 仅平台信息置顶')+'</div>'
   +'<div class="grp">'
   +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('','hr',62,62)
@@ -3095,20 +3095,17 @@ S.hr={title:'人力资源',render:function(){
   +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('b','hr',62,62)
   +'<div class="it-bd"><div class="it-t">周末家政阿姨招募</div><div class="it-s">王阿姨 · 08-30</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
   +'</div>'
-  + grpT('我的发布')
-  +'<div class="grp">'
+  + fab('go(\'hrPublish\')')
+  +'<div style="height:8px"></div>';
+}};
+S.hrMyPosts={title:'我的发布',render:function(){
+  return '<div class="grp">'
   +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('b','hr',62,62)
   +'<div class="it-bd"><div class="it-t">周末家政阿姨招募</div><div class="it-s">提交 08-30 · 已通过审核</div></div><span class="tag g">已发布</span></div>'
   +'<div class="sep full"></div>'
   +'<div class="item noind" onclick="go(\'hrEdit\')">'+thumb('gy','hr',62,62)
   +'<div class="it-bd"><div class="it-t">钟点工求职</div><div class="it-s">提交 08-29 · 驳回：含敏感词</div></div><span class="tag r">已驳回</span></div>'
   +'</div>'
-  + grp([
-    {ic:'pencil',icls:'bg-b',t:'编辑信息',s:'修改后需重新审核',ar:1,on:'go(\'hrEdit\')'},
-    {ic:'eye',icls:'bg-gy',t:'显示 / 隐藏',s:'隐藏后他人不可见',ar:1,on:'toast(\'已切换显示状态\')'},
-    {ic:'trash',icls:'bg-r',t:'删除信息',ar:1,on:'toast(\'信息已删除\')'}
-  ],'管理我的发布')
-  + fab('go(\'hrPublish\')')
   +'<div style="height:8px"></div>';
 }};
 S.hrDetail={title:'资源详情',render:function(){
