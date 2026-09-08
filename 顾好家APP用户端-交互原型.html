@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.84';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.85';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2851,8 +2851,7 @@ S.family={title:'我的家庭',render:function(){
   +'<div class="it-bd"><div class="it-t">玫瑰新城 5栋1单元-0903</div><div class="it-s">家庭成员 1 · 租户 0</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
   +'</div>'
   + grp([
-    {ic:'qr',icls:'bg-br',t:'邀请成员',s:'生成邀请海报，扫码加入房号',ar:1,on:'go(\'invitePoster\')'},
-    {ic:'trash',icls:'bg-r',t:'解除绑定',s:'解绑后该账号无法提交本小区订单',ar:1,on:'go(\'unbind\')'}
+    {ic:'qr',icls:'bg-br',t:'邀请成员',s:'生成邀请海报，扫码加入房号',ar:1,on:'go(\'invitePoster\')'}
   ]);
 }};
 S.familyMembers={title:'成员列表',render:function(){
@@ -2882,19 +2881,8 @@ S.memberRole={title:'成员设置',render:function(){
   +'<div class="sep full"></div>'
   +'<div class="cell tap" onclick="toast(\'已设为租户\');back()"><div class="cell-bd"><div class="cell-t">租户</div></div></div>'
   +'</div>'
-  +'<div class="pad"><button class="btn warn" onclick="toast(\'已解除绑定，该账号无法再提交本小区订单\');go(\'familyMembers\')">解除绑定</button></div>';
-}};
-S.unbind={title:'解除绑定',render:function(){
-  return '<div class="pad">'+hint('解除绑定后，该账号无法再提交本小区的报餐、托管、陪诊订单，已生成的订单不受影响')+'</div>'
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">爸爸</div><div class="cell-s">家庭成员 · 09-01 加入</div></div>'
-  +'<button class="btn warn" style="width:auto;padding:7px 14px;font-size:14px;margin:0" onclick="toast(\'已解除绑定，该账号无法再提交本小区订单\');go(\'familyMembers\')">解绑</button></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">租客小王</div><div class="cell-s">租户 · 09-10 加入</div></div>'
-  +'<button class="btn warn" style="width:auto;padding:7px 14px;font-size:14px;margin:0" onclick="toast(\'已解除绑定，该账号无法再提交本小区订单\');go(\'familyMembers\')">解绑</button></div>'
-  +'</div>';
+  +'<div class="pad">'+hint('解除绑定后，该账号无法再提交本小区的报餐、托管、陪诊订单，已生成的订单不受影响')+'</div>'
+  +'<div class="pad" style="padding-top:0"><button class="btn warn" onclick="toast(\'已解除绑定，该账号无法再提交本小区订单\');go(\'familyMembers\')">解除绑定</button></div>';
 }};
 S.invitePoster={title:'邀请成员',render:function(){
   return '<div class="pad" style="padding-top:24px">'
