@@ -746,15 +746,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .ord-card .ft .ab.pri:active{opacity:.85;}
 .ord-card .ft .ab.warm{background:#FFD9C7;color:#C2541A;font-weight:600;}
 .ord-card .ft .ab.warm:active{background:#FFC4A8;}
-.ord-card .timeline{padding:10px 14px;margin:0 14px 10px;background:var(--fill);border-radius:10px;display:flex;align-items:center;gap:4px;}
-.ord-card .timeline .sp{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10.5px;color:var(--label3);position:relative;}
-.ord-card .timeline .sp::before{content:'';position:absolute;left:50%;right:-50%;top:8px;height:1.5px;background:var(--sep);z-index:0;}
-.ord-card .timeline .sp:last-child::before{display:none;}
-.ord-card .timeline .sp.done{color:var(--brand-d);}
-.ord-card .timeline .sp.done::before{background:var(--brand);}
-.ord-card .timeline .sp .d{width:18px;height:18px;border-radius:50%;background:var(--sep);display:flex;align-items:center;justify-content:center;color:#fff;z-index:1;}
-.ord-card .timeline .sp.done .d{background:var(--brand);}
-.ord-card .timeline .sp .d svg{width:10px;height:10px;}
 
 .hero{height:112px;border-radius:var(--r);background:linear-gradient(135deg,#4FD8BC,#17A88A);color:#fff;
       padding:20px 22px;display:flex;flex-direction:column;justify-content:center;margin:0 var(--pad) 12px;}
@@ -809,7 +800,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.41';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.42';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2250,22 +2241,6 @@ function openOrder(id){
 function orderCard(o){
   var stext=ordStatusText(o.st),scls=ordStatusCls(o.st);
   var pnCls=o.st==='pending'?'pending':o.st==='cancel'?'cancel':'';
-  var timeline='';
-  if(o.st==='active'&&o.type===2){
-    timeline='<div class="timeline">'
-      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>报名</span></div>'
-      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>已确认</span></div>'
-      +'<div class="sp"><div class="d"></div><span>进行中</span></div>'
-      +'<div class="sp"><div class="d"></div><span>完成</span></div>'
-    +'</div>';
-  }else if(o.st==='active'&&o.type===1){
-    timeline='<div class="timeline">'
-      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>提交</span></div>'
-      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>已确认</span></div>'
-      +'<div class="sp done"><div class="d">'+ic('check',10)+'</div><span>制作中</span></div>'
-      +'<div class="sp"><div class="d"></div><span>已送达</span></div>'
-    +'</div>';
-  }
   var actions='';
   if(o.st==='pending'){
     actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'订单已复制\')">取消订单</div>'
@@ -2297,7 +2272,6 @@ function orderCard(o){
           +'<div class="m">'+ic('clock',11)+' 配送 / 使用：'+o.date+'</div>'
           +'<div class="m">'+ic('pin',11)+' 提交：'+o.sub+'</div>'
         +'</div>'
-      +(timeline||'')
         +'<div class="sum">'
           +'<div class="l">共 <b>'+o.qty+'</b> 份订单</div>'
           +'<div>'+(o.price<o.oPrice?'<span class="p">¥'+o.oPrice.toFixed(2)+'</span>':'')
