@@ -278,6 +278,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .step .n{min-width:44px;text-align:center;font-size:16px;font-weight:600;height:32px;line-height:32px;color:var(--label);
         border-left:1px solid var(--sep);border-right:1px solid var(--sep);letter-spacing:-.2px;}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:2px var(--pad) 12px;}
+.cml-chips{padding-bottom:8px;}
 .chips::-webkit-scrollbar{height:0;}
 .chip{flex:0 0 auto;padding:7px 15px;border-radius:18px;background:var(--card);font-size:13px;color:var(--label);
       cursor:pointer;white-space:nowrap;letter-spacing:-.1px;transition:.15s;}
@@ -343,7 +344,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .rev-card .merchant b{color:var(--label);font-weight:600;}
 .rev-card .merchant .reply{margin-left:auto;color:var(--brand);font-size:12px;flex-shrink:0;}
 
-.search{display:flex;align-items:center;gap:7px;background:#E9E9EA;border-radius:10px;padding:8px 11px;margin:0 var(--pad) 12px;}
+.search{display:flex;align-items:center;gap:7px;background:#E9E9EA;border-radius:10px;padding:8px 11px;margin:12px 10px 10px;}
 .search svg{width:15px;height:15px;color:var(--label3);flex-shrink:0;}
 .search input{flex:1;border:none;background:transparent;font-size:16px;outline:none;font-family:inherit;color:var(--label);}
 .search input::placeholder{color:var(--label3);}
@@ -808,7 +809,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.60';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.61';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -1129,8 +1130,8 @@ function tg(id){agreeOn[id]=!agreeOn[id];render();}
 function searchBar(ph,flFn){return '<div class="search">'+ic('search',15)+'<input placeholder="'+ph+'">'
   +(flFn?'<div class="fl" onclick="'+flFn+'">'+ic('filter',14)+'筛选</div>':'')+'</div>';}
 var chipState={};           /* 横向筛选标签状态: chipState['key']=idx */
-function chips(items,key,def){var cur=(chipState[key]===undefined?(def||0):chipState[key]);
-  var h='<div class="chips">';
+function chips(items,key,def,cls){var cur=(chipState[key]===undefined?(def||0):chipState[key]);
+  var h='<div class="chips'+(cls?' '+cls:'')+'">';
   items.forEach(function(t,i){h+='<div class="chip'+(i===cur?' on':'')+'" onclick="chipPick(\''+key+'\','+i+')">'+t+'</div>';});
   return h+'</div>';}
 function chipPick(k,i){chipState[k]=i;render();}
@@ -1913,12 +1914,12 @@ S.communityList={title:'社区活动',render:function(){
   var TABS=['全部','即将开始','报名中','名额已满','已结束'];
   var cur=(chipState.communityList===undefined?0:chipState.communityList);
   var list=cur?ACTIVITIES.filter(function(x){return x.st===TABS[cur];}):ACTIVITIES;
-  var h='<div class="pad">'+searchBar('搜索活动名称或介绍','openPanel(\'activityFilter\')')+'</div>'
-    + chips(TABS,'communityList');
+  var h=searchBar('搜索活动名称或介绍')
+    + chips(TABS,'communityList',0,'cml-chips');
   if(!list.length){
     h+='<div class="pad">'+empty('cal','暂无'+TABS[cur]+'的活动','看看其他状态的活动吧')+'</div>';
   }else{
-    h+='<div class="grp-t">共 '+list.length+' 场活动</div><div class="grp">'+actItems(list)+'</div>';
+    h+='<div class="grp-t" style="margin:10px var(--pad) 6px">共 '+list.length+' 场活动</div><div class="grp">'+actItems(list)+'</div>';
   }
   return h+hint('下拉刷新 · 上拉加载更多');
 }};
