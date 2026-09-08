@@ -808,7 +808,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.59';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.60';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -1878,7 +1878,7 @@ S.helper={title:'提交需求',render:function(){
 
 /* ================= 社区（Tab） ================= */
 S.community={tab:'community',title:'社区',nav:false,render:function(){
-  return topLg('社区','',[['bell','','noticeList',noticeBadge()],['plus','','postPublish','']])
+  return topLg('社区','',[['bell','','noticeList',noticeBadge()]])
   + grp([
     {ic:'cal',icls:'bg-br',t:'社区活动',s:'报名邻里活动，查看最新动态',ar:1,on:'go(\'communityList\')'},
     {ic:'post',icls:'bg-b',t:'社区贴吧',s:'邻里交流、二手交易、求助问答',ar:1,on:'go(\'forumList\')'},
