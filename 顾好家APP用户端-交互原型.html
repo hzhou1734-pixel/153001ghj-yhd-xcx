@@ -577,14 +577,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .pd-tags{padding:0 var(--pad) 14px;display:flex;flex-wrap:wrap;gap:6px;}
 .pd-tags .tg{font-size:11.5px;color:var(--brand);background:rgba(43,196,160,.1);padding:3px 9px;border-radius:9px;}
 .pd-date{padding:0 var(--pad) 14px;font-size:11.5px;color:var(--label3);display:flex;align-items:center;gap:6px;}
-.pd-bar{padding:10px var(--pad);display:flex;align-items:center;justify-content:space-between;
-  border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);background:var(--card);}
-.pd-bar .left{display:flex;align-items:center;gap:18px;}
-.pd-bar .act{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--label2);cursor:pointer;}
-.pd-bar .act.on{color:var(--red);}
-.pd-bar .act svg{width:20px;height:20px;stroke-width:1.9;}
-.pd-bar .right{display:flex;align-items:center;gap:14px;color:var(--label2);}
-.pd-bar .right svg{width:20px;height:20px;stroke-width:1.9;cursor:pointer;}
+.pd-bar{padding:14px var(--pad);background:var(--card);border-top:.5px solid var(--sep);
+  display:flex;align-items:center;justify-content:center;gap:10px;}
+.pd-bar-l{display:flex;align-items:center;gap:10px;}
+.pd-bk{display:flex;align-items:center;gap:6px;padding:7px 14px 7px 7px;background:var(--fill);
+  border-radius:22px;cursor:pointer;transition:background .12s,transform .12s;letter-spacing:-.1px;}
+.pd-bk:active{transform:scale(.96);}
+.pd-bk.on{background:linear-gradient(135deg,#FF6B6B,#FF4757);color:#fff;
+  box-shadow:0 4px 10px rgba(255,71,87,.22);}
+.pd-bk.on .bk-ic{background:rgba(255,255,255,.22);}
+.pd-bk.on .bk-book{background:rgba(0,0,0,.06);}
+.pd-bk .bk-ic{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.04);
+  display:flex;align-items:center;justify-content:center;color:var(--label3);transition:background .15s,color .15s;}
+.pd-bk .bk-ic svg{width:18px;height:18px;}
+.pd-bk:not(.on):active .bk-ic{background:rgba(0,0,0,.1);}
+.pd-bk span{font-size:13.5px;font-weight:600;color:var(--label);}
+.pd-bk.on span{color:#fff;}
 .pd-cmt{padding:14px var(--pad) 4px;font-size:14px;font-weight:600;color:var(--label);
   display:flex;align-items:center;justify-content:space-between;}
 .pd-cmt .sort{font-size:11.5px;color:var(--label3);font-weight:400;}
@@ -803,7 +811,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.39';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.40';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2080,19 +2088,15 @@ S.postDetail={title:'帖子详情',render:function(){
         +'<div class="nm">'+p.a+(p.cat==='公告'?' '+ic('shield',13):'')+'</div>'
         +'<div class="sub">'+p.d+' · 阳光花园</div>'
       +'</div>'
-      +(p.cat==='公告'?'':'<div class="follow" onclick="toast(\'已关注 '+p.a+'\')">+ 关注</div>')
     +'</div>'
   +'</div>'
   +'<div class="pd-body">'+p.body+'</div>'
   +'<div class="pd-tags"><span class="tg">#'+p.cat+'</span><span class="tg">#阳光花园</span><span class="tg">#邻里互助</span></div>'
   +'<div class="pd-date">'+ic('clock',12)+' 发布于 '+p.d+' · '+p.a+'</div>'
   +'<div class="pd-bar">'
-    +'<div class="left">'
-      +'<div class="act on" onclick="toast(\'已点赞\')">'+ic('heartF',20,'currentColor',2)+' '+p.l+'</div>'
-      +'<div class="act" onclick="toast(\'已收藏\')">'+ic('bookmark',20)+' 收藏</div>'
-    +'</div>'
-    +'<div class="right">'
-      + ic('msg',20,'currentColor')+' '+ic('share',20,'currentColor')+' '+ic('moreH',20,'currentColor')
+    +'<div class="pd-bar-l">'
+      +'<div class="pd-bk on" onclick="toast(\'已点赞\')"><div class="bk-ic">'+ic('heartF',22,'#fff',2)+'</div><span>点赞 '+p.l+'</span></div>'
+      +'<div class="pd-bk" onclick="toast(\'已收藏\')"><div class="bk-ic bk-book">'+ic('bookmark',22,'var(--label3)',2)+'</div><span>收藏</span></div>'
     +'</div>'
   +'</div>'
   +'<div class="pd-cmt"><span>评论 '+p.m+'</span><span class="sort">按热度</span></div>'
