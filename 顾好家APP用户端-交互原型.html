@@ -852,7 +852,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.91';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.92';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2791,41 +2791,24 @@ S.bill={title:'我的账单',render:function(){
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">待结算合计</div></div>'
   +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1254.00</div></div>'
   +'</div>'
-  + grpT('账单明细')
+  + grpT('托管单明细')
   +'<div class="grp">'
-  +'<div class="cell tap" onclick="segState.billPending=0;go(\'billPending\')"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">托管单明细</div><div class="cell-s">6 笔待结算</div></div><div class="cell-v">¥1200.00</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell tap" onclick="segState.billPending=1;go(\'billPending\')"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">报餐单明细</div><div class="cell-s">7 笔待结算</div></div><div class="cell-v">¥54.00</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">学期日托 · 9月服务费</div><div class="cell-s">09-01 09:00 · 全月托管</div></div><div class="cell-v" style="font-weight:600">¥1200.00</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末临时托管 · 半天</div><div class="cell-s">09-06 13:00 · 4 小时</div></div><div class="cell-v">¥0.00</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末临时托管 · 半天</div><div class="cell-s">09-13 13:00 · 4 小时</div></div><div class="cell-v">¥0.00</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚托加时 · 2 小时</div><div class="cell-s">09-09 18:00 · 课后延托</div></div><div class="cell-v">¥0.00</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚托加时 · 1.5 小时</div><div class="cell-s">09-11 18:00 · 课后延托</div></div><div class="cell-v">¥0.00</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">节假日托管 · 全天</div><div class="cell-s">09-20 08:30 · 中秋当日</div></div><div class="cell-v">¥0.00</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">托管单小计</div><div class="cell-s">共 6 笔待结算</div></div>'
+  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1200.00</div></div>'
   +'</div>'
-  +'<div class="btn-fixed">'+btn('结算账单','go(\'orderSettlement\')')+'</div>';
-}};
-
-/* ================= 待结算账单明细（托管/报餐分 tab） ================= */
-S.billPending={title:'账单明细',render:function(){
-  var cur=segState.billPending||0;
-  if(cur===0){
-    return '<div class="pad">'+seg(['托管单','报餐单'],'billPending')+'</div>'
-    + grpT('托管单 · 待结算')
-    +'<div class="grp">'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">学期日托 · 9月服务费</div><div class="cell-s">09-01 09:00 · 全月托管</div></div><div class="cell-v" style="font-weight:600">¥1200.00</div></div>'
-    +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末临时托管 · 半天</div><div class="cell-s">09-06 13:00 · 4 小时</div></div><div class="cell-v">¥0.00</div></div>'
-    +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末临时托管 · 半天</div><div class="cell-s">09-13 13:00 · 4 小时</div></div><div class="cell-v">¥0.00</div></div>'
-    +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚托加时 · 2 小时</div><div class="cell-s">09-09 18:00 · 课后延托</div></div><div class="cell-v">¥0.00</div></div>'
-    +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚托加时 · 1.5 小时</div><div class="cell-s">09-11 18:00 · 课后延托</div></div><div class="cell-v">¥0.00</div></div>'
-    +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">节假日托管 · 全天</div><div class="cell-s">09-20 08:30 · 中秋当日</div></div><div class="cell-v">¥0.00</div></div>'
-    +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">托管单小计</div><div class="cell-s">共 6 笔待结算</div></div>'
-    +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1200.00</div></div>'
-    +'</div>'
-    + hint('托管单费用将在结算时一并结清');
-  }
-  return '<div class="pad">'+seg(['托管单','报餐单'],'billPending')+'</div>'
-  + grpT('报餐单 · 待结算')
+  + grpT('报餐单明细')
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">09-04 10:20 · 午餐套餐</div></div><div class="cell-v" style="font-weight:600">¥36.00</div></div>'
   +'<div class="sep full"></div>'
@@ -2844,7 +2827,7 @@ S.billPending={title:'账单明细',render:function(){
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">报餐单小计</div><div class="cell-s">共 7 笔待结算</div></div>'
   +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥54.00</div></div>'
   +'</div>'
-  + hint('报餐单费用将在结算时一并结清');
+  +'<div class="btn-fixed">'+btn('结算账单','go(\'orderSettlement\')')+'</div>';
 }};
 
 /* ================= 账单详情（已结算二级页 · 托管/报餐分 tab） ================= */
