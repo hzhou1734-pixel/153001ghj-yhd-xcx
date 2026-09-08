@@ -545,10 +545,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .pd-head .info .nm svg{width:13px;height:13px;color:var(--brand);}
 .pd-head .info .sub{font-size:11.5px;color:var(--label3);margin-top:2px;}
 .pd-actions{display:flex;align-items:center;gap:12px;margin-left:auto;}
-.pd-like,.pd-fav{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--label3);cursor:pointer;transition:transform .12s;}
-.pd-like:active,.pd-fav:active{transform:scale(.9);}
+.pd-like{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--label3);cursor:pointer;transition:transform .12s,color .12s;}
+.pd-like:active{transform:scale(.86);}
 .pd-like.on{color:var(--red);}
-.pd-like svg,.pd-fav svg{width:15px;height:15px;stroke-width:2;}
+.pd-like svg{width:15px;height:15px;stroke-width:2;transition:transform .12s;}
+.pd-like.on svg{fill:var(--red);transform:scale(1.12);}
 .pd-body{padding:0 var(--pad) 12px;font-size:14.5px;line-height:1.75;color:var(--label);letter-spacing:-.1px;}
 .pd-tags{padding:0 var(--pad) 14px;display:flex;flex-wrap:wrap;gap:6px;}
 .pd-tags .tg{font-size:11.5px;color:var(--brand);background:rgba(43,196,160,.1);padding:3px 9px;border-radius:9px;}
@@ -796,7 +797,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.52';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.53';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -1989,7 +1990,16 @@ var POSTS=[
    imgs:1}
 ];
 var curPostId='p1';
+var postLike={}; /* 帖子点赞状态：id -> true/false */
 function openPost(id){curPostId=id;go('postDetail');}
+/* 帖子详情点赞：同步更新点赞数与红心状态后重渲染 */
+function togglePostLike(){
+  var p=POSTS.find(function(x){return x.id===curPostId;});
+  if(!p)return;
+  if(postLike[curPostId]){p.l--;postLike[curPostId]=false;}
+  else{p.l++;postLike[curPostId]=true;}
+  render();
+}
 function postCard(p){
   return '<div class="post-card" onclick="openPost(\''+p.id+'\')">'
     +'<div class="post-cover bg-'+p.cv+'">'
@@ -2058,8 +2068,7 @@ S.postDetail={title:'帖子详情',render:function(){
         +'<div class="sub">'+p.d+' · 阳光花园</div>'
       +'</div>'
       +'<div class="pd-actions">'
-        +'<div class="pd-like on" onclick="event.stopPropagation();toast(\'已点赞\')">'+ic('heartF',14)+'<span>'+p.l+'</span></div>'
-        +'<div class="pd-fav" onclick="event.stopPropagation();toast(\'已收藏\')">'+ic('bookmark',14)+'</div>'
+        +'<div class="pd-like'+(postLike[p.id]?' on':'')+'" onclick="event.stopPropagation();togglePostLike()">'+ic(postLike[p.id]?'heartF':'heart',14)+'<span>'+p.l+'</span></div>'
       +'</div>'
     +'</div>'
   +'</div>'
