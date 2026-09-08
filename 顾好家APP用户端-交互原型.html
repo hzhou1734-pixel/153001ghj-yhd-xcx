@@ -351,6 +351,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .search .fl{display:flex;align-items:center;gap:3px;color:var(--brand);font-size:13px;font-weight:500;cursor:pointer;flex-shrink:0;}
 .search .fl svg{width:14px;height:14px;color:var(--brand);}
 
+/* ===== 钱袋子：月份切换 + 收支 Tab + 凭证图片弹层 ===== */
+.mb-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:14px;}
+.mb-nav .mb-a{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.22);
+  display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;flex-shrink:0;transition:background .12s;}
+.mb-nav .mb-a:active{background:rgba(255,255,255,.42);}
+.mb-nav .mb-a.off{opacity:.35;pointer-events:none;}
+.mb-nav .mb-a svg{width:18px;height:18px;}
+.mb-nav .mb-m{font-size:15px;font-weight:600;color:#fff;letter-spacing:.3px;min-width:96px;text-align:center;}
+.mb-tabs{display:flex;background:var(--card);margin:0 var(--pad) 10px;border-radius:12px;padding:3px;}
+.mb-tabs .mb-t{flex:1;text-align:center;padding:8px 0;font-size:14px;color:var(--label2);cursor:pointer;border-radius:9px;transition:.15s;}
+.mb-tabs .mb-t.on{background:var(--brand);color:#fff;font-weight:600;}
+.rv-mask{position:absolute;inset:0;background:rgba(0,0,0,.72);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:60;padding:24px;animation:rvFade .18s ease;}
+.rv-box{width:100%;max-width:320px;background:#fff;border-radius:16px;overflow:hidden;animation:rvPop .2s ease;}
+.rv-img{height:232px;background:#E9E9EA;display:flex;align-items:center;justify-content:center;padding:18px;}
+.rv-paper{width:196px;background:#fff;border-radius:10px;padding:24px 18px;display:flex;flex-direction:column;
+  align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.14);}
+.rv-paper svg{width:46px;height:46px;color:var(--brand);}
+.rv-paper .rv-cap{font-size:12px;color:var(--label2);}
+.rv-paper .rv-line{height:8px;border-radius:4px;background:#EFEFF3;}
+.rv-paper .rv-stamp{width:52px;height:52px;border-radius:50%;border:2.5px solid var(--red);color:var(--red);
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transform:rotate(-18deg);
+  letter-spacing:1px;opacity:.8;}
+.rv-bd{padding:16px 18px 0;}
+.rv-bd .nm{font-size:16px;font-weight:700;color:var(--label);}
+.rv-bd .mt{margin-top:5px;font-size:13px;color:var(--label2);}
+.rv-bd .am{margin-top:10px;font-size:22px;font-weight:800;color:var(--label);letter-spacing:-.5px;}
+.rv-close{margin-top:16px;padding:12px;text-align:center;font-size:15px;font-weight:600;color:var(--brand);
+  cursor:pointer;border-top:.5px solid var(--sep);}
+.rv-close:active{background:var(--fill);}
+@keyframes rvFade{from{opacity:0}to{opacity:1}}
+@keyframes rvPop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+
 /* ===== 贴吧顶部搜索区（重构） ===== */
 .fbar{margin:0 var(--pad) 10px;background:linear-gradient(135deg,#34D2A8 0%,#17A88A 55%,#0F8E75 100%);
   border-radius:16px;padding:14px 14px 12px;color:#fff;box-shadow:0 8px 22px rgba(23,168,138,.22);position:relative;overflow:hidden;}
@@ -809,7 +842,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.62';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.63';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2961,24 +2994,96 @@ S.helperDetail={title:'需求详情',render:function(){
 }};
 
 /* ================= 钱袋子 / 人力资源 ================= */
+var MONEY_MONTHS=['2026-08','2026-07','2026-06'];   /* 倒序：0=最新 */
+var moneyMonthIdx=0;               /* 当前查看月份索引 */
+var moneyBagTab=0;                 /* 0=收入 1=支出 */
+var curReceipt=null;               /* 当前查看凭证的条目 id */
+var MONEY_BAG={
+  '2026-08':{balance:'¥12,580',inc:'+8,600',exp:'-3,200',items:[
+    {id:'mb1',type:'exp',name:'公共电费',date:'08-31',amt:'-¥1,200',ic:'drop',icls:'bg-r'},
+    {id:'mb2',type:'exp',name:'电梯维保费',date:'08-28',amt:'-¥2,000',ic:'build',icls:'bg-r'},
+    {id:'mb3',type:'inc',name:'停车费收入',date:'08-25',amt:'+¥5,200',ic:'card',icls:'bg-g'},
+    {id:'mb4',type:'inc',name:'广告位租金',date:'08-20',amt:'+¥2,400',ic:'img',icls:'bg-g'},
+    {id:'mb5',type:'inc',name:'充电桩服务费',date:'08-18',amt:'+¥1,000',ic:'sync',icls:'bg-g'}
+  ]},
+  '2026-07':{balance:'¥11,300',inc:'+7,200',exp:'-2,900',items:[
+    {id:'mb6',type:'exp',name:'公共水费',date:'07-31',amt:'-¥800',ic:'drop',icls:'bg-r'},
+    {id:'mb7',type:'exp',name:'绿化养护费',date:'07-26',amt:'-¥1,300',ic:'sProp',icls:'bg-r'},
+    {id:'mb8',type:'exp',name:'公共照明维修',date:'07-22',amt:'-¥800',ic:'build',icls:'bg-r'},
+    {id:'mb9',type:'inc',name:'停车费收入',date:'07-25',amt:'+¥4,800',ic:'card',icls:'bg-g'},
+    {id:'mb10',type:'inc',name:'广告位租金',date:'07-18',amt:'+¥2,400',ic:'img',icls:'bg-g'}
+  ]},
+  '2026-06':{balance:'¥10,900',inc:'+6,500',exp:'-2,400',items:[
+    {id:'mb11',type:'exp',name:'公共电费',date:'06-30',amt:'-¥1,100',ic:'drop',icls:'bg-r'},
+    {id:'mb12',type:'exp',name:'电梯维保费',date:'06-27',amt:'-¥1,300',ic:'build',icls:'bg-r'},
+    {id:'mb13',type:'inc',name:'停车费收入',date:'06-25',amt:'+¥4,200',ic:'card',icls:'bg-g'},
+    {id:'mb14',type:'inc',name:'充电桩服务费',date:'06-19',amt:'+¥900',ic:'sync',icls:'bg-g'},
+    {id:'mb15',type:'inc',name:'场地租赁收入',date:'06-12',amt:'+¥1,400',ic:'cal',icls:'bg-g'}
+  ]}
+};
+function moneyMonthLabel(k){var y=k.substr(0,4),m=parseInt(k.substr(5,2),10);return y+'年'+m+'月';}
+function moneyMonth(d){
+  var n=moneyMonthIdx+d;
+  if(n<0||n>=MONEY_MONTHS.length)return;
+  moneyMonthIdx=n;curReceipt=null;render();
+}
+function moneyTab(i){moneyBagTab=i;curReceipt=null;render();}
+function viewReceipt(id){curReceipt=id;render();}
+function closeReceipt(){curReceipt=null;render();}
 S.moneyBag={title:'小区钱袋子',render:function(){
-  return '<div class="pad" style="padding-top:12px">'
-  +'<div class="card" style="background:linear-gradient(135deg,#4FD8BC,#17A88A);color:#fff;padding:18px">'
-  +'<div class="row between"><div><div style="font-size:12.5px;opacity:.9">上月结余</div>'
-  +'<div style="font-size:28px;font-weight:800;letter-spacing:-.8px;margin-top:5px">¥12,580</div></div>'
-  +'<div style="text-align:right"><div style="font-size:12.5px;opacity:.9">收入 / 支出</div>'
-  +'<div style="font-size:17px;font-weight:700;margin-top:6px">+8,600 / -3,200</div></div></div></div></div>'
-  + grpT('收支明细')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-r">'+ic('doc',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">公共电费</div><div class="cell-s">09-01 · 凭证已上传</div></div><div class="cell-v" style="color:var(--red);font-weight:600">-¥1,200</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-r">'+ic('build',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">电梯维保费</div><div class="cell-s">09-01 · 凭证已上传</div></div><div class="cell-v" style="color:var(--red);font-weight:600">-¥2,000</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-g">'+ic('card',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">停车费收入</div><div class="cell-s">09-01 · 凭证已上传</div></div><div class="cell-v" style="color:var(--green);font-weight:600">+¥8,600</div></div>'
-  +'</div>'+hint('下拉刷新 · 上拉加载更多历史记录 · 凭证可点击查看');
+  var mk=MONEY_MONTHS[moneyMonthIdx];
+  var d=MONEY_BAG[mk];
+  var list=d.items.filter(function(x){return moneyBagTab===0?(x.type==='inc'):(x.type==='exp');});
+  var curR=curReceipt?d.items.find(function(x){return x.id===curReceipt;}):null;
+  var h='<div class="pad" style="padding-top:12px">'
+    +'<div class="card" style="background:linear-gradient(135deg,#4FD8BC,#17A88A);color:#fff;padding:16px 18px">'
+    +'<div class="mb-nav">'
+      +'<div class="mb-a'+(moneyMonthIdx>=MONEY_MONTHS.length-1?' off':'')+'" onclick="moneyMonth(1)">'+ic('chevL',18)+'</div>'
+      +'<div class="mb-m">'+moneyMonthLabel(mk)+'</div>'
+      +'<div class="mb-a'+(moneyMonthIdx<=0?' off':'')+'" onclick="moneyMonth(-1)">'+ic('chevR',18)+'</div>'
+    +'</div>'
+    +'<div class="row between"><div><div style="font-size:12.5px;opacity:.9">本月结余</div>'
+    +'<div style="font-size:28px;font-weight:800;letter-spacing:-.8px;margin-top:5px">'+d.balance+'</div></div>'
+    +'<div style="text-align:right"><div style="font-size:12.5px;opacity:.9">收入 / 支出</div>'
+    +'<div style="font-size:17px;font-weight:700;margin-top:6px">'+d.inc+' / '+d.exp+'</div></div></div>'
+    +'</div></div>'
+    + grpT('收支明细')
+    +'<div class="mb-tabs">'
+      +'<div class="mb-t'+(moneyBagTab===0?' on':'')+'" onclick="moneyTab(0)">收入</div>'
+      +'<div class="mb-t'+(moneyBagTab===1?' on':'')+'" onclick="moneyTab(1)">支出</div>'
+    +'</div>'
+    +'<div class="grp">'
+    + list.map(function(x,i){
+        var amtCls=x.type==='inc'?'var(--green)':'var(--red)';
+        return (i?'<div class="sep"></div>':'')
+          +'<div class="cell tap" onclick="viewReceipt(&apos;'+x.id+'&apos;)">'
+          +'<div class="cell-ic '+x.icls+'">'+ic(x.ic,17)+'</div>'
+          +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">'+x.name+'</div>'
+          +'<div class="cell-s">'+x.date+' · 点击查看凭证</div></div>'
+          +'<div class="cell-v" style="color:'+amtCls+';font-weight:600">'+x.amt+'</div>'
+          +'</div>';
+      }).join('')
+    +'</div>';
+  if(curR){
+    h+='<div class="rv-mask" onclick="closeReceipt()">'
+      +'<div class="rv-box" onclick="event.stopPropagation()">'
+      +'<div class="rv-img"><div class="rv-paper">'
+        +ic('receipt',46)
+        +'<div class="rv-cap">'+curR.name+' · 电子凭证</div>'
+        +'<div class="rv-line" style="width:62%"></div>'
+        +'<div class="rv-line" style="width:44%"></div>'
+        +'<div class="rv-line" style="width:54%"></div>'
+        +'<div class="rv-stamp">已入账</div>'
+      +'</div></div>'
+      +'<div class="rv-bd">'
+        +'<div class="nm">'+curR.name+'</div>'
+        +'<div class="mt">'+curR.date+' · '+moneyMonthLabel(mk)+'</div>'
+        +'<div class="am">'+curR.amt+'</div>'
+      +'</div>'
+      +'<div class="rv-close" onclick="closeReceipt()">关闭</div>'
+      +'</div></div>';
+  }
+  return h;
 }};
 S.hr={title:'人力资源',render:function(){
   return '<div class="pad">'+hint('下拉刷新 · 上拉加载更多招聘信息 · 仅平台信息置顶')+'</div>'
