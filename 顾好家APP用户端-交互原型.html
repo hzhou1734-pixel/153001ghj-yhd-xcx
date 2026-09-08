@@ -605,8 +605,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .pd-citem .nm svg{width:12px;height:12px;color:var(--brand);}
 .pd-citem .txt{font-size:13.5px;color:var(--label);line-height:1.5;margin-top:3px;letter-spacing:-.1px;}
 .pd-citem .meta{margin-top:6px;display:flex;align-items:center;gap:14px;color:var(--label3);font-size:11px;}
-.pd-citem .like{display:flex;align-items:center;gap:3px;cursor:pointer;}
-.pd-citem .like svg{width:12px;height:12px;}
 .pd-citem .reply{cursor:pointer;}
 .pd-input{position:sticky;bottom:0;left:0;right:0;background:var(--card);
   padding:8px var(--pad) 10px;border-top:.5px solid var(--sep);
@@ -811,7 +809,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.40';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.41';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2109,7 +2107,6 @@ S.postDetail={title:'帖子详情',render:function(){
           +'<div class="meta">'
             +'<span>'+c.d+'</span>'
             +(c.reply?'<span class="reply" style="color:var(--brand)">作者</span>':'')
-            +'<span class="like" onclick="toast(\'已点赞\')">'+ic('heart',12)+' '+(c.l||'')+'</span>'
             +'<span class="reply">回复</span>'
           +'</div>'
         +'</div>'
