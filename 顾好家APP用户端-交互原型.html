@@ -842,7 +842,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.72';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.73';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -3611,13 +3611,7 @@ S.editProfile={title:'编辑个人信息',rightLabel:'保存',rightFn:'toast(\'�
     {ic:'me',icls:'bg-br',t:'昵称',v:'顾家小林',ar:true,on:'toast(\'修改昵称\')'},
     {ic:'phone',icls:'bg-b',t:'手机号码',v:'138****6688',ar:true,on:'go(\'changePhone\')'}
   ],'基础资料')
-  + grp([
-    {ic:'home2',icls:'bg-o',t:'房屋地址',v:'阳光花园 2栋-1102',ar:true,on:'toast(\'地址以认证为准\')'}
-  ],'住址')
-  + grp([
-    {ic:'pencil',icls:'bg-gy',t:'个人简介',s:'聊聊你的兴趣和服务需求…',ar:true,on:'toast(\'编辑个人简介\')'}
-  ],'附加信息')
-  +'<div class="hint">修改后将在所有业主服务中同步展示</div>';
+  +'<div style="height:8px"></div>';
 }};
 
 /* ================= 启动 ================= */
