@@ -342,9 +342,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .rev-card .merchant{margin-top:9px;padding:7px 10px;background:var(--fill);border-radius:8px;font-size:12px;color:var(--label2);display:flex;align-items:center;gap:5px;line-height:1.5;}
 .rev-card .merchant b{color:var(--label);font-weight:600;}
 .rev-card .merchant .reply{margin-left:auto;color:var(--brand);font-size:12px;flex-shrink:0;}
-.rev-card .helpful{margin-top:8px;display:flex;gap:14px;font-size:12px;color:var(--label3);}
-.rev-card .helpful span{display:inline-flex;align-items:center;gap:3px;cursor:pointer;}
-.rev-card .helpful svg{width:13px;height:13px;}
 
 .search{display:flex;align-items:center;gap:7px;background:#E9E9EA;border-radius:10px;padding:8px 11px;margin:0 var(--pad) 12px;}
 .search svg{width:15px;height:15px;color:var(--label3);flex-shrink:0;}
@@ -820,7 +817,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.48';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.49';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2543,7 +2540,7 @@ S.review={title:'服务评价',render:function(){
     +'</div></div>';
 
   /* 评价筛选 */
-  var filters=[{n:'全部',c:REVIEWS.length,on:true},{n:'好评',c:5},{n:'4-5星',c:5},{n:'有图',c:4},{n:'服务周到',c:3}];
+  var filters=[{n:'全部',c:REVIEWS.length,on:true},{n:'好评',c:5},{n:'4-5星',c:5},{n:'有图',c:4}];
   var fhtml='<div class="rev-filter">';
   filters.forEach(function(f,i){fhtml+='<div class="rev-chip'+(f.on?' on':'')+'" onclick="pickRevFilter(this,'+i+')">'+f.n+'<span class="n">'+f.c+'</span></div>';});
   fhtml+='</div>';
@@ -2575,10 +2572,6 @@ S.review={title:'服务评价',render:function(){
       +(imgsHtml?'<div class="imgs">'+imgsHtml+'</div>':'')
       +'<div class="sku"><span class="lt"><b>'+r.sku+'</b></span></div>'
       +merchHtml
-      +'<div class="helpful">'
-        +'<span onclick="toast(\'已点赞\')">'+ic('thumb',13)+' 有用 ('+r.helpful+')</span>'
-        +'<span onclick="toast(\'已复制\')">'+ic('share',13)+' 分享</span>'
-      +'</div>'
     +'</div>';
   });
 
