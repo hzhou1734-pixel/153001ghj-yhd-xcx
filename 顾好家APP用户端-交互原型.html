@@ -809,7 +809,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.61';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.62';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2172,8 +2172,7 @@ function openNotice(id){
   go('noticeDetail');
 }
 S.noticeList={title:'社区通知',render:function(){
-  return '<div class="pad">'+hint('下拉刷新 · 上拉加载更多历史通知 · 按发布时间倒序')+'</div>'
-  +'<div class="grp">'
+  return '<div class="grp">'
   + NOTICES.map(function(x,i){
       return (i?'<div class="sep full"></div>':'')
         +'<div class="item noind" onclick="openNotice(&apos;'+x.id+'&apos;)"><div class="cell-ic '+x.cls+'">'+ic(x.ic,17)+'</div>'
