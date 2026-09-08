@@ -842,7 +842,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.69';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.70';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -3181,7 +3181,7 @@ S.hrDetail={title:'资源详情',render:function(){
   return '<div class="pad"><div class="cover" style="height:166px">'+ic('hr',42,'#fff',1.7)+'</div></div>'
   +'<div class="pad"><div class="bold" style="font-size:20px;letter-spacing:-.3px">退休教师兼职家教</div>'
   +'<div class="sub" style="margin-top:7px">物业 · 09-02 · 阳光花园</div></div>'
-  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.75;color:var(--label)">本人系本市重点小学退休教师，从教 30 余年，擅长小学语文、数学辅导。可提供工作日课后及周末上门家教服务，费用面议。有意向的邻居可电话联系。</div></div>'
+  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.75;color:var(--label)">本人系本市重点小学退休教师，从教 30 余年，擅长小学语文、数学辅导。可提供工作日课后及周末上门家教服务，费用面议。</div></div>'
   +'<div class="pad"><button class="btn sec" onclick="go(\'hrEdit\')">编辑信息</button></div>'
   +'<div class="pad"><button class="btn sec" onclick="toggleHrVis(\'退休教师兼职家教\')" id="hrVisBtn">显示/隐藏</button></div>'
   +'<div class="pad"><button class="btn warn" onclick="delHr(\'退休教师兼职家教\')">删除信息</button></div>';
@@ -3573,7 +3573,7 @@ S.hrEdit={title:'编辑信息',render:function(){
   +'<div class="grp"><div class="field"><input placeholder="标题（必填）" value="退休教师兼职家教"></div></div>'
   + grpT('正文内容')
   +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-  +'<textarea rows="6">本人系本市重点小学退休教师，从教 30 余年，擅长小学语文、数学辅导。可提供工作日课后及周末上门家教服务，费用面议。有意向的邻居可电话联系。</textarea></div></div>'
+  +'<textarea rows="6">本人系本市重点小学退休教师，从教 30 余年，擅长小学语文、数学辅导。可提供工作日课后及周末上门家教服务，费用面议。</textarea></div></div>'
   + grpT('上传图片')
   +'<div class="card"><div class="row" style="gap:10px">'
   +'<div class="upbox" onclick="toast(\'上传图片\')">'+ic('camera',20)+'<span class="n">图片 1/9</span></div>'
