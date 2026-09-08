@@ -363,13 +363,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .fbar .fb-in input{flex:1;border:none;background:transparent;font-size:14.5px;outline:none;color:var(--label);
   font-family:inherit;letter-spacing:-.1px;}
 .fbar .fb-in input::placeholder{color:var(--label3);}
-.fbar .fb-in .b-div{width:1px;height:14px;background:var(--sep);margin:0 2px;}
-.fbar .fb-in .b-btn{display:flex;align-items:center;justify-content:center;width:30px;height:30px;
-  border-radius:50%;background:var(--fill);color:var(--label2);cursor:pointer;transition:background .12s;}
-.fbar .fb-in .b-btn:active{background:#E5E5EA;}
-.fbar .fb-in .b-btn svg{width:15px;height:15px;}
-.fbar .fb-in .b-btn.pri{background:var(--brand);color:#fff;}
-.fbar .fb-in .b-btn.pri:active{background:var(--brand-d);}
 
 .item{display:flex;gap:12px;background:var(--card);padding:12px 14px;align-items:center;cursor:pointer;transition:background .12s;}
 .item:active{background:#E5E5EA;}
@@ -815,7 +808,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.58';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.59';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2075,23 +2068,17 @@ function postCards(list){
 }
 
 S.forumList={title:'社区贴吧',rightLabel:'发布',rightFn:'go(\'postPublish\')',render:function(){
-  var TABS=['全部','二手交易','求助问答','邻里话题','公告'];
-  var cur=(chipState.forumList===undefined?0:chipState.forumList);
-  var list=cur?POSTS.filter(function(x){return x.cat===TABS[cur];}):POSTS;
+  var list=POSTS;
   var h='<div class="fbar">'
       +'<div class="fb-in">'
         +'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
         +'<input placeholder="搜索帖子、用户、话题…">'
-        +'<div class="b-div"></div>'
-        +'<div class="b-btn" onclick="toast(\'拍照搜帖\')">'+ic('camera',15,'currentColor')+'</div>'
-        +'<div class="b-btn pri" onclick="toast(\'语音搜索\')">'+ic('mic',15,'#fff')+'</div>'
       +'</div>'
-    +'</div>'
-    +'<div style="margin:0 var(--pad) 12px">'+chips(TABS,'forumList')+'</div>';
+    +'</div>';
   if(!list.length){
-    h+='<div class="pad">'+empty('post','暂无'+TABS[cur]+'的帖子','换个分类看看')+'</div>';
+    h+='<div class="pad">'+empty('post','暂无帖子','去发布第一条吧')+'</div>';
   }else{
-    h+='<div class="grp-t">共 '+list.length+' 条帖子</div>'+postCards(list);
+    h+=postCards(list);
   }
   return h+hint('下拉刷新 · 上拉加载更多历史帖子 · 仅认证用户可发布')
     + fab('go(\'postPublish\')');
