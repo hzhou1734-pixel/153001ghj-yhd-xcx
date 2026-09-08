@@ -744,6 +744,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .ord-section .kv .v.gy{color:var(--label3);}
 .ord-section .log{padding:12px 14px;font-size:13.5px;color:var(--label2);line-height:1.9;}
 
+/* 添加评价页 */
+.rv-svc{display:flex;align-items:center;gap:11px;margin:0 var(--pad) 12px;background:var(--card);border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.03);}
+.rv-svc .ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
+.rv-svc .ic.b{background:linear-gradient(135deg,#34D2A8,#17A88A);}
+.rv-svc .ic.o{background:linear-gradient(135deg,#FF9E73,#F2642A);}
+.rv-svc .ic.g{background:linear-gradient(135deg,#7FB6F0,#2585E6);}
+.rv-svc .ic svg{width:20px;height:20px;}
+.rv-svc .t{font-size:15px;font-weight:600;color:var(--label);letter-spacing:-.2px;}
+.rv-svc .s{font-size:12.5px;color:var(--label3);margin-top:2px;}
+.rv-rate{margin:0 var(--pad) 12px;background:var(--card);border-radius:16px;padding:18px 14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.03);}
+.rv-rate-t{font-size:13px;color:var(--label2);font-weight:600;}
+.rv-stars{display:flex;justify-content:center;gap:8px;margin:12px 0 8px;}
+.rv-stars span{font-size:34px;line-height:1;color:#E0E0E5;cursor:pointer;transition:color .12s,transform .12s;-webkit-text-stroke:1px #E0E0E5;}
+.rv-stars span.on{color:#FFB400;-webkit-text-stroke:1px #FFB400;}
+.rv-stars span:active{transform:scale(.9);}
+.rv-score-txt{font-size:14px;font-weight:600;color:var(--accent);}
+.rv-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.rv-tag{padding:7px 13px;border-radius:16px;font-size:13px;background:var(--fill);color:var(--label2);cursor:pointer;transition:all .12s;letter-spacing:-.1px;}
+.rv-tag.on{background:rgba(43,196,160,.14);color:var(--brand-d);font-weight:600;border:1px solid rgba(43,196,160,.4);}
+.rv-imgs{display:flex;flex-wrap:wrap;gap:10px;}
+.rv-img-add{width:72px;height:72px;border-radius:12px;border:1.5px dashed #D2D2D8;display:flex;align-items:center;justify-content:center;color:var(--label3);cursor:pointer;background:#FAFAFA;}
+.rv-img-add:active{background:#F0F0F3;}
+
 .hero{height:112px;border-radius:var(--r);background:linear-gradient(135deg,#4FD8BC,#17A88A);color:#fff;
       padding:20px 22px;display:flex;flex-direction:column;justify-content:center;margin:0 var(--pad) 12px;}
 .hero.o{background:linear-gradient(135deg,#FF9E73,#F2642A);}
@@ -797,7 +820,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.46';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.47';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2373,7 +2396,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="log">提交：09-04 10:20<br>结算：—<br>取消：—</div></div>'
   +'<div class="btn-row"><button class="btn sec" onclick="toast(\'已取消报餐（当日 20:00 前）\')">取消订单</button>'
   +'<button class="btn" onclick="go(\'orderSettlement\')">订单结算</button></div>'
-  +'<div class="pad"><button class="btn acc" onclick="go(\'review\')">'+ic('star',18)+' 服务评价</button></div>';
+  +'<div class="pad"><button class="btn acc" onclick="openAddReview(1)">'+ic('star',18)+' 服务评价</button></div>';
 }};
 S.orderTrustDetail={title:'托管单详情',render:function(){
   return '<div class="ord-card" style="margin-top:12px">'
@@ -2399,7 +2422,7 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">提交：09-01 09:00<br>结算：—<br>取消：—</div></div>'
   + btn('订单结算','go(\'orderSettlement\')')
-  +'<div class="pad"><button class="btn acc" onclick="go(\'review\')">'+ic('star',18)+' 服务评价</button></div>';
+  +'<div class="pad"><button class="btn acc" onclick="openAddReview(2)">'+ic('star',18)+' 服务评价</button></div>';
 }};
 /* 陪诊单状态：no -> 'unpaid' | 'paid' */
 var escortStatus={'PZ20250903-002':'unpaid','PZ20250820-006':'paid'};
@@ -2437,6 +2460,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="log">提交：2026-09-03 16:00<br>支付：'+(isPaid?'2026-09-03 16:05':'—')+'<br>取消：—</div></div>'
   +(isPaid
     ?'<div class="pad"><button class="btn warn" onclick="go(\'refund\')">申请售后</button></div>'
+     +'<div class="pad" style="padding-top:0"><button class="btn acc" onclick="openAddReview(3)">'+ic('star',18)+' 服务评价</button></div>'
     :'<div class="btn-row"><button class="btn warn" style="flex:1" onclick="toast(\'取消需物业后台审核\')">取消订单</button>'
      +'<button class="btn" style="flex:1" onclick="openEscortPay()">订单支付</button></div>');
 }};
@@ -2567,6 +2591,46 @@ function pickRevFilter(el){
   for(var i=0;i<ch.length;i++)ch[i].classList.remove('on');
   el.classList.add('on');
 }
+/* ================= 添加评价（订单完成态入口） ================= */
+var addReviewType=1;          /* 1报餐 2托管 3陪诊 */
+var reviewScore=5;            /* 当前评分（默认 5 星） */
+var reviewTagsSel={};         /* 选中标签索引集合 */
+var REVIEW_TAGS=['专业耐心','准时可靠','服务周到','态度亲切','细心体贴','性价比高'];
+function openAddReview(type){addReviewType=type;reviewScore=5;reviewTagsSel={};go('addReview');}
+function pickReviewScore(n){reviewScore=n;render();}
+function toggleReviewTag(i){reviewTagsSel[i]=!reviewTagsSel[i];render();}
+function submitReview(){toast('评价提交成功，感谢您的反馈');back();}
+S.addReview={title:'添加评价',render:function(){
+  var svcName=addReviewType===1?'明日午餐 · 营养套餐':addReviewType===2?'学期日托 · 安心托付':addReviewType===3?'医院就诊全程陪诊 · 3 小时';
+  var stars='<div class="rv-stars">';
+  for(var i=1;i<=5;i++)stars+='<span class="'+(i<=reviewScore?'on':'')+'" onclick="pickReviewScore('+i+')">★</span>';
+  stars+='</div>';
+  var scoreTxt=['','很差','一般','满意','很好','非常满意'][reviewScore];
+  var tagHtml='<div class="rv-tags">';
+  REVIEW_TAGS.forEach(function(tg,i){tagHtml+='<div class="rv-tag'+(reviewTagsSel[i]?' on':'')+'" onclick="toggleReviewTag('+i+')">'+tg+'</div>';});
+  tagHtml+='</div>';
+  return '<div style="height:12px"></div>'
+    +'<div class="rv-svc">'
+      +'<div class="ic '+ordTypeCls[addReviewType]+'">'+ic(ordTypeIcons[addReviewType],20)+'</div>'
+      +'<div><div class="t">'+ordTypeLabels[addReviewType-1]+'</div><div class="s">'+svcName+'</div></div>'
+    +'</div>'
+    +'<div class="rv-rate">'
+      +'<div class="rv-rate-t">为本次服务评分</div>'
+      +stars
+      +'<div class="rv-score-txt">'+scoreTxt+'</div>'
+    +'</div>'
+    + grpT('说说这次服务的感受（选填）')
+    +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
+      +'<textarea id="rvText" rows="4" placeholder="服务是否专业？态度是否亲切？分享给邻居们参考…"></textarea></div></div>'
+    + grpT('添加标签')
+    +'<div class="grp" style="padding:14px 12px">'+tagHtml+'</div>'
+    + grpT('上传图片（选填）')
+    +'<div class="grp" style="padding:14px 12px"><div class="rv-imgs">'
+      +'<div class="rv-img-add" onclick="toast(\'打开相册添加图片\')">'+ic('plus',22)+'</div>'
+    +'</div></div>'
+    + btn('提交评价','submitReview()','acc')
+    + hint('提交后评价将公开展示，帮助更多邻居选择服务');
+}};
 S.refund={title:'退款申请',render:function(){
   return '<div class="pad" style="padding-top:12px">'
   +'<div class="card" style="text-align:center;padding:18px 16px">'
