@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.86';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.87';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2914,8 +2914,7 @@ S.butler={title:'我的管家',render:function(){
   + grpT('微信二维码')
   +'<div class="pad"><div class="card" style="text-align:center">'
   +'<div style="width:132px;height:132px;margin:8px auto 10px;border-radius:12px;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--label)">'+ic('qr',90,'#1C1C1E',1.4)+'</div>'
-  +'<div class="sub">长按识别二维码添加管家微信</div></div></div>'
-  + hint('管家信息根据房号自动匹配 · 未认证用户不可查看');
+  +'<div class="sub">长按识别二维码添加管家微信</div></div></div>';
 }};
 S.callMine={title:'一键呼叫',render:function(){
   return '<div class="pad" style="padding-top:12px">'
