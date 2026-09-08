@@ -848,7 +848,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.81';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.82';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2966,7 +2966,7 @@ S.mySignup={title:'我的报名',render:function(){
   return '<div class="grp">'
   +'<div class="item noind" onclick="go(\'activityDetail\')">'+thumb('o','cal',62,62)
   +'<div class="it-bd"><div class="it-t">中秋邻里联欢会</div><div class="it-s">活动时间 9-28 18:30 · 报名于 09-10</div></div><span class="tag g">报名成功</span></div>'
-  +'</div>'+hint('每个用户每个活动仅可报名一次');
+  +'</div>';
 }};
 S.myPosts={title:'我的帖子',render:function(){
   var cur=segState.myPosts||0;
