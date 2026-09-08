@@ -852,7 +852,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.92';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.93';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2732,7 +2732,8 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
     {ic:'yen',icls:'bg-o',t:'我的账单',s:'报餐 / 托管两类账单',ar:1,on:'go(\'bill\')'},
     {ic:'signup',icls:'bg-y',t:'我的报名',s:'社区活动报名记录',ar:1,on:'go(\'mySignup\')'},
     {ic:'post',icls:'bg-in',t:'我的帖子',s:'我发布的邻里帖子与互动',ar:1,on:'go(\'myPosts\')'},
-    {ic:'sHelper',icls:'bg-br',t:'我的需求',s:'生活帮手需求进度跟进',ar:1,on:'needCert(\'myHelper\')'}
+    {ic:'sHelper',icls:'bg-br',t:'我的需求',s:'生活帮手需求进度跟进',ar:1,on:'needCert(\'myHelper\')'},
+    {ic:'msg',icls:'bg-b',t:'系统消息',s:'服务通知与账单提醒',ar:1,on:'go(\'sysMsg\')',badge:sysMsgBadge()}
   ],'我的服务')
   /* ④ 家庭与设备 */
   + grp([
@@ -3427,6 +3428,103 @@ S.bandRename={title:'修改名称',render:function(){
   + grpT('设备名称')
   +'<div class="grp"><div class="field"><input placeholder="请输入设备名称" value="妈妈的手环"></div></div>'
   +'<div class="pad"><button class="btn" onclick="toast(\'名称修改成功\');back()">保存</button></div>';
+}};
+
+/* ================= 系统消息 / 系统设置 / 用户协议 / 隐私政策（补充页面） ================= */
+var SYS_MSGS=[
+  {id:'m1',cat:0,ic:'bell',cls:'bg-o',t:'供水检修施工延期通知',s:'09-04 14:30 · 来自物业服务中心',un:true,
+   h:'供水检修施工延期通知',b:'各位业主：<br><br>因施工方设备调配原因，原定本周六的供水检修施工延期至下周三 08:00-18:00 进行。检修期间将停止供水约 8 小时，请各位业主提前做好储水准备。<br><br>给您带来不便，敬请谅解。<br><br>—— 物业服务中心'},
+  {id:'m2',ic:'yen',cls:'bg-y',t:'托管账单出账提醒',s:'09-03 10:00 · 来自账务系统',un:true,
+   h:'9 月托管账单已出账',b:'您的 9 月托管服务账单已出账，本期金额 ¥688.00，请于 9 月 15 日前完成缴费。您可前往「我的-我的账单」查看账单明细并完成支付。<br><br>—— 顾好家账务系统'},
+  {id:'m3',cat:1,ic:'cal',cls:'bg-br',t:'报餐服务恢复通知',s:'09-02 09:00 · 来自社区食堂',un:false,
+   h:'社区食堂报餐服务恢复通知',b:'社区食堂设备检修已完成，报餐服务即日起恢复。下单截止时间仍为每日 10:00，欢迎各位业主继续使用。<br><br>—— 社区食堂'},
+  {id:'m4',cat:1,ic:'shield',cls:'bg-g',t:'房屋认证审核通过',s:'09-01 16:20 · 来自审核系统',un:true,
+   h:'房屋认证审核通过',b:'您提交的「阳光花园 3栋2单元-1802」房屋认证已审核通过。认证通过后您可使用报餐、托管、一键呼叫等社区专属服务。<br><br>—— 顾好家审核系统'}
+];
+var curSysMsg='m1';
+function sysMsgUnread(){var n=0;for(var i=0;i<SYS_MSGS.length;i++)if(SYS_MSGS[i].un)n++;return n;}
+function sysMsgBadge(){var n=sysMsgUnread();return n>0?String(n):'';}
+function curSysM(){for(var i=0;i<SYS_MSGS.length;i++)if(SYS_MSGS[i].id===curSysMsg)return SYS_MSGS[i];return SYS_MSGS[0];}
+function openSysMsg(id){
+  curSysMsg=id;
+  for(var i=0;i<SYS_MSGS.length;i++)if(SYS_MSGS[i].id===id)SYS_MSGS[i].un=false;
+  go('sysMsgDetail');
+}
+function readAllSysMsg(){for(var i=0;i<SYS_MSGS.length;i++)SYS_MSGS[i].un=false;render();toast('全部消息已设为已读');}
+S.sysMsg={title:'系统消息',render:function(){
+  if(segState.sysMsg===undefined)segState.sysMsg=0;
+  var ci=segState.sysMsg;
+  var list=SYS_MSGS.filter(function(x){return ci===0||x.cat===ci-1;});
+  return seg(['全部','系统通知','服务提醒','账单提醒'],'sysMsg')
+  +'<div class="grp">'
+  + list.map(function(x,i){
+      return (i?'<div class="sep full"></div>':'')
+        +'<div class="item noind" onclick="openSysMsg(&apos;'+x.id+'&apos;)"><div class="cell-ic '+x.cls+'">'+ic(x.ic,17)+'</div>'
+        +'<div class="it-bd"><div class="it-t">'+x.t+(x.un?'<span class="dot-u"></span>':'')+'</div>'
+        +'<div class="it-s">'+x.s+'</div></div>'+ic('chevR',16,'var(--label4)')+'</div>';
+    }).join('')
+  +'</div>'
+  +'<div class="pad">'+btn('全部已读','readAllSysMsg()')+'</div>';
+}};
+S.sysMsgDetail={title:'消息详情',render:function(){
+  var x=curSysM();
+  return '<div class="card">'
+  +'<div class="bold" style="font-size:17px;line-height:1.5">'+x.h+'</div>'
+  +'<div class="sub" style="margin:6px 0 12px;font-size:12px">'+x.s+'</div>'
+  +'<div class="sub" style="line-height:1.8;font-size:14px;color:var(--label)">'+x.b+'</div>'
+  +'</div>'+hint('左右滑动可切换其他消息');
+}};
+var SET={notify:true,sound:true,vibrate:false,personal:true};
+function tglNotify(){SET.notify=!SET.notify;render();}
+function tglSound(){SET.sound=!SET.sound;render();}
+function tglVibrate(){SET.vibrate=!SET.vibrate;render();}
+function tglPersonal(){SET.personal=!SET.personal;render();}
+function clearCache(){toast('缓存已清除，共释放 36.2MB');}
+function doLogout(){toast('已退出登录');go('login');}
+S.settings={title:'系统设置',render:function(){
+  return grp([
+    {ic:'bell',icls:'bg-o',t:'消息通知',s:'服务进度 / 账单 / 公告提醒',ctl:sw(SET.notify,'tglNotify()')},
+    {ic:'ok',icls:'bg-g',t:'通知声音',ctl:sw(SET.sound,'tglSound()')},
+    {ic:'warn',icls:'bg-y',t:'通知震动',ctl:sw(SET.vibrate,'tglVibrate()')},
+    {ic:'star',icls:'bg-p',t:'个性化推荐',s:'基于使用习惯推荐社区服务',ctl:sw(SET.personal,'tglPersonal()')}
+  ],'消息与提醒')
+  + grp([
+    {ic:'lock',icls:'bg-b',t:'隐私设置',s:'授权管理与个人信息',ar:1,on:'go(\'privacy\')'},
+    {ic:'doc',icls:'bg-in',t:'用户协议',ar:1,on:'go(\'agreement\')'},
+    {ic:'shield',icls:'bg-br',t:'隐私政策',ar:1,on:'go(\'privacy\')'}
+  ],'协议与隐私')
+  + grp([
+    {ic:'trash',icls:'bg-r',t:'清除缓存',s:'清理图片与临时文件',v:'36.2MB',on:'clearCache()'},
+    {ic:'sync',icls:'bg-t',t:'检查更新',s:'当前已是最新版本',v:APP_VER,on:'toast(\'当前已是最新版本\')'}
+  ],'通用')
+  + grp([
+    {ic:'build',icls:'bg-g',t:'关于顾好家',s:'版本 '+APP_VER+' · 深圳顾好家科技有限公司',ar:1,on:'toast(\'顾好家 v'+APP_VER.slice(1)+'\')'},
+    {ic:'logout',icls:'bg-r',t:'退出登录',s:'退出后需重新登录使用',on:'doLogout()'}
+  ],'关于与账号');
+}};
+S.agreement={title:'用户协议',render:function(){
+  return '<div class="card">'
+  +'<div class="bold" style="font-size:17px">顾好家用户服务协议</div>'
+  +'<div class="sub" style="margin:6px 0 12px;font-size:12px">更新日期：2026-08-01 · 生效日期：2026-08-01</div>'
+  +'<div class="sub" style="line-height:1.8;font-size:14px;color:var(--label)">'
+  +'<b>一、协议的接受</b><br>当您注册、登录或使用顾好家 APP 的任一服务，即视为您已阅读并同意本协议全部条款。<br><br>'
+  +'<b>二、账号与安全</b><br>账号仅限本人使用，请妥善保管登录凭证；因个人保管不当造成的损失由用户自行承担。<br><br>'
+  +'<b>三、社区服务规范</b><br>您通过本平台发布的内容不得违反法律法规及社区公约，平台有权对违规内容进行处理。<br><br>'
+  +'<b>四、服务的变更与中止</b><br>平台有权根据运营需要对服务内容进行调整、中断或终止，并提前予以公告。<br><br>'
+  +'<b>五、免责声明</b><br>因不可抗力、网络故障等原因导致服务无法正常提供的，平台不承担相应责任。</div>'
+  +'</div>'+hint('本协议适用于顾好家 APP 全部功能模块');
+}};
+S.privacy={title:'隐私政策',render:function(){
+  return '<div class="card">'
+  +'<div class="bold" style="font-size:17px">顾好家隐私政策</div>'
+  +'<div class="sub" style="margin:6px 0 12px;font-size:12px">更新日期：2026-08-01 · 生效日期：2026-08-01</div>'
+  +'<div class="sub" style="line-height:1.8;font-size:14px;color:var(--label)">'
+  +'<b>一、我们收集的信息</b><br>为提供报餐、托管、生活帮手等服务，我们会收集您的手机号码、房号、订单与账单信息。<br><br>'
+  +'<b>二、信息的使用</b><br>收集的信息仅用于服务提供、订单履约、账单结算与服务通知，不用于任何无关用途。<br><br>'
+  +'<b>三、信息的存储与保护</b><br>您的信息存储于境内服务器，采用加密传输与访问控制等安全措施防止泄露。<br><br>'
+  +'<b>四、信息的共享</b><br>除法律法规要求或经您明确同意外，我们不会向任何第三方共享您的个人信息。<br><br>'
+  +'<b>五、您的权利</b><br>您可在「我的-个人信息」中查阅、更正您的个人信息，也可联系客服申请删除账号数据。</div>'
+  +'</div>'+hint('如对隐私政策有疑问，可通过「我的管家」联系客服');
 }};
 
 /* ================= 内容编辑 / 驳回（补充页面） ================= */
