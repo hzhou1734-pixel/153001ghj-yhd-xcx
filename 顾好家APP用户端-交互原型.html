@@ -571,6 +571,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
   font-size:13px;color:var(--label3);cursor:pointer;}
 .pd-input .send{background:var(--brand);color:#fff;font-size:13px;font-weight:500;
   padding:6px 14px;border-radius:14px;cursor:pointer;flex:0 0 auto;}
+/* 评论输入弹层（贴合手机框，置于 #screen 内） */
+.cmt-mask{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:48;
+  animation:cmtFade .2s ease;}
+.cmt-sheet{position:absolute;left:0;right:0;bottom:0;z-index:49;background:var(--card);
+  border-radius:16px 16px 0 0;padding:14px var(--pad) 16px;
+  box-shadow:0 -6px 24px rgba(20,40,35,.16);animation:cmtUp .22s ease;}
+.cmt-sheet .cs-head{font-size:14px;font-weight:600;color:var(--label);margin-bottom:10px;}
+.cmt-sheet textarea{width:100%;box-sizing:border-box;border:none;background:var(--fill);
+  border-radius:12px;padding:12px;font-size:14px;color:var(--label);line-height:1.6;
+  resize:none;font-family:inherit;outline:none;}
+.cmt-sheet textarea::placeholder{color:var(--label3);}
+.cmt-sheet .cs-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+.cmt-sheet .cs-cancel{font-size:14px;color:var(--label3);cursor:pointer;padding:6px 4px;}
+.cmt-sheet .cs-send{background:var(--brand);color:#fff;font-size:14px;font-weight:500;
+  padding:7px 20px;border-radius:14px;cursor:pointer;}
+.cmt-sheet .cs-send:active{background:var(--brand-d);}
+@keyframes cmtUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+@keyframes cmtFade{from{opacity:0;}to{opacity:1;}}
 
 .metric{background:var(--card);border-radius:var(--r);margin:0 var(--pad) 12px;overflow:hidden;}
 .metric.tap{cursor:pointer;transition:transform .12s,opacity .12s;}
@@ -792,7 +810,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.54';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.55';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -932,6 +950,7 @@ function tabbar(){var T=[['home','tabHome','首页'],['community','tabComm','社
   T.forEach(function(t){h+='<div class="tb'+(t[0]===c?' on':'')+'" onclick="go(\''+t[0]+'\')">'+ic(t[1],24)+t[2]+'</div>';});
   return h;}
 function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
+  if(cur!=='postDetail')cmtOpen=false;   /* 离开帖子详情时关闭评论弹层 */
   if(s.nav!==false)h+=nav(s.title,s.rightLabel,s.rightFn);
   h+=s.render();
   var sc=document.getElementById('screen');
@@ -943,7 +962,9 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
   var tb=document.getElementById('tabbar');
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
-  sc.scrollTop=0;}
+  sc.scrollTop=0;
+  /* 评论输入弹层打开时自动聚焦输入框 */
+  if(cmtOpen){var ct=document.getElementById('cmtText');if(ct){setTimeout(function(){ct.focus();},60);}}
 
 /* ================= iOS 组件 ================= */
 function grpT(t){return '<div class="grp-t">'+t+'</div>';}
@@ -1995,6 +2016,25 @@ function togglePostLike(){
   else{p.l++;postLike[curPostId]=true;}
   render();
 }
+/* 帖子评论：全局评论列表 + 评论输入弹层 */
+var postComments=[
+  {a:'小李',ac:'b',t:'想要，怎么联系？',d:'09-03 15:00',l:3},
+  {a:'王阿姨',ac:'o',t:'私信你啦~',d:'09-03 15:10',l:0,reply:true},
+  {a:'张叔',ac:'p',t:'这个牌子不错，值得入手。',d:'09-03 16:22',l:5}
+];
+var cmtOpen=false;
+var cmtReplyTo='';   /* 回复目标昵称，空串表示普通评论 */
+function openCommentBox(name){cmtReplyTo=name||'';cmtOpen=true;render();}
+function closeCommentBox(){cmtOpen=false;render();}
+function submitComment(){
+  var ta=document.getElementById('cmtText');
+  var text=ta?ta.value.trim():'';
+  if(!text)return;
+  postComments.unshift({a:'我',ac:'g',t:(cmtReplyTo?'@'+cmtReplyTo+' ':'')+text,d:'刚刚',l:0});
+  var p=POSTS.find(function(x){return x.id===curPostId;});
+  if(p)p.m++;
+  cmtOpen=false;render();
+}
 function postCard(p){
   return '<div class="post-card" onclick="openPost(\''+p.id+'\')">'
     +'<div class="post-cover bg-'+p.cv+'">'
@@ -2045,11 +2085,7 @@ S.forumList={title:'社区贴吧',rightLabel:'发布',rightFn:'go(\'postPublish\
 
 S.postDetail={title:'帖子详情',render:function(){
   var p=POSTS.find(function(x){return x.id===curPostId;})||POSTS[0];
-  var comments=[
-    {a:'小李',ac:'b',t:'想要，怎么联系？',d:'09-03 15:00',l:3,auth:true},
-    {a:'王阿姨',ac:'o',t:'私信你啦~',d:'09-03 15:10',l:0,reply:true},
-    {a:'张叔',ac:'p',t:'这个牌子不错，值得入手。',d:'09-03 16:22',l:5,auth:false}
-  ];
+  var comments=postComments;
   return '<div class="pd-cover bg-'+p.cv+'">'
     + ic('img',64,'rgba(255,255,255,.92)',1.6)
     +'<div class="pd-dot">'+(p.imgs>1?'<i class="on"></i><i></i><i></i>':'<i class="on"></i>')+'</div>'
@@ -2079,16 +2115,27 @@ S.postDetail={title:'帖子详情',render:function(){
           +'<div class="meta">'
             +'<span>'+c.d+'</span>'
             +(c.reply?'<span class="reply" style="color:var(--brand)">作者</span>':'')
-            +'<span class="reply">回复</span>'
+            +'<span class="reply" onclick="openCommentBox(\''+c.a+'\')">回复</span>'
           +'</div>'
         +'</div>'
       +'</div>';
     }).join('')
   +'<div style="height:64px"></div>'
   +'<div class="pd-input">'
-    +'<div class="inp" onclick="toast(\'打开评论输入\')">说点什么…</div>'
-    +'<div class="send" onclick="toast(\'已发送\')">发送</div>'
-  +'</div>';
+    +'<div class="inp" onclick="openCommentBox()">说点什么…</div>'
+    +'<div class="send" onclick="openCommentBox()">发送</div>'
+  +'</div>'
+  +(cmtOpen
+    ?'<div class="cmt-mask" onclick="closeCommentBox()"></div>'
+     +'<div class="cmt-sheet">'
+       +'<div class="cs-head">'+(cmtReplyTo?('回复 @'+cmtReplyTo):'发表评论')+'</div>'
+       +'<textarea id="cmtText" rows="3" placeholder="'+(cmtReplyTo?('回复 @'+cmtReplyTo+'…'):'说点什么…')+'"></textarea>'
+       +'<div class="cs-row">'
+         +'<span class="cs-cancel" onclick="closeCommentBox()">取消</span>'
+         +'<span class="cs-send" onclick="submitComment()">发送</span>'
+       +'</div>'
+     +'</div>'
+    :'');
 }};
 S.postPublish={title:'发布帖子',render:function(){
   return '<div class="grp">'
