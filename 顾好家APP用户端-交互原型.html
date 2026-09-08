@@ -852,7 +852,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.95';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.97';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -3474,21 +3474,14 @@ S.sysMsgDetail={title:'消息详情',render:function(){
   +'<div class="sub" style="line-height:1.8;font-size:14px;color:var(--label)">'+x.b+'</div>'
   +'</div>'+hint('左右滑动可切换其他消息');
 }};
-var SET={notify:true,sound:true,vibrate:false,personal:true};
-function tglNotify(){SET.notify=!SET.notify;render();}
-function tglSound(){SET.sound=!SET.sound;render();}
-function tglVibrate(){SET.vibrate=!SET.vibrate;render();}
-function tglPersonal(){SET.personal=!SET.personal;render();}
 function clearCache(){toast('缓存已清除，共释放 36.2MB');}
 function doLogout(){toast('已退出登录');go('login');}
+S.delAccount={title:'注销账号',nav:false,render:function(){
+  return dlg('warn','注销账号','注销后账号数据将无法恢复，确定要注销吗？','确认注销','doDelAccount()','再想想');
+}};
+function doDelAccount(){toast('账号已提交注销申请');go('login');}
 S.settings={title:'系统设置',render:function(){
   return grp([
-    {ic:'bell',icls:'bg-o',t:'消息通知',s:'服务进度 / 账单 / 公告提醒',ctl:sw(SET.notify,'tglNotify()')},
-    {ic:'ok',icls:'bg-g',t:'通知声音',ctl:sw(SET.sound,'tglSound()')},
-    {ic:'warn',icls:'bg-y',t:'通知震动',ctl:sw(SET.vibrate,'tglVibrate()')},
-    {ic:'star',icls:'bg-p',t:'个性化推荐',s:'基于使用习惯推荐社区服务',ctl:sw(SET.personal,'tglPersonal()')}
-  ],'消息与提醒')
-  + grp([
     {ic:'lock',icls:'bg-b',t:'隐私设置',s:'授权管理与个人信息',ar:1,on:'go(\'privacy\')'},
     {ic:'doc',icls:'bg-in',t:'用户协议',ar:1,on:'go(\'agreement\')'},
     {ic:'shield',icls:'bg-br',t:'隐私政策',ar:1,on:'go(\'privacy\')'}
@@ -3498,8 +3491,8 @@ S.settings={title:'系统设置',render:function(){
     {ic:'sync',icls:'bg-t',t:'检查更新',s:'当前已是最新版本',v:APP_VER,on:'toast(\'当前已是最新版本\')'}
   ],'通用')
   + grp([
-    {ic:'build',icls:'bg-g',t:'关于顾好家',s:'版本 '+APP_VER+' · 深圳顾好家科技有限公司',ar:1,on:'toast(\'顾好家 v'+APP_VER.slice(1)+'\')'},
-    {ic:'logout',icls:'bg-r',t:'退出登录',s:'退出后需重新登录使用',on:'doLogout()'}
+    {ic:'logout',icls:'bg-r',t:'退出登录',s:'退出后需重新登录使用',on:'doLogout()'},
+    {ic:'me',icls:'bg-in',t:'注销账号',s:'注销后账号数据将无法恢复',ar:1,on:'go(\'delAccount\')'}
   ],'关于与账号');
 }};
 S.agreement={title:'用户协议',render:function(){
