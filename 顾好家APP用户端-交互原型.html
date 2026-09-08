@@ -350,6 +350,48 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .search .fl{display:flex;align-items:center;gap:3px;color:var(--brand);font-size:13px;font-weight:500;cursor:pointer;flex-shrink:0;}
 .search .fl svg{width:14px;height:14px;color:var(--brand);}
 
+/* ===== 贴吧顶部搜索区（重构） ===== */
+.fbar{margin:0 var(--pad) 10px;background:linear-gradient(135deg,#34D2A8 0%,#17A88A 55%,#0F8E75 100%);
+  border-radius:16px;padding:14px 14px 12px;color:#fff;box-shadow:0 8px 22px rgba(23,168,138,.22);position:relative;overflow:hidden;}
+.fbar::before{content:'';position:absolute;top:-30px;right:-20px;width:130px;height:130px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 70%);}
+.fbar::after{content:'';position:absolute;bottom:-50px;left:-30px;width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.12) 0%,rgba(255,255,255,0) 70%);}
+.fbar .fb-in{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.96);border-radius:22px;
+  padding:10px 12px;position:relative;z-index:1;box-shadow:0 4px 12px rgba(0,0,0,.06);}
+.fbar .fb-in svg.ico{width:17px;height:17px;color:var(--brand-d);flex-shrink:0;}
+.fbar .fb-in input{flex:1;border:none;background:transparent;font-size:14.5px;outline:none;color:var(--label);
+  font-family:inherit;letter-spacing:-.1px;}
+.fbar .fb-in input::placeholder{color:var(--label3);}
+.fbar .fb-in .b-div{width:1px;height:14px;background:var(--sep);margin:0 2px;}
+.fbar .fb-in .b-btn{display:flex;align-items:center;justify-content:center;width:30px;height:30px;
+  border-radius:50%;background:var(--fill);color:var(--label2);cursor:pointer;transition:background .12s;}
+.fbar .fb-in .b-btn:active{background:#E5E5EA;}
+.fbar .fb-in .b-btn svg{width:15px;height:15px;}
+.fbar .fb-in .b-btn.pri{background:var(--brand);color:#fff;}
+.fbar .fb-in .b-btn.pri:active{background:var(--brand-d);}
+.fbar .fb-tags{display:flex;align-items:center;gap:6px;margin-top:11px;overflow-x:auto;position:relative;z-index:1;
+  scrollbar-width:none;-ms-overflow-style:none;}
+.fbar .fb-tags::-webkit-scrollbar{display:none;}
+.fbar .fb-tags .lb{font-size:11.5px;opacity:.88;flex-shrink:0;margin-right:2px;letter-spacing:.2px;}
+.fbar .fb-tags .tg{flex-shrink:0;font-size:11.5px;padding:4px 11px;border-radius:11px;
+  background:rgba(255,255,255,.18);color:#fff;cursor:pointer;transition:background .12s;letter-spacing:-.1px;}
+.fbar .fb-tags .tg:active{background:rgba(255,255,255,.32);}
+.fbar .fb-tags .tg.hot{background:rgba(255,255,255,.32);font-weight:600;}
+.fbar .fb-tags .tg.hot::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;
+  background:#FFD66B;margin-right:5px;vertical-align:1px;}
+
+.fbar-stats{display:flex;justify-content:space-around;margin:0 var(--pad) 12px;background:var(--card);
+  border-radius:14px;padding:13px 8px;}
+.fbar-stats .st{text-align:center;cursor:pointer;flex:1;position:relative;transition:opacity .12s;}
+.fbar-stats .st:active{opacity:.6;}
+.fbar-stats .st + .st::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:.5px;height:24px;background:var(--sep);}
+.fbar-stats .st .n{font-size:18px;font-weight:700;color:var(--label);letter-spacing:-.5px;line-height:1.1;
+  font-variant-numeric:tabular-nums;}
+.fbar-stats .st .l{font-size:11.5px;color:var(--label2);margin-top:3px;}
+.fbar-stats .st .n em{font-style:normal;font-size:11px;color:var(--brand);margin-left:2px;font-weight:600;}
+
 .item{display:flex;gap:12px;background:var(--card);padding:12px 14px;align-items:center;cursor:pointer;transition:background .12s;}
 .item:active{background:#E5E5EA;}
 .grp>.item:not(:last-child){border-bottom:.5px solid var(--sep);}
@@ -761,9 +803,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.38';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.39';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
-var APP_BUILT='2026-09-07';
+var APP_BUILT='2026-09-08';
 
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
@@ -772,6 +814,7 @@ var P={
   search:'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20.5 20.5L16.2 16.2',
   filter:'M4 6.5h16M7 12h10M10 17.5h4',
   camera:'M4 8.5h3l1.6-2.3h6.8L17 8.5h3V19H4zM12 16.4a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8z',
+  mic:'M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3zM5 11a7 7 0 0 0 14 0M12 18v3',
   video:'M3.5 7.5h10.5v9H3.5zM14 11.2l6.5-3.4v8.4L14 12.8',
   trash:'M5 7h14M9.5 7V4.8h5V7M6.8 7l.9 12.2h8.6L17.2 7',
   pencil:'M4 20h4.2L20.2 8 16 3.8 4 15.8zM14.5 5.4l4.1 4.1',
@@ -1984,7 +2027,29 @@ S.forumList={title:'社区贴吧',rightLabel:'发布',rightFn:'go(\'postPublish\
   var TABS=['全部','二手交易','求助问答','邻里话题','公告'];
   var cur=(chipState.forumList===undefined?0:chipState.forumList);
   var list=cur?POSTS.filter(function(x){return x.cat===TABS[cur];}):POSTS;
-  var h='<div class="pad">'+searchBar('搜索帖子标题或内容','')+'</div>'+chips(TABS,'forumList');
+  var total=POSTS.length;
+  var todayCount=POSTS.filter(function(x){return (x.d||'').substr(0,5)==='09-08';}).length;
+  var HOT=['婴儿车','充电桩','快递柜','空调维修','早教','二手书','宠物','装修'];
+  var h='<div class="fbar">'
+      +'<div class="fb-in">'
+        +'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
+        +'<input placeholder="搜索帖子、用户、话题…">'
+        +'<div class="b-div"></div>'
+        +'<div class="b-btn" onclick="toast(\'拍照搜帖\')">'+ic('camera',15,'currentColor')+'</div>'
+        +'<div class="b-btn pri" onclick="toast(\'语音搜索\')">'+ic('mic',15,'#fff')+'</div>'
+      +'</div>'
+      +'<div class="fb-tags">'
+        +'<span class="lb">热门</span>'
+        +HOT.map(function(t,i){return '<div class="tg'+(i===0?' hot':'')+'" onclick="toast(\'搜索：'+t+'\')">'+t+'</div>';}).join('')
+      +'</div>'
+    +'</div>'
+    +'<div class="fbar-stats">'
+      +'<div class="st" onclick="toast(\'今日新帖\')"><div class="n">'+todayCount+'<em>新</em></div><div class="l">今日新帖</div></div>'
+      +'<div class="st" onclick="toast(\'在线邻居\')"><div class="n">128</div><div class="l">在线邻居</div></div>'
+      +'<div class="st" onclick="toast(\'本月精华\')"><div class="n">36</div><div class="l">本月精华</div></div>'
+      +'<div class="st" onclick="go(\'myPosts\')"><div class="n">'+(POSTS.filter(function(x){return x.mine;}).length||2)+'</div><div class="l">我的发布</div></div>'
+    +'</div>'
+    +'<div style="margin:0 var(--pad) 12px">'+chips(TABS,'forumList')+'</div>';
   if(!list.length){
     h+='<div class="pad">'+empty('post','暂无'+TABS[cur]+'的帖子','换个分类看看')+'</div>';
   }else{
