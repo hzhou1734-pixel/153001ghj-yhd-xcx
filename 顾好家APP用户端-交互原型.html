@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.87';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.88';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2743,12 +2743,7 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
     {ic:'wallet',icls:'bg-g',t:'小区钱袋子',s:'可提现余额 ¥1,280.00',ar:1,on:'needCert(\'moneyBag\')'},
     {ic:'hr',icls:'bg-t',t:'人力资源',s:'发布 / 查看邻里供需信息',ar:1,on:'needCert(\'hr\')'},
     {ic:'shield',icls:'bg-br',t:'业主认证',s:CERT==='ok'?'已认证 2 个房号':(CERT==='pending'?'审核中 1 个 · 已认证 2 个':'未认证 · 认证后开放全部权益'),ar:1,on:'go(\'certList\')'}
-  ],'社区权益')
-  /* ⑥ 账户与安全 */
-  + grp([
-    {ic:'bell',icls:'bg-r',t:'系统消息',s:'通知、审核与活动提醒',v:'2 条未读',ar:1,on:'go(\'messages\')'},
-    {ic:'gear',icls:'bg-gy',t:'系统设置',s:'通知 / 隐私 / 账号安全',ar:1,on:'go(\'settings\')'}
-  ],'账户与安全');
+  ],'社区权益');
 }};
 
 /* ================= 个人信息 ================= */
