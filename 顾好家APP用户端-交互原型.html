@@ -588,28 +588,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .pd-input{position:sticky;bottom:0;left:0;right:0;background:var(--card);
   padding:8px var(--pad) 10px;border-top:.5px solid var(--sep);
   display:flex;align-items:center;gap:8px;z-index:5;}
-.pd-input .inp{flex:1;background:var(--fill);border-radius:18px;padding:8px 14px;
-  font-size:13px;color:var(--label3);cursor:pointer;}
+.pd-input input{flex:1;background:var(--fill);border:none;border-radius:18px;padding:9px 14px;
+  font-size:14px;color:var(--label);outline:none;font-family:inherit;line-height:1.4;}
+.pd-input input::placeholder{color:var(--label3);}
 .pd-input .send{background:var(--brand);color:#fff;font-size:13px;font-weight:500;
-  padding:6px 14px;border-radius:14px;cursor:pointer;flex:0 0 auto;}
-/* 评论输入弹层（贴合手机框，置于 #screen 内） */
-.cmt-mask{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:48;
-  animation:cmtFade .2s ease;}
-.cmt-sheet{position:absolute;left:0;right:0;bottom:0;z-index:49;background:var(--card);
-  border-radius:16px 16px 0 0;padding:14px var(--pad) 16px;
-  box-shadow:0 -6px 24px rgba(20,40,35,.16);animation:cmtUp .22s ease;}
-.cmt-sheet .cs-head{font-size:14px;font-weight:600;color:var(--label);margin-bottom:10px;}
-.cmt-sheet textarea{width:100%;box-sizing:border-box;border:none;background:var(--fill);
-  border-radius:12px;padding:12px;font-size:14px;color:var(--label);line-height:1.6;
-  resize:none;font-family:inherit;outline:none;}
-.cmt-sheet textarea::placeholder{color:var(--label3);}
-.cmt-sheet .cs-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
-.cmt-sheet .cs-cancel{font-size:14px;color:var(--label3);cursor:pointer;padding:6px 4px;}
-.cmt-sheet .cs-send{background:var(--brand);color:#fff;font-size:14px;font-weight:500;
-  padding:7px 20px;border-radius:14px;cursor:pointer;}
-.cmt-sheet .cs-send:active{background:var(--brand-d);}
-@keyframes cmtUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-@keyframes cmtFade{from{opacity:0;}to{opacity:1;}}
+  padding:7px 15px;border-radius:16px;cursor:pointer;flex:0 0 auto;transition:opacity .12s;}
+.pd-input .send:active{opacity:.7;}
 
 .metric{background:var(--card);border-radius:var(--r);margin:0 var(--pad) 12px;overflow:hidden;}
 .metric.tap{cursor:pointer;transition:transform .12s,opacity .12s;}
@@ -831,7 +815,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.57';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.58';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -971,7 +955,7 @@ function tabbar(){var T=[['home','tabHome','首页'],['community','tabComm','社
   T.forEach(function(t){h+='<div class="tb'+(t[0]===c?' on':'')+'" onclick="go(\''+t[0]+'\')">'+ic(t[1],24)+t[2]+'</div>';});
   return h;}
 function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
-  if(cur!=='postDetail')cmtOpen=false;   /* 离开帖子详情时关闭评论弹层 */
+  if(cur!=='postDetail')cmtReplyTo='';   /* 离开帖子详情时清空回复态 */
   if(s.nav!==false)h+=nav(s.title,s.rightLabel,s.rightFn);
   h+=s.render();
   var sc=document.getElementById('screen');
@@ -984,8 +968,6 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
   sc.scrollTop=0;
-  /* 评论输入弹层打开时自动聚焦输入框 */
-  if(cmtOpen){var ct=document.getElementById('cmtText');if(ct){setTimeout(function(){ct.focus();},60);}}
 }
 
 /* ================= iOS 组件 ================= */
@@ -2050,18 +2032,22 @@ var postComments=[
   {a:'王阿姨',ac:'o',t:'私信你啦~',d:'09-03 15:10',l:0,reply:true},
   {a:'张叔',ac:'p',t:'这个牌子不错，值得入手。',d:'09-03 16:22',l:5}
 ];
-var cmtOpen=false;
 var cmtReplyTo='';   /* 回复目标昵称，空串表示普通评论 */
-function openCommentBox(name){cmtReplyTo=name||'';cmtOpen=true;render();}
-function closeCommentBox(){cmtOpen=false;render();}
+function openCommentBox(name){
+  cmtReplyTo=name||'';
+  render();
+  setTimeout(function(){var el=document.getElementById('cmtText');if(el)el.focus();},0);
+}
 function submitComment(){
-  var ta=document.getElementById('cmtText');
-  var text=ta?ta.value.trim():'';
-  if(!text)return;
+  var el=document.getElementById('cmtText');
+  var text=el?el.value.trim():'';
+  if(!text){toast('请输入评论内容');return;}
   postComments.unshift({a:'我',ac:'g',t:(cmtReplyTo?'@'+cmtReplyTo+' ':'')+text,d:'刚刚',l:0});
   var p=POSTS.find(function(x){return x.id===curPostId;});
   if(p)p.m++;
-  cmtOpen=false;render();
+  cmtReplyTo='';
+  render();
+  toast('评论发布成功');
 }
 function postCard(p){
   return '<div class="post-card" onclick="openPost(\''+p.id+'\')">'
@@ -2150,20 +2136,9 @@ S.postDetail={title:'帖子详情',render:function(){
     }).join('')
   +'<div style="height:64px"></div>'
   +'<div class="pd-input">'
-    +'<div class="inp" onclick="openCommentBox()">说点什么…</div>'
-    +'<div class="send" onclick="openCommentBox()">发送</div>'
-  +'</div>'
-  +(cmtOpen
-    ?'<div class="cmt-mask" onclick="closeCommentBox()"></div>'
-     +'<div class="cmt-sheet">'
-       +'<div class="cs-head">'+(cmtReplyTo?('回复 @'+cmtReplyTo):'发表评论')+'</div>'
-       +'<textarea id="cmtText" rows="3" placeholder="'+(cmtReplyTo?('回复 @'+cmtReplyTo+'…'):'说点什么…')+'"></textarea>'
-       +'<div class="cs-row">'
-         +'<span class="cs-cancel" onclick="closeCommentBox()">取消</span>'
-         +'<span class="cs-send" onclick="submitComment()">发送</span>'
-       +'</div>'
-     +'</div>'
-    :'');
+    +'<input id="cmtText" type="text" placeholder="'+(cmtReplyTo?('回复 @'+cmtReplyTo+'…'):'说点什么…')+'" onkeydown="if(event.key===\'Enter\')submitComment()">'
+    +'<div class="send" onclick="submitComment()">发送</div>'
+  +'</div>';
 }};
 S.postPublish={title:'发布帖子',render:function(){
   return '<div class="grp">'
