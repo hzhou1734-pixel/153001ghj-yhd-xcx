@@ -750,6 +750,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .ord-card .ft .ab.warm{background:#FFD9C7;color:#C2541A;font-weight:600;}
 .ord-card .ft .ab.warm:active{background:#FFC4A8;}
 
+/* 订单详情页信息卡片 */
+.ord-section{margin:0 var(--pad) 12px;background:var(--card);border-radius:16px;overflow:hidden;}
+.ord-section .st{padding:12px 14px;font-size:13px;color:var(--label2);font-weight:600;letter-spacing:-.1px;background:#FAFAFA;border-bottom:.5px solid var(--sep);}
+.ord-section .kv{display:flex;align-items:flex-start;justify-content:space-between;padding:12px 14px;}
+.ord-section .kv:not(:last-child){border-bottom:.5px solid var(--sep);}
+.ord-section .kv .k{font-size:14px;color:var(--label);}
+.ord-section .kv .v{font-size:14px;color:var(--label2);text-align:right;flex-shrink:0;margin-left:12px;}
+.ord-section .kv .v.pr{font-size:16px;font-weight:700;color:var(--accent);}
+.ord-section .kv .v.b{font-weight:600;color:var(--label);}
+.ord-section .kv .v.g{color:var(--brand-d);font-weight:600;}
+.ord-section .kv .v.o{color:#F2642A;font-weight:600;}
+.ord-section .kv .v.gy{color:var(--label3);}
+.ord-section .log{padding:12px 14px;font-size:13.5px;color:var(--label2);line-height:1.9;}
+
 .hero{height:112px;border-radius:var(--r);background:linear-gradient(135deg,#4FD8BC,#17A88A);color:#fff;
       padding:20px 22px;display:flex;flex-direction:column;justify-content:center;margin:0 var(--pad) 12px;}
 .hero.o{background:linear-gradient(135deg,#FF9E73,#F2642A);}
@@ -803,7 +817,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.43';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.44';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -2361,45 +2375,54 @@ S.orderSearch={title:'订单搜索',nav:false,render:function(){
 
 /* ================= 订单详情 ================= */
 S.orderMealDetail={title:'报餐单详情',render:function(){
-  return '<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-br">'+ic('receipt',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">订单状态</div><div class="cell-s">#BC20250904-001</div></div><span class="tag br">已确认</span></div></div>'
-  + grpT('菜单信息')
-  +'<div class="grp"><div class="cell">'+thumb('','sMeal',40,40,'')
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">清蒸鲈鱼 · 时蔬 · 米饭</div><div class="cell-s">报餐日期 09-05 · 2 份</div></div>'
-  +'<div class="cell-v">¥18 × 2</div></div></div>'
-  + grpT('支付信息')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">预估金额</div></div><div class="cell-v" style="color:var(--accent);font-weight:700;font-size:17px">¥36.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付状态</div></div><div class="cell-v">未支付</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">顾家币额度</div></div>'
+  return '<div class="ord-card" style="margin-top:12px">'
+  +'<div class="hd"><div class="l"><div class="ic b">'+ic('sMeal',18)+'</div>'
+  +'<div><div>报餐单</div><div class="no">#BC20250904-001</div></div></div>'
+  +'<div class="st s-active">已确认</div></div>'
+  +'<div class="bd">'
+  +'<div class="ti">明日午餐<span class="qty">× 2</span></div>'
+  +'<div class="meta"><div class="m">'+ic('clock',11)+'配送 / 使用：09-05</div><div class="m">'+ic('pin',11)+'提交：09-04 10:20</div></div>'
+  +'<div class="sum"><div class="l">共 <b>2</b> 份</div><div><span class="pn">¥36.00</span></div></div>'
+  +'</div></div>'
+  +'<div class="ord-section"><div class="st">菜单信息</div>'
+  +'<div class="kv"><span class="k">明日午餐</span><span class="v">¥18.00 × 2</span></div>'
+  +'<div class="kv"><span class="k">报餐日期</span><span class="v b">09-05</span></div>'
+  +'<div class="kv"><span class="k">套餐规格</span><span class="v">A套餐 · 12:00送达</span></div>'
   +'</div>'
-  + grpT('订单日志')
-  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="log">提交：09-04 10:20<br>结算：—<br>取消：—</div></div></div></div>'
+  +'<div class="ord-section"><div class="st">支付信息</div>'
+  +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥36.00</span></div>'
+  +'<div class="kv"><span class="k">支付状态</span><span class="v o">未支付</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">顾家币额度</span></div>'
+  +'</div>'
+  +'<div class="ord-section"><div class="st">订单日志</div>'
+  +'<div class="log">提交：09-04 10:20<br>结算：—<br>取消：—</div></div>'
   +'<div class="btn-row"><button class="btn sec" onclick="toast(\'已取消报餐（当日 20:00 前）\')">取消订单</button>'
   +'<button class="btn" onclick="go(\'orderSettlement\')">订单结算</button></div>'
   +'<div class="pad"><button class="btn acc" onclick="go(\'review\')">'+ic('star',18)+' 服务评价</button></div>';
 }};
 S.orderTrustDetail={title:'托管单详情',render:function(){
-  return '<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('receipt',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">订单状态</div><div class="cell-s">#TG20250901-003</div></div><span class="tag br">进行中</span></div></div>'
-  + grpT('托管信息')
-  +'<div class="grp"><div class="cell" style="align-items:flex-start">'
-  +'<div class="cell-bd"><div class="log" style="font-size:14px;color:var(--label);line-height:1.9">'
-  +'托管项目：学期日托<br>托管人数：1 人<br>是否需要接送：是<br>接送地址：阳光花园 3栋2单元1802</div></div></div></div>'
-  + grpT('支付信息')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">预估金额</div></div><div class="cell-v" style="color:var(--accent);font-weight:700;font-size:17px">¥1200.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付状态</div></div><div class="cell-v">未支付</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">顾家币额度</div></div>'
+  return '<div class="ord-card" style="margin-top:12px">'
+  +'<div class="hd"><div class="l"><div class="ic o">'+ic('sTrust',18)+'</div>'
+  +'<div><div>托管单</div><div class="no">#TG20250901-003</div></div></div>'
+  +'<div class="st s-active">进行中</div></div>'
+  +'<div class="bd">'
+  +'<div class="ti">学期日托<span class="qty">· 1 人</span></div>'
+  +'<div class="meta"><div class="m">'+ic('clock',11)+'托管时间：10-01 至 12-31</div><div class="m">'+ic('pin',11)+'提交：09-01 09:00</div></div>'
+  +'<div class="sum"><div class="l">服务周期 <b>3</b> 个月</div><div><span class="pn">¥1200.00</span></div></div>'
+  +'</div></div>'
+  +'<div class="ord-section"><div class="st">托管信息</div>'
+  +'<div class="kv"><span class="k">托管项目</span><span class="v b">学期日托</span></div>'
+  +'<div class="kv"><span class="k">托管人数</span><span class="v">1 人</span></div>'
+  +'<div class="kv"><span class="k">是否接送</span><span class="v g">是</span></div>'
+  +'<div class="kv"><span class="k">接送地址</span><span class="v">阳光花园 3栋2单元1802</span></div>'
   +'</div>'
-  + grpT('订单日志')
-  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="log">提交：09-01 09:00<br>结算：—<br>取消：—</div></div></div></div>'
+  +'<div class="ord-section"><div class="st">支付信息</div>'
+  +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥1200.00</span></div>'
+  +'<div class="kv"><span class="k">支付状态</span><span class="v o">未支付</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">顾家币额度</span></div>'
+  +'</div>'
+  +'<div class="ord-section"><div class="st">订单日志</div>'
+  +'<div class="log">提交：09-01 09:00<br>结算：—<br>取消：—</div></div>'
   + btn('订单结算','go(\'orderSettlement\')')
   +'<div class="pad"><button class="btn acc" onclick="go(\'review\')">'+ic('star',18)+' 服务评价</button></div>';
 }};
@@ -2411,31 +2434,32 @@ function openEscortDetail(no){curEscortOrder=no;go('orderEscortDetail');}
 S.orderEscortDetail={title:'陪诊单详情',render:function(){
   var status=escortStatus[curEscortOrder]||'unpaid';
   var isPaid=(status==='paid');
-  return '<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('receipt',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">订单状态</div><div class="cell-s">#'+curEscortOrder+'</div></div><span class="tag '+(isPaid?'g':'o')+'">'+(isPaid?'已支付':'待支付')+'</span></div></div>'
-  + grpT('陪诊信息')
-  +'<div class="grp">'
-  +'<div class="cell" style="align-items:flex-start">'
-  +'<div class="cell-bd"><div class="log" style="font-size:14px;color:var(--label);line-height:1.9">'
-  +'服务名称：医院就诊全程陪诊<br>陪诊日期：09-05<br>服务时长：3 小时<br>陪诊地址：市第一人民医院</div></div></div>'
+  var stext=isPaid?'已支付':'待支付',scls=isPaid?'done':'pending';
+  return '<div class="ord-card" style="margin-top:12px">'
+  +'<div class="hd"><div class="l"><div class="ic g">'+ic('sEscort',18)+'</div>'
+  +'<div><div>陪诊单</div><div class="no">#'+curEscortOrder+'</div></div></div>'
+  +'<div class="st s-'+scls+'">'+stext+'</div></div>'
+  +'<div class="bd">'
+  +'<div class="ti">医院就诊全程陪诊<span class="qty">· 3 小时</span></div>'
+  +'<div class="meta"><div class="m">'+ic('clock',11)+'陪诊日期：09-05 09:00</div><div class="m">'+ic('pin',11)+'提交：2026-09-03 16:00</div></div>'
+  +'<div class="sum"><div class="l">服务时长 <b>3</b> 小时</div><div><span class="pn '+(isPaid?'':'pending')+'">¥240.00</span></div></div>'
+  +'</div></div>'
+  +'<div class="ord-section"><div class="st">陪诊信息</div>'
+  +'<div class="kv"><span class="k">服务名称</span><span class="v b">医院就诊全程陪诊</span></div>'
+  +'<div class="kv"><span class="k">陪诊日期</span><span class="v">09-05 09:00</span></div>'
+  +'<div class="kv"><span class="k">服务时长</span><span class="v">3 小时</span></div>'
+  +'<div class="kv"><span class="k">陪诊地址</span><span class="v">市第一人民医院</span></div>'
   +(isPaid
-    ?'<div class="sep full"></div>'
-      +'<div class="cell"><div class="cell-ic bg-b">'+ic('me',17)+'</div>'
-      +'<div class="cell-bd"><div class="cell-t">张师傅</div><div class="cell-s">陪诊员</div></div>'
-      +'<div class="cell-call" onclick="event.stopPropagation();toast(\'正在呼叫 张师傅…\')">'+ic('phone',17,'#fff')+'</div>'
+    ?'<div class="kv"><span class="k">陪诊员</span><span class="v" style="display:flex;align-items:center;gap:8px">张师傅<div class="cell-call" style="width:24px;height:24px" onclick="event.stopPropagation();toast(\'正在呼叫 张师傅…\')">'+ic('phone',13,'#fff')+'</div></span></div>'
     :'')
   +'</div>'
-  + grpT('支付信息')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付金额</div></div><div class="cell-v" style="color:var(--accent);font-weight:700;font-size:17px">¥240.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付状态</div></div><div class="cell-v">'+(isPaid?'已支付':'待支付')+'</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">'+(isPaid?'支付宝':'—')+'</div></div>'
+  +'<div class="ord-section"><div class="st">支付信息</div>'
+  +'<div class="kv"><span class="k">支付金额</span><span class="v pr">¥240.00</span></div>'
+  +'<div class="kv"><span class="k">支付状态</span><span class="v '+(isPaid?'g':'o')+'">'+stext+'</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">'+(isPaid?'支付宝':'—')+'</span></div>'
   +'</div>'
-  + grpT('订单日志')
-  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="log">提交：2026-09-03 16:00<br>支付：'+(isPaid?'2026-09-03 16:05':'—')+'<br>取消：—</div></div></div></div>'
+  +'<div class="ord-section"><div class="st">订单日志</div>'
+  +'<div class="log">提交：2026-09-03 16:00<br>支付：'+(isPaid?'2026-09-03 16:05':'—')+'<br>取消：—</div></div>'
   +(isPaid
     ?'<div class="pad"><button class="btn warn" onclick="go(\'refund\')">申请售后</button></div>'
     :'<div class="btn-row"><button class="btn warn" style="flex:1" onclick="toast(\'取消需物业后台审核\')">取消订单</button>'
