@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.89';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.90';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-08';
 
@@ -3000,27 +3000,6 @@ S.myPosts={title:'我的帖子',render:function(){
   return '<div class="pad">'+seg(['已发布','审核中','已驳回'],'myPosts')+'</div>'
   + (list.length?'<div style="margin:0 var(--pad) 14px">'+items+'</div>':'<div class="empty">'+ic('post',30,'#999')+'<div class="et">暂无'+['已发布','审核中','已驳回'][cur]+'帖子</div><div class="es">发布帖子后将在此处展示</div></div>');
 }};
-S.messages={title:'系统消息',rightLabel:'一键已读',rightFn:'toast(\'已全部标记为已读\')',render:function(){
-  var cur=segState.messages||0;
-  var data={0:[{i:'o',ic:'sEscort',bg:'bg-o',t:'陪诊单下单成功',s:'您的陪诊单已提交，请及时完成支付',d:'09-03 16:00',tag:'r',tagT:'未读',click:'orderEscortDetail'},
-              {i:'br',ic:'sMeal',bg:'bg-br',t:'报餐单已确认',s:'明日午餐 2 份已确认',d:'09-04 10:20',tag:'r',tagT:'未读',click:'orderMealDetail'},
-              {i:'',ic:'sTrust',bg:'bg-b',t:'托管报名已提交',s:'学期日托 1 人，已同步至物业后台',d:'09-01 09:30',tag:'',tagT:'',click:'orderTrustDetail'}],
-           1:[{i:'',ic:'yen',bg:'bg-y',t:'账单支付提醒',s:'您有待结算账单 ¥1254.00',d:'09-01 09:00',tag:'r',tagT:'未读',click:'bill'},
-              {i:'',ic:'yen',bg:'bg-y',t:'已生成8月报餐账单',s:'共计 ¥486.00，请于月底前结算',d:'08-31 18:00',tag:'',tagT:'',click:'bill'}],
-           2:[{i:'',ic:'post',bg:'bg-b',t:'帖子审核通过',s:'您的帖子已发布成功',d:'09-03 15:00',tag:'',tagT:'',click:'postDetail'},
-              {i:'gy',ic:'post',bg:'bg-gy',t:'帖子审核未通过',s:'驳回原因：含敏感词，请修改后重新提交',d:'09-02 10:30',tag:'',tagT:'',click:'postReject'},
-              {i:'',ic:'post',bg:'bg-b',t:'收到新评论',s:'王阿姨 评论了你的帖子：「方便送货上门吗？」',d:'09-03 16:20',tag:'r',tagT:'未读',click:'postDetail'}]}[cur]||[];
-  var items=data.map(function(x){
-    var onclick=x.click?(' onclick="go(\''+x.click+'\')"'):'';
-    return '<div class="item noind"'+onclick+'><div class="cell-ic '+x.bg+'">'+ic(x.ic,17)+'</div>'
-      +'<div class="it-bd"><div class="it-t">'+x.t+'</div><div class="it-s">'+x.s+'</div><div class="it-s">'+x.d+'</div></div>'
-      + (x.tag?'<span class="tag '+x.tag+'">'+x.tagT+'</span>':'')+'</div>';
-  }).join('<div class="sep full"></div>');
-  var unread=data.filter(function(x){return x.tag==='r';}).length;
-  return '<div class="pad">'+seg(['订单','账单','帖子'],'messages')+'</div>'
-  + (data.length?'<div class="grp">'+items+'</div>':'<div class="empty">'+ic('bell',30,'#999')+'<div class="et">暂无'+['订单','账单','帖子'][cur]+'消息</div><div class="es">相关消息将在此处展示</div></div>')
-  + (data.length?hint('当前'+['订单','账单','帖子'][cur]+'分类未读 '+unread+' 条 · 点击消息即标记为已读'):'');
-}};
 S.myHelper={title:'我的需求',render:function(){
   return '<div class="grp">'
   +'<div class="item noind" onclick="go(\'helperDetail\')"><div class="cell-ic bg-br">'+ic('sHelper',17)+'</div>'
@@ -3180,84 +3159,6 @@ S.hrPublish={title:'发布信息',render:function(){
   +'<div class="upbox" onclick="toast(\'上传图片\')">'+ic('camera',20)+'<span class="n">图片 0/9</span></div></div></div>'
   + btn('提交发布','toast(\'已提交，等待物业审核\');go(\'hr\')')
   + hint('提交后需经过敏感词比对，通过后由物业后台审核');
-}};
-
-/* ================= 系统设置 / 注销 ================= */
-S.settings={title:'系统设置',render:function(){
-  return grp([
-    {ic:'info',icls:'bg-gy',t:'关于我们',ar:1,on:'go(\'about\')'},
-    {ic:'doc',icls:'bg-gy',t:'版本号',v:APP_VER,ar:1,on:'go(\'version\')'},
-    {ic:'lock',icls:'bg-gy',t:'用户协议',ar:1,on:'go(\'agreement\')'},
-    {ic:'shield',icls:'bg-gy',t:'隐私政策',ar:1,on:'go(\'privacy\')'}
-  ])
-  + grp([
-    {ic:'logout',icls:'bg-o',t:'退出账号',ar:1,on:'toast(\'已退出账号\');go(\'welcome\')'},
-    {ic:'warn',icls:'bg-r',t:'注销账号',ar:1,on:'go(\'accountCancel\')'}
-  ],'账号管理');
-}};
-S.accountCancel={title:'注销账号',render:function(){
-  return '<div class="pad">'
-  +'<div class="card" style="background:rgba(255,59,48,.07)"><div class="row" style="gap:9px;align-items:flex-start">'
-  +'<span style="color:var(--red);flex-shrink:0;margin-top:1px">'+ic('warn',18)+'</span>'
-  +'<div class="sub" style="color:#8A1C14;line-height:1.6">注销前请确认：<br>· 当前账号所有账单已结清<br>· 若为认证户主账号，需先移交户主权限<br>· 注销后数据保留，重新注册可自动恢复</div></div></div></div>'
-  + grpT('验证手机号')
-  +'<div class="grp">'
-  +'<div class="inp-row"><input placeholder="请输入绑定的手机号码" type="tel" value="138****6688" readonly></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="inp-row"><input placeholder="请输入验证码" type="tel">'
-  +'<button class="code-btn" onclick="toast(\'验证码已发送，60秒后可重发\')">获取验证码</button></div>'
-  +'</div>'
-  +'<div class="pad"><button class="btn warn" onclick="toast(\'账号注销成功\');go(\'welcome\')">确认注销</button></div>';
-}};
-
-/* ================= 协议 / 关于 / 版本（补充页面） ================= */
-function docPage(cards,foot){
-  var h='<div class="pad">';
-  cards.forEach(function(c){h+='<div class="card"><div class="bold" style="font-size:16px;margin-bottom:10px">'+c[0]+'</div>'
-    +'<div class="sub" style="font-size:13.5px;line-height:1.85;color:var(--label)">'+c[1]+'</div></div>';});
-  return h+'</div>'+'<div class="pad">'+hint(foot)+'</div>';
-}
-S.agreement={title:'用户协议',render:function(){
-  return docPage([
-    ['一、服务总则','1.1 本协议是您与顾好家社区服务平台（以下简称"本平台"）之间，就使用本平台各项服务所订立的协议。<br><br>1.2 您在使用服务前应认真阅读并充分理解本协议全部内容。<br><br>1.3 您勾选"我已阅读并同意《用户协议》《隐私政策》"并完成注册后，即视为已充分理解并接受本协议全部内容。'],
-    ['二、账号与认证','2.1 您需使用本人实名认证的手机号码完成注册，并妥善保管账号及验证码。<br><br>2.2 使用报餐、托管、陪诊等服务前，需先完成业主认证：选择小区、楼栋、房号，并提交业主姓名与联系号码，由物业后台审核。<br><br>2.3 同一用户可提交多个小区的多条认证，每个小区由对应物业后台独立审核维护。'],
-    ['三、服务说明','3.1 报餐、托管服务由物业线下执行，本平台仅记录报名、账单及支付信息，不跟踪线下服务过程。<br><br>3.2 陪诊服务在线上完成支付后即完成平台流程，后续陪诊行为由服务人员线下执行。<br><br>3.3 健康小屋数据来源于第三方智能手环设备，评估结果仅供参考，不能替代医疗诊断。<br><br>3.4 物业服务由第三方物业管理系统提供，本系统与其数据不互通，您需在第三方系统中登录操作。'],
-    ['四、订单与支付','4.1 报餐单仅可提交次日餐品，当日 20:00 前可取消，20:00 后不可取消。<br><br>4.2 陪诊单仅可在陪诊日期前申请全额退款，退款由物业后台审核通过后原路退回，1-3 个工作日到账。<br><br>4.3 报餐与托管账单按月结算，您可在「我的账单」中提前发起结算。'],
-    ['五、内容规范','5.1 您在社区贴吧发布的内容需经过敏感词过滤，涉及敏感词的内容禁止发布。<br><br>5.2 帖子发布后需由物业后台审核，审核通过后发布成功；审核不通过可查看驳回原因并修改后重新提交。<br><br>5.3 您可对已发布的帖子设置显示或隐藏，也可删除自己的帖子。'],
-    ['六、其他','6.1 本平台有权根据运营需要修订本协议，修订后的条款一经公布即生效。<br><br>6.2 本协议的订立、执行与解释均适用中华人民共和国法律。']
-  ],'最后更新：2026-09-01');
-}};
-S.privacy={title:'隐私政策',render:function(){
-  return docPage([
-    ['一、我们收集的信息','1.1 注册信息：手机号码、验证码校验记录。<br><br>1.2 认证信息：小区、楼栋、房号、业主姓名、联系号码。<br><br>1.3 使用信息：报餐、托管、陪诊订单记录，账单与支付记录。<br><br>1.4 健康数据：经您授权后，从您连接的智能手环同步的心率、血压、血脂等数据。'],
-    ['二、我们如何使用信息','2.1 用于完成业主认证审核、订单生成与服务交付。<br><br>2.2 用于生成健康检测报告与风险评估（评估结果仅供参考）。<br><br>2.3 用于向您推送订单状态、账单提醒、帖子审核结果等系统消息。<br><br>2.4 我们不会将您的个人信息出售给任何第三方。'],
-    ['三、信息共享','3.1 您的认证与订单信息会同步至对应小区的物业后台，用于审核与服务执行。<br><br>3.2 支付环节由支付宝、微信提供担保交易，我们不存储您的支付密码。<br><br>3.3 除法律法规要求或您明确授权外，我们不会向其他第三方共享您的个人信息。'],
-    ['四、您的权利','4.1 您可在「个人信息」中修改头像、昵称，换绑手机号码。<br><br>4.2 您可随时断开手环连接，断开后历史数据仍会保留。<br><br>4.3 您可注销账号，注销后所有数据保留不予删除，再次使用同一号码注册可自动恢复。'],
-    ['五、信息安全','5.1 我们采用加密传输与存储措施保护您的个人信息。<br><br>5.2 请您妥善保管账号与验证码，因保管不善导致的损失由您自行承担。']
-  ],'最后更新：2026-09-01');
-}};
-S.about={title:'关于我们',render:function(){
-  return '<div class="pad" style="padding-top:30px;text-align:center">'
-  +'<div style="width:82px;height:82px;border-radius:22px;background:linear-gradient(145deg,#5AD1B5,#17A88A);display:flex;align-items:center;justify-content:center;margin:0 auto 15px;color:#fff">'+ic('home2',44,'#fff',1.7)+'</div>'
-  +'<div class="bold" style="font-size:21px;letter-spacing:-.3px">顾好家</div>'
-  +'<div class="sub" style="margin-top:6px">让社区生活更美好</div></div>'
-  +'<div class="card" style="margin-top:16px"><div class="sub" style="font-size:14px;line-height:1.85;color:var(--label)">顾好家是一款面向社区居民的一站式生活服务平台，围绕"健康、照护、膳食、物业、邻里"五大场景，为业主与住户提供便捷、可信的社区服务。<br><br>我们联合物业公司与社区服务机构，将报餐、托管、陪诊、生活帮手等高频需求线上化，让居民少跑腿、让服务更透明。<br><br>同时提供健康小屋、社区活动、邻里贴吧、小区通知与精彩内容，帮助居民随时掌握健康数据、参与社区生活、了解小区动态。</div></div>'
-  + grp([
-    {ic:'phone',icls:'bg-br',t:'客服电话',v:'400-888-8888',ar:1,on:'toast(\'正在呼叫客服\')'},
-    {ic:'msg',icls:'bg-b',t:'商务合作',v:'bd@guhait.cn',ar:1,on:'toast(\'已复制邮箱\')'},
-    {ic:'pin',icls:'bg-o',t:'公司地址',v:'合肥市高新区',ar:1,on:'toast(\'查看地图\')'}
-  ],'联系我们');
-}};
-S.version={title:'版本信息',render:function(){
-  return '<div class="pad" style="padding-top:34px;text-align:center">'
-  +'<div style="width:70px;height:70px;border-radius:20px;background:linear-gradient(145deg,#5AD1B5,#17A88A);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:#fff">'+ic('home2',38,'#fff',1.7)+'</div>'
-  +'<div class="bold" style="font-size:19px">顾好家</div>'
-  +'<div class="sub" style="margin-top:6px">当前版本 <span class="bold">'+APP_VER+'</span></div>'
-  +'<div style="margin-top:14px"><span class="tag g" style="padding:5px 13px;font-size:13px">已是最新版本</span></div></div>'
-  +'<div class="pad" style="padding-top:22px"><button class="btn sec" onclick="toast(\'正在检测新版本…\')">检测更新</button></div>'
-  + grpT('更新内容')
-  +'<div class="card"><div class="sub" style="font-size:13.5px;line-height:1.9;color:var(--label)">'+APP_VER+'（'+APP_BUILT+'）<br>· 全新上线报餐、托管、陪诊三大服务<br>· 新增健康小屋，支持手环连接与数据同步<br>· 新增社区活动、邻里贴吧、小区通知<br>· 优化订单结算与账单管理流程</div></div>'
-  + hint('APP 重新启动时自动检测版本，如为强制更新则必须更新后使用');
 }};
 
 /* ================= 支付流程（补充页面） ================= */
