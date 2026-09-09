@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.106';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.107';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-09';
 
@@ -1238,14 +1238,14 @@ function authPage(){
   +'<div class="au-seg" data-mode="'+m+'"><span class="s'+(m===0?' on':'')+'" onclick="segPick(\'loginMode\',0)">验证码登录</span>'
   +'<span class="s'+(m===1?' on':'')+'" onclick="segPick(\'loginMode\',1)">密码登录</span></div>'
   +'<div class="au-slot" data-mode="'+m+'">'
-  +'<div class="au-in"><span class="pre">'+ic('phone',19)+'</span><input placeholder="请输入手机号码" type="tel"></div>';
+  +'<div class="au-in"><span class="pre">'+ic('phone',19)+'</span><input placeholder="请输入手机号码" type="tel" value="13800006688"></div>';
   if(m===0){
     /* 验证码登录：与密码模式等高占位，切换不晃动 */
-    h+='<div class="au-in"><span class="pre">'+ic('msg',19)+'</span><input placeholder="请输入验证码" type="tel">'
+    h+='<div class="au-in"><span class="pre">'+ic('msg',19)+'</span><input placeholder="请输入验证码" type="tel" value="123456">'
       +'<button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
       +'<div class="au-fp-spacer"></div>';
   }else{
-    h+='<div class="au-in"><span class="pre">'+ic('lock',19)+'</span><input placeholder="请输入登录密码" type="password">'
+    h+='<div class="au-in"><span class="pre">'+ic('lock',19)+'</span><input placeholder="请输入登录密码" type="password" value="123456">'
       +'<button class="eye-btn" onclick="eyeToggle(this)">'+ic('eyeOff',19,'var(--label3)')+'</button></div>'
       +'<div class="au-fp" onclick="segState.findStep=0;go(\'findPwd\')">忘记密码？</div>';
   }
