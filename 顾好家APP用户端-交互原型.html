@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.111';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.112';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-09';
 
@@ -3464,9 +3464,23 @@ S.sysMsgDetail={title:'消息详情',render:function(){
 function clearCache(){toast('缓存已清除，共释放 36.2MB');}
 function doLogout(){toast('已退出登录');hist=[];go('login');}
 S.delAccount={title:'注销账号',nav:false,render:function(){
-  return dlg('warn','注销账号','注销后账号数据将无法恢复，确定要注销吗？','确认注销','doDelAccount()','再想想');
+  return dlg('warn','注销账号','注销后账号数据将无法恢复，确定要注销吗？','确认注销','go(\'delVerify\')','再想想');
 }};
-function doDelAccount(){toast('账号已提交注销申请');hist=[];go('login');}
+S.delVerify={title:'注销账号',render:function(){
+  return '<div class="grp">'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">验证手机号</div></div><div class="cell-v">138****6688</div></div>'
+  +'</div>'
+  +'<div class="grp">'
+  +'<div class="inp-row"><input id="delCode" placeholder="请输入验证码" type="tel" value="123456"><button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
+  +'</div>'
+  +'<div class="pad"><button class="btn" onclick="doDelAccount()">确认注销</button></div>'
+  + hint('验证码将发送至注册手机号，校验通过后账号立即注销');
+}};
+function doDelAccount(){
+  var c=(document.getElementById('delCode')||{}).value||'';
+  if(c!=='123456'){toast('验证码错误，请重新输入');return;}
+  toast('账号已注销');hist=[];go('login');
+}
 S.settings={title:'系统设置',render:function(){
   return grp([
     {ic:'lock',icls:'bg-b',t:'隐私设置',s:'授权管理与个人信息',ar:1,on:'go(\'privacy\')'},
