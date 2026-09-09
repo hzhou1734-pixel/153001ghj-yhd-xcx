@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.105';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.106';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-09';
 
@@ -1289,8 +1289,8 @@ S.regProfile={title:'完善资料',render:function(){
 S.wechatBind={title:'绑定微信',nav:false,render:function(){
   return dlg('share','绑定微信','绑定后可使用微信快捷登录，也可在个人中心再次绑定','授权绑定','go(\'regProfile\')','以后再说');
 }};
-/* 登录页与启动页共用同一套登录界面 */
-S.login   ={title:'',nav:false,render:function(){go('welcome');}};
+/* 登录页与启动页共用同一套登录界面（直接渲染，禁止在 render 内二次 go() 导致 undefined 覆盖） */
+S.login   ={title:'',nav:false,render:authPage};
 function doLogin(){if(!chkAgree('log'))return;go('home');}
 /* 找回密码：两步——验证手机号 → 设置新密码 */
 S.findPwd={title:'找回密码',render:function(){
@@ -3465,11 +3465,11 @@ S.sysMsgDetail={title:'消息详情',render:function(){
   +'</div>'+hint('左右滑动可切换其他消息');
 }};
 function clearCache(){toast('缓存已清除，共释放 36.2MB');}
-function doLogout(){toast('已退出登录');go('login');}
+function doLogout(){toast('已退出登录');hist=[];go('login');}
 S.delAccount={title:'注销账号',nav:false,render:function(){
   return dlg('warn','注销账号','注销后账号数据将无法恢复，确定要注销吗？','确认注销','doDelAccount()','再想想');
 }};
-function doDelAccount(){toast('账号已提交注销申请');go('login');}
+function doDelAccount(){toast('账号已提交注销申请');hist=[];go('login');}
 S.settings={title:'系统设置',render:function(){
   return grp([
     {ic:'lock',icls:'bg-b',t:'隐私设置',s:'授权管理与个人信息',ar:1,on:'go(\'privacy\')'},
