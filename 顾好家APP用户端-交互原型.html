@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.108';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.109';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-09';
 
@@ -1204,9 +1204,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+actItems(ACTIVITIES.filter(function(a){return a.st==='报名中';}))+'</div>'
   +'<div class="sect"><div class="t">社区贴吧</div><div class="m" onclick="go(\'forumList\')">去逛逛'+ic('chevR',14)+'</div></div>'
-  +'<div class="grp"><div class="item noind" onclick="go(\'postDetail\')">'+avt(40)
-  +'<div class="it-bd"><div class="it-t">出一台九成新婴儿车</div><div class="it-s">王阿姨 · 09-03 · 二手交易</div></div>'
-  +'<div class="row" style="gap:12px;color:var(--label3);font-size:12px"><span>♥ 12</span><span>💬 3</span></div></div></div>'
+  +postCards(POSTS.slice(0,4))
   +'<div class="sect"><div class="t">精彩内容</div><div class="m" onclick="go(\'featuredList\')">更多'+ic('chevR',14)+'</div></div>'
   +'<div class="grp"><div class="item noind" onclick="go(\'articleDetail\')">'+thumb('b','doc',58,58)
   +'<div class="it-bd"><div class="it-t">垃圾分类新指南来了</div><div class="it-s">09-03 · 物业服务中心</div></div>'
