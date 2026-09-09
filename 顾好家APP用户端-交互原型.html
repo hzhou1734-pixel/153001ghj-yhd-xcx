@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.107';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.108';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-09';
 
@@ -2299,8 +2299,7 @@ function orderListHTML(type,sub,curTab){
   var pendingCount=sum.p;
   var pendingAmt=ORDERS.filter(function(o){return o.type===type&&o.st==='pending';}).reduce(function(a,b){return a+b.price;},0);
   return '<div class="ord-sum">'
-      +'<div class="os-h"><div><div class="os-t">'+sub+'</div><div class="os-b">本月服务订单 · 总计 '+sum.total+' 单</div></div>'
-        +'<div class="os-w" onclick="openPanel(\'orderSearch\')">筛选 '+ic('chevR',13)+'</div></div>'
+      +'<div class="os-h"><div><div class="os-t">'+sub+'</div><div class="os-b">本月服务订单 · 总计 '+sum.total+' 单</div></div></div>'
       +'<div class="os-c">'+sum.total+'</div>'
       +'<div class="os-r">'
         +'<div class="os-cd'+(ordCurFilter==='pending'?' on':'')+'" onclick="setOrdFilter(\'pending\')"><div class="n">'+sum.p+'</div><div class="l">待支付</div></div>'
