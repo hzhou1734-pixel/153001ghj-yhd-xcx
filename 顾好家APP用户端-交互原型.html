@@ -505,7 +505,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 .carousel{height:158px;border-radius:var(--r);overflow:hidden;position:relative;margin:0 var(--pad) 12px;
           box-shadow:0 6px 18px rgba(43,196,160,.2);}
-.carousel .track{display:flex;height:100%;animation:slide 9s infinite;}
+.carousel .track{display:flex;height:100%;animation:slide 7.5s infinite;}
 .carousel .sl{flex:0 0 100%;height:100%;display:flex;align-items:center;padding:0 22px;color:#fff;position:relative;}
 .carousel .sl .em{width:62px;height:62px;border-radius:18px;background:rgba(0,0,0,.15);display:flex;
        align-items:center;justify-content:center;margin-right:16px;flex:0 0 62px;
@@ -849,9 +849,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.112';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.115';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
-var APP_BUILT='2026-09-09';
+var APP_BUILT='2026-09-18';
 
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
@@ -988,7 +988,6 @@ function tabbar(){var T=[['home','tabHome','首页'],['community','tabComm','社
   T.forEach(function(t){h+='<div class="tb'+(t[0]===c?' on':'')+'" onclick="go(\''+t[0]+'\')">'+ic(t[1],24)+t[2]+'</div>';});
   return h;}
 function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
-  if(cur!=='postDetail')cmtReplyTo='';   /* 离开帖子详情时清空回复态 */
   if(s.nav!==false)h+=nav(s.title,s.rightLabel,s.rightFn);
   h+=s.render();
   var sc=document.getElementById('screen');
@@ -1203,8 +1202,6 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+actItems(ACTIVITIES.filter(function(a){return a.st==='报名中';}))+'</div>'
-  +'<div class="sect"><div class="t">社区贴吧</div><div class="m" onclick="go(\'forumList\')">去逛逛'+ic('chevR',14)+'</div></div>'
-  +postCards(POSTS.slice(0,4))
   +'<div class="sect"><div class="t">精彩内容</div><div class="m" onclick="go(\'featuredList\')">更多'+ic('chevR',14)+'</div></div>'
   +'<div class="grp"><div class="item noind" onclick="go(\'articleDetail\')">'+thumb('b','doc',58,58)
   +'<div class="it-bd"><div class="it-t">垃圾分类新指南来了</div><div class="it-s">09-03 · 物业服务中心</div></div>'
@@ -1343,7 +1340,15 @@ S.certify={title:'房屋认证',render:function(){
   +'<div class="grp">'
   +'<div class="field"><span class="lb">姓名</span><input placeholder="请输入业主姓名"></div>'
   +'<div class="sep"></div>'
-  +'<div class="field"><span class="lb">联系号码</span><input placeholder="请输入联系号码" type="tel"></div>'
+  +'<div class="field"><span class="lb">年龄</span><input placeholder="请输入年龄" type="tel"></div>'
+  +'<div class="sep"></div>'
+  +'<div class="field"><span class="lb">电话号码</span><input placeholder="请输入电话号码" type="tel"></div>'
+  +'<div class="sep"></div>'
+  +'<div class="field"><span class="lb">职业</span><input placeholder="请输入职业"></div>'
+  +'<div class="sep"></div>'
+  +'<div class="field"><span class="lb">家庭人口</span><input placeholder="请输入家庭人口数" type="tel"></div>'
+  +'<div class="sep"></div>'
+  +'<div class="field"><span class="lb">兴趣爱好</span><input placeholder="如：书法、太极、园艺"></div>'
   +'</div>'
   + btn('提交认证','toast(\'已提交，等待物业审核\');go(\'certList\')');
 }};
@@ -1447,11 +1452,18 @@ S.communitySwitch={title:'我的小区',render:function(){
 
 /* ================= 健康小屋 ================= */
 S.healthHome={title:'健康小屋',render:function(){
+  var on=(pickState.bandOn===undefined?true:pickState.bandOn);
   return '<div class="pad">'
   +'<div class="card" style="background:linear-gradient(135deg,#E4FBF4,#C8F2E5);display:flex;align-items:center;justify-content:space-between;gap:12px">'
   +'<div class="row" style="gap:11px"><div style="width:42px;height:42px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--brand)">'+ic('watch',23)+'</div>'
-  +'<div><div class="bold" style="font-size:15px">未连接健康手环</div><div class="sub" style="margin-top:3px">连接后自动同步健康数据</div></div></div>'
-  +'<button class="btn" style="width:auto;padding:9px 16px;font-size:14px;margin:0" onclick="go(\'bandConnect\')">去连接</button></div></div>'
+  +(on
+    ?'<div><div class="bold" style="font-size:15px">Huawei Band 7</div><div class="sub" style="margin-top:3px">最后同步：09-08 14:20</div></div></div>'
+      +'<div class="row" style="gap:8px">'
+      +'<button class="btn sec" style="width:auto;padding:9px 12px;font-size:13px;margin:0" onclick="pickState.bandOn=false;toast(\'已取消连接，历史数据仍保留\');render()">取消连接</button>'
+      +'<button class="btn" style="width:auto;padding:9px 12px;font-size:13px;margin:0" onclick="toast(\'更换设备后新数据覆盖后续记录\')">更换设备</button></div>'
+    :'<div><div class="bold" style="font-size:15px">您还未连接健康手环，点击去连接</div><div class="sub" style="margin-top:3px">将通过注册手机号自动匹配并同步数据</div></div></div>'
+      +'<button class="btn" style="width:auto;padding:9px 16px;font-size:14px;margin:0" onclick="go(\'bandConnect\')">去连接</button>')
+  +'</div></div>'
   +'<div class="sect"><div class="t">健康数据</div></div>'
   +'<div class="tiles">'
   + tile('pulse','实时健康数据','心率 · 血压 · 血脂','bg-r','healthData')
@@ -1459,7 +1471,8 @@ S.healthHome={title:'健康小屋',render:function(){
   + tile('report','历史检测报告','日报 · 周报 · 月报 · 年报','bg-br','healthReport')
   + tile('risk','健康风险评估','每周自动更新评估结果','bg-o','healthRisk')
   +'</div>'
-  +'<div class="pad"><button class="btn acc" onclick="go(\'emergencyCall\')">'+ic('phone',19)+' 一键呼叫紧急电话</button></div>'
+  +'<div class="pad"><button class="btn acc" onclick="go(\'emergencyCall\')">'+ic('phone',19)+' 紧急呼叫</button></div>'
+  +'<div class="pad" style="padding-top:0">'+hint('健康手环为 4G 模块，通过注册手机号与手环厂商账号匹配后自动同步数据，无需蓝牙配对；一个账号同时只能连接一个手环，断开连接后历史数据仍保留')+'</div>'
 }};
 function tile(i,t,s,cls,on){return '<div class="tile" onclick="go(\''+on+'\')"><div class="th '+cls+'">'+ic(i,19)+'</div>'
   +'<div class="tt">'+t+'</div><div class="ts">'+s+'</div></div>';}
@@ -1467,9 +1480,9 @@ S.bandConnect={title:'连接健康手环',render:function(){
   return '<div class="pad">'
   +'<div class="card" style="text-align:center;padding:22px 16px">'
   +'<div style="width:52px;height:52px;border-radius:15px;background:var(--fill);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--brand)">'+ic('bt',27)+'</div>'
-  +'<div class="bold" style="font-size:16px">需要蓝牙与位置权限</div>'
-  +'<div class="sub" style="margin-top:6px">健康小屋需获取蓝牙和位置权限，<br>用于搜索并连接附近的手环设备</div>'
-  +'<button class="btn" style="margin-top:14px" onclick="toast(\'已授予权限，开始搜索\')">允许授权</button></div></div>'
+  +'<div class="bold" style="font-size:16px">通过手机号自动匹配</div>'
+  +'<div class="sub" style="margin-top:6px">健康手环为 4G 模块，无需蓝牙配对。<br>将使用注册手机号 138****6688 与手环厂商账号进行匹配</div>'
+  +'<button class="btn" style="margin-top:14px" onclick="pickState.bandOn=true;toast(\'匹配成功，已同步历史数据\');go(\'healthHome\')">授权并匹配</button></div></div>'
   +'<div class="sect"><div class="t">搜索到的设备</div></div>'
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-ic bg-br">'+ic('watch',17)+'</div><div class="cell-bd"><div class="cell-t">Mi Band 8</div><div class="cell-s">信号强 · 可连接</div></div>'
@@ -1652,30 +1665,35 @@ S.escortDetail={title:'陪诊服务',render:function(){
 }};
 S.escortBook={title:'服务预约',render:function(){
   var ds=['09-05','09-06','09-07','09-08','09-09','09-10','09-11'],ws=['周五','周六','周日','周一','周二','周三','周四'];
-  var SL=[['6-9 点','清晨'],['9-12 点','上午'],['12-15 点','午间'],['15-18 点','下午'],['18-21 点','晚间']];
   var di=(pickState.escortDate===undefined?0:pickState.escortDate);
-  var si=(pickState.escortSlot===undefined?-1:pickState.escortSlot);
-  var hours=(pickState.escortHours===undefined?3:pickState.escortHours);
-  hours=Math.max(1,Math.min(99,hours));
-  var amount=hours*80;
+  var dur=(pickState.escortDur===undefined?0:pickState.escortDur);   /* 0=半天 1=一天 */
+  var DL=[['半天（4 小时）','¥320'],['一天（8 小时）','¥560']];
+  var needPick=(pickState.escortPick===undefined?true:pickState.escortPick);
   var h='';
   ds.forEach(function(d,i){h+='<div class="d'+(i===di?' on':'')+'" onclick="pickEscortDate('+i+')"><div class="w">'+ws[i]+'</div><div class="n">'+d.slice(3)+'</div></div>';});
-  var sh='';
-  SL.forEach(function(s,i){sh+='<div class="slot'+(i===si?' on':'')+'" onclick="pickEscortSlot('+i+')"><div class="t">'+s[0]+'</div><div class="s">'+s[1]+'</div></div>';});
-  return grp([{ic:'clock',icls:'bg-br',t:'陪诊时长',s:'',ctl:step('escortHours',{def:3,min:1,max:99})}])
-  + grpT('陪诊日期')
-  +'<div class="card"><div class="pick">'+h+'</div>'
-  +'<div class="slot-hd" style="display:flex;justify-content:space-between;align-items:center">'
-  +'<span>服务时段</span>'
-  +(si>=0?'<span style="color:var(--brand);font-weight:600">'+SL[si][0]+'</span>':'<span style="color:var(--label3)">未选择</span>')
-  +'</div><div class="slots">'+sh+'</div></div>'
-  + grpT('陪诊地址')
-  +'<div class="grp"><div class="field"><input value="阳光花园 3栋2单元1802" style="flex:1"></div></div>'
+  var dh='';
+  DL.forEach(function(x,i){dh+='<div class="slot'+(i===dur?' on':'')+'" onclick="pickEscortDur('+i+')"><div class="t">'+x[0]+'</div><div class="s">'+x[1]+'</div></div>';});
+  var amount=(dur===0?320:560);
+  return grpT('服务时长')
+  +'<div class="card"><div class="slots">'+dh+'</div></div>'
+  + grpT('陪诊日期（仅可选择未来 7 天内）')
+  +'<div class="card"><div class="pick">'+h+'</div></div>'
+  + grp([
+    {ic:'pin',icls:'bg-br',t:'是否需要接送',s:'需要则使用已认证房号',ctl:sw(needPick,'toggleEscortPick()')}
+  ])
+  +(needPick
+    ?'<div class="card"><div class="kv" style="padding:0"><span class="k">陪诊地址（认证房号）</span></div>'
+      +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
+      +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'仅可选择已认证房号\')">修改陪诊地址'+ic('chevR',14)+'</span></div></div>'
+    :'<div class="grp"><div class="field"><span class="lb">陪诊地址</span><input placeholder="请输入陪诊地址"></div></div>')
+  + grpT('医院地址')
+  +'<div class="grp"><div class="field"><span class="lb">医院</span><input value="市第一人民医院" style="flex:1"></div></div>'
   + grp([{t:'订单金额合计',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
-  + btn('立即结算',(si>=0?"openEscortPay()":"toast('请选择服务时段')"));
+  + btn('下一步','go(\'payment\')');
 }};
 function pickEscortDate(i){pickState.escortDate=i;render();}
-function pickEscortSlot(i){pickState.escortSlot=i;render();}
+function pickEscortDur(i){pickState.escortDur=i;render();}
+function toggleEscortPick(){pickState.escortPick=!pickState.escortPick;render();}
 
 /* ================= 托管服务 ================= */
 /* 托管类型数据：列表页与详情页共用 */
@@ -1704,25 +1722,45 @@ S.trustDetail={title:'托管详情',render:function(){
   var pk=TRUST[i];
   var cnt=(pickState.trustCount===undefined?1:pickState.trustCount);
   cnt=Math.max(1,Math.min(5,cnt));
-  var needPick=(pickState.trustPick===undefined?true:pickState.trustPick);
+  var nj=(pickState.trustJie===undefined?true:pickState.trustJie);
+  var ns=(pickState.trustSong===undefined?false:pickState.trustSong);
+  var nm=(pickState.trustMeal===undefined?false:pickState.trustMeal);
+  var care=pickState.trustCare||{};
+  var CARE=[['上午 8-12','8:00-12:00'],['下午 12-18','12:00-18:00'],['晚上 18-21','18:00-21:00']];
+  var ch='';
+  CARE.forEach(function(c,idx){ch+='<div class="qbtn'+(care[idx]?' on':'')+'" onclick="toggleTrustCare('+idx+')">'+c[0]+'</div>';});
+  var amount=pk.p*cnt+(nm?18*cnt:0);
   return '<div class="pad"><div class="cover '+pk.cov+'" style="height:150px">'+ic(pk.ic,40,pk.dark?'#7A5B00':'#fff',1.7)+'</div></div>'
   +'<div class="pad">'
   +'<div class="row between"><div><div class="bold" style="font-size:20px">'+pk.n+'</div>'
   +'<div class="sub" style="margin-top:5px">'+pk.d+'</div></div>'
   +'<div style="text-align:right"><span class="price" style="font-size:24px">¥'+pk.p+'</span><div class="sub">'+pk.u+'</div></div></div></div>'
   + grp([
-    {ic:'family',icls:'bg-b',t:'托管人数',s:'1 - 5 人',ctl:step('trustCount',{def:1,min:1,max:5})},
-    {ic:'pin',icls:'bg-br',t:'是否需要接送',s:'从已绑定房号接送',ctl:sw(needPick,'toggleTrustPick()')}
+    {ic:'family',icls:'bg-b',t:'孩子数量',s:'按孩子数量计费 · 1 - 5 人',ctl:step('trustCount',{def:1,min:1,max:5})},
+    {ic:'pin',icls:'bg-br',t:'是否需要接',s:'从学校送到家里（认证房号）',ctl:sw(nj,'toggleTrustJie()')},
+    {ic:'pin',icls:'bg-o',t:'是否需要送',s:'从小区送到学校',ctl:sw(ns,'toggleTrustSong()')},
+    {ic:'sMeal',icls:'bg-y',t:'是否需要用餐',s:'用餐信息归属膳食单',ctl:sw(nm,'toggleTrustMeal()')}
   ])
-  +(needPick
-    ?'<div class="card"><div class="kv" style="padding:0"><span class="k">接送地址</span></div>'
-      +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
-      +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'仅可选择已绑定房号\')">更换'+ic('chevR',14)+'</span></div></div>'
+  +((nj||ns)
+    ? grpT('接送设置')
+      +'<div class="grp">'
+      +(nj?'<div class="cell"><div class="cell-bd"><div class="cell-t">接 · 学校</div><div class="cell-s">从学校送到家里</div></div><div class="cell-v">阳光小学</div></div>':'')
+      +(nj&&ns?'<div class="sep full"></div>':'')
+      +(ns?'<div class="cell"><div class="cell-bd"><div class="cell-t">送 · 学校</div><div class="cell-s">从小区送到学校</div></div><div class="cell-v">阳光小学</div></div>':'')
+      +((nj||ns)?'<div class="sep full"></div>':'')
+      +'<div class="cell"><div class="cell-bd"><div class="cell-t">接送地址</div><div class="cell-s">认证房号</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div>'
+      +'</div>'
     :'')
-  + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+(pk.p*cnt)+'.00</span>'}])
-  +'<div style="padding:4px var(--pad) 38px">'+btn('提交报名','toast(\'报名成功，已消耗顾家币额度\');go(\'orderTrustDetail\')')+'</div>';
+  + grpT('看护时段（可多选）')
+  +'<div class="pad"><div class="qlist">'+ch+'</div></div>'
+  + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
+  +'<div class="pad" style="padding-top:0">'+hint('附加费规则：选择上午托管后超过 12:30 计入下午场；超过 21:30 按 xx 元/小时收取附加费，不足 1 小时按 1 小时计算，具体金额由物业后台设置')+'</div>'
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','toast(\'托管订单已提交，等待物业后台派发托管老师\');go(\'orderTrustDetail\')')+'</div>';
 }};
-function toggleTrustPick(){pickState.trustPick=!pickState.trustPick;render();}
+function toggleTrustJie(){pickState.trustJie=!pickState.trustJie;render();}
+function toggleTrustSong(){pickState.trustSong=!pickState.trustSong;render();}
+function toggleTrustMeal(){pickState.trustMeal=!pickState.trustMeal;render();}
+function toggleTrustCare(i){var c=pickState.trustCare||{};c[i]=!c[i];pickState.trustCare=c;render();}
 function openTrust(i){pickState.trustType=i;go('trustDetail');}
 
 /* ================= 健康膳食 ================= */
@@ -1730,27 +1768,39 @@ S.meal={title:'健康膳食',render:function(){
   var mc=(pickState.mealCount===undefined?2:pickState.mealCount);
   mc=Math.max(1,Math.min(10,mc));
   var needDelivery=(pickState.mealDelivery===undefined?true:pickState.mealDelivery);
-  var deliveryNote='<div class="pad" style="padding-top:0;font-size:12px;color:var(--label3);line-height:1.6">仅可提交明日报餐，报餐截止时间为当日 20:00</div>';
-  return '<div class="sect"><div class="t">明日菜单</div><div class="m">9月5日 周六</div></div>'
+  var mt=(pickState.mealType===undefined?1:pickState.mealType);   /* 0=早餐 1=午餐 2=晚餐 */
+  var MT=[['早餐','¥8'],['午餐','¥18'],['晚餐','¥18']];
+  var MENU=[
+    {t:'小米粥 · 水煮蛋 · 杂粮包',s:'清淡养胃 · 约 380 kcal',p:8},
+    {t:'清蒸鲈鱼 · 时蔬 · 米饭',s:'低油低盐 · 适老营养餐 · 约 520 kcal',p:18},
+    {t:'山药排骨汤 · 时蔬 · 杂粮饭',s:'易消化 · 约 480 kcal',p:18}
+  ];
+  var CUT=['前一日 19:00 截止','当日 10:00 截止','当日 14:00 截止'];
+  var mh='';
+  MT.forEach(function(x,i){mh+='<div class="d'+(i===mt?' on':'')+'" onclick="pickMealType('+i+')"><div class="w">'+x[0]+'</div><div class="n">'+x[1]+'</div></div>';});
+  var m=MENU[mt];
+  return '<div class="sect"><div class="t">今日菜单</div><div class="m">9月5日 周六 · '+MT[mt][0]+'</div></div>'
+  +'<div class="card"><div class="pick">'+mh+'</div></div>'
   +'<div class="grp">'
   +'<div class="item noind" onclick="go(\'mealDetail\')">'+thumb('','sMeal',54,54,'')
-  +'<div class="it-bd"><div class="it-t">清蒸鲈鱼 · 时蔬 · 米饭</div><div class="it-s">低油低盐 · 适老营养餐 · 约 520 kcal</div></div>'
-  +'<span class="price" style="font-size:16px">¥18</span></div>'
+  +'<div class="it-bd"><div class="it-t">'+m.t+'</div><div class="it-s">'+m.s+'</div></div>'
+  +'<span class="price" style="font-size:16px">¥'+m.p+'</span></div>'
   +'</div>'
   + grp([
     {ic:'sMeal',icls:'bg-y',t:'报餐份数',s:'1 - 10 份',ctl:step('mealCount',{def:2,min:1,max:10})},
-    {ic:'pin',icls:'bg-br',t:'是否需要送餐',s:'送餐至已绑定房号',ctl:sw(needDelivery,'toggleMealDelivery()')}
+    {ic:'pin',icls:'bg-br',t:'是否需要配送',s:'配送至已认证房号',ctl:sw(needDelivery,'toggleMealDelivery()')}
   ])
   +(needDelivery
-    ?'<div class="card"><div class="kv" style="padding:0"><span class="k">送餐地址</span></div>'
+    ?'<div class="card"><div class="kv" style="padding:0"><span class="k">配送地址</span></div>'
       +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
       +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'可添加备注\')">备注'+ic('chevR',14)+'</span></div></div>'
-      +deliveryNote
-    :deliveryNote)
-  + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+(18*mc)+'.00</span>'}])
+    :'')
+  + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+(m.p*mc)+'.00</span>'}])
+  +'<div class="pad" style="padding-top:0">'+hint('下单与取消截止时间 — 早餐：前一日 19:00；午餐：当日 10:00；晚餐：当日 14:00。当前选中'+MT[mt][0]+'，'+CUT[mt]+'。当日 14:00 后展示次日菜品，次日菜单未更新时显示缺省信息')+'</div>'
   +'<div style="padding:4px var(--pad) 38px">'+btn('提交报餐','toast(\'报餐成功\');go(\'orderMealDetail\')')+'</div>';
 }};
 function toggleMealDelivery(){pickState.mealDelivery=!pickState.mealDelivery;render();}
+function pickMealType(i){pickState.mealType=i;render();}
 
 S.mealDetail={title:'膳食详情',render:function(){
   var rich='<div class="rich">'
@@ -1825,20 +1875,27 @@ S.miniJump={title:'跳转中',nav:false,render:function(){
 /* 旧的 S.property 已迁移到 S.miniJump 占位页，保留 goMini 备用入口 */
 
 /* ================= 生活帮手 ================= */
-S.helper={title:'提交需求',render:function(){
-  return '<div class="pad">'+hint('需求提交后同步至物业后台，由楼栋管家跟进处理')+'</div>'
+S.helper={title:'提交服务订单',render:function(){
+  return '<div class="pad">'+hint('所有收费的生活服务在此提交，提交后由物业后台派单，员工端完成服务后订单完成')+'</div>'
   +'<div class="grp">'
-  + pfield('类型','helpType','请选择帮助类型')
+  + pfield('类型','helpType','请选择服务类型')
   +'</div>'
-  + grpT('需求情况')
+  + grpT('服务信息')
+  +'<div class="grp">'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">服务内容</div></div><div class="cell-v">家政保洁 · 全屋深度清洁</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">服务金额</div></div><div class="cell-v"><span class="price">¥180.00</span></div></div>'
+  +'</div>'
+  + grpT('服务时间')
+  +'<div class="grp"><div class="field"><span class="lb">上门时间</span><input placeholder="请选择上门服务时间"></div></div>'
+  + grpT('服务地址')
+  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="cell-t">服务地址</div><div class="cell-s">按认证房号显示</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div></div>'
+  + grpT('备注')
   +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-  +'<textarea rows="5" placeholder="请描述您的需求情况…"></textarea></div></div>'
-  + grpT('上传资料')
-  +'<div class="card"><div class="row" style="gap:10px">'
-  +'<div class="upbox" onclick="toast(\'上传图片，最多 9 张\')">'+ic('camera',20)+'<span class="n">图片 0/9</span></div>'
-  +'<div class="upbox" onclick="toast(\'上传视频，最多 3 个\')">'+ic('video',20)+'<span class="n">视频 0/3</span></div>'
-  +'</div></div>'
-  + btn('提交需求','toast(\'需求已提交，管家将跟进处理\');go(\'myHelper\')');
+  +'<textarea rows="4" placeholder="请描述服务需求与备注…"></textarea></div></div>'
+  + grp([{t:'订单金额',ctl:'<span class="price" style="font-size:20px">¥180.00</span>'}])
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','toast(\'订单已提交，等待物业后台派单\');go(\'ordersHelper\')')+'</div>'
+  + hint('线上提交订单；若涉及材料费，由服务人员在线下收取');
 }};
 
 /* ================= 社区（Tab） ================= */
@@ -1846,7 +1903,6 @@ S.community={tab:'community',title:'社区',nav:false,render:function(){
   return topLg('社区','',[['bell','','noticeList',noticeBadge()]])
   + grp([
     {ic:'cal',icls:'bg-br',t:'社区活动',s:'报名邻里活动，查看最新动态',ar:1,on:'go(\'communityList\')'},
-    {ic:'post',icls:'bg-b',t:'社区贴吧',s:'邻里交流、二手交易、求助问答',ar:1,on:'go(\'forumList\')'},
     {ic:'bell',icls:'bg-o',t:'社区通知',s:'物业公告、停水停电提醒',ar:1,on:'go(\'noticeList\')',badge:noticeBadge()},
     {ic:'doc',icls:'bg-p',t:'精彩内容',s:'小区资讯、生活指南',ar:1,on:'go(\'featuredList\')'}
   ])
@@ -1858,18 +1914,22 @@ S.community={tab:'community',title:'社区',nav:false,render:function(){
 
 /* ================= 社区活动 ================= */
 var ACTIVITIES=[
-  {n:'中秋邻里联欢会',when:'9月28日 18:30',s:'中心广场 · 已报 86/200',st:'报名中',sc:'g',c:'',ty:'节日庆典'},
-  {n:'少儿阅读营',when:'本周末 14:00',s:'阅览室 · 30/30 人',st:'名额已满',sc:'gy',c:'p',ty:'亲子活动'},
-  {n:'重阳节健康讲座',when:'9月29日 14:00',s:'活动中心 · 0/80 人',st:'即将开始',sc:'b',c:'b',ty:'健康讲座'},
-  {n:'邻里跳蚤市场',when:'9月12日 09:00',s:'西门广场 · 42/100 人',st:'报名中',sc:'g',c:'o',ty:'节日庆典'},
-  {n:'秋季健步走',when:'9月25日 09:00',s:'江畔绿道 · 18/60 人',st:'报名中',sc:'g',c:'y',ty:'健康讲座'},
-  {n:'重阳敬老慰问',when:'9月30日 10:00',s:'各楼栋 · 0/40 人',st:'即将开始',sc:'b',c:'p',ty:'志愿服务'},
-  {n:'暑期趣味运动会',when:'8月20日 已结束',s:'中央草坪 · 128 人参与',st:'已结束',sc:'gy',c:'gy',ty:'亲子活动'}
+  {n:'中秋邻里联欢会',when:'9月28日 18:30',bm:'报名 09-05 至 09-26',s:'中心广场 · 已报 86/200',st:'报名中',sc:'g',c:'',ty:'节日庆典'},
+  {n:'少儿阅读营',when:'本周末 14:00',bm:'报名 09-01 至 09-12',s:'阅览室 · 30/30 人',st:'名额已满',sc:'gy',c:'p',ty:'亲子活动'},
+  {n:'重阳节健康讲座',when:'9月29日 14:00',bm:'报名 09-10 至 09-27',s:'活动中心 · 0/80 人',st:'即将开始',sc:'b',c:'b',ty:'健康讲座'},
+  {n:'邻里跳蚤市场',when:'9月12日 09:00',bm:'报名 09-02 至 09-10',s:'西门广场 · 42/100 人',st:'报名中',sc:'g',c:'o',ty:'节日庆典'},
+  {n:'秋季健步走',when:'9月25日 09:00',bm:'报名 09-08 至 09-23',s:'江畔绿道 · 18/60 人',st:'报名中',sc:'g',c:'y',ty:'健康讲座'},
+  {n:'重阳敬老慰问',when:'9月30日 10:00',bm:'报名 09-12 至 09-28',s:'各楼栋 · 0/40 人',st:'即将开始',sc:'b',c:'p',ty:'志愿服务'},
+  {n:'暑期趣味运动会',when:'8月20日 已结束',bm:'报名 08-01 至 08-18',s:'中央草坪 · 128 人参与',st:'已结束',sc:'gy',c:'gy',ty:'亲子活动'}
 ];
 function actItem(a){
+  /* 状态按钮交互：报名中=立即报名可点；即将开始/名额已满/已结束=置灰不可点 */
+  var can=(a.st==='报名中');
+  var label=(a.st==='报名中')?'立即报名':(a.st==='名额已满'?'名额已满':(a.st==='已结束'?'已结束':'即将开始'));
+  var b='<div style="flex-shrink:0;margin-left:8px;opacity:'+(can?'1':'.45')+'"><div class="ab '+(can?'pri':'sec')+'" onclick="event.stopPropagation();'+(can?'go(\'activitySignup\')':'toast(\''+label+'，暂不可报名\')')+'">'+label+'</div></div>';
   return '<div class="item noind" onclick="go(\'activityDetail\')">'+thumb(a.c,'cal',58,58)
-    +'<div class="it-bd"><div class="it-t">'+a.n+'</div><div class="it-s">'+a.when+' · '+a.s+'</div></div>'
-    +'<span class="tag '+a.sc+'">'+a.st+'</span></div>';
+    +'<div class="it-bd"><div class="it-t">'+a.n+'</div><div class="it-s">'+a.bm+'</div></div>'
+    +'<span class="tag '+a.sc+'">'+a.st+'</span>'+b+'</div>';
 }
 function actItems(list){
   return list.map(function(a,i){return (i?'<div class="sep full"></div>':'')+actItem(a);}).join('');
@@ -1878,7 +1938,7 @@ S.communityList={title:'社区活动',render:function(){
   var TABS=['全部','即将开始','报名中','名额已满','已结束'];
   var cur=(chipState.communityList===undefined?0:chipState.communityList);
   var list=cur?ACTIVITIES.filter(function(x){return x.st===TABS[cur];}):ACTIVITIES;
-  var h=searchBar('搜索活动名称或介绍')
+  var h=searchBar('搜索活动名称或介绍','go(\'activityFilter\')')
     + chips(TABS,'communityList',0,'cml-chips');
   if(!list.length){
     h+='<div class="pad">'+empty('cal','暂无'+TABS[cur]+'的活动','看看其他状态的活动吧')+'</div>';
@@ -1915,11 +1975,15 @@ S.activityDetail={title:'活动详情',render:function(){
   +'<div class="sep"></div>'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('pin',17)+'</div><div class="cell-bd"><div class="cell-t">活动地点</div></div><div class="cell-v">中心广场</div></div>'
   +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-p">'+ic('family',17)+'</div><div class="cell-bd"><div class="cell-t">报名人数</div></div><div class="cell-v">86 / 200 人</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-p">'+ic('family',17)+'</div><div class="cell-bd"><div class="cell-t">限制人数</div></div><div class="cell-v">200 人</div></div>'
+  +'<div class="sep"></div>'
+  +'<div class="cell"><div class="cell-ic bg-p">'+ic('family',17)+'</div><div class="cell-bd"><div class="cell-t">已报名人数</div></div><div class="cell-v">86 人</div></div>'
   +'</div>'
   + grpT('活动介绍')
   +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.7;color:var(--label)">邻里齐聚，赏月品茗，趣味游戏与才艺展示。现场设置灯谜区、手工月饼 DIY 与儿童游乐区，欢迎携家人一同参加。活动免费，名额有限，报满即止。</div></div>'
-  +'<div class="pad"><button class="btn des">已报名</button></div>';
+  +(pickState.actSigned
+    ?'<div class="pad"><button class="btn des">已报名</button></div>'
+    :'<div class="pad"><button class="btn" onclick="go(\'activitySignup\')">立即报名</button></div>');
 }};
 S.activitySignup={title:'活动报名',render:function(){
   return '<div class="pad">'+hint('每个用户每个活动仅可报名一次')+'</div>'
@@ -1931,202 +1995,7 @@ S.activitySignup={title:'活动报名',render:function(){
   + grpT('备注（选填）')
   +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
   +'<textarea rows="3" placeholder="如有特殊需求请在此说明…"></textarea></div></div>'
-  + btn('提交报名','toast(\'报名成功，已同步至物业后台\');go(\'mySignup\')');
-}};
-
-/* ================= 社区贴吧 ================= */
-var POSTS=[
-  {id:'p1',cat:'二手交易',catC:'br',cv:'o',ti:'出一台九成新婴儿车',a:'王阿姨',ac:'o',d:'09-03',l:128,m:23,
-   body:'孩子长大了用不上，九成新，可折叠，带遮阳棚。小区内自提，价格好商量，有兴趣的邻居可以私信我。',
-   imgs:3},
-  {id:'p2',cat:'求助问答',catC:'b',cv:'b',ti:'求助：谁家有多余的梯子',a:'小李',ac:'b',d:'09-02',l:45,m:18,
-   body:'家里换灯泡需要借梯子用半天，明天中午还，麻烦有的话私信一下，谢谢！',
-   imgs:1},
-  {id:'p3',cat:'邻里话题',catC:'o',cv:'o',ti:'小区西门早点摊搬哪里了？',a:'张叔',ac:'p',d:'09-01',l:212,m:54,
-   body:'连着两天没看到那个卖煎饼的大叔了，邻居们有消息吗？',
-   imgs:2},
-  {id:'p4',cat:'公告',catC:'gy',cv:'gy',ti:'关于中秋期间电梯检修的通知',a:'物业中心',ac:'gy',d:'08-31',l:331,m:16,
-   body:'按年度检修计划，3栋2单元电梯将于 9月8日 9:00-16:00 停梯检验，请高层住户提前安排出行。',
-   imgs:1},
-  {id:'p5',cat:'二手交易',catC:'br',cv:'p',ti:'转让儿童自行车一辆',a:'刘女士',ac:'p',d:'08-30',l:89,m:12,
-   body:'12寸儿童自行车，原价 380，现 80 转让，车况良好，附赠护具一套。',
-   imgs:1},
-  {id:'p6',cat:'公告',catC:'gy',cv:'br',ti:'9月社区健康义诊安排',a:'健康小屋',ac:'g',d:'08-29',l:472,m:31,
-   body:'本月15日、22日上午 9:00-11:30 在中心广场设义诊台，提供血压血糖免费测量。',
-   imgs:2},
-  {id:'p7',cat:'邻里话题',catC:'o',cv:'y',ti:'地下车库充电桩使用情况调查',a:'陈先生',ac:'y',d:'08-28',l:160,m:29,
-   body:'建议在 3栋负一层再增加 4 个充电桩，目前早晚高峰都排不上队。',
-   imgs:2},
-  {id:'p8',cat:'邻里话题',catC:'o',cv:'t',ti:'楼道堆的旧纸箱请尽快清理',a:'赵阿姨',ac:'o',d:'08-27',l:58,m:22,
-   body:'3栋一单元 18 楼，堆了好几个月了，容易引起火灾隐患，请尽快处理。',
-   imgs:1},
-  {id:'p9',cat:'二手交易',catC:'br',cv:'p',ti:'免费送几本育儿书籍',a:'孙老师',ac:'b',d:'08-26',l:241,m:35,
-   body:'《正面管教》《好妈妈胜过好老师》等共 8 本，自提免运费。',
-   imgs:3},
-  {id:'p10',cat:'公告',catC:'gy',cv:'b',ti:'垃圾分类督导员招募通知',a:'物业中心',ac:'gy',d:'08-25',l:312,m:18,
-   body:'每周二、四、六 7:00-9:00 在垃圾投放点值守，每位志愿者每月补贴 200 元。',
-   imgs:1}
-];
-var curPostId='p1';
-var postLike={}; /* 帖子点赞状态：id -> true/false */
-function openPost(id){curPostId=id;go('postDetail');}
-/* 帖子详情点赞：同步更新点赞数与红心状态后重渲染 */
-function togglePostLike(){
-  var p=POSTS.find(function(x){return x.id===curPostId;});
-  if(!p)return;
-  if(postLike[curPostId]){p.l--;postLike[curPostId]=false;}
-  else{p.l++;postLike[curPostId]=true;}
-  render();
-}
-/* 我的帖子：单帖操作（显示/隐藏、删除） */
-var postVis={}; /* 帖子显示状态：title -> true(显示)/false(隐藏)，缺省为显示 */
-var postDel={}; /* 帖子删除状态：title -> true(已删除) */
-function togglePostVis(t){postVis[t]=(postVis[t]!==false)?false:true;render();}
-function delPost(t){postDel[t]=true;toast('帖子已删除');render();}
-
-/* 帖子评论：全局评论列表 + 评论输入弹层 */
-var postComments=[
-  {a:'小李',ac:'b',t:'想要，怎么联系？',d:'09-03 15:00',l:3},
-  {a:'王阿姨',ac:'o',t:'私信你啦~',d:'09-03 15:10',l:0,reply:true},
-  {a:'张叔',ac:'p',t:'这个牌子不错，值得入手。',d:'09-03 16:22',l:5}
-];
-var cmtReplyTo='';   /* 回复目标昵称，空串表示普通评论 */
-function openCommentBox(name){
-  cmtReplyTo=name||'';
-  render();
-  setTimeout(function(){var el=document.getElementById('cmtText');if(el)el.focus();},0);
-}
-function submitComment(){
-  var el=document.getElementById('cmtText');
-  var text=el?el.value.trim():'';
-  if(!text){toast('请输入评论内容');return;}
-  postComments.unshift({a:'我',ac:'g',t:(cmtReplyTo?'@'+cmtReplyTo+' ':'')+text,d:'刚刚',l:0});
-  var p=POSTS.find(function(x){return x.id===curPostId;});
-  if(p)p.m++;
-  cmtReplyTo='';
-  render();
-  toast('评论发布成功');
-}
-function postCard(p){
-  return '<div class="post-card" onclick="openPost(\''+p.id+'\')">'
-    +'<div class="post-cover bg-'+p.cv+'">'
-      + ic('img',38,'rgba(255,255,255,.9)',1.6)
-      +'<span class="pc-badge">'+p.cat+'</span>'
-      +(p.imgs>1?'<span class="pc-count">'+ic('img',11)+' '+p.imgs+'</span>':'')
-    +'</div>'
-    +'<div class="post-info">'
-      +'<div class="ti">'+p.ti+'</div>'
-      +'<div class="post-meta">'
-        +'<div class="post-author">'
-          +'<div class="avt-mini bg-'+p.ac+'">'+ic('me',10)+'</div>'
-          + p.a
-        +'</div>'
-        +'<div class="post-likes">'+ic('heart',11)+' '+p.l+'</div>'
-      +'</div>'
-    +'</div>'
-  +'</div>';
-}
-function postCards(list){
-  return '<div class="post-grid">'
-    + list.map(function(p){return postCard(p);}).join('')
-  +'</div>';
-}
-
-S.forumList={title:'社区贴吧',rightLabel:'我的发布',rightFn:'go(\'forumMyPosts\')',render:function(){
-  var list=POSTS;
-  var h='<div class="fbar">'
-      +'<div class="fb-in">'
-        +'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
-        +'<input placeholder="搜索帖子、用户、话题…">'
-      +'</div>'
-    +'</div>';
-  if(!list.length){
-    h+='<div class="pad">'+empty('post','暂无帖子','去发布第一条吧')+'</div>';
-  }else{
-    h+=postCards(list);
-  }
-  return h+hint('下拉加载更多')
-    + fab('go(\'postPublish\')');
-}};
-
-/* 我的发布（社区贴吧）：按帖子状态分组的个人发布列表 */
-S.forumMyPosts={title:'我的发布',render:function(){
-  return '<div class="grp">'
-  +'<div class="item noind" onclick="go(\'postDetail\')">'+thumb('','post',62,62)
-  +'<div class="it-bd"><div class="it-t">出一台九成新婴儿车</div><div class="it-s">提交 09-03 · 二手交易</div></div><span class="tag g">已发布</span></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'postDetail\')">'+thumb('o','post',62,62)
-  +'<div class="it-bd"><div class="it-t">免费送几本育儿书籍</div><div class="it-s">提交 08-26 · 二手交易</div></div><span class="tag g">已发布</span></div>'
-  +'</div>'
-  +'<div class="grp">'
-  +'<div class="item noind" onclick="go(\'postDetail\')">'+thumb('b','post',62,62)
-  +'<div class="it-bd"><div class="it-t">求助：谁家有多余的梯子</div><div class="it-s">提交 09-02 · 求助问答</div></div><span class="tag y">审核中</span></div>'
-  +'</div>'
-  +'<div class="grp">'
-  +'<div class="item noind" onclick="go(\'postEdit\')">'+thumb('gy','post',62,62)
-  +'<div class="it-bd"><div class="it-t">转让闲置跑步机</div><div class="it-s">提交 09-02 · 驳回：含敏感词</div></div><span class="tag r">已驳回</span></div>'
-  +'</div>'
-  +'<div style="height:8px"></div>';
-}};
-
-S.postDetail={title:'帖子详情',render:function(){
-  var p=POSTS.find(function(x){return x.id===curPostId;})||POSTS[0];
-  var comments=postComments;
-  return '<div class="pd-cover bg-'+p.cv+'">'
-    + ic('img',64,'rgba(255,255,255,.92)',1.6)
-    +'<div class="pd-dot">'+(p.imgs>1?'<i class="on"></i><i></i><i></i>':'<i class="on"></i>')+'</div>'
-  +'</div>'
-  +'<div class="pd-head">'
-    +'<div class="ti">'+p.ti+'</div>'
-    +'<div class="meta">'
-      +'<div class="avt bg-'+p.ac+'">'+ic('me',18)+'</div>'
-      +'<div class="info">'
-        +'<div class="nm">'+p.a+(p.cat==='公告'?' '+ic('shield',13):'')+'</div>'
-        +'<div class="sub">'+p.d+' · 阳光花园</div>'
-      +'</div>'
-      +'<div class="pd-actions">'
-        +'<div class="pd-like'+(postLike[p.id]?' on':'')+'" onclick="event.stopPropagation();togglePostLike()">'+ic(postLike[p.id]?'heartF':'heart',14)+'<span>'+p.l+'</span></div>'
-      +'</div>'
-    +'</div>'
-  +'</div>'
-  +'<div class="pd-body">'+p.body+'</div>'
-  +'<div class="pd-tags"><span class="tg">#'+p.cat+'</span><span class="tg">#阳光花园</span><span class="tg">#邻里互助</span></div>'
-  +'<div class="pd-cmt"><span>评论 '+p.m+'</span></div>'
-  + comments.map(function(c){
-      return '<div class="pd-citem">'
-        +'<div class="avt bg-'+c.ac+'">'+ic('me',15)+'</div>'
-        +'<div class="bd">'
-          +'<div class="nm">'+c.a+'</div>'
-          +'<div class="txt">'+c.t+'</div>'
-          +'<div class="meta">'
-            +'<span>'+c.d+'</span>'
-            +(c.reply?'<span class="reply" style="color:var(--brand)">作者</span>':'')
-            +'<span class="reply" onclick="openCommentBox(\''+c.a+'\')">回复</span>'
-          +'</div>'
-        +'</div>'
-      +'</div>';
-    }).join('')
-  +'<div style="height:64px"></div>'
-  +'<div class="pd-input">'
-    +'<input id="cmtText" type="text" placeholder="'+(cmtReplyTo?('回复 @'+cmtReplyTo+'…'):'说点什么…')+'" onkeydown="if(event.key===\'Enter\')submitComment()">'
-    +'<div class="send" onclick="submitComment()">发送</div>'
-  +'</div>';
-}};
-S.postPublish={title:'发布帖子',render:function(){
-  return '<div class="grp">'
-  + pfield('分类','postCat','请选择分类')
-  +'</div>'
-  +'<div class="grp"><div class="field"><input placeholder="标题（必填）"></div></div>'
-  + grpT('内容（必填）')
-  +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-  +'<textarea rows="6" placeholder="分享你的想法…"></textarea></div></div>'
-  + grpT('添加素材')
-  +'<div class="card"><div class="row" style="gap:10px">'
-  +'<div class="upbox" onclick="toast(\'上传图片，最多 9 张\')">'+ic('camera',20)+'<span class="n">图片 0/9</span></div>'
-  +'<div class="upbox" onclick="toast(\'上传视频，最多 1 个\')">'+ic('video',20)+'<span class="n">视频 0/1</span></div>'
-  +'</div></div>'
-  + btn('发布','toast(\'已提交，等待物业审核\');go(\'myPosts\')')
-  + hint('内容需经过敏感词过滤，通过后由物业后台审核');
+  + btn('提交报名','pickState.actSigned=true;toast(\'报名成功，已同步至物业后台\');go(\'mySignup\')');
 }};
 
 /* ================= 社区通知 ================= */
@@ -2143,7 +2012,15 @@ var NOTICES=[
   {id:'n3',ic:'cal',cls:'bg-br',t:'中秋节物业值班安排',s:'09-01 10:20',
    a:'物业服务中心',d:'09-01 10:20',un:false,
    h:'中秋节物业值班安排',
-   b:'各位业主：<br><br>中秋假期（9月13日-9月15日）期间，物业服务中心正常值班，时间为每天 8:30-20:00。<br><br>如遇紧急情况，请拨打 24 小时值班电话，或通过 APP 一键呼叫联系楼栋管家。'}
+   b:'各位业主：<br><br>中秋假期（9月13日-9月15日）期间，物业服务中心正常值班，时间为每天 8:30-20:00。<br><br>如遇紧急情况，请拨打 24 小时值班电话，或通过 APP 一键呼叫联系楼栋管家。'},
+  {id:'n4',ic:'info',cls:'bg-b',t:'社区健康小屋开放时间调整',s:'08-30 09:00 · 健康小屋',
+   a:'物业服务中心',d:'08-30 09:00',un:false,
+   h:'社区健康小屋开放时间调整',
+   b:'各位业主：<br><br>自 9 月 1 日起，社区健康小屋开放时间调整为每天 8:00-20:00，健康手环数据同步与一键呼叫服务同步开放。<br><br>如需测量血压、血脂等指标，可前往健康小屋自助使用。'},
+  {id:'n5',ic:'bell',cls:'bg-o',t:'关于小区垃圾分类投放点调整',s:'08-28 15:40',
+   a:'物业服务中心',d:'08-28 15:40',un:false,
+   h:'关于小区垃圾分类投放点调整',
+   b:'各位业主：<br><br>为提升垃圾分类投放效率，自 9 月 1 日起，3 栋与 5 栋之间的临时投放点取消，统一调整至各楼栋单元门口的分类投放点。<br><br>投放时间为每天 6:30-9:00、18:00-21:00，感谢配合。'}
 ];
 var curNotice='n1';
 function unreadN(){var n=0;for(var i=0;i<NOTICES.length;i++)if(NOTICES[i].un)n++;return n;}
@@ -2210,11 +2087,14 @@ var ORDERS=[
   {id:'TG20250601-005',type:2,t1:'周末半日托',qty:1,price:600,oPrice:720,date:'06-01 至 06-30',sub:'05-28 14:00',st:'done',pay:'已结算',tags:['周六半天']},
   {id:'PZ20250903-002',type:3,t1:'医院就诊全程陪诊 · 3 小时',qty:3,price:240,oPrice:240,date:'09-05 09:00',sub:'09-03 16:00',st:'pending',pay:'待支付',tags:['陪诊员·李阿姨','北京协和医院']},
   {id:'PZ20250820-006',type:3,t1:'体检陪诊 · 2 小时',qty:2,price:160,oPrice:180,date:'08-22 08:30',sub:'08-20 10:30',st:'done',pay:'已支付',tags:['陪诊员·王阿姨','301医院体检中心']},
-  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'refund',pay:'退款中',tags:['陪诊员·李阿姨','同济医院']}
+  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',tags:['陪诊员·李阿姨','同济医院']},
+  {id:'SH20250904-001',type:4,t1:'家政保洁 · 全屋深度清洁',qty:1,price:180,oPrice:180,date:'09-05 09:00',sub:'09-04 15:30',st:'active',pay:'线下收取',tags:['上门 09:00','3栋2单元-1802']},
+  {id:'SH20250902-003',type:4,t1:'空调维修 · 挂机加氟',qty:1,price:260,oPrice:260,date:'09-02 14:00',sub:'09-01 20:10',st:'done',pay:'线下收取',tags:['上门 14:00','师傅·王师傅']},
+  {id:'SH20250828-002',type:4,t1:'水电维修 · 厨房水管更换',qty:1,price:150,oPrice:150,date:'08-29 10:00',sub:'08-28 09:20',st:'cancel',pay:'已取消',tags:['上门 10:00']}
 ];
-var ordTypeLabels=['报餐单','托管单','陪诊单'];
-var ordTypeIcons={1:'sMeal',2:'sTrust',3:'sEscort'};
-var ordTypeCls={1:'b',2:'o',3:'g'};
+var ordTypeLabels=['报餐单','托管单','陪诊单','生活帮手单'];
+var ordTypeIcons={1:'sMeal',2:'sTrust',3:'sEscort',4:'sHelper'};
+var ordTypeCls={1:'b',2:'o',3:'g',4:'br'};
 function ordSummary(type){
   var list=type?ORDERS.filter(function(o){return o.type===type;}):ORDERS;
   var total=list.length,p=0,a=0,d=0,c=0,r=0;
@@ -2228,7 +2108,13 @@ function ordSummary(type){
   }
   return {total:total,p:p,a:a,d:d,c:c,r:r};
 }
-function ordStatusText(s){return s==='pending'?'待支付':s==='active'?'进行中':s==='done'?'已完成':s==='cancel'?'已取消':s==='refund'?'退款中':'-';}
+/* 状态名按订单类型区分（以需求文档为准）：
+   报餐单=已报餐/已取消/已完成；托管单=进行中/已取消/已完成；陪诊单=待支付/进行中/已完成/已取消；生活帮手单=进行中/已完成/已取消 */
+function ordStatusText(s,type){
+  if(type===1)return s==='done'?'已完成':s==='cancel'?'已取消':'已报餐';
+  if(type===2||type===4)return s==='done'?'已完成':s==='cancel'?'已取消':'进行中';
+  return s==='pending'?'待支付':s==='active'?'进行中':s==='done'?'已完成':s==='cancel'?'已取消':s==='refund'?'退款中':'-';
+}
 function ordStatusCls(s){return s==='pending'?'pending':s==='active'?'active':s==='done'?'done':s==='cancel'?'cancel':'refund';}
 /* 订单详情跳转映射 */
 function openOrder(id){
@@ -2237,7 +2123,9 @@ function openOrder(id){
   if(o.type===1){mealDemoStatus=o.st;go('orderMealDetail');}
   else if(o.type===2){trustDemoStatus=o.st;go('orderTrustDetail');}
   else if(o.type===3){escortDemoStatus=o.st;openEscortDetail(o.id);}
+  else if(o.type===4){helperDemoStatus=o.st;go('orderHelperDetail');}
 }
+var helperDemoStatus='active';
 /* 统一订单卡片渲染 */
 function orderCard(o){
   var stext=ordStatusText(o.st),scls=ordStatusCls(o.st);
@@ -2310,6 +2198,7 @@ function orderListHTML(type,sub,curTab){
       +'<div class="t'+(type===1?' on':'')+'" onclick="setOrdType(1)">报餐单</div>'
       +'<div class="t'+(type===2?' on':'')+'" onclick="setOrdType(2)">托管单</div>'
       +'<div class="t'+(type===3?' on':'')+'" onclick="setOrdType(3)">陪诊单</div>'
+      +'<div class="t'+(type===4?' on':'')+'" onclick="setOrdType(4)">生活帮手单</div>'
     +'</div>'
     +'<div class="ord-st">'+chips.join('')+'</div>'
     +(list.length?list.map(orderCard).join(''):'<div class="pad">'+empty('post','暂无相关订单','切换其他分类或筛选试试')+'</div>')
@@ -2337,6 +2226,10 @@ S.ordersEscort={tab:'orders',title:'订单',nav:false,render:function(){
   return topLg('订单','所有订单',[['wallet','','orderSettlement','']])
     + orderListHTML(3,'陪诊订单 · 暖心陪伴','ordersEscort');
 }};
+S.ordersHelper={tab:'orders',title:'订单',nav:false,render:function(){
+  return topLg('订单','所有订单',[['wallet','','orderSettlement','']])
+    + orderListHTML(4,'生活帮手订单 · 上门服务','ordersHelper');
+}};
 S.orderSearch={title:'订单搜索',nav:false,render:function(){
   return '<div class="mask"><div class="sheet">'
   +'<div class="sh"><div class="x" onclick="closePanel()">'+ic('x',20)+'</div><div class="t">搜索订单</div><div class="ok" onclick="toast(\'已应用筛选\');closePanel()">搜索</div></div>'
@@ -2348,7 +2241,7 @@ S.orderSearch={title:'订单搜索',nav:false,render:function(){
   +'<div class="bold" style="margin-bottom:10px;font-size:14px">订单类型</div><div class="qlist">'
   +'<div class="qbtn on">全部</div><div class="qbtn">报餐单</div><div class="qbtn">托管单</div><div class="qbtn">陪诊单</div></div></div></div>'
   +'<div class="pad"><button class="btn sec" onclick="toast(\'已重置\')">重置</button></div>'
-  +'<div class="pad">'+hint('搜索与筛选对 3 类订单同时生效')+'</div>'
+  +'<div class="pad">'+hint('搜索与筛选对 4 类订单同时生效')+'</div>'
   +'</div></div>';
 }};
 
@@ -2425,7 +2318,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
 var trustDemoStatus='active';
 S.orderTrustDetail={title:'托管单详情',render:function(){
   var st=trustDemoStatus;
-  var stext=ordStatusText(st),scls=ordStatusCls(st);
+  var stext=ordStatusText(st,2),scls=ordStatusCls(st);
   var payText={pending:'未支付',active:'未支付',done:'已结算',cancel:'已取消'}[st];
   var payCls={pending:'o',active:'o',done:'g',cancel:'gy'}[st];
 
@@ -2434,7 +2327,8 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
     btns=btn('订单结算','go(&apos;orderSettlement&apos;)')
       +'<div class="pad"><button class="btn acc" onclick="openAddReview(2)">'+ic('star',18)+' 服务评价</button></div>';
   }else if(st==='active'){
-    btns=btn('订单结算','go(&apos;orderSettlement&apos;)');
+    btns=btn('订单结算','go(&apos;orderSettlement&apos;)')
+      +'<div class="pad"><button class="btn sec" onclick="toast(&apos;订单开始时间前 1 小时可取消订单&apos;)">取消订单</button></div>';
   }else if(st==='done'){
     btns='<div class="pad"><button class="btn acc" onclick="openAddReview(2)">'+ic('star',18)+' 服务评价</button></div>';
   }
@@ -2457,7 +2351,7 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   +'<div class="ord-section"><div class="st">支付信息</div>'
   +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥1200.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
-  +'<div class="kv"><span class="k">支付方式</span><span class="v">/</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">提交：09-01 09:00<br>结算：—<br>取消：—</div></div>'
@@ -2470,7 +2364,7 @@ function openEscortDetail(no){curEscortOrder=no;go('orderEscortDetail');}
 
 S.orderEscortDetail={title:'陪诊单详情',render:function(){
   var st=escortDemoStatus;
-  var stext=ordStatusText(st),scls=ordStatusCls(st);
+  var stext=ordStatusText(st,3),scls=ordStatusCls(st);
   var payText={pending:'未支付',active:'已支付',done:'已支付',cancel:'已取消',refund:'退款中'}[st];
   var payCls={pending:'o',active:'g',done:'g',cancel:'gy',refund:'o'}[st];
   var hasEscort=(st==='active'||st==='done');
@@ -2481,7 +2375,9 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
     btns='<div class="btn-row"><button class="btn warn" style="flex:1" onclick="toast(&apos;取消需物业后台审核&apos;)">取消订单</button>'
        +'<button class="btn" style="flex:1" onclick="openEscortPay()">订单支付</button></div>';
   }else if(st==='active'){
-    btns='<div class="pad"><button class="btn" onclick="toast(&apos;正在呼叫 管家…&apos;)">'+ic('phone',18)+' 联系管家</button></div>';
+    btns='<div class="pad"><button class="btn" onclick="toast(&apos;正在呼叫 管家…&apos;)">'+ic('phone',18)+' 联系管家</button></div>'
+      +'<div class="pad" style="padding-top:0"><button class="btn warn" onclick="toast(&apos;打开收银台&apos;);go(&apos;payment&apos;)">支付附加账单 ¥60.00</button></div>'
+      +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="go(&apos;refund&apos;)">申请退款</button></div>';
   }else if(st==='done'){
     btns='<div class="pad"><button class="btn acc" onclick="openAddReview(3)">'+ic('star',18)+' 服务评价</button></div>';
   }
@@ -2508,10 +2404,53 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="kv"><span class="k">支付金额</span><span class="v pr">¥240.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
   +'<div class="kv"><span class="k">支付方式</span><span class="v">'+(paid?'支付宝':'/')+'</span></div>'
+  +'<div class="kv"><span class="k">附加费用</span><span class="v '+(st==='active'?'pr':'')+'">'+(st==='active'?'¥60.00（陪诊员已上传 · 待支付）':'¥0.00')+'</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">提交：2026-09-03 16:00<br>支付：'+(paid?'2026-09-03 16:05':'—')+'<br>取消：—</div></div>'
   + btns;
+}};
+S.orderHelperDetail={title:'生活帮手单详情',render:function(){
+  var st=helperDemoStatus;
+  var stext=ordStatusText(st,4),scls=ordStatusCls(st);
+  var btns='';
+  if(st==='active'){
+    btns='<div class="pad"><button class="btn sec" onclick="toast(&apos;已提交取消申请，等待物业后台审核&apos;)">取消订单</button></div>';
+  }else if(st==='done'){
+    btns='<div class="pad"><button class="btn acc" onclick="openAddReview(4)">'+ic('star',18)+' 服务评价</button></div>';
+  }else{
+    btns='<div class="pad"><button class="btn sec" onclick="toast(&apos;已重新提交服务需求&apos;)">重新预约</button></div>';
+  }
+  return '<div class="ord-card" style="margin-top:12px">'
+  +'<div class="hd"><div class="l"><div class="ic br">'+ic('sHelper',18)+'</div>'
+  +'<div><div>生活帮手单</div><div class="no">#SH20250904-001</div></div></div>'
+  +'<div class="st s-'+scls+'">'+stext+'</div></div>'
+  +'<div class="bd">'
+  +'<div class="ti">家政保洁 · 全屋深度清洁<span class="qty">· 1 次</span></div>'
+  +'<div class="meta"><div class="m">'+ic('clock',11)+'上门时间：09-05 09:00</div><div class="m">'+ic('pin',11)+'提交：2026-09-04 15:30</div></div>'
+  +'<div class="sum"><div class="l">服务数量 <b>1</b> 次</div><div><span class="pn">¥180.00</span></div></div>'
+  +'</div></div>'
+  +'<div class="ord-section"><div class="st">服务信息</div>'
+  +'<div class="kv"><span class="k">服务标题</span><span class="v b">家政保洁 · 全屋深度清洁</span></div>'
+  +'<div class="kv"><span class="k">服务数量</span><span class="v">1 次</span></div>'
+  +'<div class="kv"><span class="k">服务价格</span><span class="v">¥180.00</span></div>'
+  +'<div class="kv"><span class="k">上门时间</span><span class="v">09-05 09:00</span></div>'
+  +'<div class="kv"><span class="k">服务地址</span><span class="v">阳光花园 3栋2单元-1802（认证房号）</span></div>'
+  +'</div>'
+  +(st!=='cancel'
+   ?'<div class="ord-section"><div class="st">服务人员</div>'
+    +'<div class="kv"><span class="k">服务人员</span><span class="v" style="display:flex;align-items:center;gap:8px">王师傅<div class="cell-call" style="width:24px;height:24px" onclick="event.stopPropagation();toast(&apos;正在呼叫 王师傅…&apos;)">'+ic('phone',13,'#fff')+'</div></span></div>'
+    +'<div class="kv"><span class="k">联系电话</span><span class="v">138 0000 1234</span></div>'
+    +'</div>'
+   :'')
+  +'<div class="ord-section"><div class="st">金额信息</div>'
+  +'<div class="kv"><span class="k">订单金额</span><span class="v pr">¥180.00</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">线上不做订单支付，由线下收取</span></div>'
+  +'</div>'
+  +'<div class="ord-section"><div class="st">订单日志</div>'
+  +'<div class="log">下单：2026-09-04 15:30<br>支付：—（线下收取）<br>完成：'+(st==='done'?'2026-09-05 11:20':'—')+'<br>取消：'+(st==='cancel'?'2026-09-04 18:00':'—')+'</div></div>'
+  + btns
+  + hint('取消订单需在上门服务时间前申请，由物业后台审核通过后生效；涉及材料费由线下收取');
 }};
 
 /* ================= 结算 / 评价 / 退款 ================= */
@@ -2664,17 +2603,8 @@ S.addReview={title:'添加评价',render:function(){
       +stars
       +'<div class="rv-score-txt">'+scoreTxt+'</div>'
     +'</div>'
-    + grpT('说说这次服务的感受（选填）')
-    +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-      +'<textarea id="rvText" rows="4" placeholder="服务是否专业？态度是否亲切？分享给邻居们参考…"></textarea></div></div>'
-    + grpT('添加标签')
-    +'<div class="grp" style="padding:14px 12px">'+tagHtml+'</div>'
-    + grpT('上传图片（选填）')
-    +'<div class="grp" style="padding:14px 12px"><div class="rv-imgs">'
-      +'<div class="rv-img-add" onclick="toast(\'打开相册添加图片\')">'+ic('plus',22)+'</div>'
-    +'</div></div>'
     + btn('提交评价','submitReview()','acc')
-    + hint('提交后评价将公开展示，帮助更多邻居选择服务');
+    + hint('服务评价仅支持 1-5 星评分，不做文字与图片评价');
 }};
 S.refund={title:'退款申请',render:function(){
   return '<div class="pad" style="padding-top:12px">'
@@ -2709,9 +2639,9 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   +'</div>'
   /* ③ 我的服务 */
   + grp([
+    {ic:'wallet',icls:'bg-t',t:'顾好家币',s:'余额 ¥868.00 · 可用于托管、报餐支付',ar:1,on:'go(\'coin\')'},
     {ic:'yen',icls:'bg-o',t:'我的账单',s:'报餐 / 托管两类账单',ar:1,on:'go(\'bill\')'},
     {ic:'signup',icls:'bg-y',t:'我的报名',s:'社区活动报名记录',ar:1,on:'go(\'mySignup\')'},
-    {ic:'post',icls:'bg-in',t:'我的帖子',s:'我发布的邻里帖子与互动',ar:1,on:'go(\'myPosts\')'},
     {ic:'sHelper',icls:'bg-br',t:'我的需求',s:'生活帮手需求进度跟进',ar:1,on:'needCert(\'myHelper\')'},
     {ic:'msg',icls:'bg-b',t:'系统消息',s:'服务通知与账单提醒',ar:1,on:'go(\'sysMsg\')',badge:sysMsgBadge()}
   ],'我的服务')
@@ -2749,6 +2679,56 @@ S.personInfo={title:'个人信息',render:function(){
 }};
 
 /* ================= 我的账单 ================= */
+/* ================= 顾好家币（账户余额 / 充值 / 明细） ================= */
+S.coin={title:'顾好家币',render:function(){
+  return '<div class="card" style="margin:14px var(--pad);background:linear-gradient(135deg,#2BC4A0,#17A88A);color:#fff;padding:20px 18px">'
+  +'<div style="font-size:13px;opacity:.9">账户余额</div>'
+  +'<div style="font-size:32px;font-weight:700;margin:8px 0 16px;letter-spacing:-.5px">¥ 868.00</div>'
+  +'<div style="display:flex;gap:10px">'
+  +'<div style="flex:1;background:rgba(255,255,255,.2);border-radius:12px;padding:11px 0;text-align:center;font-size:14px;font-weight:600;cursor:pointer" onclick="go(\'coinRecharge\')">账户充值</div>'
+  +'<div style="flex:1;background:rgba(255,255,255,.2);border-radius:12px;padding:11px 0;text-align:center;font-size:14px;font-weight:600;cursor:pointer" onclick="go(\'coinDetail\')">账户明细</div>'
+  +'</div></div>'
+  + grp([
+    {ic:'sTrust',icls:'bg-o',t:'托管单支付',s:'下单按最高价预收，结算后退差价',ar:1,on:'go(\'ordersTrust\')'},
+    {ic:'sMeal',icls:'bg-b',t:'报餐单支付',s:'下单即扣，结算后退差价',ar:1,on:'go(\'orders\')'}
+  ],'余额可用于')
+  + hint('顾好家币可用于托管单、报餐单支付；每月 1 号结算上月账单后，差价自动退还至账户余额');
+}};
+S.coinRecharge={title:'账户充值',render:function(){
+  return grpT('充值金额')
+  +'<div class="grp"><div class="field"><span class="lb">金额</span><input placeholder="请输入充值金额" type="tel"></div></div>'
+  +'<div class="pad"><div class="qlist">'
+  +'<div class="qbtn">¥100</div><div class="qbtn">¥300</div><div class="qbtn">¥500</div><div class="qbtn">¥1000</div></div></div>'
+  + grpT('支付方式')
+  +'<div class="grp">'
+  +'<div class="cell tap" onclick="pickPay(\'wechat\')"><div class="cell-ic bg-g">'+ic('wechat',17)+'</div><div class="cell-bd"><div class="cell-t">微信支付</div></div>'
+  +(payMethod==='wechat'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell tap" onclick="pickPay(\'alipay\')"><div class="cell-ic bg-b">'+ic('alipay',17)+'</div><div class="cell-bd"><div class="cell-t">支付宝支付</div></div>'
+  +(payMethod==='alipay'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
+  +'</div>'
+  +'<div class="pad"><button class="btn" onclick="toast(\'支付成功，账户已充值\');back()">确认充值</button></div>'
+  + hint('充值金额即时到账，顾好家币可用于平台内托管单、报餐单支付');
+}};
+var COIN_LOG=[
+  {t:'结算返还',a:126.00,d:'2026-09-01 10:00',sign:'+'},
+  {t:'托管单支出',a:1200.00,d:'2026-09-01 09:00',sign:'-'},
+  {t:'报餐单支出',a:36.00,d:'2026-08-31 17:30',sign:'-'},
+  {t:'余额充值',a:500.00,d:'2026-08-28 14:20',sign:'+'},
+  {t:'托管单支出',a:980.00,d:'2026-07-01 15:20',sign:'-'},
+  {t:'报餐单支出',a:18.00,d:'2026-06-30 11:05',sign:'-'}
+];
+S.coinDetail={title:'账户明细',render:function(){
+  var cur=segState.coinLog||0;
+  var list=COIN_LOG.filter(function(x){return cur===0?true:(cur===1?x.sign==='+':x.sign==='-');});
+  return '<div class="pad">'+seg(['全部','收入','支出'],'coinLog')+'</div>'
+  +'<div class="grp">'+list.map(function(x,i){
+      return (i?'<div class="sep full"></div>':'')
+      +'<div class="cell"><div class="cell-bd"><div class="cell-t">'+x.t+'</div><div class="cell-s">'+x.d+'</div></div>'
+      +'<div class="cell-v" style="font-weight:600;color:'+(x.sign==='+'?'var(--green)':'var(--accent)')+'">'+x.sign+'¥'+x.a.toFixed(2)+'</div></div>';
+    }).join('')+'</div>'
+  + hint('变动类目：余额充值、托管单支出、报餐单支出、结算返还');
+}};
 S.bill={title:'我的账单',render:function(){
   var cur=segState.bill||0;
   if(cur===1){
@@ -2772,8 +2752,9 @@ S.bill={title:'我的账单',render:function(){
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">待结算合计</div></div>'
   +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1254.00</div></div>'
   +'</div>'
-  + grpT('托管单明细')
-  +'<div class="grp">'
+  +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldT=!pickState.billFoldT;render()"><span>托管单明细 · 共 6 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldT?'收起':'展开')+'</span></div>'
+  +(pickState.billFoldT
+  ?'<div class="grp">'
   +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">学期日托 · 9月服务费</div><div class="cell-s">09-01 09:00 · 全月托管</div></div><div class="cell-v" style="font-weight:600">¥1200.00</div></div>'
   +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末临时托管 · 半天</div><div class="cell-s">09-06 13:00 · 4 小时</div></div><div class="cell-v">¥0.00</div></div>'
@@ -2788,9 +2769,10 @@ S.bill={title:'我的账单',render:function(){
   +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">托管单小计</div><div class="cell-s">共 6 笔待结算</div></div>'
   +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1200.00</div></div>'
-  +'</div>'
-  + grpT('报餐单明细')
-  +'<div class="grp">'
+  +'</div>':'')
+  +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldM=!pickState.billFoldM;render()"><span>报餐单明细 · 共 7 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldM?'收起':'展开')+'</span></div>'
+  +(pickState.billFoldM
+  ?'<div class="grp">'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">09-04 10:20 · 午餐套餐</div></div><div class="cell-v" style="font-weight:600">¥36.00</div></div>'
   +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">09-01 12:10 · 午餐套餐</div></div><div class="cell-v">¥18.00</div></div>'
@@ -2807,8 +2789,8 @@ S.bill={title:'我的账单',render:function(){
   +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">报餐单小计</div><div class="cell-s">共 7 笔待结算</div></div>'
   +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥54.00</div></div>'
-  +'</div>'
-  +'<div class="btn-fixed">'+btn('结算账单','go(\'orderSettlement\')')+'</div>';
+  +'</div>':'')
+  + hint('账单结算无需用户操作：每月 1 号由物业后台完成预收核算并填写成本金额后，系统自动结算上月的托管单与报餐单，低于预收金额的部分自动退还差价');
 }};
 
 /* ================= 账单详情（已结算二级页 · 托管/报餐分 tab） ================= */
@@ -2848,7 +2830,7 @@ S.billDetail={title:'账单详情',render:function(){
 
 /* ================= 我的家庭 ================= */
 S.family={title:'我的家庭',render:function(){
-  return '<div class="pad">'+hint('每个房号最多绑定 3 个租户，家庭成员无限制')+'</div>'
+  return '<div class="pad">'+hint('每个房号最多绑定 5 个租户、5 个家庭成员；家庭成员与租户的角色权限没有区别')+'</div>'
   +'<div class="grp">'
   +'<div class="item noind" onclick="go(\'familyMembers\')"><div class="cell-ic bg-br">'+ic('home2',17)+'</div>'
   +'<div class="it-bd"><div class="it-t">阳光花园 3栋2单元-1802</div><div class="it-s">家庭成员 3 · 租户 1</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
@@ -2940,19 +2922,11 @@ S.myBand={title:'我的手环',render:function(){
   +'<div class="cell"><div class="cell-ic bg-br">'+ic('watch',17)+'</div>'
   +'<div class="cell-bd"><div class="cell-t">Mi Band 8</div><div class="cell-s">连接于 09-01 08:30</div></div><span class="tag g">已连接</span></div>'
   +'</div>'
-  + grpT('我的设备')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-gy">'+ic('watch',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">Huawei Band 7</div><div class="cell-s">未连接 · 最后同步 08-15</div></div>'
-  +'<button class="btn sec" style="width:auto;padding:7px 14px;font-size:14px;margin:0" onclick="toast(\'正在连接…\')">连接</button></div>'
-  +'</div>'
   + grp([
-    {ic:'trash',icls:'bg-r',t:'断开当前连接',ar:1,on:'toast(\'已断开连接，历史数据保留\')'},
-    {ic:'plus',icls:'bg-br',t:'添加设备',ar:1,on:'go(\'bandConnect\')'},
-    {ic:'pencil',icls:'bg-gy',t:'修改名称',s:'仅本系统内生效',ar:1,on:'go(\'bandRename\')'},
+    {ic:'trash',icls:'bg-r',t:'断开连接',ar:1,on:'toast(\'已断开连接，历史数据仍保留\')'},
     {ic:'chart',icls:'bg-b',t:'历史数据',ar:1,on:'go(\'healthData\')'}
   ],'设备管理')
-  + hint('可同时绑定多台手环，但只允许同时连接控制 1 台');
+  + hint('用户与手环的绑定依据授权的注册手机号码：与当前账号手机号一致即自动绑定并同步该账号下所有数据，因此一个账号只能绑定一个手环');
 }};
 
 /* ================= 报名 / 帖子 / 消息 ================= */
@@ -2962,58 +2936,9 @@ S.mySignup={title:'我的报名',render:function(){
   +'<div class="it-bd"><div class="it-t">中秋邻里联欢会</div><div class="it-s">活动时间 9-28 18:30 · 报名于 09-10</div></div><span class="tag g">报名成功</span></div>'
   +'</div>';
 }};
-S.myPosts={title:'我的帖子',render:function(){
-  var cur=segState.myPosts||0;
-  var list={0:[{t:'出一台九成新婴儿车',cat:'二手交易',cv:'br',s:'九成新，可坐可躺，车轮无磨损，自提可小刀',d:'09-03 14:20',l:12,m:3,tag:'g',tagT:'已发布',click:'postDetail'},
-               {t:'免费送几本育儿书籍',cat:'二手交易',cv:'br',s:'适合 0-3 岁，共 8 本，包邮，需要的邻居留言',d:'09-02 11:30',l:24,m:5,tag:'g',tagT:'已发布',click:'postDetail'},
-               {t:'中秋节拼车回乡',cat:'邻里话题',cv:'o',s:'中秋当天出发，还差 2 人，费用 AA',d:'09-01 18:00',l:8,m:2,tag:'g',tagT:'已发布',click:'postDetail'}],
-            1:[{t:'求购一辆二手电动车',cat:'二手交易',cv:'br',s:'预算 800 以内，续航 40km 以上，成色不限',d:'09-04 09:15',l:0,m:0,tag:'y',tagT:'审核中',click:''},
-               {t:'招合租室友（限女生）',cat:'邻里话题',cv:'o',s:'两室一厅主卧招租，拎包入住，非诚勿扰',d:'09-03 22:08',l:0,m:0,tag:'y',tagT:'审核中',click:''}],
-            2:[{t:'转让闲置跑步机',cat:'二手交易',cv:'br',s:'家用折叠款，功能完好，因搬家急转',d:'09-02 10:05',l:5,m:1,tag:'r',tagT:'已驳回',click:'postReject'}]}[cur]||[];
-  list=list.filter(function(x){return !postDel[x.t];});
-  var items=list.map(function(x){
-    var dim=(cur===0&&postVis[x.t]===false)?' dim':'';
-    var onclick=x.click?(' onclick="go(\''+x.click+'\')"'):'';
-    var key=x.t;
-    var stats='';
-    if(cur===1){ stats='<div class="mp-stats">'+ic('clock',12)+' 提交于 '+x.d+'</div>'; }
-    else{ stats='<div class="mp-stats">'+ic('heart',12)+' '+x.l+'<span class="dot"></span>'+ic('msg',12)+' '+x.m+'<span class="dot"></span>'+x.d+'</div>'; }
-    var tip='';
-    if(cur===1){ tip='<div class="mp-prog">'+ic('shield',13)+'审核预计 24 小时内完成，通过后将自动发布</div>'; }
-    else if(cur===2){ tip='<div class="mp-rj">'+ic('info',13)+'驳回原因：含敏感词，请修改后重新提交</div>'; }
-    var act='';
-    if(cur===0){
-      var vis=(postVis[key]!==false);
-      act='<div class="mp-ops">'
-        +'<div class="mp-vis"><span onclick="togglePostVis(\''+key+'\')">'+(vis?'显示':'已隐藏')+'</span>'+sw(vis,"togglePostVis('"+key+"')")+'</div>'
-        +'<div class="mp-del" onclick="delPost(\''+key+'\')">'+ic('trash',13)+' 删除</div>'
-        +'</div>';
-    }else if(cur===1){
-      act='<div class="mp-ops"><div class="mp-btn" onclick="toast(\'已撤回审核\')">'+ic('chevL',13)+' 撤回审核</div></div>';
-    }else{
-      act='<div class="mp-ops">'
-        +'<div class="mp-btn" onclick="go(\'postEdit\')">'+ic('pencil',13)+' 编辑后重新提交</div>'
-        +'<div class="mp-del" onclick="delPost(\''+key+'\')">'+ic('trash',13)+' 删除</div>'
-        +'</div>';
-    }
-    return '<div class="mp-card'+dim+'">'
-      +'<div class="mp-head"'+onclick+'>'
-        +'<div class="mp-bd"><div class="mp-ti">'+x.t+'</div>'
-          +'<div class="mp-meta"><span class="mp-cat">'+x.cat+'</span><span>'+x.d+'</span></div>'
-        +'</div>'
-        +'<span class="mp-pill '+x.tag+'"><i></i>'+x.tagT+'</span>'
-      +'</div>'
-      +'<div class="mp-sub"'+onclick+'>'+x.s+'</div>'
-      +tip
-      +'<div class="mp-foot">'+stats+act+'</div>'
-      +'</div>';
-  }).join('');
-  return '<div class="pad">'+seg(['已发布','审核中','已驳回'],'myPosts')+'</div>'
-  + (list.length?'<div style="margin:0 var(--pad) 14px">'+items+'</div>':'<div class="empty">'+ic('post',30,'#999')+'<div class="et">暂无'+['已发布','审核中','已驳回'][cur]+'帖子</div><div class="es">发布帖子后将在此处展示</div></div>');
-}};
-S.myHelper={title:'我的需求',render:function(){
+S.myHelper={title:'生活帮手订单',render:function(){
   return '<div class="grp">'
-  +'<div class="item noind" onclick="go(\'helperDetail\')"><div class="cell-ic bg-br">'+ic('sHelper',17)+'</div>'
+  +'<div class="item noind" onclick="go(\'orderHelperDetail\')"><div class="cell-ic bg-br">'+ic('sHelper',17)+'</div>'
   +'<div class="it-bd"><div class="it-t">水管维修</div><div class="it-s">提交 09-02 11:20 · 类型：维修</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
   +'<div class="sep full"></div>'
   +'<div class="item noind" onclick="go(\'helperDetail\')"><div class="cell-ic bg-br">'+ic('sHelper',17)+'</div>'
@@ -3088,8 +3013,9 @@ S.moneyBag={title:'小区钱袋子',render:function(){
     +'</div></div>'
     + grpT('收支明细')
     +'<div class="mb-tabs">'
-      +'<div class="mb-t'+(moneyBagTab===0?' on':'')+'" onclick="moneyTab(0)">收入</div>'
-      +'<div class="mb-t'+(moneyBagTab===1?' on':'')+'" onclick="moneyTab(1)">支出</div>'
+      +'<div class="mb-t'+(moneyBagTab===0?' on':'')+'" onclick="moneyTab(0)">物业钱袋子</div>'
+      +'<div class="mb-t'+(moneyBagTab===1?' on':'')+'" onclick="moneyTab(1)">膳食钱袋子</div>'
+      +'<div class="mb-t'+(moneyBagTab===2?' on':'')+'" onclick="moneyTab(2)">托管钱袋子</div>'
     +'</div>'
     +'<div class="grp">'
     + list.map(function(x,i){
@@ -3179,10 +3105,9 @@ var payMethod='alipay';   /* 当前选中支付方式 'alipay' | 'wechat' */
 function pickPay(m){payMethod=m;render();}
 function payNow(){if(payCtx&&payCtx.label==='陪诊单')escortDemoStatus='active';go('payResult');}
 function openEscortPay(){
-  var hours=(pickState.escortHours===undefined?3:pickState.escortHours);
-  hours=Math.max(1,Math.min(99,hours));
-  var amount=hours*80;
-  payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+hours+' 小时',no:'PZ20250905-001',count:'1 单'};
+  var dur=(pickState.escortDur===undefined?0:pickState.escortDur);
+  var amount=(dur===0?320:560);
+  payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+(dur===0?'半天（4 小时）':'一天（8 小时）'),no:'PZ20250905-001',count:'1 单'};
   payMethod='alipay';
   go('payment');
 }
@@ -3425,8 +3350,8 @@ var SYS_MSGS=[
    h:'8 月托管账单已结算',b:'您的 8 月托管服务账单已完成结算，合计金额 ¥1200.00，结算时间 2026-08-01。您可前往「我的-我的账单」查看结算明细。'},
   {id:'m8',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'07-01 18:00 · 来自账务系统',un:false,
    h:'7 月托管账单已结算',b:'您的 7 月托管服务账单已完成结算，合计金额 ¥1200.00，结算时间 2026-07-01。您可前往「我的-我的账单」查看结算明细。'},
-  {id:'m4',cat:1,ic:'shield',cls:'bg-g',t:'房屋认证审核通过',s:'09-01 16:20 · 来自审核系统',un:true,
-   h:'房屋认证审核通过',b:'您提交的「阳光花园 3栋2单元-1802」房屋认证已审核通过。认证通过后您可使用报餐、托管、一键呼叫等社区专属服务。'}
+  {id:'m4',cat:1,ic:'wallet',cls:'bg-g',t:'账单退还结果',s:'09-01 16:20 · 来自结算系统',un:true,
+   h:'7 月账单差价已退还',b:'您 7 月的报餐单与托管单已完成结算核算，退还差价 ¥126.00 已退回至顾好家币账户余额，可前往「我的-我的账单」查看结算明细。'}
 ];
 var curSysMsg='m1';
 function sysMsgUnread(){var n=0;for(var i=0;i<SYS_MSGS.length;i++)if(SYS_MSGS[i].un)n++;return n;}
@@ -3441,8 +3366,8 @@ function readAllSysMsg(){for(var i=0;i<SYS_MSGS.length;i++)SYS_MSGS[i].un=false;
 S.sysMsg={title:'系统消息',render:function(){
   if(segState.sysMsg===undefined)segState.sysMsg=0;
   var ci=segState.sysMsg;
-  var list=SYS_MSGS.filter(function(x){return ci===0||x.cat===ci-1;});
-  return seg(['全部','系统通知','服务提醒','账单提醒'],'sysMsg')
+  var list=SYS_MSGS.filter(function(x){return ci===0?x.cat===0:x.cat===1;});
+  return seg(['订单消息','账单消息'],'sysMsg')
   +'<div class="grp">'
   + list.map(function(x,i){
       return (i?'<div class="sep full"></div>':'')
@@ -3462,7 +3387,7 @@ S.sysMsgDetail={title:'消息详情',render:function(){
   +'</div>'+hint('左右滑动可切换其他消息');
 }};
 function clearCache(){toast('缓存已清除，共释放 36.2MB');}
-function doLogout(){toast('已退出登录');hist=[];go('login');}
+function doLogout(){toast('已退出登录');hist=[];go('home');}
 S.delAccount={title:'注销账号',nav:false,render:function(){
   return dlg('warn','注销账号','注销后账号数据将无法恢复，确定要注销吗？','确认注销','go(\'delVerify\')','再想想');
 }};
@@ -3474,15 +3399,28 @@ S.delVerify={title:'注销账号',render:function(){
   +'<div class="inp-row"><input id="delCode" placeholder="请输入验证码" type="tel" value="123456"><button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
   +'</div>'
   +'<div class="pad"><button class="btn" onclick="doDelAccount()">确认注销</button></div>'
-  + hint('验证码将发送至注册手机号，校验通过后账号立即注销');
+  + hint('验证码将发送至注册手机号，校验通过后账号立即注销，账号数据全部移除。注销条件：当前账号所有账单已结清；若为认证户主账号，需先移交户主权限，由物业审核通过后完成移交');
 }};
 function doDelAccount(){
   var c=(document.getElementById('delCode')||{}).value||'';
   if(c!=='123456'){toast('验证码错误，请重新输入');return;}
   toast('账号已注销');hist=[];go('login');
 }
+S.about={title:'关于我们',render:function(){
+  return '<div class="pad" style="text-align:center;padding-top:30px">'
+  +'<div style="width:64px;height:64px;border-radius:16px;background:linear-gradient(145deg,#5AD1B5,#17A88A);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:#fff">'+ic('home2',32,'#fff',1.7)+'</div>'
+  +'<div class="bold" style="font-size:19px">顾好家</div>'
+  +'<div class="sub" style="margin-top:6px">当前版本 '+APP_VER+'</div></div>'
+  +'<div class="pad"><div class="card"><div class="sub" style="font-size:14px;line-height:1.8;color:var(--label)">顾好家是面向社区居民的一站式生活服务平台，围绕健康、膳食、托管、陪诊与生活帮手等日常需求，联合物业与社区服务资源，为业主提供便捷、可信的社区服务体验。</div></div></div>'
+  + grp([
+    {ic:'sync',icls:'bg-t',t:'版本号',v:APP_VER,on:'toast(\'当前已是最新版本\')'},
+    {ic:'doc',icls:'bg-in',t:'用户协议',ar:1,on:'go(\'agreement\')'},
+    {ic:'shield',icls:'bg-br',t:'隐私政策',ar:1,on:'go(\'privacy\')'}
+  ],'版本与协议');
+}};
 S.settings={title:'系统设置',render:function(){
   return grp([
+    {ic:'info',icls:'bg-b',t:'关于我们',s:'平台介绍与版本信息',ar:1,on:'go(\'about\')'},
     {ic:'lock',icls:'bg-b',t:'隐私设置',s:'授权管理与个人信息',ar:1,on:'go(\'privacy\')'},
     {ic:'doc',icls:'bg-in',t:'用户协议',ar:1,on:'go(\'agreement\')'},
     {ic:'shield',icls:'bg-br',t:'隐私政策',ar:1,on:'go(\'privacy\')'}
@@ -3522,44 +3460,6 @@ S.privacy={title:'隐私政策',render:function(){
 }};
 
 /* ================= 内容编辑 / 驳回（补充页面） ================= */
-S.postEdit={title:'编辑帖子',render:function(){
-  return '<div class="pad">'+hint('修改后需重新进行敏感词比对，并由物业后台重新审核，审核通过后修改完成')+'</div>'
-  +'<div class="grp">'
-  + pfield('分类','postCat','请选择分类')
-  +'</div>'
-  +'<div class="grp"><div class="field"><input placeholder="标题（必填）" value="出一台九成新婴儿车"></div></div>'
-  + grpT('内容（必填）')
-  +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-  +'<textarea rows="6">宝宝长大了，婴儿车闲置转让。九成新，可折叠，带遮阳篷和置物篮，品牌是好孩子，购于去年，原价 899 元。自提优先，可小刀，有意向的邻居请私信。</textarea></div></div>'
-  + grpT('添加素材')
-  +'<div class="card"><div class="row" style="gap:10px">'
-  +'<div class="upbox" onclick="toast(\'上传图片，最多 9 张\')">'+ic('camera',20)+'<span class="n">图片 2/9</span></div>'
-  +'<div class="upbox" onclick="toast(\'上传视频，最多 1 个\')">'+ic('video',20)+'<span class="n">视频 0/1</span></div>'
-  +'</div></div>'
-  + btn('提交修改','toast(\'已提交，等待物业重新审核\');go(\'myPosts\')')
-  + hint('每次修改都需经过敏感词库比对与物业后台审核');
-}};
-S.postReject={title:'驳回原因',render:function(){
-  return '<div class="pad">'
-  +'<div class="card" style="background:rgba(255,59,48,.07)"><div class="row" style="gap:9px;align-items:flex-start">'
-  +'<span style="color:var(--red);flex-shrink:0;margin-top:1px">'+ic('warn',18)+'</span>'
-  +'<div><div class="bold" style="font-size:15px;color:#8A1C14">审核未通过</div>'
-  +'<div class="sub" style="color:#8A1C14;margin-top:6px;line-height:1.7">您的帖子内容涉及敏感词信息，暂不允许发布。请修改相关内容后重新提交审核。</div></div></div></div></div>'
-  + grpT('被驳回的帖子')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-gy">'+ic('post',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">转让闲置跑步机</div><div class="cell-s">提交 09-02 10:05 · 分类：二手交易</div></div><span class="tag r">已驳回</span></div>'
-  +'</div>'
-  + grpT('命中敏感词')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="color:var(--red)">低价急转</div><div class="cell-s">位于正文第 2 行</div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="color:var(--red)">加微信</div><div class="cell-s">位于正文第 4 行</div></div></div>'
-  +'</div>'
-  +'<div class="pad"><button class="btn" onclick="go(\'postEdit\')">修改并重新提交</button></div>'
-  +'<div class="pad"><button class="btn warn" onclick="toast(\'帖子已删除\');go(\'myPosts\')">删除帖子</button></div>'
-  + hint('修改后需重新经过敏感词比对与物业后台审核');
-}};
 S.hrEdit={title:'编辑信息',render:function(){
   return '<div class="pad">'+hint('修改后需重新进行敏感词比对，并由物业后台重新审核，审核通过后修改成功')+'</div>'
   +'<div class="grp"><div class="field"><input placeholder="标题（必填）" value="退休教师兼职家教"></div></div>'
