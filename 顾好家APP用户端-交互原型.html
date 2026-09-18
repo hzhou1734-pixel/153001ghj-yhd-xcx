@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.116';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.117';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-18';
 
@@ -1185,11 +1185,11 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'<div class="row" style="gap:7px">'+ic('pin',17,'var(--brand)')+'<span class="bold" style="font-size:15px">'+CUR_COMMUNITY.name+' · '+CUR_COMMUNITY.detail+'</span></div>'
   +'<div class="row" style="gap:1px;color:var(--label2);font-size:13px">切换'+ic('chevR',14,'var(--label4)')+'</div></div>'
   +'<div class="carousel"><div class="track">'
-  + slide('sHealth','社区便民服务升级','家政、维修、代办一站式直达','linear-gradient(135deg,#4FD8BC,#17A88A)')
-  + slide('sEscort','健康小屋义诊活动','专业医生驻点，免费健康咨询','linear-gradient(135deg,#FF9E73,#F2642A)')
-  + slide('sTrust','暑期托管开始报名','放心托管，寓教于乐过暑假','linear-gradient(135deg,#7CC0F5,#3A8FD1)')
-  + slide('sMeal','适老营养餐上线','低油低盐，每日新鲜配送','linear-gradient(135deg,#C9B4F7,#8E5FE0)')
-  + slide('sHelper','生活帮手随时响应','管家上门，需求快速跟进','linear-gradient(135deg,#5AC8FA,#0A84FF)')
+  + slide('sHealth','社区便民服务升级','家政、维修、代办一站式直达','linear-gradient(135deg,#4FD8BC,#17A88A)','helperList')
+  + slide('sEscort','健康小屋义诊活动','专业医生驻点，免费健康咨询','linear-gradient(135deg,#FF9E73,#F2642A)','healthHome')
+  + slide('sTrust','暑期托管开始报名','放心托管，寓教于乐过暑假','linear-gradient(135deg,#7CC0F5,#3A8FD1)','trusteeship')
+  + slide('sMeal','适老营养餐上线','低油低盐，每日新鲜配送','linear-gradient(135deg,#C9B4F7,#8E5FE0)','meal')
+  + slide('sHelper','生活帮手随时响应','管家上门，需求快速跟进','linear-gradient(135deg,#5AC8FA,#0A84FF)','escortList')
   +'</div><div class="dot"><i class="on"></i><i></i><i></i><i></i><i></i></div></div>'
   +'<div class="notice" onclick="go(\'noticeList\')"><div class="nb">'+ic('bell',13,'#fff')+'</div>'
   +'<div class="nx">本周六小区供水检修，请提前储水…</div><div class="nt">09-04</div></div>'
@@ -1198,7 +1198,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   + svc('sHealth','健康小屋','healthHome','g')+svc('sEscort','陪诊服务','escortList','o',1)
   + svc('sTrust','托管服务','trusteeship','b',1)+svc('sMeal','健康膳食','meal','p',1)
   + svc('sProp','物业服务','物业服务系统','',0,'mini')+svc('sHelper','生活帮手','helperList','y',1)
-  + svc('sCall','一键呼叫','emergencyCall','r')+svc('sMore','更多服务','community','')
+  + svc('sCall','一键呼叫','emergencyCall','r')
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+actItems(ACTIVITIES.filter(function(a){return a.st==='报名中';}))+'</div>'
@@ -1207,7 +1207,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'<div class="it-bd"><div class="it-t">垃圾分类新指南来了</div><div class="it-s">09-03 · 物业服务中心</div></div>'
   +ic('chevR',16,'var(--label4)')+'</div></div>';
 }};
-function slide(i,t,s,bg){return '<div class="sl" style="background:'+bg+'"><div class="em">'+ic(i,32,'#fff',1.9)+'</div>'
+function slide(i,t,s,bg,to){return '<div class="sl" style="background:'+bg+'" onclick="'+(to?'go(\''+to+'\')':'toast(\'该轮播暂未配置跳转\')')+'"><div class="em">'+ic(i,32,'#fff',1.9)+'</div>'
   +'<div class="tx"><div class="t">'+t+'</div><div class="s">'+s+'</div></div></div>';}
 /* need=true 时该服务需业主认证，未认证自动引导至认证页 */
 function svc(i,t,id,cls,need,mode){var fn=mode==='mini'?'goMini(\''+(id||t)+'\')':(need?'needCert(\''+id+'\')':'go(\''+id+'\')');return '<div class="svc" onclick="'+fn+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
@@ -1281,9 +1281,19 @@ S.regProfile={title:'完善资料',render:function(){
   +'<div class="grp">'+ pfield('小区','regCommunity','请选择') +'</div>'
   +'<div class="pad"><button class="btn" onclick="go(\'home\')">完成</button></div>';
 }};
-S.wechatBind={title:'绑定微信',nav:false,render:function(){
-  return dlg('share','绑定微信','绑定后可使用微信快捷登录，也可在个人中心再次绑定','授权绑定','go(\'regProfile\')','以后再说');
+/* 微信授权登录后的手机号码授权绑定：验证码校验通过即完成注册 */
+S.wechatBind={title:'绑定手机号码',render:function(){
+  return '<div class="pad">'+hint('微信授权登录成功，请绑定手机号码完成账号注册')+'</div>'
+  +'<div class="grp">'
+  +'<div class="inp-row"><input placeholder="请输入手机号码" type="tel"></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="inp-row"><input placeholder="请输入验证码" type="tel"><button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
+  +'</div>'
+  +'<div class="pad">'+agree('wx')+'</div>'
+  +'<div class="pad"><button class="btn" onclick="doBindPhone()">提交账号注册</button></div>'
+  +'<div class="pad">'+hint('验证码由阿里云短信服务下发，点击获取验证码后 60 秒可重新获取')+'</div>';
 }};
+function doBindPhone(){if(!chkAgree('wx'))return;toast('手机号码绑定成功');go('home');}
 /* 登录页与启动页共用同一套登录界面（直接渲染，禁止在 render 内二次 go() 导致 undefined 覆盖） */
 S.login   ={title:'',nav:false,render:authPage};
 function doLogin(){if(!chkAgree('log'))return;go('home');}
@@ -1311,7 +1321,7 @@ S.wechatLogin={title:'微信授权登录',render:function(){
   +'<div style="width:78px;height:78px;border-radius:22px;background:linear-gradient(145deg,#5AD1B5,#17A88A);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:#fff">'+ic('share',36,'#fff',1.7)+'</div>'
   +'<div class="bold" style="font-size:19px">微信授权登录</div>'
   +'<div class="sub" style="margin-top:9px;line-height:1.7">正在使用微信账号登录顾好家<br>请确认授权以继续</div></div>'
-  +'<div class="pad" style="padding-top:26px"><button class="btn" onclick="go(\'wechatFail\')">授权并登录</button></div>'
+  +'<div class="pad" style="padding-top:26px"><button class="btn" onclick="go(\'wechatBind\')">授权并登录</button></div>'
   +'<div class="pad"><button class="btn sec" onclick="back()">返回登录</button></div>'
   +'<div class="pad">'+hint('若该微信未绑定已注册账号，将提示暂未绑定账号无法登录')+'</div>';
 }};
@@ -1447,7 +1457,8 @@ S.communitySwitch={title:'我的小区',render:function(){
   +'<div class="item noind" onclick="toast(\'该小区还在审核中，通过后才能切换哦\')">'+thumb('b','home2',40,40,'')
   +'<div class="it-bd"><div class="it-t">玫瑰新城</div><div class="it-s">5栋1单元-0903 · 审核中</div></div><span class="tag o">审核中</span></div>'
   +'</div>'
-  + grp([{ic:'plus',icls:'bg-br',t:'添加认证小区',s:'选择小区提交认证申请',ar:1,on:'go(\'certify\')'}]);
+  + grp([{ic:'plus',icls:'bg-br',t:'添加认证小区',s:'选择小区提交认证申请',ar:1,on:'go(\'certify\')'}])
+  +'<div class="pad">'+hint('列表显示当前已认证的小区，可点击切换；审核中的小区需物业后台通过后才能切换，未认证小区将显示缺省内容')+'</div>';
 }};
 
 /* ================= 健康小屋 ================= */
@@ -1482,25 +1493,25 @@ S.bandConnect={title:'连接健康手环',render:function(){
   +'<div style="width:52px;height:52px;border-radius:15px;background:var(--fill);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--brand)">'+ic('bt',27)+'</div>'
   +'<div class="bold" style="font-size:16px">通过手机号自动匹配</div>'
   +'<div class="sub" style="margin-top:6px">健康手环为 4G 模块，无需蓝牙配对。<br>将使用注册手机号 138****6688 与手环厂商账号进行匹配</div>'
-  +'<button class="btn" style="margin-top:14px" onclick="pickState.bandOn=true;toast(\'匹配成功，已同步历史数据\');go(\'healthHome\')">授权并匹配</button></div></div>'
-  +'<div class="sect"><div class="t">搜索到的设备</div></div>'
+  +'<button class="btn" style="margin-top:14px" onclick="go(\'bandConnecting\')">去连接</button></div></div>'
+  +'<div class="sect"><div class="t">匹配流程</div></div>'
   +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-br">'+ic('watch',17)+'</div><div class="cell-bd"><div class="cell-t">Mi Band 8</div><div class="cell-s">信号强 · 可连接</div></div>'
-  +'<button class="btn" style="width:auto;padding:7px 15px;font-size:14px;margin:0" onclick="go(\'bandConnecting\')">连接</button></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-gy">'+ic('watch',17)+'</div><div class="cell-bd"><div class="cell-t">Huawei Band 7</div><div class="cell-s">信号中 · 可连接</div></div>'
-  +'<button class="btn sec" style="width:auto;padding:7px 15px;font-size:14px;margin:0" onclick="go(\'bandConnecting\')">连接</button></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">获取授权</div><div class="cell-s">授权查询手环厂商注册手机号</div></div><span class="tag g">已授权</span></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">手机号匹配</div><div class="cell-s">与手环厂商账号手机号一致即自动绑定</div></div><span class="tag br">待匹配</span></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">同步历史数据</div><div class="cell-s">绑定成功后自动同步该手环全部数据</div></div></div>'
   +'</div>'
   +'<div class="pad"><button class="btn sec" onclick="back()">取消连接</button></div>'
-  + hint('一个账号同时只能连接一台手环，断开后历史数据仍保留');
+  + hint('手环为 4G 模块，无需蓝牙搜索配对；一个账号同时只能连接一台手环，断开连接后历史数据仍保留，更换设备后新数据覆盖后续记录');
 }};
 S.bandConnecting={title:'连接健康手环',render:function(){
   return '<div class="pad" style="padding-top:70px;text-align:center">'
   +'<div style="width:74px;height:74px;border-radius:24px;background:var(--fill);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--brand)">'+ic('sync',36,'var(--brand)',1.7)+'</div>'
-  +'<div class="bold" style="font-size:17px">正在连接 Mi Band 8…</div>'
-  +'<div class="sub" style="margin-top:7px">正在搜索蓝牙信号并建立配对</div>'
-  +'<div class="sub" style="margin-top:26px">配对成功后将自动同步历史数据</div></div>'
-  +'<div class="pad" style="padding-top:22px"><button class="btn" onclick="toast(\'连接成功，正在同步历史数据…\');go(\'healthHome\')">模拟连接成功</button></div>'
+  +'<div class="bold" style="font-size:17px">正在匹配健康手环…</div>'
+  +'<div class="sub" style="margin-top:7px">正在通过注册手机号 138****6688 与手环厂商账号匹配</div>'
+  +'<div class="sub" style="margin-top:26px">匹配成功后将自动同步历史数据</div></div>'
+  +'<div class="pad" style="padding-top:22px"><button class="btn" onclick="pickState.bandOn=true;toast(\'匹配成功，正在同步历史数据…\');go(\'healthHome\')">模拟匹配成功</button></div>'
   +'<div class="pad"><button class="btn sec" onclick="toast(\'已取消连接\');back()">取消</button></div>';
 }};
 S.healthData={title:'实时健康数据',render:function(){
@@ -1508,9 +1519,10 @@ S.healthData={title:'实时健康数据',render:function(){
   +'<div class="row between" style="margin-bottom:12px;padding:0 4px"><span class="sub">更新于 09-04 09:30 · 每30分钟自动同步</span>'
   +'<span class="row" style="gap:3px;color:var(--brand);font-size:13px;font-weight:600;cursor:pointer" onclick="toast(\'已同步最新数据\')">'+ic('sync',14)+'同步</span></div>'
   + metric('pulse','心率','78','次/分','正常范围 60 - 100 次/分',false,62)
-  + metric('bp','血压','120/80','mmHg','收缩压 120 / 舒张压 80 · 正常',false,55)
-  + metric('drop','血脂','5.2','mmol/L','总胆固醇 · 甘油三酯 1.6 偏高',true,80)
-  +'</div>';
+  + metric('bp','血压','120/80','mmHg','正常范围 收缩压 90-139 / 舒张压 60-89 mmHg',false,55)
+  + metric('drop','血脂','5.2','mmol/L','正常范围 总胆固醇 3.1-5.2 / 甘油三酯 0.4-1.7 mmol/L · 甘油三酯 1.6 偏高',true,80)
+  +'</div>'
+  +'<div class="pad">'+hint('数据每 30 分钟自动同步一次，异常数据以红色标注；下拉可同步最新数据，历史数据永久保存')+'</div>';
 }};
 function metric(i,n,v,u,ref,ab,pct){
   return '<div class="metric tap" onclick="go(\'healthTrend\')"><div class="mh"><div class="mi" style="background:'+(ab?'var(--red)':'var(--brand)')+'">'+ic(i,15)+'</div>'
@@ -1534,10 +1546,16 @@ S.healthCompare={title:'健康数据对比',render:function(){
   +'<div style="flex:1;text-align:right"><div class="sub">本次</div><div class="bold" style="font-size:19px">'+d.now+'</div></div></div></div>'
   +'<div class="card"><div class="row between" style="margin-bottom:12px"><span class="bold">血压对比</span>'
   +'<span class="row" style="gap:4px;color:var(--'+(d.cls2==='g'?'green':'red')+');font-weight:700;font-size:14px">'+d.tag2+'</span></div>'
-  +'<div class="row" style="gap:0"><div style="flex:1"><div class="sub">'+d.bp.l+'</div><div class="bold" style="font-size:19px">'+d.bp.n+'</div></div>'
+  +'<div class="cover g" style="height:76px">'+ic('chart',30,'#fff',1.7)+'</div>'
+  +'<div class="row" style="gap:0;margin-top:12px"><div style="flex:1"><div class="sub">'+d.bp.l+'</div><div class="bold" style="font-size:19px">'+d.bp.n+'</div></div>'
   +'<div style="flex:1;text-align:center"><div class="sub">变化</div><div style="color:var(--'+(d.cls2==='g'?'green':'red')+');font-weight:700;font-size:19px">'+d.del2+'</div></div>'
   +'<div style="flex:1;text-align:right"><div class="sub">本次</div><div class="bold" style="font-size:19px">'+d.now2+'</div></div></div></div>'
-  +'<div class="pad"></div>';
+  +'<div class="card"><div class="row between" style="margin-bottom:12px"><span class="bold">血脂对比</span>'
+  +'<span class="row" style="gap:4px;color:var(--green);font-weight:700;font-size:14px">↓ 0.3 mmol/L</span></div>'
+  +'<div class="row" style="gap:0"><div style="flex:1"><div class="sub">上次</div><div class="bold" style="font-size:19px">5.5</div></div>'
+  +'<div style="flex:1;text-align:center"><div class="sub">变化</div><div style="color:var(--green);font-weight:700;font-size:19px">-0.3</div></div>'
+  +'<div style="flex:1;text-align:right"><div class="sub">本次</div><div class="bold" style="font-size:19px">5.2</div></div></div></div>'
+  +'<div class="pad">'+hint('变化幅度用箭头表示：上升红色、下降绿色；无历史数据时显示「暂无对比数据」')+'</div>';
 }};
 S.healthReport={title:'历史检测报告',render:function(){
   var TABS=['日报','周报','月报','年报','24小时','近七天','近30天'];
@@ -1585,7 +1603,7 @@ S.healthReport={title:'历史检测报告',render:function(){
     });
     h+='</div>';
   }
-  h+='<div class="pad">'+hint(cur<4?'日报 / 周报 / 月报 / 年报由系统定时自动生成':'24小时 / 近七天 / 近30天 为实时生成，可随时查看历史区间数据')+'</div>';
+  h+='<div class="pad">'+hint(cur<4?'日报 / 周报 / 月报 / 年报由系统定时自动生成，报告永久保存':'24小时 / 近七天 / 近30天 为实时生成，报告永久保存，可随时查看历史区间数据')+'</div>';
   return h;
 }};
 function openReport(n,s,sc){pickState.reportPick=n;pickState.reportPickS=s;pickState.reportPickSc=sc;go('reportDetail');}
@@ -1594,7 +1612,7 @@ S.healthRisk={title:'健康风险评估',render:function(){
   +'<div class="card" style="text-align:center;background:linear-gradient(135deg,#FFF6DC,#FFE9AC);padding:20px 16px">'
   +'<div class="sub" style="color:#8A6D00">综合风险等级</div>'
   +'<div style="font-size:34px;font-weight:800;color:#D4A017;margin:8px 0;letter-spacing:-.8px">中风险</div>'
-  +'<div class="sub" style="color:#8A6D00">评估每周自动更新一次</div></div></div>'
+  +'<div class="sub" style="color:#8A6D00">评估时间 09-01 · 每周自动更新一次</div></div></div>'
   +'<div class="sect"><div class="t">风险因素</div></div>'
   +'<div class="grp">'
   +'<div class="cell tap" onclick="go(\'riskFactor\')"><div class="cell-ic bg-o">'+ic('drop',17)+'</div>'
@@ -1610,17 +1628,26 @@ S.emergencyCall={title:'紧急呼叫',render:function(){
   return '<div class="pad" style="padding-top:56px;text-align:center">'
   +'<div style="width:168px;height:168px;border-radius:50%;background:linear-gradient(145deg,#FF9E73,#F2642A);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin:0 auto 22px;color:#fff;box-shadow:0 14px 34px rgba(242,100,42,.4);cursor:pointer" onclick="toast(\'正在呼叫 120 急救中心\')">'
   +ic('phone',44,'#fff',1.7)+'<span style="font-size:19px;font-weight:700">紧急呼叫</span></div>'
-  +'<div class="sub">点击直接调用系统拨号界面<br>呼叫号码由物业后台配置</div></div>';
+  +'<div class="sub">点击直接调用系统拨号界面<br>呼叫号码由物业后台配置</div></div>'
+  + grpT('预设急救电话')
+  +'<div class="grp">'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">急救中心</div><div class="cell-s">医疗急救</div></div><div class="cell-v">120</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">小区保安亭</div><div class="cell-s">物业 24 小时值班</div></div><div class="cell-v">0731-8888 6688</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">楼栋管家</div><div class="cell-s">王管家</div></div><div class="cell-v">138 0000 6688</div></div>'
+  +'</div>'
+  +'<div class="pad">'+hint('第三方手环收到的一键呼叫信息，平台能否收到由第三方手环决定')+'</div>';
 }};
 
 /* ================= 陪诊服务 ================= */
 /* 陪诊服务列表数据（由物业后台配置，列表页与详情页共用） */
 var ESCORT=[
-  {n:'医院就诊全程陪诊',d:'含挂号协助、问诊陪同、取药代领、报告解读',p:'¥80',u:'/ 小时',ph:320,pd:560,ic:'sEscort',cls:'bg-o',cov:'o',tag:'热门',tagc:'br'},
-  {n:'专家号预约陪诊',d:'三甲专家号预约 · 全程陪同就诊',p:'¥380',u:'/ 次',ph:380,pd:680,ic:'star',cls:'bg-y',cov:'y',tag:'专家',tagc:'y'},
-  {n:'体检全程陪检',d:'体检项目引导、排队取号、报告代取',p:'¥260',u:'/ 次',ph:260,pd:460,ic:'pulse',cls:'bg-r',cov:'r',tag:'体检',tagc:'r'},
-  {n:'夜间急诊陪诊',d:'夜间及节假日急诊陪同 · 2 小时起',p:'¥120',u:'/ 小时',ph:480,pd:960,ic:'sCall',cls:'bg-b',cov:'b',tag:'夜间',tagc:'b'},
-  {n:'代取药送药上门',d:'处方代取 · 药品配送到家',p:'¥60',u:'/ 次',ph:60,pd:60,ic:'sMeal',cls:'bg-g',cov:'g',tag:'代办',tagc:'g'}
+  {n:'医院就诊全程陪诊',d:'含挂号协助、问诊陪同、取药代领、报告解读',ph:320,pd:560,ic:'sEscort',cls:'bg-o',cov:'o',tag:'热门',tagc:'br'},
+  {n:'专家号预约陪诊',d:'三甲专家号预约 · 全程陪同就诊',ph:380,pd:680,ic:'star',cls:'bg-y',cov:'y',tag:'专家',tagc:'y'},
+  {n:'体检全程陪检',d:'体检项目引导、排队取号、报告代取',ph:260,pd:460,ic:'pulse',cls:'bg-r',cov:'r',tag:'体检',tagc:'r'},
+  {n:'夜间急诊陪诊',d:'夜间及节假日急诊陪同就医',ph:480,pd:960,ic:'sCall',cls:'bg-b',cov:'b',tag:'夜间',tagc:'b'},
+  {n:'代取药送药上门',d:'处方代取 · 药品配送到家',ph:60,pd:100,ic:'sMeal',cls:'bg-g',cov:'g',tag:'代办',tagc:'g'}
 ];
 S.escortList={title:'陪诊服务',render:function(){
   var h='';
@@ -1628,8 +1655,8 @@ S.escortList={title:'陪诊服务',render:function(){
     h+='<div class="item noind" onclick="openEscort('+i+')">'+thumb(e.cov,e.ic,54,54)
       +'<div class="it-bd"><div class="it-t">'+e.n+'<span class="tag '+e.tagc+'" style="margin-left:6px">'+e.tag+'</span></div>'
       +'<div class="it-s">'+e.d+'</div></div>'
-      +'<div style="text-align:right"><span class="price" style="font-size:16px">'+e.p+'</span>'
-      +'<div class="sub" style="font-size:11px;margin-top:2px">'+e.u+'</div></div></div>';
+      +'<div style="text-align:right;line-height:1.5"><div style="font-size:12px;color:var(--label3)">半天 <span class="price" style="font-size:15px">¥'+e.ph+'</span></div>'
+      +'<div style="font-size:12px;color:var(--label3)">整天 <span class="price" style="font-size:15px">¥'+e.pd+'</span></div></div></div>';
     if(i<ESCORT.length-1)h+='<div class="sep"></div>';
   });
   return '<div class="pad">'+hint('服务内容由各小区物业后台配置，切换小区后陪诊服务随之变化')+'</div>'
@@ -1682,7 +1709,9 @@ S.escortDetail={title:'服务详情',render:function(){
   +'<div class="row between" style="margin-bottom:6px"><div class="bold" style="font-size:21px;letter-spacing:-.4px">'+e.n+'</div>'
   +'<span class="tag '+e.tagc+'">'+e.tag+'</span></div>'
   +'<div class="sub">'+e.d+'</div>'
-  +'<div class="row" style="gap:5px;margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">'+e.p+'</span><span class="sub">'+e.u+'</span></div></div>'
+  +'<div class="row" style="gap:24px;margin-top:12px;align-items:baseline">'
+  +'<div><div class="sub" style="margin-bottom:3px">半天（4 小时）</div><span class="price" style="font-size:26px">¥'+e.ph+'</span></div>'
+  +'<div><div class="sub" style="margin-bottom:3px">整天（8 小时）</div><span class="price" style="font-size:26px">¥'+e.pd+'</span></div></div></div>'
   +'<div class="pad">'+hint('点击「立即预约」开始下单 · 可同时申请多个小区')+'</div>'
   + grp([{ic:'star',icls:'bg-y',t:'4.9 分 · 共 128 条评价',s:'点击查看用户真实评价',ar:true,on:'go(\'review\')'}])
   +'<div style="margin-top:6px"><div class="grp-t">服务详情</div>'+rich+'</div>'
@@ -1701,7 +1730,7 @@ S.escortBook={title:'服务预约',render:function(){
   var dh='';
   DL.forEach(function(x,i){dh+='<div class="slot'+(i===dur?' on':'')+'" onclick="pickEscortDur('+i+')"><div class="t">'+x[0]+'</div><div class="s">'+x[1]+'</div></div>';});
   var amount=(dur===0?ek.ph:ek.pd);
-  return '<div class="sect"><div class="t">'+ek.n+'</div><div class="m">'+ek.p+' '+ek.u+'</div></div>'
+  return '<div class="sect"><div class="t">'+ek.n+'</div><div class="m">半天 ¥'+ek.ph+' · 整天 ¥'+ek.pd+'</div></div>'
   + grpT('服务时长')
   +'<div class="card"><div class="slots">'+dh+'</div></div>'
   + grpT('陪诊日期（仅可选择未来 7 天内）')
