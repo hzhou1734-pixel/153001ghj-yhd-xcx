@@ -851,7 +851,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.159';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.160';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1719,9 +1719,8 @@ S.escortBook={title:'服务预约',render:function(){
   + grpT('医院地址')
   +'<div class="grp"><div class="field"><span class="lb">医院</span><input value="市第一人民医院" style="flex:1"></div></div>'
   + grpT('备注')
-  +'<div class="grp"><div class="field" style="flex-direction:column;align-items:stretch;gap:8px"><span class="lb">备注（选填，500 字内）</span>'
-  +'<textarea id="escortNote" maxlength="500" placeholder="如有特殊需求请在此说明" oninput="onEscortNote(this)" style="width:100%;min-height:84px;border:0;outline:0;resize:none;font:14px/1.5 inherit;color:var(--text);background:transparent">'
-  +(pickState.escortNote||'')+'</textarea>'
+  +'<div class="grp"><div class="field" style="flex-direction:column;align-items:stretch;gap:8px"><span class="lb">备注</span>'
+  +'<textarea id="escortNote" maxlength="500" placeholder="如有特殊需求请在此说明" oninput="onEscortNote(this)" style="width:100%;min-height:84px;border:0;outline:0;resize:none;font:14px/1.5 inherit;color:var(--text);background:transparent">'+(pickState.escortNote||'')+'</textarea>'
   +'<div class="sub" style="text-align:right"><span id="escortNoteCnt">'+((pickState.escortNote||'').length)+'</span>/500</div></div></div>'
   + grp([{t:'订单金额合计',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
   + btn('下一步','go(\'payment\')');
