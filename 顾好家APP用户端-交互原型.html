@@ -855,7 +855,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.183';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.184';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2373,9 +2373,9 @@ S.articleDetail={title:'资讯详情',render:function(){
 /* 订单数据：type 1=报餐 2=托管 3=陪诊；status: pending待支付 / active进行中 / done已完成 / cancel已取消 / refund退款中 */
 var ORDERS=[
   {id:'BC20250904-001',type:1,t1:'明日午餐',qty:2,price:36,oPrice:36,date:'09-05',sub:'09-04 10:20',st:'active',pay:'已确认',tags:['12:00送达','A套餐']},
-  {id:'BC20250902-008',type:1,t1:'昨日午餐',qty:1,price:18,oPrice:18,date:'09-03',sub:'09-02 11:05',st:'done',pay:'已结算',tags:['12:00送达','A套餐']},
+  {id:'BC20250902-008',type:1,t1:'昨日午餐',qty:1,price:18,oPrice:18,date:'09-03',sub:'09-02 11:05',st:'done',pay:'已结算',doneTime:'09-03 12:30',tags:['12:00送达','A套餐']},
   {id:'BC20250903-004',type:1,t1:'午餐 · 1 份',qty:1,price:18,oPrice:18,date:'09-04',sub:'09-03 09:40',st:'cancel',pay:'已取消',cancelTime:'09-03 14:25',tags:['12:00送达']},
-  {id:'BC20250901-002',type:1,t1:'今日晚餐',qty:2,price:36,oPrice:36,date:'09-01',sub:'08-31 17:30',st:'done',pay:'已结算',tags:['17:30送达','B套餐']},
+  {id:'BC20250901-002',type:1,t1:'今日晚餐',qty:2,price:36,oPrice:36,date:'09-01',sub:'08-31 17:30',st:'done',pay:'已结算',doneTime:'09-01 17:40',tags:['17:30送达','B套餐']},
   {id:'TG20250901-003',type:2,t1:'禄口一小课后托管',qty:1,price:1200,oPrice:1500,date:'10-01',sub:'09-01 09:00',st:'active',pay:'进行中',tags:['7岁·全日班','周一至周五']},
   {id:'TG20250701-011',type:2,t1:'暑期托',qty:1,price:980,oPrice:980,date:'07-01',sub:'07-01 15:20',st:'cancel',pay:'已取消',cancelTime:'07-01 16:10',tags:['8岁·全日班']},
   {id:'TG20250601-005',type:2,t1:'周末半日托',qty:1,price:600,oPrice:720,date:'06-01',sub:'05-28 14:00',st:'done',pay:'已结算',tags:['周六半天']},
@@ -2586,7 +2586,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">'+ordLog([['提交',(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')],['结算','—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—']])+'</div></div>'
+  +'<div class="log">'+ordLog([['提交',(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')],['结算','—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—'],['完成',(st==='done'&&curOrder&&curOrder.doneTime)?curOrder.doneTime:'—']])+'</div></div>'
   + btns;
 }};
 /* 托管单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
