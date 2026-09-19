@@ -64,7 +64,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
         justify-content:center;border:2px solid #fff;box-sizing:content-box;}
 
 /* 垂直节奏基线：块间距 12px / 分区标题上 20px 下 8px / 页面首元素 12px */
-.grp-t{font-size:13px;color:var(--label2);margin:20px var(--pad) 8px;letter-spacing:-.1px;}
+.grp-t{font-size:17px;font-weight:600;color:var(--label);margin:20px var(--pad) 10px;letter-spacing:-.3px;}
 .grp{background:var(--card);border-radius:var(--r);margin:0 var(--pad) 12px;overflow:hidden;}
 /* 标题栏之后的首个元素：统一 12px 留白（小字分区标题 / 大分区标题各减） */
 .nav + .grp,.nav + .card,.nav + .metric,.nav + .hero,.nav + .carousel,.nav + .notice,
@@ -72,6 +72,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .nav + .empty,.nav + .agree{margin-top:12px;}
 .nav + .sect{margin-top:6px;}
 .nav + .grp-t{margin-top:12px;}
+.rev-head{display:flex;align-items:center;justify-content:space-between;margin:14px var(--pad) 10px;}
+.rev-head .grp-t{margin:0;}
+.rev-more{display:flex;align-items:center;gap:2px;font-size:13px;font-weight:400;color:var(--label2);cursor:pointer;}
+.rev-more:active{opacity:.6;}
 /* 一级页大标题栏已自带 26px 渐变过渡，其下首个元素不再叠加留白 */
 .nav-lg + .pad{padding-top:0;}
 .nav-lg + .grp,.nav-lg + .card,.nav-lg + .metric,.nav-lg + .stat3,
@@ -856,7 +860,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.193';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.194';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1694,8 +1698,8 @@ S.escortDetail={title:'服务详情',render:function(){
   +'<div class="sub" style="margin-top:6px">'+e.d+'</div>'
   + escortPriceHtml(e)
   +'</div>'
-  +'<div class="grp-t" style="margin:14px var(--pad) 6px">用户评价</div>'
-  +'<div class="grp">'+revCards(3,true)+'</div>'
+  +'<div class="rev-head"><div class="grp-t">用户评价</div><div class="rev-more" onclick="go(\'review\')">查看更多'+ic('chevR',14)+'</div></div>'
+  +'<div class="grp">'+revCards(3)+'</div>'
   +'<div style="margin-top:6px"><div class="grp-t">服务详情</div>'+rich+'</div>'
   +'<div class="btn-fixed"><button class="btn" onclick="go(\'escortBook\')">立即预约</button></div>';
 }};
@@ -2166,9 +2170,9 @@ S.helperInfo={title:'服务详情',render:function(){
   +'<div class="sub" style="margin-top:6px">'+x.d+'</div>'
   +'<div class="row" style="margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">¥'+x.p+'</span>'
   +'<span class="sub" style="margin-left:6px">'+x.u+'</span></div></div>'
-  +'<div class="grp-t" style="margin:14px var(--pad) 6px">用户评价</div>'
-  +'<div class="grp">'+revCards(3,true)+'</div>'
-  +'<div class="grp-t" style="margin:6px var(--pad)">服务详情</div>'
+  +'<div class="rev-head"><div class="grp-t">用户评价</div><div class="rev-more" onclick="go(\'review\')">查看更多'+ic('chevR',14)+'</div></div>'
+  +'<div class="grp">'+revCards(3)+'</div>'
+  +'<div class="grp-t" style="margin:16px var(--pad) 10px">服务详情</div>'
   +'<div class="rich" style="padding:0 var(--pad)">'+x.info+'</div>'
   +'<div class="btn-fixed"><button class="btn" onclick="go(\'helper\')">立即预约</button></div>';
 }};
