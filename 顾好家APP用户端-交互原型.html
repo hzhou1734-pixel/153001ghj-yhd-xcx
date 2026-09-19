@@ -851,7 +851,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.157';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.158';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -3288,8 +3288,6 @@ S.payResult={title:'支付结果',nav:false,render:function(){
   +'<div class="bold" style="font-size:22px;letter-spacing:-.3px">支付成功</div>'
   +'<div class="sub" style="margin-top:8px">¥'+amt+' · '+mName+'支付</div></div>'
   +'<div class="grp" style="margin-top:22px">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">结算订单</div></div><div class="cell-v">'+c.count+'</div></div>'
-  +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">'+mName+'</div></div>'
   +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付时间</div></div><div class="cell-v">09-05 09:50</div></div>'
@@ -3297,8 +3295,7 @@ S.payResult={title:'支付结果',nav:false,render:function(){
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">交易单号</div></div><div class="cell-v" style="font-size:12.5px">20260905095000123456</div></div>'
   +'</div>'
   +'<div class="pad" style="padding-top:16px"><button class="btn" onclick="go(\'orders\')">查看订单</button></div>'
-  +'<div class="pad"><button class="btn sec" onclick="go(\'home\')">返回首页</button></div>'
-  +'<div class="pad">'+hint('已完成结算的订单可在订单详情中提交服务评价')+'</div>';
+  +'<div class="pad"><button class="btn sec" onclick="go(\'home\')">返回首页</button></div>';
 }};
 S.wechatFail={title:'微信登录',nav:false,render:function(){
   return '<div class="pad" style="padding-top:76px;text-align:center">'
