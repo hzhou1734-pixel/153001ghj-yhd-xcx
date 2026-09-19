@@ -856,7 +856,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.190';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.191';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2169,7 +2169,7 @@ S.helperInfo={title:'服务详情',render:function(){
   +'<div class="grp">'+revCards()+'</div>'
   +'<div class="grp-t" style="margin:6px var(--pad)">服务详情</div>'
   +'<div class="rich" style="padding:0 var(--pad)">'+x.info+'</div>'
-  +'<div class="pad"><button class="btn" onclick="go(\'helper\')">立即预约</button></div>';
+  +'<div class="btn-fixed"><button class="btn" onclick="go(\'helper\')">立即预约</button></div>';
 }};
 S.helper={title:'提交服务订单',render:function(){
   var hi=(pickState.helperType===undefined?0:pickState.helperType);
