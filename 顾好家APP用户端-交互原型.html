@@ -856,7 +856,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.192';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.193';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1694,7 +1694,8 @@ S.escortDetail={title:'服务详情',render:function(){
   +'<div class="sub" style="margin-top:6px">'+e.d+'</div>'
   + escortPriceHtml(e)
   +'</div>'
-  + grp([{ic:'star',icls:'bg-y',t:'用户评价',s:'点击查看',ar:true,on:'go(\'review\')'}])
+  +'<div class="grp-t" style="margin:14px var(--pad) 6px">用户评价</div>'
+  +'<div class="grp">'+revCards(3,true)+'</div>'
   +'<div style="margin-top:6px"><div class="grp-t">服务详情</div>'+rich+'</div>'
   +'<div class="btn-fixed"><button class="btn" onclick="go(\'escortBook\')">立即预约</button></div>';
 }};
@@ -2166,7 +2167,7 @@ S.helperInfo={title:'服务详情',render:function(){
   +'<div class="row" style="margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">¥'+x.p+'</span>'
   +'<span class="sub" style="margin-left:6px">'+x.u+'</span></div></div>'
   +'<div class="grp-t" style="margin:14px var(--pad) 6px">用户评价</div>'
-  +'<div class="grp">'+revCards()+'</div>'
+  +'<div class="grp">'+revCards(3,true)+'</div>'
   +'<div class="grp-t" style="margin:6px var(--pad)">服务详情</div>'
   +'<div class="rich" style="padding:0 var(--pad)">'+x.info+'</div>'
   +'<div class="btn-fixed"><button class="btn" onclick="go(\'helper\')">立即预约</button></div>';
@@ -2755,7 +2756,7 @@ S.orderSettlement={title:'订单结算',render:function(){
   +'</div>'
   + btn('立即结算','go(\'payment\')');
 }};
-function revCards(){
+function revCards(limit, showMore){
   /* 模拟评价数据：仅含头像首字、昵称、评星、评价时间，无文字与图片内容 */
   var REVIEWS=[
     {nm:'张**',t:'2026-09-04 14:30',score:5},
@@ -2764,8 +2765,9 @@ function revCards(){
     {nm:'赵**',t:'2026-08-25 16:42',score:5},
     {nm:'陈**',t:'2026-08-22 09:05',score:5}
   ];
+  var list=limit?REVIEWS.slice(0,limit):REVIEWS;
   var h='<div class="rev-list">';
-  REVIEWS.forEach(function(r){
+  list.forEach(function(r){
     var st='';for(var i=0;i<5;i++)st+=i<r.score?'<span>★</span>':'<span class="g">★</span>';
     h+='<div class="rev-card"><div class="hd">'
       +'<div class="ava">'+r.nm.charAt(0)+'</div>'
@@ -2773,7 +2775,13 @@ function revCards(){
       +'<div class="time">'+r.t.substring(5)+'</div>'
     +'</div></div>';
   });
-  return h+'</div>';
+  h+='</div>';
+  if(showMore && REVIEWS.length>list.length){
+    h+='<div class="sep full"></div>'
+      +'<div class="cell tap" onclick="go(\'review\')"><div class="cell-bd"><div class="cell-t">查看更多评价</div></div>'
+      +'<div class="cell-ar">'+ic('chevR',16)+'</div></div>';
+  }
+  return h;
 }
 S.review={title:'服务评价',render:function(){return revCards();}};
 /* ================= 添加评价（订单完成态入口） ================= */
