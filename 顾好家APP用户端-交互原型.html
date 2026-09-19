@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.125';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.126';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1620,9 +1620,9 @@ S.healthRisk={title:'健康风险评估',render:function(){
 var ESCORT=[
   {n:'医院就诊全程陪诊',d:'含挂号协助、问诊陪同、取药代领、报告解读',ph:320,pd:560,ic:'sEscort',cls:'bg-o',cov:'o',tag:'热门',tagc:'br'},
   {n:'专家号预约陪诊',d:'三甲专家号预约 · 全程陪同就诊',ph:380,pd:680,ic:'star',cls:'bg-y',cov:'y',tag:'专家',tagc:'y'},
-  {n:'体检全程陪检',d:'体检项目引导、排队取号、报告代取',ph:260,pd:460,ic:'pulse',cls:'bg-r',cov:'r',tag:'体检',tagc:'r'},
-  {n:'夜间急诊陪诊',d:'夜间及节假日急诊陪同就医',ph:480,pd:960,ic:'sCall',cls:'bg-b',cov:'b',tag:'夜间',tagc:'b'},
-  {n:'代取药送药上门',d:'处方代取 · 药品配送到家',ph:60,pd:100,ic:'sMeal',cls:'bg-g',cov:'g',tag:'代办',tagc:'g'}
+  {n:'体检全程陪检',d:'体检项目引导、排队取号、报告代取',ph:260,pd:460,ic:'pulse',cls:'bg-r',cov:'r'},
+  {n:'夜间急诊陪诊',d:'夜间及节假日急诊陪同就医',ph:480,pd:960,ic:'sCall',cls:'bg-b',cov:'b'},
+  {n:'代取药送药上门',d:'处方代取 · 药品配送到家',ph:60,pd:100,ic:'sMeal',cls:'bg-g',cov:'g'}
 ];
 S.escortList={title:'陪诊服务',render:function(){
   var h='';
