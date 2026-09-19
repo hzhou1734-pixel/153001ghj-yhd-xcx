@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.119';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.121';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -978,7 +978,8 @@ function nav(t,rl,rf){var r=rl?'<div class="rt" onclick="'+rf+'">'+rl+'</div>':'
 function topLg(t,sub,acts){
   var a='';
   if(acts)acts.forEach(function(b){
-    a+='<div class="ab" onclick="go(\''+b[2]+'\')">'+ic(b[0],18)+(b[3]?'<span class="bd">'+b[3]+'</span>':'')+'</div>';
+    var fn=b[2].indexOf('tel:')===0?'location.href=\''+b[2]+'\'':'go(\''+b[2]+'\')';
+    a+='<div class="ab" onclick="'+fn+'">'+ic(b[0],18)+(b[3]?'<span class="bd">'+b[3]+'</span>':'')+'</div>';
   });
   return '<div class="nav-lg"><div class="hg"><div><div class="t">'+t+'</div>'+(sub?'<div class="s">'+sub+'</div>':'')+'</div>'
     +(a?'<div class="ac">'+a+'</div>':'')+'</div></div>';
@@ -1180,7 +1181,7 @@ function dlg(icn,t,s,ok,okFn,no){return '<div class="dialog-mask"><div class="di
 
 /* ================= 首页 ================= */
 S.home={tab:'home',title:'首页',nav:false,render:function(){
-  return topLg('首页','',[['bell','','noticeList',noticeBadge()],['sCall','','emergencyCall','']])
+  return topLg('首页','',[['bell','','noticeList',noticeBadge()],['sCall','','tel:120','']])
   +'<div class="row between" style="margin:0 var(--pad) 12px;cursor:pointer" onclick="go(\'communitySwitch\')">'
   +'<div class="row" style="gap:7px">'+ic('pin',17,'var(--brand)')+'<span class="bold" style="font-size:15px">'+CUR_COMMUNITY.name+' · '+CUR_COMMUNITY.detail+'</span></div>'
   +'<div class="row" style="gap:1px;color:var(--label2);font-size:13px">切换'+ic('chevR',14,'var(--label4)')+'</div></div>'
@@ -1198,7 +1199,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   + svc('sHealth','健康小屋','healthHome','g')+svc('sEscort','陪诊服务','escortList','o',1)
   + svc('sTrust','托管服务','trusteeship','b',1)+svc('sMeal','健康膳食','meal','p',1)
   + svc('sProp','物业服务','物业服务系统','',0,'mini')+svc('sHelper','生活帮手','helperList','y',1)
-  + svc('sCall','一键呼叫','emergencyCall','r')
+  + svc('sCall','一键呼叫','tel:120','r')
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+actItems(ACTIVITIES.filter(function(a){return a.st==='报名中';}))+'</div>'
@@ -1210,7 +1211,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
 function slide(i,t,s,bg,to){return '<div class="sl" style="background:'+bg+'" onclick="'+(to?'go(\''+to+'\')':'toast(\'该轮播暂未配置跳转\')')+'"><div class="em">'+ic(i,32,'#fff',1.9)+'</div>'
   +'<div class="tx"><div class="t">'+t+'</div><div class="s">'+s+'</div></div></div>';}
 /* need=true 时该服务需业主认证，未认证自动引导至认证页 */
-function svc(i,t,id,cls,need,mode){var fn=mode==='mini'?'goMini(\''+(id||t)+'\')':(need?'needCert(\''+id+'\')':'go(\''+id+'\')');return '<div class="svc" onclick="'+fn+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
+function svc(i,t,id,cls,need,mode){var fn=mode==='mini'?'goMini(\''+(id||t)+'\')':(need?'needCert(\''+id+'\')':(id.indexOf('tel:')===0?'location.href=\''+id+'\'':'go(\''+id+'\')'));return '<div class="svc" onclick="'+fn+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
 
 /* 跳转第三方小程序：先 toast 提示，0.4s 后切换到 miniJump 占位页 */
 function goMini(name){var _n=name||'小程序';toast('正在打开 '+_n+' …');setTimeout(function(){curMiniName=_n;go('miniJump');},420);}
@@ -1482,8 +1483,7 @@ S.healthHome={title:'健康小屋',render:function(){
   + tile('report','历史检测报告','日报 · 周报 · 月报 · 年报','bg-br','healthReport')
   + tile('risk','健康风险评估','每周自动更新评估结果','bg-o','healthRisk')
   +'</div>'
-  +'<div class="pad"><button class="btn acc" onclick="go(\'emergencyCall\')">'+ic('phone',19)+' 紧急呼叫</button></div>'
-  +'<div class="pad" style="padding-top:0">'+hint('健康手环为 4G 模块，通过注册手机号与手环厂商账号匹配后自动同步数据，无需蓝牙配对；一个账号同时只能连接一个手环，断开连接后历史数据仍保留')+'</div>'
+  +'<div class="pad"><button class="btn acc" onclick="location.href=\'tel:120\';toast(\'正在呼叫 120 急救中心\')">'+ic('phone',19)+' 紧急呼叫</button></div>'
 }};
 function tile(i,t,s,cls,on){return '<div class="tile" onclick="go(\''+on+'\')"><div class="th '+cls+'">'+ic(i,19)+'</div>'
   +'<div class="tt">'+t+'</div><div class="ts">'+s+'</div></div>';}
@@ -1613,21 +1613,6 @@ S.healthRisk={title:'健康风险评估',render:function(){
   +'</div>'
   +'<div class="pad"><button class="btn sec" onclick="go(\'riskReport\')">查看完整评估报告</button></div>'
   + hint('评估结果仅供参考，不能替代医疗诊断');
-}};
-S.emergencyCall={title:'紧急呼叫',render:function(){
-  return '<div class="pad" style="padding-top:56px;text-align:center">'
-  +'<div style="width:168px;height:168px;border-radius:50%;background:linear-gradient(145deg,#FF9E73,#F2642A);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin:0 auto 22px;color:#fff;box-shadow:0 14px 34px rgba(242,100,42,.4);cursor:pointer" onclick="toast(\'正在呼叫 120 急救中心\')">'
-  +ic('phone',44,'#fff',1.7)+'<span style="font-size:19px;font-weight:700">紧急呼叫</span></div>'
-  +'<div class="sub">点击直接调用系统拨号界面<br>呼叫号码由物业后台配置</div></div>'
-  + grpT('预设急救电话')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">急救中心</div><div class="cell-s">医疗急救</div></div><div class="cell-v">120</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">小区保安亭</div><div class="cell-s">物业 24 小时值班</div></div><div class="cell-v">0731-8888 6688</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">楼栋管家</div><div class="cell-s">王管家</div></div><div class="cell-v">138 0000 6688</div></div>'
-  +'</div>'
-  +'<div class="pad">'+hint('第三方手环收到的一键呼叫信息，平台能否收到由第三方手环决定')+'</div>';
 }};
 
 /* ================= 陪诊服务 ================= */
