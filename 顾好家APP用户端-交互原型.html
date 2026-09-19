@@ -849,9 +849,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.117';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.118';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
-var APP_BUILT='2026-09-18';
+var APP_BUILT='2026-09-19';
 
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
@@ -1492,18 +1492,8 @@ S.bandConnect={title:'连接健康手环',render:function(){
   +'<div class="card" style="text-align:center;padding:22px 16px">'
   +'<div style="width:52px;height:52px;border-radius:15px;background:var(--fill);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--brand)">'+ic('bt',27)+'</div>'
   +'<div class="bold" style="font-size:16px">通过手机号自动匹配</div>'
-  +'<div class="sub" style="margin-top:6px">健康手环为 4G 模块，无需蓝牙配对。<br>将使用注册手机号 138****6688 与手环厂商账号进行匹配</div>'
-  +'<button class="btn" style="margin-top:14px" onclick="go(\'bandConnecting\')">去连接</button></div></div>'
-  +'<div class="sect"><div class="t">匹配流程</div></div>'
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">获取授权</div><div class="cell-s">授权查询手环厂商注册手机号</div></div><span class="tag g">已授权</span></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">手机号匹配</div><div class="cell-s">与手环厂商账号手机号一致即自动绑定</div></div><span class="tag br">待匹配</span></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">同步历史数据</div><div class="cell-s">绑定成功后自动同步该手环全部数据</div></div></div>'
-  +'</div>'
-  +'<div class="pad"><button class="btn sec" onclick="back()">取消连接</button></div>'
-  + hint('手环为 4G 模块，无需蓝牙搜索配对；一个账号同时只能连接一台手环，断开连接后历史数据仍保留，更换设备后新数据覆盖后续记录');
+  +'<div class="sub" style="margin-top:6px">将使用注册手机号 138****6688 与手环厂商账号进行匹配</div>'
+  +'<button class="btn" style="margin-top:14px" onclick="go(\'bandConnecting\')">去连接</button></div></div>';
 }};
 S.bandConnecting={title:'连接健康手环',render:function(){
   return '<div class="pad" style="padding-top:70px;text-align:center">'
