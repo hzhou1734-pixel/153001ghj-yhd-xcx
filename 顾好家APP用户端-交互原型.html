@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.138';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.139';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -988,10 +988,13 @@ function tabbar(){var T=[['home','tabHome','首页'],['community','tabComm','社
   var c=(S[cur]&&S[cur].tab)?S[cur].tab:lastTab,h='';
   T.forEach(function(t){h+='<div class="tb'+(t[0]===c?' on':'')+'" onclick="go(\''+t[0]+'\')">'+ic(t[1],24)+t[2]+'</div>';});
   return h;}
+var lastRenderPage=null;
 function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
+  var samePage=(cur===lastRenderPage);
   if(s.nav!==false)h+=nav(s.title,s.rightLabel,s.rightFn);
   h+=s.render();
   var sc=document.getElementById('screen');
+  var keepTop=samePage?sc.scrollTop:0;
   sc.className=showTab?'screen with-tabbar':'screen';
   sc.innerHTML=h;
   /* 底部下拉弹窗渲染到独立层：不进路由栈、不随内容滚动、不跳转页面 */
@@ -1000,7 +1003,9 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
   var tb=document.getElementById('tabbar');
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
-  sc.scrollTop=0;
+  /* 路由切换回顶部；同页原地刷新（开关/弹窗等）保持滚动位置，避免页面晃动 */
+  sc.scrollTop=keepTop;
+  lastRenderPage=cur;
 }
 
 /* ================= iOS 组件 ================= */
