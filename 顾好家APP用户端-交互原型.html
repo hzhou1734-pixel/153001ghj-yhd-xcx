@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.141';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.143';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -999,7 +999,7 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
   sc.innerHTML=h;
   /* 底部下拉弹窗渲染到独立层：不进路由栈、不随内容滚动、不跳转页面 */
   var pk=document.getElementById('picker');
-  pk.innerHTML=pickerSheet()+schoolSheet();
+  pk.innerHTML=pickerSheet()+schoolSheet()+payDialogHTML();
   var tb=document.getElementById('tabbar');
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
@@ -1779,7 +1779,7 @@ S.trustDetail={title:'托管详情',render:function(){
   + grpT('看护时段（可多选）')
   +'<div class="pad"><div class="qlist">'+ch+'</div></div>'
   + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
-  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','toast(\'托管订单已提交，等待物业后台派发托管老师\');go(\'orderTrustDetail\')')+'</div>';
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','openPayConfirm('+amount+',function(){toast(\'托管订单已提交，等待物业后台派发托管老师\');go(\'orderTrustDetail\')})')+'</div>';
 }};
 function toggleTrustJie(){pickState.trustJie=!pickState.trustJie;render();}
 function toggleTrustSong(){pickState.trustSong=!pickState.trustSong;render();}
@@ -1808,6 +1808,45 @@ function schoolSheet(){
   return h+'</div></div></div>';
 }
 
+
+/* ================= 顾好家币支付确认弹窗 ================= */
+var payConfirm=null;
+var payInsufficient=null;
+function openPayConfirm(amount,onOk){
+  if(COIN_BALANCE<amount){payInsufficient=amount;render();return;}
+  payConfirm={amount:amount,onOk:onOk};render();
+}
+function closePayConfirm(){payConfirm=null;render();}
+function confirmPay(){
+  var amt=payConfirm.amount,fn=payConfirm.onOk;
+  COIN_BALANCE-=amt;payConfirm=null;render();fn();
+}
+function goRecharge(){payInsufficient=null;render();go('coinRecharge');}
+function payDialogHTML(){
+  var h='';
+  if(payConfirm){
+    h+='<div class="mask" onclick="closePayConfirm()"><div class="sheet" onclick="event.stopPropagation()">'      +'<div class="sh"><div class="t" style="text-align:center">确认提交</div></div>'
+      +'<div class="pad" style="text-align:center;padding:18px 16px 6px">'
+      +'<div style="font-size:15px;color:var(--label);line-height:1.6">本次将扣除 <b style="color:var(--brand);font-size:19px">'+payConfirm.amount+'</b> 顾好家币，是否确认提交？</div>'
+      +'<div style="font-size:12.5px;color:var(--label3);margin-top:10px">提交后支付状态为「已支付」</div>'
+      +'</div>'
+      +'<div style="display:flex;border-top:.5px solid var(--sep)">'
+      +'<div style="flex:1;padding:13px;font-size:16px;color:var(--label2);cursor:pointer" onclick="closePayConfirm()">取消</div>'
+      +'<div style="flex:1;padding:13px;font-size:16px;font-weight:600;color:var(--brand);cursor:pointer;border-left:.5px solid var(--sep)" onclick="confirmPay()">确认提交</div>'
+      +'</div></div></div>';
+  }
+  if(payInsufficient){
+    h+='<div class="mask" onclick="payInsufficient=null;render()"><div class="sheet" onclick="event.stopPropagation()">'      +'<div class="sh"><div class="t" style="text-align:center">顾好家币不足</div></div>'
+      +'<div class="pad" style="text-align:center;padding:18px 16px 6px">'
+      +'<div style="font-size:15px;color:var(--label);line-height:1.6">当前余额不足以支付本次订单，需 <b style="color:var(--accent)">'+payInsufficient+'</b> 顾好家币，请先充值后再提交。</div>'
+      +'</div>'
+      +'<div style="display:flex;border-top:.5px solid var(--sep)">'
+      +'<div style="flex:1;padding:13px;font-size:16px;color:var(--label2);cursor:pointer" onclick="payInsufficient=null;render()">取消</div>'
+      +'<div style="flex:1;padding:13px;font-size:16px;font-weight:600;color:var(--brand);cursor:pointer;border-left:.5px solid var(--sep)" onclick="goRecharge()">去充值</div>'
+      +'</div></div></div>';
+  }
+  return h;
+}
 
 /* ================= 健康膳食 ================= */
 S.meal={title:'健康膳食',render:function(){
@@ -1843,7 +1882,7 @@ S.meal={title:'健康膳食',render:function(){
     :'')
   + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+(m.p*mc)+'.00</span>'}])
   +'<div class="pad" style="padding-top:0">'+hint('下单与取消截止时间 — 早餐：前一日 19:00；午餐：当日 10:00；晚餐：当日 14:00。当前选中'+MT[mt][0]+'，'+CUT[mt]+'。当日 14:00 后展示次日菜品，次日菜单未更新时显示缺省信息')+'</div>'
-  +'<div style="padding:4px var(--pad) 38px">'+btn('提交报餐','toast(\'报餐成功\');go(\'orderMealDetail\')')+'</div>';
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交报餐','openPayConfirm('+(m.p*mc)+',function(){toast(\'报餐成功\');go(\'orderMealDetail\')})')+'</div>';
 }};
 function toggleMealDelivery(){pickState.mealDelivery=!pickState.mealDelivery;render();}
 function pickMealType(i){pickState.mealType=i;render();}
@@ -2321,8 +2360,8 @@ var mealDemoStatus='pending';
 S.orderMealDetail={title:'报餐单详情',render:function(){
   var st=mealDemoStatus;
   var stext=ordStatusText(st),scls=ordStatusCls(st);
-  var payText={pending:'未支付',active:'未支付',done:'已结算',cancel:'已取消'}[st];
-  var payCls={pending:'o',active:'o',done:'g',cancel:'gy'}[st];
+  var payText={pending:'未支付',active:'已支付',done:'已结算',cancel:'已取消'}[st];
+  var payCls={pending:'o',active:'g',done:'g',cancel:'gy'}[st];
 
   var btns='';
   if(st==='pending'){
@@ -2353,7 +2392,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="ord-section"><div class="st">支付信息</div>'
   +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥36.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
-  +'<div class="kv"><span class="k">支付方式</span><span class="v">/</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">提交：09-04 10:20<br>结算：—<br>取消：—</div></div>'
@@ -2375,7 +2414,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="ord-section"><div class="st">支付信息</div>'
   +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥36.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v o">未支付</span></div>'
-  +'<div class="kv"><span class="k">支付方式</span><span class="v">/</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">提交：09-04 10:20<br>结算：—<br>取消：—</div></div>'
@@ -2388,8 +2427,8 @@ var trustDemoStatus='active';
 S.orderTrustDetail={title:'托管单详情',render:function(){
   var st=trustDemoStatus;
   var stext=ordStatusText(st,2),scls=ordStatusCls(st);
-  var payText={pending:'未支付',active:'未支付',done:'已结算',cancel:'已取消'}[st];
-  var payCls={pending:'o',active:'o',done:'g',cancel:'gy'}[st];
+  var payText={pending:'未支付',active:'已支付',done:'已结算',cancel:'已取消'}[st];
+  var payCls={pending:'o',active:'g',done:'g',cancel:'gy'}[st];
 
   var btns='';
   if(st==='pending'){
@@ -2636,7 +2675,7 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   +'</div>'
   /* ③ 我的服务 */
   + grp([
-    {ic:'wallet',icls:'bg-t',t:'顾好家币',s:'余额 ¥868.00 · 可用于托管、报餐支付',ar:1,on:'go(\'coin\')'},
+    {ic:'wallet',icls:'bg-t',t:'顾好家币',s:'余额 ¥'+COIN_BALANCE.toFixed(2)+' · 可用于托管、报餐支付',ar:1,on:'go(\'coin\')'},
     {ic:'yen',icls:'bg-o',t:'我的账单',s:'报餐 / 托管两类账单',ar:1,on:'go(\'bill\')'},
     {ic:'signup',icls:'bg-y',t:'我的报名',s:'社区活动报名记录',ar:1,on:'go(\'mySignup\')'},
     {ic:'sHelper',icls:'bg-br',t:'我的需求',s:'生活帮手需求进度跟进',ar:1,on:'needCert(\'myHelper\')'},
@@ -2680,7 +2719,7 @@ S.personInfo={title:'个人信息',render:function(){
 S.coin={title:'顾好家币',render:function(){
   return '<div class="card" style="margin:14px var(--pad);background:linear-gradient(135deg,#2BC4A0,#17A88A);color:#fff;padding:20px 18px">'
   +'<div style="font-size:13px;opacity:.9">账户余额</div>'
-  +'<div style="font-size:32px;font-weight:700;margin:8px 0 16px;letter-spacing:-.5px">¥ 868.00</div>'
+  +'<div style="font-size:32px;font-weight:700;margin:8px 0 16px;letter-spacing:-.5px">¥ '+COIN_BALANCE.toFixed(2)+'</div>'
   +'<div style="display:flex;gap:10px">'
   +'<div style="flex:1;background:rgba(255,255,255,.2);border-radius:12px;padding:11px 0;text-align:center;font-size:14px;font-weight:600;cursor:pointer" onclick="go(\'coinRecharge\')">账户充值</div>'
   +'<div style="flex:1;background:rgba(255,255,255,.2);border-radius:12px;padding:11px 0;text-align:center;font-size:14px;font-weight:600;cursor:pointer" onclick="go(\'coinDetail\')">账户明细</div>'
@@ -2707,6 +2746,7 @@ S.coinRecharge={title:'账户充值',render:function(){
   +'<div class="pad"><button class="btn" onclick="toast(\'支付成功，账户已充值\');back()">确认充值</button></div>'
   + hint('充值金额即时到账，顾好家币可用于平台内托管单、报餐单支付');
 }};
+var COIN_BALANCE=868;
 var COIN_LOG=[
   {t:'结算返还',a:126.00,d:'2026-09-01 10:00',sign:'+'},
   {t:'托管单支出',a:1200.00,d:'2026-09-01 09:00',sign:'-'},
