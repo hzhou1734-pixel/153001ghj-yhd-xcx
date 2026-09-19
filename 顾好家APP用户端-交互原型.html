@@ -851,7 +851,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.171';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.172';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2619,7 +2619,7 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   if(o.jie||o.song)info+=trkv('接送地址',o.house);
   info+=trkv('是否需要用餐',o.meal?'是':'否',o.meal?'g':null);
   info+=trkv('是否需要作业辅导',o.tutor?'是':'否',o.tutor?'g':null);
-  info+=trkv('看护时段',(o.care&&o.care.length)?o.care.join(' · '):'未选择');
+  info+=trkv('看护时段',(o.care&&o.care.length)?o.period+' · '+o.care.join(' · '):'未选择');
 
   var btns='';
   if(st==='pending'){
@@ -2638,7 +2638,7 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   +'<div class="st s-'+scls+'">'+stext+'</div></div>'
   +'<div class="bd">'
   +'<div class="ti">'+o.name+'<span class="qty">· '+o.count+' 人</span></div>'
-  +'<div class="meta"><div class="m">'+ic('clock',11)+'服务周期：'+o.period+'</div><div class="m">'+ic('pin',11)+'提交：'+o.submit+'</div></div>'
+  +'<div class="meta"><div class="m">'+ic('pin',11)+'提交：'+o.submit+'</div></div>'
   +'<div class="sum"><div class="l">实付金额 <b>¥'+o.price.toFixed(2)+'</b></div><div><span class="pn">¥'+o.price.toFixed(2)+'</span></div></div>'
   +'</div></div>'
   +'<div class="ord-section"><div class="st">托管信息</div>'+info+'</div>'
