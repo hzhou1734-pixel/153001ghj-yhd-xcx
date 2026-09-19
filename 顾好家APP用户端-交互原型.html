@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.137';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.138';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1795,7 +1795,7 @@ function schoolSheet(){
     +'<div class="grp" style="margin:0 14px 6px;border-radius:12px;overflow:hidden">';
   SCHOOLS.forEach(function(v,i){
     if(i)h+='<div class="sep full"></div>';
-    h+='<div class="cell tap" onclick="pickSchool(\'+v+\')">'
+    h+='<div class="cell tap" onclick="pickSchool(\''+v+'\')">'
       +'<div class="cell-bd"><div class="cell-t" style="font-weight:'+(v===cur?'600':'400')+';color:'+(v===cur?'var(--brand)':'inherit')+'">'+v+'</div></div>'
       +(v===cur?'<div class="cell-ar" style="color:var(--brand)">'+ic('check',19)+'</div>':'')+'</div>';
   });
