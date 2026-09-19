@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.195';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.196';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2224,18 +2224,18 @@ S.community={tab:'community',title:'社区',nav:false,render:function(){
 
 /* ================= 社区活动 ================= */
 var ACTIVITIES=[
-  {n:'中秋邻里联欢会',when:'9月28日 18:30',bm:'报名 09-05 至 09-26',s:'中心广场 · 已报 86/200',st:'报名中',sc:'g',c:'',ty:'节日庆典'},
-  {n:'少儿阅读营',when:'本周末 14:00',bm:'报名 09-01 至 09-12',s:'阅览室 · 30/30 人',st:'名额已满',sc:'gy',c:'p',ty:'亲子活动'},
-  {n:'重阳节健康讲座',when:'9月29日 14:00',bm:'报名 09-10 至 09-27',s:'活动中心 · 0/80 人',st:'即将开始',sc:'b',c:'b',ty:'健康讲座'},
-  {n:'邻里跳蚤市场',when:'9月12日 09:00',bm:'报名 09-02 至 09-10',s:'西门广场 · 42/100 人',st:'报名中',sc:'g',c:'o',ty:'节日庆典'},
-  {n:'秋季健步走',when:'9月25日 09:00',bm:'报名 09-08 至 09-23',s:'江畔绿道 · 18/60 人',st:'报名中',sc:'g',c:'y',ty:'健康讲座'},
-  {n:'重阳敬老慰问',when:'9月30日 10:00',bm:'报名 09-12 至 09-28',s:'各楼栋 · 0/40 人',st:'即将开始',sc:'b',c:'p',ty:'志愿服务'},
+  {n:'中秋邻里联欢会',when:'9月28日 18:30',bm:'报名 09-05 至 09-26',s:'中心广场 · 已报 86 人',st:'报名中',sc:'g',c:'',ty:'节日庆典'},
+  {n:'少儿阅读营',when:'本周末 14:00',bm:'报名 09-01 至 09-12',s:'阅览室 · 已报 30 人',st:'报名中',sc:'g',c:'p',ty:'亲子活动'},
+  {n:'重阳节健康讲座',when:'9月29日 14:00',bm:'报名 09-10 至 09-27',s:'活动中心 · 0 人',st:'即将开始',sc:'b',c:'b',ty:'健康讲座'},
+  {n:'邻里跳蚤市场',when:'9月12日 09:00',bm:'报名 09-02 至 09-10',s:'西门广场 · 已报 42 人',st:'报名中',sc:'g',c:'o',ty:'节日庆典'},
+  {n:'秋季健步走',when:'9月25日 09:00',bm:'报名 09-08 至 09-23',s:'江畔绿道 · 已报 18 人',st:'报名中',sc:'g',c:'y',ty:'健康讲座'},
+  {n:'重阳敬老慰问',when:'9月30日 10:00',bm:'报名 09-12 至 09-28',s:'各楼栋 · 0 人',st:'即将开始',sc:'b',c:'p',ty:'志愿服务'},
   {n:'暑期趣味运动会',when:'8月20日 已结束',bm:'报名 08-01 至 08-18',s:'中央草坪 · 128 人参与',st:'已结束',sc:'gy',c:'gy',ty:'亲子活动'}
 ];
 function actItem(a){
-  /* 列表不显示「立即报名」按钮（报名中点击条目进详情报名）；即将开始/名额已满/已结束=置灰不可点 */
+  /* 列表不显示「立即报名」按钮（报名中点击条目进详情报名）；即将开始/已结束=置灰不可点 */
   var can=(a.st==='报名中');
-  var label=(a.st==='名额已满'?'名额已满':(a.st==='已结束'?'已结束':'即将开始'));
+  var label=(a.st==='已结束'?'已结束':'即将开始');
   var b=can?'':'<div style="flex-shrink:0;margin-left:8px;opacity:.45"><div class="ab sec" onclick="event.stopPropagation();toast(\''+label+'，暂不可报名\')">'+label+'</div></div>';
   var nw='display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
   return '<div class="item noind" onclick="go(\'activityDetail\')">'+thumb(a.c,'cal',58,58)
@@ -2246,7 +2246,7 @@ function actItems(list){
   return list.map(function(a,i){return (i?'<div class="sep full"></div>':'')+actItem(a);}).join('');
 }
 S.communityList={title:'社区活动',render:function(){
-  var TABS=['全部','即将开始','报名中','名额已满','已结束'];
+  var TABS=['全部','即将开始','报名中','已结束'];
   var cur=(chipState.communityList===undefined?0:chipState.communityList);
   var list=cur?ACTIVITIES.filter(function(x){return x.st===TABS[cur];}):ACTIVITIES;
   var h=searchBar('搜索活动名称或介绍','go(\'activityFilter\')')
@@ -2264,7 +2264,7 @@ S.activityFilter={title:'筛选',nav:false,render:function(){
   +'<div class="sh"><div class="x" onclick="closePanel()">'+ic('x',20)+'</div><div class="t">筛选活动</div><div class="ok" onclick="toast(\'已应用筛选条件\');closePanel()">确定</div></div>'
   +'<div class="pad"><div class="card">'
   +'<div class="bold" style="margin-bottom:10px;font-size:14px">活动状态</div><div class="qlist">'
-  +'<div class="qbtn on">全部</div><div class="qbtn">即将开始</div><div class="qbtn">报名中</div><div class="qbtn">名额已满</div><div class="qbtn">已结束</div></div></div></div>'
+  +'<div class="qbtn on">全部</div><div class="qbtn">即将开始</div><div class="qbtn">报名中</div><div class="qbtn">已结束</div></div></div></div>'
   +'<div class="pad"><div class="card">'
   +'<div class="bold" style="margin-bottom:10px;font-size:14px">活动时间</div><div class="qlist">'
   +'<div class="qbtn on">不限</div><div class="qbtn">本周</div><div class="qbtn">本月</div><div class="qbtn">近三个月</div><div class="qbtn">更早</div></div></div></div>'
@@ -2289,7 +2289,7 @@ S.activityDetail={title:'活动详情',render:function(){
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">已报名人数</div></div><div class="cell-v">86 人</div></div>'
   +'</div>'
   + grpT('活动介绍')
-  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.7;color:var(--label)">邻里齐聚，赏月品茗，趣味游戏与才艺展示。现场设置灯谜区、手工月饼 DIY 与儿童游乐区，欢迎携家人一同参加。活动免费，名额有限，报满即止。</div></div>'
+  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.7;color:var(--label)">邻里齐聚，赏月品茗，趣味游戏与才艺展示。现场设置灯谜区、手工月饼 DIY 与儿童游乐区，欢迎携家人一同参加。活动免费，名额不限，欢迎广大业主积极参与。</div></div>'
   +(pickState.actSigned
     ?'<div class="pad"><button class="btn des">已报名</button></div>'
     :'<div class="pad"><button class="btn" onclick="go(\'activitySignup\')">立即报名</button></div>');
