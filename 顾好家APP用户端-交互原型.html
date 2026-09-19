@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.133';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.134';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -996,7 +996,7 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
   sc.innerHTML=h;
   /* 底部下拉弹窗渲染到独立层：不进路由栈、不随内容滚动、不跳转页面 */
   var pk=document.getElementById('picker');
-  pk.innerHTML=pickerSheet();
+  pk.innerHTML=pickerSheet()+schoolSheet();
   var tb=document.getElementById('tabbar');
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
@@ -1762,9 +1762,9 @@ S.trustDetail={title:'托管详情',render:function(){
   +((nj||ns)
     ? grpT('接送设置')
       +'<div class="grp">'
-      +(nj?'<div class="cell tap" onclick="pickTrustSchoolTarget(\'trustJieSchool\')"><div class="cell-bd"><div class="cell-t">接 · 学校</div><div class="cell-s">从学校送到家里</div></div><div class="cell-v">'+(pickState.trustJieSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
+      +(nj?'<div class="cell tap" onclick="openSchoolSheet(\'trustJieSchool\')"><div class="cell-bd"><div class="cell-t">接 · 学校</div><div class="cell-s">从学校送到家里</div></div><div class="cell-v">'+(pickState.trustJieSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
       +(nj&&ns?'<div class="sep full"></div>':'')
-      +(ns?'<div class="cell tap" onclick="pickTrustSchoolTarget(\'trustSchool\')"><div class="cell-bd"><div class="cell-t">送 · 学校</div><div class="cell-s">从小区送到学校</div></div><div class="cell-v">'+(pickState.trustSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
+      +(ns?'<div class="cell tap" onclick="openSchoolSheet(\'trustSchool\')"><div class="cell-bd"><div class="cell-t">送 · 学校</div><div class="cell-s">从小区送到学校</div></div><div class="cell-v">'+(pickState.trustSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
       +((nj||ns)?'<div class="sep full"></div>':'')
       +'<div class="cell"><div class="cell-bd"><div class="cell-t">接送地址</div><div class="cell-s">认证房号</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div>'
       +'</div>'
@@ -1781,19 +1781,27 @@ function toggleTrustMeal(){pickState.trustMeal=!pickState.trustMeal;render();}
 function toggleTrustCare(i){var c=pickState.trustCare||{};c[i]=!c[i];pickState.trustCare=c;render();}
 function openTrust(i){pickState.trustType=i;go('trustDetail');}
 function toggleTrustTutor(){pickState.trustTutor=!pickState.trustTutor;render();}
-function pickTrustSchoolTarget(key){pickState.trustSchoolTarget=key;go('trustSchool');}
-function pickTrustSchool(nm){var k=pickState.trustSchoolTarget||'trustSchool';pickState[k]=nm;back();}
-S.trustSchool={title:'选择学校',render:function(){
+var openSchool=null;
+function openSchoolSheet(key){openSchool=key;render();}
+function closeSchoolSheet(){openSchool=null;render();}
+function pickSchool(nm){if(openSchool)pickState[openSchool]=nm;openSchool=null;render();}
+function schoolSheet(){
+  if(!openSchool)return '';
   var SCHOOLS=['禄口一小','禄口二小','禄口三中','禄口实验小学'];
-  var h='';
-  SCHOOLS.forEach(function(nm){
-    var cur=pickState[pickState.trustSchoolTarget||'trustSchool'];
-    h+='<div class="item noind tap" onclick="pickTrustSchool(\''+nm+'\')">'+thumb('','sTrust',44,44)
-      +'<div class="it-bd"><div class="it-t">'+nm+'</div></div>'
-      +(cur===nm?'<div class="cell-ar">'+ic('check',18,'var(--brand)')+'</div>':'')+'</div>';
+  var cur=pickState[openSchool]||'';
+  var h='<div class="mask" onclick="closeSchoolSheet()"><div class="sheet" onclick="event.stopPropagation()">'
+    +'<div class="sh"><div class="x" onclick="closeSchoolSheet()">'+ic('x',20)+'</div>'
+    +'<div class="t">选择学校</div><div class="ok" onclick="closeSchoolSheet()">完成</div></div>'
+    +'<div class="grp" style="margin:0 14px 6px;border-radius:12px;overflow:hidden">';
+  SCHOOLS.forEach(function(v,i){
+    if(i)h+='<div class="sep full"></div>';
+    h+='<div class="cell tap" onclick="pickSchool(\'+v+\')">'
+      +'<div class="cell-bd"><div class="cell-t" style="font-weight:'+(v===cur?'600':'400')+';color:'+(v===cur?'var(--brand)':'inherit')+'">'+v+'</div></div>'
+      +(v===cur?'<div class="cell-ar" style="color:var(--brand)">'+ic('check',19)+'</div>':'')+'</div>';
   });
-  return '<div class="grp">'+h+'</div>';
-}};
+  return h+'</div></div></div>';
+}
+
 
 /* ================= 健康膳食 ================= */
 S.meal={title:'健康膳食',render:function(){
