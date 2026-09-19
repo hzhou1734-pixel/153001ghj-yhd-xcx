@@ -856,7 +856,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.191';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.192';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2175,7 +2175,6 @@ S.helper={title:'提交服务订单',render:function(){
   var hi=(pickState.helperType===undefined?0:pickState.helperType);
   var hk=HELPER[hi];
   return '<div class="sect"><div class="t">'+hk.n+'</div><div class="m">¥'+hk.p+' '+hk.u+'</div></div>'
-  +'<div class="pad">'+hint('所有收费的生活服务在此提交，提交后由物业后台派单，员工端完成服务后订单完成')+'</div>'
   + grpT('服务信息')
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">服务内容</div></div><div class="cell-v">'+hk.n+' · '+hk.d+'</div></div>'
