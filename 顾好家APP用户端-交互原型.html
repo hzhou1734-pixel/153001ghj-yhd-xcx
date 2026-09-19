@@ -477,6 +477,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .cover.b{background:linear-gradient(135deg,#9CCBF5,#4FA8E0);}
 .cover.p{background:linear-gradient(135deg,#C9B4F7,#AF52DE);}
 .cover.y{background:linear-gradient(135deg,#FFE08A,#FFCC00);}
+.cover.g{background:linear-gradient(135deg,#7BE39B,#34C759);}
+.cover.r{background:linear-gradient(135deg,#FF8C7A,#FF3B30);}
 .cover svg{width:38px;height:38px;}
 
 /* 富文本正文 */
@@ -849,7 +851,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.143';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.144';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1962,12 +1964,84 @@ S.miniJump={title:'跳转中',nav:false,render:function(){
 /* ================= 生活帮手 ================= */
 /* 生活帮手服务列表数据（内容由物业后台提交） */
 var HELPER=[
-  {n:'家政保洁',d:'全屋深度清洁 · 含厨卫除污',p:180,u:'/ 次',ic:'sHelper',cls:'bg-y',cov:'y'},
-  {n:'家电维修',d:'空调 / 洗衣机 / 冰箱上门检修',p:120,u:'/ 次起',ic:'sProp',cls:'bg-b',cov:'b'},
-  {n:'管道疏通',d:'厨卫下水道疏通 · 30 分钟响应',p:150,u:'/ 次',ic:'sHealth',cls:'bg-g',cov:'g'},
-  {n:'开锁换锁',d:'公安备案锁匠 · 24 小时上门',p:200,u:'/ 次',ic:'lock',cls:'bg-t',cov:'o'},
-  {n:'家具安装',d:'拆装、组装、墙面打孔挂件',p:160,u:'/ 次',ic:'home2',cls:'bg-p',cov:'p'},
-  {n:'适老改造',d:'扶手安装、防滑处理、无障碍改造',p:380,u:'/ 次起',ic:'family',cls:'bg-o',cov:'r'}
+  {n:'家政保洁',d:'全屋深度清洁 · 含厨卫除污',p:180,u:'/ 次',ic:'sHelper',cls:'bg-y',cov:'y',
+    info:'<p>由<strong>物业认证保洁人员</strong>上门服务，覆盖日常清扫、厨房除油、卫浴除污、玻璃擦拭等场景，工具与清洁剂均由服务方提供。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>全屋清扫</strong>：地面、桌面、家具表面除尘擦拭</li>'
+      +'<li><strong>厨卫除污</strong>：油烟机、瓷砖、马桶深度清洁</li>'
+      +'<li><strong>玻璃擦拭</strong>：门窗玻璃内外清洁</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>服务前确认范围，服务后由您验收签字</li>'
+      +'<li>面积约 90㎡ 内为标准单，超面积按补充协议计费</li>'
+    +'</ul>'},
+  {n:'家电维修',d:'空调 / 洗衣机 / 冰箱上门检修',p:120,u:'/ 次起',ic:'sProp',cls:'bg-b',cov:'b',
+    info:'<p>由<strong>持证维修师傅</strong>上门检修，覆盖空调、洗衣机、冰箱、油烟机等常见家电，故障先报价、后维修。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>故障检测</strong>：上门排查定位故障原因</li>'
+      +'<li><strong>维修更换</strong>：更换通用配件，提供维修质保</li>'
+      +'<li><strong>清洗保养</strong>：空调拆洗、洗衣机槽清洗可选</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>上门检测费 ¥120 起，维修费用另计并先报价</li>'
+      +'<li>更换配件质保 90 天</li>'
+    +'</ul>'},
+  {n:'管道疏通',d:'厨卫下水道疏通 · 30 分钟响应',p:150,u:'/ 次',ic:'sHealth',cls:'bg-g',cov:'g',
+    info:'<p>由<strong>专业疏通人员</strong>快速响应，覆盖厨房下水道、卫生间地漏、马桶堵塞等常见疏通场景。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>下水道疏通</strong>：厨卫管道高压疏通</li>'
+      +'<li><strong>地漏疏通</strong>：毛发、油污堵塞清理</li>'
+      +'<li><strong>马桶疏通</strong>：软硬物堵塞处理</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>市区 30 分钟内响应，夜间照常服务</li>'
+      +'<li>常规疏通 ¥150 / 次，特殊拆管另计</li>'
+    +'</ul>'},
+  {n:'开锁换锁',d:'公安备案锁匠 · 24 小时上门',p:200,u:'/ 次',ic:'lock',cls:'bg-t',cov:'o',
+    info:'<p>由<strong>公安备案锁匠</strong>提供上门开锁、换锁、配钥匙服务，身份核验后作业，保障居家安全。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>紧急开锁</strong>：门锁、车锁、保险柜</li>'
+      +'<li><strong>换锁升级</strong>：防盗锁芯更换</li>'
+      +'<li><strong>配钥匙</strong>：常规与芯片钥匙</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>24 小时上门，需出示身份与居住证明</li>'
+      +'<li>开锁 ¥200 / 次起，换锁材料费另计</li>'
+    +'</ul>'},
+  {n:'家具安装',d:'拆装、组装、墙面打孔挂件',p:160,u:'/ 次',ic:'home2',cls:'bg-p',cov:'p',
+    info:'<p>由<strong>专业师傅</strong>提供家具拆装、组装、墙面打孔与挂件安装服务，自带工具，保护墙面与地面。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>家具组装</strong>：床、柜、桌、架类成品组装</li>'
+      +'<li><strong>拆装搬运</strong>：旧家具拆装与移位</li>'
+      +'<li><strong>墙面作业</strong>：挂画、置物架、电视打孔安装</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>标准单含 2 件以内家具，超出按件计费</li>'
+      +'<li>高空或特殊墙体作业前先确认方案</li>'
+    +'</ul>'},
+  {n:'适老改造',d:'扶手安装、防滑处理、无障碍改造',p:380,u:'/ 次起',ic:'family',cls:'bg-o',cov:'r',
+    info:'<p>由<strong>适老化改造专员</strong>上门评估与施工，覆盖扶手安装、防滑处理、无障碍通道等居家安全改造。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>扶手安装</strong>：卫生间、走廊防滑扶手</li>'
+      +'<li><strong>防滑处理</strong>：地面防滑涂层与防滑垫铺设</li>'
+      +'<li><strong>无障碍改造</strong>：门槛坡道、夜间感应灯</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>先免费上门评估，出具改造方案与报价</li>'
+      +'<li>改造 ¥380 起，按实际工程量结算</li>'
+    +'</ul>'}
 ];
 S.helperList={title:'生活帮手',render:function(){
   var h='';
@@ -1982,7 +2056,22 @@ S.helperList={title:'生活帮手',render:function(){
   + grpT('生活服务列表')
   +'<div class="grp">'+h+'</div>';
 }};
-function openHelper(i){pickState.helperType=i;go('helper');}
+function openHelper(i){pickState.helperType=i;go('helperInfo');}
+S.helperInfo={title:'服务详情',render:function(){
+  var hi=(pickState.helperType===undefined?0:pickState.helperType);
+  var x=HELPER[hi];
+  return '<div class="pad"><div class="cover '+x.cov+'" style="height:168px">'+ic(x.ic,42,'#fff',1.7)+'</div></div>'
+  +'<div class="pad">'
+  +'<div class="bold" style="font-size:21px;letter-spacing:-.4px">'+x.n+'</div>'
+  +'<div class="sub" style="margin-top:6px">'+x.d+'</div>'
+  +'<div class="row" style="margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">¥'+x.p+'</span>'
+  +'<span class="sub" style="margin-left:6px">'+x.u+'</span></div></div>'
+  +'<div class="grp-t" style="margin:14px var(--pad) 6px">用户评价</div>'
+  +'<div class="grp">'+revCards()+'</div>'
+  +'<div class="grp-t" style="margin:6px var(--pad)">服务详情</div>'
+  +'<div class="rich" style="padding:0 var(--pad)">'+x.info+'</div>'
+  +'<div class="pad"><button class="btn" onclick="go(\'helper\')">立即预约</button></div>';
+}};
 S.helper={title:'提交服务订单',render:function(){
   var hi=(pickState.helperType===undefined?0:pickState.helperType);
   var hk=HELPER[hi];
@@ -2583,8 +2672,8 @@ S.orderSettlement={title:'订单结算',render:function(){
   +'</div>'
   + btn('立即结算','go(\'payment\')');
 }};
-S.review={title:'服务评价',render:function(){
-  /* 模拟评价数据：仅含头像首字、昵称、评星、评价时间 */
+function revCards(){
+  /* 模拟评价数据：仅含头像首字、昵称、评星、评价时间，无文字与图片内容 */
   var REVIEWS=[
     {nm:'张**',t:'2026-09-04',score:5},
     {nm:'李**',t:'2026-09-03',score:5},
@@ -2592,25 +2681,18 @@ S.review={title:'服务评价',render:function(){
     {nm:'赵**',t:'2026-08-25',score:5},
     {nm:'陈**',t:'2026-08-22',score:5}
   ];
-  function ava(nm){return nm.charAt(0);}
-  function starsHtml(n){var h='';for(var i=0;i<5;i++)h+=i<n?'★':'☆';return h;}
-  var lhtml='<div class="rev-list">';
+  var h='<div class="rev-list">';
   REVIEWS.forEach(function(r){
     var st='';for(var i=0;i<5;i++)st+=i<r.score?'<span>★</span>':'<span class="g">★</span>';
-    lhtml+='<div class="rev-card">'
-      +'<div class="hd">'
-        +'<div class="ava">'+ava(r.nm)+'</div>'
-        +'<div class="meta">'
-          +'<div class="nm">'+r.nm+'</div>'
-          +'<div class="stars-s">'+st+'</div>'
-        +'</div>'
-        +'<div class="time">'+r.t.substring(5)+'</div>'
-      +'</div>'
-    +'</div>';
+    h+='<div class="rev-card"><div class="hd">'
+      +'<div class="ava">'+r.nm.charAt(0)+'</div>'
+      +'<div class="meta"><div class="nm">'+r.nm+'</div><div class="stars-s">'+st+'</div></div>'
+      +'<div class="time">'+r.t.substring(5)+'</div>'
+    +'</div></div>';
   });
-  lhtml+='</div>';
-  return lhtml;
-}};
+  return h+'</div>';
+}
+S.review={title:'服务评价',render:function(){return revCards();}};
 /* ================= 添加评价（订单完成态入口） ================= */
 var addReviewType=1;          /* 1报餐 2托管 3陪诊 */
 var reviewScore=5;            /* 当前评分（默认 5 星） */
