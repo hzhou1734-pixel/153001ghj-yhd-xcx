@@ -855,7 +855,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.180';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.181';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2541,6 +2541,16 @@ S.orderSearch={title:'订单搜索',nav:false,render:function(){
 var mealDemoStatus='active';
 
 /* ================= 订单详情 ================= */
+/* 订单日志：未发生的节点（时间值为 '—' 或空）不显示整行（节点名称+值均不显示） */
+function ordLog(items){
+  var lines=[];
+  items.forEach(function(it){
+    var v=it[1];
+    if(v===''||v==='—')return;
+    lines.push(it[0]+'：'+v);
+  });
+  return lines.join('<br>');
+}
 S.orderMealDetail={title:'报餐单详情',render:function(){
   var st=mealDemoStatus;
   var stext=ordStatusText(st,1),scls=ordStatusCls(st);
@@ -2574,7 +2584,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">提交：09-04 10:20<br>结算：—<br>取消：—</div></div>'
+  +'<div class="log">'+ordLog([['提交','09-04 10:20'],['结算','—'],['取消','—']])+'</div></div>'
   + btns;
 }};
 /* 托管单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
@@ -2624,7 +2634,7 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">提交：'+o.submit+'<br>结算：—<br>取消：—</div></div>'
+  +'<div class="log">'+ordLog([['提交',o.submit],['结算','—'],['取消','—']])+'</div></div>'
   + btns;
 }};
 /* 陪诊单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
@@ -2677,7 +2687,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="kv"><span class="k">附加费用</span><span class="v '+(st==='active'?'pr':'')+'">'+(st==='active'?'¥60.00（陪诊员已上传 · 待支付）':'¥0.00')+'</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">提交：2026-09-03 16:00<br>支付：'+(paid?'2026-09-03 16:05':'—')+'<br>取消：—</div></div>'
+  +'<div class="log">'+ordLog([['提交','2026-09-03 16:00'],['支付',paid?'2026-09-03 16:05':'—'],['取消','—']])+'</div></div>'
   + btns;
 }};
 S.orderHelperDetail={title:'生活帮手单详情',render:function(){
@@ -2718,7 +2728,7 @@ S.orderHelperDetail={title:'生活帮手单详情',render:function(){
   +'<div class="kv"><span class="k">支付方式</span><span class="v">线上不做订单支付，由线下收取</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">下单：2026-09-04 15:30<br>支付：—（线下收取）<br>完成：'+(st==='done'?'2026-09-05 11:20':'—')+'<br>取消：'+(st==='cancel'?'2026-09-04 18:00':'—')+'</div></div>'
+  +'<div class="log">'+ordLog([['下单','2026-09-04 15:30'],['支付','—（线下收取）'],['完成',st==='done'?'2026-09-05 11:20':'—'],['取消',st==='cancel'?'2026-09-04 18:00':'—']])+'</div></div>'
   + btns
   + hint('取消订单需在上门服务时间前申请，由物业后台审核通过后生效；涉及材料费由线下收取');
 }};
