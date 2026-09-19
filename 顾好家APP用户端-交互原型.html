@@ -855,7 +855,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.178';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.179';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2506,6 +2506,7 @@ function setOrdType(t){
   if(t===1)go('orders');
   else if(t===2)go('ordersTrust');
   else if(t===3)go('ordersEscort');
+  else if(t===4)go('ordersHelper');
 }
 S.orders={tab:'orders',title:'订单',nav:false,render:function(){
   return topLg('订单','所有订单',[])
