@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.129';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.130';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1754,10 +1754,10 @@ S.trustDetail={title:'托管详情',render:function(){
   +'<div style="text-align:right"><span class="price" style="font-size:24px">¥'+pk.p+'</span></div></div></div>'
   + grp([
     {ic:'family',icls:'bg-b',t:'孩子数量',s:'按孩子数量计费 · 1 - 5 人',ctl:step('trustCount',{def:1,min:1,max:5})},
-    {ic:'pin',icls:'bg-br',t:'是否需要接',s:'从学校送到家里（认证房号）',ctl:sw(nj,'toggleTrustJie()')},
-    {ic:'pin',icls:'bg-o',t:'是否需要送',s:'从小区送到学校',ctl:sw(ns,'toggleTrustSong()')},
-    {ic:'sMeal',icls:'bg-y',t:'是否需要用餐',s:'用餐信息归属膳食单',ctl:sw(nm,'toggleTrustMeal()')},
-    {ic:'pencil',icls:'bg-g',t:'是否需要作业辅导',s:'托管期间作业答疑与检查',ctl:sw(nt,'toggleTrustTutor()')}
+    {ic:'pin',icls:'bg-br',t:'是否需要接',ctl:sw(nj,'toggleTrustJie()')},
+    {ic:'pin',icls:'bg-o',t:'是否需要送',ctl:sw(ns,'toggleTrustSong()')},
+    {ic:'sMeal',icls:'bg-y',t:'是否需要用餐',ctl:sw(nm,'toggleTrustMeal()')},
+    {ic:'pencil',icls:'bg-g',t:'是否需要作业辅导',ctl:sw(nt,'toggleTrustTutor()')}
   ])
   +((nj||ns)
     ? grpT('接送设置')
