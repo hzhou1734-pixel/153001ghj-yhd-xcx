@@ -855,7 +855,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.182';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.183';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2374,17 +2374,17 @@ S.articleDetail={title:'资讯详情',render:function(){
 var ORDERS=[
   {id:'BC20250904-001',type:1,t1:'明日午餐',qty:2,price:36,oPrice:36,date:'09-05',sub:'09-04 10:20',st:'active',pay:'已确认',tags:['12:00送达','A套餐']},
   {id:'BC20250902-008',type:1,t1:'昨日午餐',qty:1,price:18,oPrice:18,date:'09-03',sub:'09-02 11:05',st:'done',pay:'已结算',tags:['12:00送达','A套餐']},
-  {id:'BC20250903-004',type:1,t1:'午餐 · 1 份',qty:1,price:18,oPrice:18,date:'09-04',sub:'09-03 09:40',st:'cancel',pay:'已取消',tags:['12:00送达']},
+  {id:'BC20250903-004',type:1,t1:'午餐 · 1 份',qty:1,price:18,oPrice:18,date:'09-04',sub:'09-03 09:40',st:'cancel',pay:'已取消',cancelTime:'09-03 14:25',tags:['12:00送达']},
   {id:'BC20250901-002',type:1,t1:'今日晚餐',qty:2,price:36,oPrice:36,date:'09-01',sub:'08-31 17:30',st:'done',pay:'已结算',tags:['17:30送达','B套餐']},
   {id:'TG20250901-003',type:2,t1:'禄口一小课后托管',qty:1,price:1200,oPrice:1500,date:'10-01',sub:'09-01 09:00',st:'active',pay:'进行中',tags:['7岁·全日班','周一至周五']},
-  {id:'TG20250701-011',type:2,t1:'暑期托',qty:1,price:980,oPrice:980,date:'07-01',sub:'07-01 15:20',st:'cancel',pay:'已取消',tags:['8岁·全日班']},
+  {id:'TG20250701-011',type:2,t1:'暑期托',qty:1,price:980,oPrice:980,date:'07-01',sub:'07-01 15:20',st:'cancel',pay:'已取消',cancelTime:'07-01 16:10',tags:['8岁·全日班']},
   {id:'TG20250601-005',type:2,t1:'周末半日托',qty:1,price:600,oPrice:720,date:'06-01',sub:'05-28 14:00',st:'done',pay:'已结算',tags:['周六半天']},
   {id:'PZ20250903-002',type:3,t1:'医院就诊全程陪诊 · 3 小时',qty:3,price:240,oPrice:240,date:'09-05 09:00',sub:'09-03 16:00',st:'pending',pay:'待支付',tags:['陪诊员·李阿姨','北京协和医院']},
   {id:'PZ20250820-006',type:3,t1:'体检陪诊 · 2 小时',qty:2,price:160,oPrice:180,date:'08-22 08:30',sub:'08-20 10:30',st:'done',pay:'已支付',tags:['陪诊员·王阿姨','301医院体检中心']},
-  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',tags:['陪诊员·李阿姨','同济医院']},
+  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-05 20:30',tags:['陪诊员·李阿姨','同济医院']},
   {id:'SH20250904-001',type:4,t1:'家政保洁 · 全屋深度清洁',qty:1,price:180,oPrice:180,date:'09-05 09:00',sub:'09-04 15:30',st:'active',pay:'线下收取',tags:['上门 09:00','3栋2单元-1802']},
   {id:'SH20250902-003',type:4,t1:'空调维修 · 挂机加氟',qty:1,price:260,oPrice:260,date:'09-02 14:00',sub:'09-01 20:10',st:'done',pay:'线下收取',tags:['上门 14:00','师傅·王师傅']},
-  {id:'SH20250828-002',type:4,t1:'水电维修 · 厨房水管更换',qty:1,price:150,oPrice:150,date:'08-29 10:00',sub:'08-28 09:20',st:'cancel',pay:'已取消',tags:['上门 10:00']}
+  {id:'SH20250828-002',type:4,t1:'水电维修 · 厨房水管更换',qty:1,price:150,oPrice:150,date:'08-29 10:00',sub:'08-28 09:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-28 11:40',tags:['上门 10:00']}
 ];
 var ordTypeLabels=['报餐单','托管单','陪诊单','生活帮手单'];
 var ordTypeIcons={1:'sMeal',2:'sTrust',3:'sEscort',4:'sHelper'};
@@ -2412,9 +2412,11 @@ function ordStatusText(s,type){
 }
 function ordStatusCls(s){return s==='pending'?'pending':s==='active'?'active':s==='done'?'done':s==='cancel'?'cancel':'refund';}
 /* 订单详情跳转映射 */
+var curOrder=null;
 function openOrder(id){
   var o=ORDERS.filter(function(x){return x.id===id;})[0];
   if(!o)return;
+  curOrder=o;
   if(o.type===1){mealDemoStatus=o.st;go('orderMealDetail');}
   else if(o.type===2){trustDemoStatus=o.st;var s=trustOrderSnapshot();s.id=o.id;s.price=o.price;s.amount=o.price;s.period=o.date;s.submit=o.sub;lastTrustOrder=s;go('orderTrustDetail');}
   else if(o.type===3){escortDemoStatus=o.st;openEscortDetail(o.id);}
@@ -2570,7 +2572,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="st s-'+scls+'">'+stext+'</div></div>'
   +'<div class="bd">'
   +'<div class="ti">明日午餐<span class="qty">× 2</span></div>'
-  +'<div class="meta"><div class="m">'+ic('clock',11)+'配送 / 使用：09-05</div><div class="m">'+ic('pin',11)+'提交：09-04 10:20</div></div>'
+  +'<div class="meta"><div class="m">'+ic('clock',11)+'配送 / 使用：09-05</div><div class="m">'+ic('pin',11)+'提交：'+(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')+'</div></div>'
   +'<div class="sum"><div class="l">共 <b>2</b> 份</div><div><span class="pn">¥36.00</span></div></div>'
   +'</div></div>'
   +'<div class="ord-section"><div class="st">菜单信息</div>'
@@ -2584,7 +2586,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">'+ordLog([['提交','09-04 10:20'],['结算','—'],['取消','—']])+'</div></div>'
+  +'<div class="log">'+ordLog([['提交',(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')],['结算','—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—']])+'</div></div>'
   + btns;
 }};
 /* 托管单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
@@ -2634,7 +2636,7 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">'+ordLog([['提交',o.submit],['结算','—'],['取消','—']])+'</div></div>'
+  +'<div class="log">'+ordLog([['提交',o.submit],['结算','—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—']])+'</div></div>'
   + btns;
 }};
 /* 陪诊单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
@@ -2687,7 +2689,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="kv"><span class="k">附加费用</span><span class="v '+(st==='active'?'pr':'')+'">'+(st==='active'?'¥60.00（陪诊员已上传 · 待支付）':'¥0.00')+'</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">'+ordLog([['提交','2026-09-03 16:00'],['支付',paid?'2026-09-03 16:05':'—'],['取消','—']])+'</div></div>'
+  +'<div class="log">'+ordLog([['提交','2026-09-03 16:00'],['支付',paid?'2026-09-03 16:05':'—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—']])+'</div></div>'
   + btns;
 }};
 S.orderHelperDetail={title:'生活帮手单详情',render:function(){
@@ -2728,7 +2730,7 @@ S.orderHelperDetail={title:'生活帮手单详情',render:function(){
   +'<div class="kv"><span class="k">支付方式</span><span class="v">线上不做订单支付，由线下收取</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">'+ordLog([['下单','2026-09-04 15:30'],['支付','—（线下收取）'],['完成',st==='done'?'2026-09-05 11:20':'—'],['取消',st==='cancel'?'2026-09-04 18:00':'—']])+'</div></div>'
+  +'<div class="log">'+ordLog([['下单','2026-09-04 15:30'],['支付','—（线下收取）'],['完成',st==='done'?'2026-09-05 11:20':'—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—']])+'</div></div>'
   + btns
   + hint('取消订单需在上门服务时间前申请，由物业后台审核通过后生效；涉及材料费由线下收取');
 }};
