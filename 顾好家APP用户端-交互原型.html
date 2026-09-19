@@ -851,7 +851,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.149';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.150';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1644,6 +1644,16 @@ S.escortList={title:'陪诊服务',render:function(){
   return '<div class="grp">'+h+'</div>';
 }};
 function openEscort(i){pickState.escortType=i;go('escortDetail');}
+function escortPriceHtml(e){
+  var c='';
+  if(e.ph!==undefined&&e.ph!==''){
+    c+='<div style="flex:1;background:rgba(43,196,160,.08);border:1px solid rgba(43,196,160,.22);border-radius:12px;padding:10px 14px"><div class="sub" style="margin-bottom:2px">半天</div><span class="price" style="font-size:24px">¥'+e.ph+'</span></div>';
+  }
+  if(e.pd!==undefined&&e.pd!==''){
+    c+='<div style="flex:1;background:rgba(43,196,160,.08);border:1px solid rgba(43,196,160,.22);border-radius:12px;padding:10px 14px"><div class="sub" style="margin-bottom:2px">整天</div><span class="price" style="font-size:24px">¥'+e.pd+'</span></div>';
+  }
+  return c? '<div class="row" style="gap:10px;margin-top:14px">'+c+'</div>' : '';
+}
 S.escortDetail={title:'服务详情',render:function(){
   var ei=(pickState.escortType===undefined?0:pickState.escortType);
   var e=ESCORT[ei];
@@ -1678,10 +1688,8 @@ S.escortDetail={title:'服务详情',render:function(){
   +'<div class="pad">'
   +'<div class="bold" style="font-size:21px;letter-spacing:-.4px">'+e.n+'</div>'
   +'<div class="sub" style="margin-top:6px">'+e.d+'</div>'
-  +'<div class="row" style="gap:10px;margin-top:14px">'
-  +'<div style="flex:1;background:rgba(43,196,160,.08);border:1px solid rgba(43,196,160,.22);border-radius:12px;padding:10px 14px"><div class="sub" style="margin-bottom:2px">半天（4 小时）</div><span class="price" style="font-size:24px">¥'+e.ph+'</span></div>'
-  +'<div style="flex:1;background:rgba(43,196,160,.08);border:1px solid rgba(43,196,160,.22);border-radius:12px;padding:10px 14px"><div class="sub" style="margin-bottom:2px">整天（8 小时）</div><span class="price" style="font-size:24px">¥'+e.pd+'</span></div>'
-  +'</div></div>'
+  + escortPriceHtml(e)
+  +'</div>'
   + grp([{ic:'star',icls:'bg-y',t:'用户评价',s:'点击查看',ar:true,on:'go(\'review\')'}])
   +'<div style="margin-top:6px"><div class="grp-t">服务详情</div>'+rich+'</div>'
   +'<div class="btn-fixed"><button class="btn" onclick="go(\'escortBook\')">立即预约</button></div>';
