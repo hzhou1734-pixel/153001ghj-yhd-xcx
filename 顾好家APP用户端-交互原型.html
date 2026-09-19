@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.196';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.197';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2295,13 +2295,13 @@ S.activityDetail={title:'活动详情',render:function(){
     :'<div class="pad"><button class="btn" onclick="go(\'activitySignup\')">立即报名</button></div>');
 }};
 S.activitySignup={title:'活动报名',render:function(){
-  return '<div class="pad">'+hint('每个用户每个活动仅可报名一次')+'</div>'
+  return ''
   +'<div class="grp">'
   +'<div class="field"><span class="lb">姓名</span><input placeholder="请输入姓名"></div>'
   +'<div class="sep"></div>'
   +'<div class="field"><span class="lb">手机号</span><input placeholder="请输入手机号" type="tel"></div>'
   +'</div>'
-  + grpT('备注（选填）')
+  + grpT('备注')
   +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
   +'<textarea rows="3" placeholder="如有特殊需求请在此说明…"></textarea></div></div>'
   + btn('提交报名','pickState.actSigned=true;toast(\'报名成功，已同步至物业后台\');go(\'mySignup\')');
