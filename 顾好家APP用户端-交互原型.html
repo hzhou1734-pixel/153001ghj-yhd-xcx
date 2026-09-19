@@ -385,6 +385,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .grp>.item:not(:last-child){border-bottom:.5px solid var(--sep);}
 .grp>.item{margin-left:55px;padding-left:0;padding-right:14px;}
 .grp>.item.noind{margin-left:0;padding-left:14px;}
+.mopt.on{background:var(--brand-fill);}
+.mopt.on .it-t{color:var(--brand);}
+.radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--sep);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;transition:all .12s;}
+.radio.on{background:var(--brand);border-color:var(--brand);}
 .thumb{border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,#D6F5EC,#A9E9D8);display:flex;
        align-items:center;justify-content:center;color:rgba(255,255,255,.95);overflow:hidden;}
 .thumb svg{width:22px;height:22px;}
@@ -851,7 +855,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.174';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.175';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1945,22 +1949,35 @@ S.meal={title:'健康膳食',render:function(){
   mc=Math.max(1,Math.min(10,mc));
   var needDelivery=(pickState.mealDelivery===undefined?false:pickState.mealDelivery);
   var mt=(pickState.mealType===undefined?1:pickState.mealType);   /* 0=早餐 1=午餐 2=晚餐 */
-  var MT=[['早餐','¥8'],['午餐','¥18'],['晚餐','¥18']];
-  var MENU=[
-    {t:'小米粥 · 水煮蛋 · 杂粮包',s:'清淡养胃',p:8},
-    {t:'清蒸鲈鱼 · 时蔬 · 米饭',s:'低油低盐 · 适老营养餐',p:18},
-    {t:'山药排骨汤 · 时蔬 · 杂粮饭',s:'易消化',p:18}
-  ];
+  var MT=[['早餐','¥6 起'],['午餐','¥18 起'],['晚餐','¥16 起']];
+  var MENUS={
+    0:[{t:'小米粥 · 水煮蛋 · 杂粮包',s:'清淡养胃',p:8},
+       {t:'南瓜粥 · 蒸玉米 · 白煮蛋',s:'暖胃轻食',p:6},
+       {t:'燕麦牛奶 · 全麦面包 · 时令水果',s:'高纤饱腹',p:10}],
+    1:[{t:'清蒸鲈鱼 · 时蔬 · 米饭',s:'低油低盐 · 适老营养餐',p:18},
+       {t:'香菇滑鸡 · 西兰花 · 软米饭',s:'高蛋白低脂',p:20},
+       {t:'番茄炖牛腩 · 时蔬 · 杂粮饭',s:'补铁暖身',p:22}],
+    2:[{t:'山药排骨汤 · 时蔬 · 杂粮饭',s:'易消化',p:18},
+       {t:'虾仁蒸蛋 · 时蔬 · 米饭',s:'清淡软糯',p:16},
+       {t:'莲藕排骨汤 · 杂粮包 · 时蔬',s:'养胃安神',p:20}]
+  };
+  var mi=(pickState.mealItem===undefined?0:pickState.mealItem);
+  var list=MENUS[mt]; var m=list[mi]||list[0];
   var mh='';
   MT.forEach(function(x,i){mh+='<div class="d'+(i===mt?' on':'')+'" onclick="pickMealType('+i+')"><div class="w">'+x[0]+'</div><div class="n">'+x[1]+'</div></div>';});
-  var m=MENU[mt];
+  var opts='';
+  list.forEach(function(x,i){
+    var on=(i===mi);
+    opts+='<div class="item noind mopt'+(on?' on':'')+'" onclick="pickMealItem('+i+')">'+thumb('','sMeal',54,54,'')
+      +'<div class="it-bd"><div class="it-t">'+x.t+'</div><div class="it-s">'+x.s+'</div></div>'
+      +'<div style="flex-shrink:0;display:flex;align-items:center;gap:10px">'
+      +'<span class="price" style="font-size:16px">¥'+x.p+'</span>'
+      +'<span class="radio'+(on?' on':'')+'">'+(on?ic('check',13):'')+'</span></div></div>';
+  });
   return '<div class="sect"><div class="t">今日菜单</div><div class="m">9月5日 周六 · '+MT[mt][0]+'</div></div>'
   +'<div class="card"><div class="pick">'+mh+'</div></div>'
-  +'<div class="grp">'
-  +'<div class="item noind" onclick="go(\'mealDetail\')">'+thumb('','sMeal',54,54,'')
-  +'<div class="it-bd"><div class="it-t">'+m.t+'</div><div class="it-s">'+m.s+'</div></div>'
-  +'<span class="price" style="font-size:16px">¥'+m.p+'</span></div>'
-  +'</div>'
+  + grpT('可选套餐')
+  +'<div class="grp">'+opts+'</div>'
   + grp([
     {ic:'sMeal',icls:'bg-y',t:'报餐份数',s:'1 - 10 份',ctl:step('mealCount',{def:2,min:1,max:10})},
     {ic:'pin',icls:'bg-br',t:'是否需要配送',s:'配送至已认证房号',ctl:sw(needDelivery,'toggleMealDelivery()')},
@@ -1970,7 +1987,8 @@ S.meal={title:'健康膳食',render:function(){
   +'<div style="padding:4px var(--pad) 38px">'+btn('提交报餐','openPayConfirm('+(m.p*mc)+',function(){toast(\'报餐成功\');go(\'orderMealDetail\')})')+'</div>';
 }};
 function toggleMealDelivery(){pickState.mealDelivery=!pickState.mealDelivery;render();}
-function pickMealType(i){pickState.mealType=i;render();}
+function pickMealType(i){pickState.mealType=i;pickState.mealItem=0;render();}
+function pickMealItem(i){pickState.mealItem=i;render();}
 
 S.mealDetail={title:'膳食详情',render:function(){
   var rich='<div class="rich">'
