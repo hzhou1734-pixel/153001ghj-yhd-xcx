@@ -76,6 +76,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .rev-head .grp-t{margin:0;}
 .rev-more{display:flex;align-items:center;gap:2px;font-size:13px;font-weight:400;color:var(--label2);cursor:pointer;}
 .rev-more:active{opacity:.6;}
+.svc-stats{display:flex;align-items:center;background:#fff;border-radius:14px;margin:14px var(--pad) 0;padding:14px 0;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+.svc-stats .st{flex:1;text-align:center;}
+.svc-stats .sv-n{font-size:19px;font-weight:700;color:var(--label);letter-spacing:-.4px;line-height:1.1;}
+.svc-stats .sv-l{font-size:11px;color:var(--label3);margin-top:4px;}
+.svc-stats .sv-sep{width:.5px;height:26px;background:var(--sep);}
 /* 一级页大标题栏已自带 26px 渐变过渡，其下首个元素不再叠加留白 */
 .nav-lg + .pad{padding-top:0;}
 .nav-lg + .grp,.nav-lg + .card,.nav-lg + .metric,.nav-lg + .stat3,
@@ -860,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.194';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.195';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1784,6 +1789,9 @@ S.trustDetail={title:'托管详情',render:function(){
   +'<div class="row between"><div><div class="bold" style="font-size:20px">'+pk.n+'</div>'
   +'<div class="sub" style="margin-top:5px">'+pk.d+'</div></div>'
   +'<div style="text-align:right"><span class="price" style="font-size:24px">¥'+pk.p+'起</span></div></div></div>'
+  +'<div class="svc-stats">'+svcStats('4.9','2.3k+','97%')+'</div>'
+  +'<div class="rev-head"><div class="grp-t">用户评价</div><div class="rev-more" onclick="go(\'review\')">查看更多'+ic('chevR',14)+'</div></div>'
+  +'<div class="grp">'+revCards(3)+'</div>'
   + grp([
     {ic:'family',icls:'bg-b',t:'孩子数量',s:'按孩子数量计费 · 1 - 5 人',ctl:step('trustCount',{def:1,min:1,max:5})},
     {ic:'pin',icls:'bg-br',t:'是否需要接',ctl:sw(nj,'toggleTrustJie()')},
@@ -2041,10 +2049,12 @@ S.mealDetail={title:'膳食详情',render:function(){
   +'<span class="tag g">推荐</span></div>'
   +'<div class="sub">由营养师 + 三星主厨联合研发 · 每日新鲜配送</div>'
   +'<div class="row" style="gap:5px;margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">¥18</span><span class="sub">/ 份</span></div></div>'
+  +'<div class="svc-stats">'+svcStats('4.8','1.2k+','98%')+'</div>'
   +'<div class="pad">'+hint('点击「立即报餐」开始下单 · 截止时间为当日 20:00')+'</div>'
-  + grp([{ic:'star',icls:'bg-y',t:'用户评价',s:'点击查看',ar:true,on:'go(\'review\')'}])
+  +'<div class="rev-head"><div class="grp-t">用户评价</div><div class="rev-more" onclick="go(\'review\')">查看更多'+ic('chevR',14)+'</div></div>'
+  +'<div class="grp">'+revCards(3)+'</div>'
   +'<div style="margin-top:6px"><div class="grp-t">膳食详情</div>'+rich+'</div>'
-  +'<div style="padding:4px var(--pad) 38px">'+btn('立即报餐','go(\'meal\')')+'</div>';
+  +'<div class="btn-fixed"><button class="btn" onclick="go(\'meal\')">立即报餐</button></div>';
 }};
 
 /* ================= 跳转第三方小程序占位 ================= */
@@ -2788,6 +2798,14 @@ function revCards(limit, showMore){
   return h;
 }
 S.review={title:'服务评价',render:function(){return revCards();}};
+/* 服务数据条：评分 / 已服务 / 好评率 */
+function svcStats(score,sold,rate){
+  return '<div class="st"><div class="sv-n">'+score+'</div><div class="sv-l">综合评分</div></div>'
+    +'<div class="sv-sep"></div>'
+    +'<div class="st"><div class="sv-n">'+sold+'</div><div class="sv-l">已服务</div></div>'
+    +'<div class="sv-sep"></div>'
+    +'<div class="st"><div class="sv-n">'+rate+'</div><div class="sv-l">好评率</div></div>';
+}
 /* ================= 添加评价（订单完成态入口） ================= */
 var addReviewType=1;          /* 1报餐 2托管 3陪诊 */
 var reviewScore=5;            /* 当前评分（默认 5 星） */
