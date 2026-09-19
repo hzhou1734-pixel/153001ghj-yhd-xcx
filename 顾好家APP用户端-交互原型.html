@@ -856,7 +856,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.189';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.190';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2436,8 +2436,6 @@ function orderCard(o){
     actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'联系客服\')">联系管家</div>';
   }else if(o.st==='done'){
     actions='<div class="ab pri" onclick="event.stopPropagation();toast(\'再次预约\')">再次预约</div>';
-  }else if(o.st==='cancel'){
-    actions='<div class="ab pri" onclick="event.stopPropagation();toast(\'重新预约\')">重新预约</div>';
   }else if(o.st==='refund'){
     actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'查看详情\')">退款详情</div>';
   }
@@ -2703,8 +2701,6 @@ S.orderHelperDetail={title:'生活帮手单详情',render:function(){
     btns='<div class="pad"><button class="btn sec" onclick="toast(&apos;已提交取消申请，等待物业后台审核&apos;)">取消订单</button></div>';
   }else if(st==='done'){
     btns='<div class="pad"><button class="btn acc" onclick="openAddReview(4)">'+ic('star',18)+' 服务评价</button></div>';
-  }else{
-    btns='<div class="pad"><button class="btn sec" onclick="toast(&apos;已重新提交服务需求&apos;)">重新预约</button></div>';
   }
   return '<div class="ord-card" style="margin-top:12px">'
   +'<div class="hd"><div class="l"><div class="ic br">'+ic('sHelper',18)+'</div>'
