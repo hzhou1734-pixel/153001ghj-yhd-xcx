@@ -851,7 +851,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.168';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.169';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1205,7 +1205,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'<div class="card"><div class="grid">'
   + svc('sHealth','健康小屋','healthHome','g')+svc('sEscort','陪诊服务','escortList','o',1)
   + svc('sTrust','托管服务','trusteeship','b',1)+svc('sMeal','健康膳食','meal','p',1)
-  + svc('sProp','物业服务','物业服务系统','',0,'mini')+svc('sHelper','生活帮手','helperList','y',1)
+  + svc('sProp','物业服务','跳转物业服务管理小程序','',0,'toast')+svc('sHelper','生活帮手','helperList','y',1)
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+actItems(ACTIVITIES.filter(function(a){return a.st==='报名中';}))+'</div>'
@@ -1217,7 +1217,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
 function slide(i,t,s,bg,to){return '<div class="sl" style="background:'+bg+'" onclick="'+(to?'go(\''+to+'\')':'toast(\'该轮播暂未配置跳转\')')+'"><div class="em">'+ic(i,32,'#fff',1.9)+'</div>'
   +'<div class="tx"><div class="t">'+t+'</div><div class="s">'+s+'</div></div></div>';}
 /* need=true 时该服务需业主认证，未认证自动引导至认证页 */
-function svc(i,t,id,cls,need,mode){var fn=mode==='mini'?'goMini(\''+(id||t)+'\')':(need?'needCert(\''+id+'\')':(id.indexOf('tel:')===0?'location.href=\''+id+'\'':'go(\''+id+'\')'));return '<div class="svc" onclick="'+fn+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
+function svc(i,t,id,cls,need,mode){var fn=mode==='mini'?'goMini(\''+(id||t)+'\')':(mode==='toast'?'toast(\''+(id||t)+'\')':(need?'needCert(\''+id+'\')':(id.indexOf('tel:')===0?'location.href=\''+id+'\'':'go(\''+id+'\')')));return '<div class="svc" onclick="'+fn+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
 
 /* 跳转第三方小程序：先 toast 提示，0.4s 后切换到 miniJump 占位页 */
 function goMini(name){var _n=name||'小程序';toast('正在打开 '+_n+' …');setTimeout(function(){curMiniName=_n;go('miniJump');},420);}
