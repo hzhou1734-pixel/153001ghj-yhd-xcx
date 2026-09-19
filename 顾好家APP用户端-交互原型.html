@@ -856,7 +856,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.188';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.189';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -2735,7 +2735,7 @@ S.orderHelperDetail={title:'生活帮手单详情',render:function(){
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">'+ordLog([['下单','2026-09-04 15:30'],['支付','—（线下收取）'],['完成',st==='done'?'2026-09-05 11:20':'—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—']])+'</div></div>'
   + btns
-  + hint('取消订单需在上门服务时间前申请，由物业后台审核通过后生效；涉及材料费由线下收取');
+  ;
 }};
 
 /* ================= 结算 / 评价 / 退款 ================= */
