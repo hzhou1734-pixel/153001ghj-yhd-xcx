@@ -851,7 +851,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.148';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.149';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1676,11 +1676,12 @@ S.escortDetail={title:'服务详情',render:function(){
     +'</div>';
   return '<div class="pad"><div class="cover o" style="height:168px">'+ic('sEscort',42,'#fff',1.7)+'</div></div>'
   +'<div class="pad">'
-  +'<div class="row between" style="margin-bottom:6px"><div class="bold" style="font-size:21px;letter-spacing:-.4px">'+e.n+'</div>'
-  +'<div class="sub">'+e.d+'</div>'
-  +'<div class="row" style="gap:24px;margin-top:12px;align-items:baseline">'
-  +'<div><div class="sub" style="margin-bottom:3px">半天（4 小时）</div><span class="price" style="font-size:26px">¥'+e.ph+'</span></div>'
-  +'<div><div class="sub" style="margin-bottom:3px">整天（8 小时）</div><span class="price" style="font-size:26px">¥'+e.pd+'</span></div></div></div>'
+  +'<div class="bold" style="font-size:21px;letter-spacing:-.4px">'+e.n+'</div>'
+  +'<div class="sub" style="margin-top:6px">'+e.d+'</div>'
+  +'<div class="row" style="gap:10px;margin-top:14px">'
+  +'<div style="flex:1;background:rgba(43,196,160,.08);border:1px solid rgba(43,196,160,.22);border-radius:12px;padding:10px 14px"><div class="sub" style="margin-bottom:2px">半天（4 小时）</div><span class="price" style="font-size:24px">¥'+e.ph+'</span></div>'
+  +'<div style="flex:1;background:rgba(43,196,160,.08);border:1px solid rgba(43,196,160,.22);border-radius:12px;padding:10px 14px"><div class="sub" style="margin-bottom:2px">整天（8 小时）</div><span class="price" style="font-size:24px">¥'+e.pd+'</span></div>'
+  +'</div></div>'
   + grp([{ic:'star',icls:'bg-y',t:'用户评价',s:'点击查看',ar:true,on:'go(\'review\')'}])
   +'<div style="margin-top:6px"><div class="grp-t">服务详情</div>'+rich+'</div>'
   +'<div class="btn-fixed"><button class="btn" onclick="go(\'escortBook\')">立即预约</button></div>';
