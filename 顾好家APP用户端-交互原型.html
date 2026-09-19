@@ -849,7 +849,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.139';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.140';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1751,7 +1751,9 @@ S.trustDetail={title:'托管详情',render:function(){
   var CARE=[['上午 8-12','8:00-12:00'],['下午 12-18','12:00-18:00'],['晚上 18-21','18:00-21:00']];
   var ch='';
   CARE.forEach(function(c,idx){ch+='<div class="qbtn'+(care[idx]?' on':'')+'" onclick="toggleTrustCare('+idx+')">'+c[0]+'</div>';});
-  var amount=(pk.p+(nj?5:0)+(ns?5:0)+(nm?5:0)+(nt?5:0))*cnt;
+  var careCount=0;for(var ci in care){if(care[ci])careCount++;}
+  var careMul=Math.pow(2,Math.max(0,careCount-1));
+  var amount=(pk.p+(nj?5:0)+(ns?5:0)+(nm?5:0)+(nt?5:0))*cnt*careMul;
   return '<div class="pad"><div class="cover '+pk.cov+'" style="height:150px">'+ic(pk.ic,40,pk.dark?'#7A5B00':'#fff',1.7)+'</div></div>'
   +'<div class="pad">'
   +'<div class="row between"><div><div class="bold" style="font-size:20px">'+pk.n+'</div>'
@@ -1777,7 +1779,7 @@ S.trustDetail={title:'托管详情',render:function(){
   + grpT('看护时段（可多选）')
   +'<div class="pad"><div class="qlist">'+ch+'</div></div>'
   + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
-  +'<div class="pad" style="padding-top:0">'+hint('计费规则：基础托管 ¥5/人，勾选一项附加服务 +¥5/人，按孩子数量计算总额（每多 1 个孩子价格 × 对应倍数）')+'</div>'
+  +'<div class="pad" style="padding-top:0">'+hint('计费规则：基础托管 ¥5/人，勾选一项附加服务 +¥5/人；每多选一个看护时段价格翻倍；按孩子数量 × 人数计算总额')+'</div>'
   +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','toast(\'托管订单已提交，等待物业后台派发托管老师\');go(\'orderTrustDetail\')')+'</div>';
 }};
 function toggleTrustJie(){pickState.trustJie=!pickState.trustJie;render();}
