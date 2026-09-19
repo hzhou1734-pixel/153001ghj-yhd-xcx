@@ -851,7 +851,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.173';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.174';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-19';
 
@@ -1866,7 +1866,7 @@ function schoolSheet(){
 var openHouse=false;
 function openHouseSheet(){openHouse=true;render();}
 function closeHouseSheet(){openHouse=false;render();}
-function pickHouse(nm){pickState.escortHouse=nm;openHouse=false;render();}
+function pickHouse(nm){pickState.escortHouse=nm;pickState.mealHouse=nm;openHouse=false;render();}
 function houseSheet(){
   if(!openHouse)return '';
   var HOUSES=['阳光花园 3栋2单元1802','阳光花园 3栋2单元0704','阳光花园 5栋1单元1101','阳光花园 8栋2单元1503','阳光花园 12栋1单元0902'];
@@ -1943,15 +1943,14 @@ function payDialogHTML(){
 S.meal={title:'健康膳食',render:function(){
   var mc=(pickState.mealCount===undefined?2:pickState.mealCount);
   mc=Math.max(1,Math.min(10,mc));
-  var needDelivery=(pickState.mealDelivery===undefined?true:pickState.mealDelivery);
+  var needDelivery=(pickState.mealDelivery===undefined?false:pickState.mealDelivery);
   var mt=(pickState.mealType===undefined?1:pickState.mealType);   /* 0=早餐 1=午餐 2=晚餐 */
   var MT=[['早餐','¥8'],['午餐','¥18'],['晚餐','¥18']];
   var MENU=[
-    {t:'小米粥 · 水煮蛋 · 杂粮包',s:'清淡养胃 · 约 380 kcal',p:8},
-    {t:'清蒸鲈鱼 · 时蔬 · 米饭',s:'低油低盐 · 适老营养餐 · 约 520 kcal',p:18},
-    {t:'山药排骨汤 · 时蔬 · 杂粮饭',s:'易消化 · 约 480 kcal',p:18}
+    {t:'小米粥 · 水煮蛋 · 杂粮包',s:'清淡养胃',p:8},
+    {t:'清蒸鲈鱼 · 时蔬 · 米饭',s:'低油低盐 · 适老营养餐',p:18},
+    {t:'山药排骨汤 · 时蔬 · 杂粮饭',s:'易消化',p:18}
   ];
-  var CUT=['前一日 19:00 截止','当日 10:00 截止','当日 14:00 截止'];
   var mh='';
   MT.forEach(function(x,i){mh+='<div class="d'+(i===mt?' on':'')+'" onclick="pickMealType('+i+')"><div class="w">'+x[0]+'</div><div class="n">'+x[1]+'</div></div>';});
   var m=MENU[mt];
@@ -1964,15 +1963,10 @@ S.meal={title:'健康膳食',render:function(){
   +'</div>'
   + grp([
     {ic:'sMeal',icls:'bg-y',t:'报餐份数',s:'1 - 10 份',ctl:step('mealCount',{def:2,min:1,max:10})},
-    {ic:'pin',icls:'bg-br',t:'是否需要配送',s:'配送至已认证房号',ctl:sw(needDelivery,'toggleMealDelivery()')}
+    {ic:'pin',icls:'bg-br',t:'是否需要配送',s:'配送至已认证房号',ctl:sw(needDelivery,'toggleMealDelivery()')},
+    needDelivery?{t:'配送地址（认证房号）',s:(pickState.mealHouse||'阳光花园 3栋2单元1802'),ar:1,on:'openHouseSheet()'}:null
   ])
-  +(needDelivery
-    ?'<div class="card"><div class="kv" style="padding:0"><span class="k">配送地址</span></div>'
-      +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
-      +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'可添加备注\')">备注'+ic('chevR',14)+'</span></div></div>'
-    :'')
-  + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+(m.p*mc)+'.00</span>'}])
-  +'<div class="pad" style="padding-top:0">'+hint('下单与取消截止时间 — 早餐：前一日 19:00；午餐：当日 10:00；晚餐：当日 14:00。当前选中'+MT[mt][0]+'，'+CUT[mt]+'。当日 14:00 后展示次日菜品，次日菜单未更新时显示缺省信息')+'</div>'
+  + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+(m.p*mc)+'.00</span>'}])
   +'<div style="padding:4px var(--pad) 38px">'+btn('提交报餐','openPayConfirm('+(m.p*mc)+',function(){toast(\'报餐成功\');go(\'orderMealDetail\')})')+'</div>';
 }};
 function toggleMealDelivery(){pickState.mealDelivery=!pickState.mealDelivery;render();}
