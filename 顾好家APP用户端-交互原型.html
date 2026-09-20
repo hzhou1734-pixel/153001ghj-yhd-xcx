@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.232';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.233';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -2902,22 +2902,22 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   +'</div>'
   /* ③ 我的服务 */
   + grp([
-    {ic:'wallet',icls:'bg-t',t:'顾好家币',s:'余额 ¥'+COIN_BALANCE.toFixed(2)+' · 可用于托管、报餐支付',ar:1,on:'go(\'coin\')'},
-    {ic:'yen',icls:'bg-o',t:'我的账单',s:'报餐 / 托管两类账单',ar:1,on:'go(\'bill\')'},
-    {ic:'signup',icls:'bg-y',t:'我的报名',s:'社区活动报名记录',ar:1,on:'go(\'mySignup\')'}
-  ],'我的服务')
+    {ic:'wallet',icls:'bg-t',t:'顾好家币',ar:1,on:'go(\'coin\')'},
+    {ic:'yen',icls:'bg-o',t:'我的账单',ar:1,on:'go(\'bill\')'},
+    {ic:'signup',icls:'bg-y',t:'我的报名',ar:1,on:'go(\'mySignup\')'}
+  ],'我的服务',1)
   /* ④ 家庭与设备 */
   + grp([
-    {ic:'family',icls:'bg-b',t:'我的家庭',s:'2 个房号 · 4 位家庭成员',ar:1,on:'needCert(\'family\')'},
-    {ic:'butler',icls:'bg-p',t:'我的管家',s:'李婷 · 3栋楼栋管家',ar:1,on:'needCert(\'butler\')'},
-    {ic:'watch',icls:'bg-t',t:'我的手环',s:'已连接 · 数据同步中',ar:1,on:'go(\'myBand\')'}
-  ],'家庭与设备')
+    {ic:'family',icls:'bg-b',t:'我的家庭',ar:1,on:'needCert(\'family\')'},
+    {ic:'butler',icls:'bg-p',t:'我的管家',ar:1,on:'needCert(\'butler\')'},
+    {ic:'watch',icls:'bg-t',t:'我的手环',ar:1,on:'go(\'myBand\')'}
+  ],'家庭与设备',1)
   /* ⑤ 社区权益 */
   + grp([
-    {ic:'wallet',icls:'bg-g',t:'小区钱袋子',s:'可提现余额 ¥1,280.00',ar:1,on:'needCert(\'moneyBag\')'},
-    {ic:'hr',icls:'bg-t',t:'人力资源',s:'人才入驻 · 技能服务派单',ar:1,on:'needCert(\'hr\')'},
-    {ic:'shield',icls:'bg-br',t:'业主认证',s:CERT==='ok'?'已认证 2 个房号':(CERT==='pending'?'审核中 1 个 · 已认证 2 个':'未认证 · 认证后开放全部权益'),ar:1,on:'go(\'certList\')'}
-  ],'社区权益');
+    {ic:'wallet',icls:'bg-g',t:'小区钱袋子',ar:1,on:'needCert(\'moneyBag\')'},
+    {ic:'hr',icls:'bg-t',t:'人力资源',ar:1,on:'needCert(\'hr\')'},
+    {ic:'shield',icls:'bg-br',t:'业主认证',ar:1,on:'go(\'certList\')'}
+  ],'社区权益',1);
 }};
 
 /* ================= 个人信息 ================= */
