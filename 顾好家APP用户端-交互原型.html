@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.204';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.205';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -1903,40 +1903,43 @@ function houseSheet(){
 }
 
 
-/* 上门时间选择弹窗：先选未来 7 天日期，再选时间段 */
-var openTime=null; /* null | 'date' | 'slot' */
-function openTimeSheet(){openTime='date';render();}
+/* 期望上门时间弹窗：同一弹窗内先选日期（未来7天横排）再选时间段（3列网格） */
+var openTime=null; /* null | 'time' */
+function openTimeSheet(){openTime='time';render();}
 function closeTimeSheet(){openTime=null;render();}
-function timeBackDate(){openTime='date';render();}
-function pickHelperDate(d){pickState.helperDate=d;openTime='slot';render();}
-function pickHelperSlot(s){pickState.helperSlot=s;openTime=null;render();}
+function pickHelperDate(d){pickState.helperDate=d;render();}
+function pickHelperSlot(s){if(!pickState.helperDate)pickState.helperDate=helperDates()[0];pickState.helperSlot=s;openTime=null;render();}
 function helperDates(){
-  var out=[],wd=['周日','周一','周二','周三','周四','周五','周六'];
+  var out=[];
   for(var i=0;i<7;i++){
     var d=new Date();d.setDate(d.getDate()+i);
-    var m=('0'+(d.getMonth()+1)).slice(-2),dd=('0'+d.getDate()).slice(-2);
-    out.push(i===0?('今天 '+m+'-'+dd):(i===1?('明天 '+m+'-'+dd):(m+'-'+dd+' '+wd[d.getDay()])));
+    out.push((d.getMonth()+1)+'\u00b7'+d.getDate());
   }
   return out;
 }
 function timeSheet(){
   if(!openTime)return '';
   var dates=helperDates();
-  var slots=['08:00-10:00','10:00-12:00','12:00-14:00','14:00-16:00','16:00-18:00','18:00-20:00'];
-  var curD=pickState.helperDate||'',curS=pickState.helperSlot||'';
+  var slots=['8:00 - 9:00','9:00 - 10:00','10:00 - 11:00','11:00 - 12:00','12:00 - 13:00','13:00 - 14:00','14:00 - 15:00','15:00 - 16:00','17:00 - 18:00','18:00 - 19:00','19:00 - 20:00','20:00 - 21:00'];
+  var curD=pickState.helperDate||dates[0];
+  var curS=pickState.helperSlot||'';
   var h='<div class="mask" onclick="closeTimeSheet()"><div class="sheet" onclick="event.stopPropagation()">'
     +'<div class="sh"><div class="x" onclick="closeTimeSheet()">'+ic('x',20)+'</div>'
-    +'<div class="t">'+(openTime==='date'?'选择上门日期':'选择时间段')+'</div><div class="ok" onclick="closeTimeSheet()">完成</div></div>';
-  var list=(openTime==='date')?dates:slots;
-  if(openTime==='slot')h+='<div class="sub" style="padding:0 18px 8px;font-size:12px;color:var(--label3)">已选日期：'+(curD||'—')+'　<span style="color:var(--brand)" onclick="timeBackDate()">重新选择日期</span></div>';
-  h+='<div class="grp" style="margin:0 14px 6px;border-radius:12px;overflow:hidden">';
-  list.forEach(function(v,i){
-    if(i)h+='<div class="sep full"></div>';
-    var on=(openTime==='date')?(v===curD):(v===curS);
-    var fn=(openTime==='date')?'pickHelperDate':'pickHelperSlot';
-    h+='<div class="cell tap" onclick="'+fn+'(\''+v+'\')">'
-      +'<div class="cell-bd"><div class="cell-t" style="font-weight:'+(on?'600':'400')+';color:'+(on?'var(--brand)':'inherit')+'">'+v+'</div></div>'
-      +(on?'<div class="cell-ar" style="color:var(--brand)">'+ic('check',19)+'</div>':'')+'</div>';
+    +'<div class="t">期望上门时间</div><div class="ok" onclick="closeTimeSheet()">完成</div></div>'
+    +'<div class="grp-t" style="margin:2px 18px 10px">上门日期</div>'
+    +'<div style="display:flex;gap:8px;overflow-x:auto;padding:0 18px 4px;-webkit-overflow-scrolling:touch">';
+  dates.forEach(function(v){
+    var on=(v===curD);
+    h+='<div onclick="pickHelperDate(\''+v+'\')" style="flex-shrink:0;min-width:52px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:14px;cursor:pointer;'
+      +(on?'background:#8A8A8E;color:#fff;font-weight:600;':'background:#F2F2F7;color:var(--label);')+'">'+v+'</div>';
+  });
+  h+='</div>'
+    +'<div class="grp-t" style="margin:18px 18px 10px">上门时间点</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 18px 20px">';
+  slots.forEach(function(v){
+    var on=(v===curS);
+    h+='<div onclick="pickHelperSlot(\''+v+'\')" style="height:44px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:13px;cursor:pointer;border:1px solid '
+      +(on?'var(--brand)':'var(--sep)')+';color:'+(on?'var(--brand)':'var(--label)')+';font-weight:'+(on?'600':'400')+';background:'+(on?'rgba(43,196,160,.07)':'#fff')+'">'+v+'</div>';
   });
   return h+'</div></div></div>';
 }
