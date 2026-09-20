@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.231';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.232';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -1531,8 +1531,7 @@ S.healthData={title:'实时健康数据',render:function(){
   + metric('pulse','心率','78','次/分','正常范围 60 - 100 次/分',false,62)
   + metric('bp','血压','120/80','mmHg','正常范围 收缩压 90-139 / 舒张压 60-89 mmHg',false,55)
   + metric('drop','血脂','5.2','mmol/L','正常范围 总胆固醇 3.1-5.2 / 甘油三酯 0.4-1.7 mmol/L · 甘油三酯 1.6 偏高',true,80)
-  +'</div>'
-  +'<div class="pad">'+hint('数据每 30 分钟自动同步一次，异常数据以红色标注；下拉可同步最新数据，历史数据永久保存')+'</div>';
+  +'</div>';
 }};
 function metric(i,n,v,u,ref,ab,pct){
   return '<div class="metric tap" onclick="go(\'healthTrend\')"><div class="mh"><div class="mi" style="background:'+(ab?'var(--red)':'var(--brand)')+'">'+ic(i,15)+'</div>'
@@ -3171,8 +3170,7 @@ S.myBand={title:'我的手环',render:function(){
   + grp([
     {ic:'trash',icls:'bg-r',t:'断开连接',ar:1,on:'toast(\'已断开连接，历史数据仍保留\')'},
     {ic:'chart',icls:'bg-b',t:'历史数据',ar:1,on:'go(\'healthData\')'}
-  ],'设备管理')
-  + hint('用户与手环的绑定依据授权的注册手机号码：与当前账号手机号一致即自动绑定并同步该账号下所有数据，因此一个账号只能绑定一个手环');
+  ],'设备管理');
 }};
 
 /* ================= 报名 / 帖子 / 消息 ================= */
