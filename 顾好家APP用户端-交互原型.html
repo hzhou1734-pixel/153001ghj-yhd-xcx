@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.235';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.236';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -3432,9 +3432,7 @@ S.hr={title:'人力资源',render:function(){
 }};
 /* 认证资料（已录入）：查看提交的资料，可发起修改（修改需物业重新审核） */
 S.hrCertView={title:'认证资料',render:function(){
-  return '<div class="pad" style="padding-top:16px"><span class="tag g">已通过审核</span>'
-  +'<div class="sub" style="margin-top:9px">资料已进入小区人才库，可接收物业后台派单</div></div>'
-  + grp([
+  return grp([
     {t:'姓名',v:'李建国'},
     {t:'联系电话',v:'138****6688'},
     {t:'服务类目',v:'家电维修 · 管道疏通'}
@@ -3445,8 +3443,7 @@ S.hrCertView={title:'认证资料',render:function(){
   +'<div class="card"><div class="row" style="gap:10px">'
   +'<div class="upbox">'+ic('doc',20)+'<span class="n">低压电工证</span></div>'
   +'<div class="upbox">'+ic('doc',20)+'<span class="n">技能证书</span></div></div></div>'
-  + btn('修改认证资料','go(\'hrCertApply\')')
-  + hint('修改后需由物业后台审核通过后再更新；审核期间不影响生活帮手类订单');
+  + btn('修改认证资料','go(\'hrCertApply\')');
 }};
 /* 人才认证（未录入=首次提交 / 已录入=修改资料） */
 S.hrCertApply={title:'人才认证',render:function(){
