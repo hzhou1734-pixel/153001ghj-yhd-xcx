@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.223';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.224';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -1209,7 +1209,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'<div class="carousel"><div class="track">'
   + slide('sHealth','社区便民服务升级','家政、维修、代办一站式直达','linear-gradient(135deg,#4FD8BC,#17A88A)','helperList')
   + slide('sEscort','健康小屋义诊活动','专业医生驻点，免费健康咨询','linear-gradient(135deg,#FF9E73,#F2642A)','healthHome')
-  + slide('sTrust','暑期托管开始报名','放心托管，寓教于乐过暑假','linear-gradient(135deg,#7CC0F5,#3A8FD1)','trusteeship')
+  + slide('sTrust','周末托管开放预约','单日托管，随约随托','linear-gradient(135deg,#7CC0F5,#3A8FD1)','trusteeship')
   + slide('sMeal','适老营养餐上线','低油低盐，每日新鲜配送','linear-gradient(135deg,#C9B4F7,#8E5FE0)','meal')
   + slide('sHelper','生活帮手随时响应','管家上门，需求快速跟进','linear-gradient(135deg,#5AC8FA,#0A84FF)','escortList')
   +'</div><div class="dot"><i class="on"></i><i></i><i></i><i></i><i></i></div></div>'
@@ -1749,10 +1749,10 @@ function onEscortNote(el){pickState.escortNote=el.value;var c=document.getElemen
 /* ================= 托管服务 ================= */
 /* 托管类型数据：列表页与详情页共用 */
 var TRUST=[
-  {n:'禄口一小课后托管',d:'工作日课后看护 · 含午餐',p:5,pc:1,m:'1 人',ic:'sTrust',cls:'bg-b',cov:'b'},
-  {n:'禄口二小周末托管',d:'仅周末两天 · 含午餐与看护',p:5,pc:1,m:'1 人',ic:'family',cls:'bg-p',cov:'p'},
-  {n:'禄口三中接送托管',d:'上下学接送 · 全时段看护',p:5,pc:30,m:'30 天',ic:'cal',cls:'bg-t',cov:'o'},
-  {n:'禄口实验小学假期托管',d:'假期全时段看护 · 60 天套餐',p:5,pc:60,m:'60 天',ic:'sun',cls:'bg-o',cov:'y',dark:1}
+  {n:'禄口一小课后托管',d:'工作日课后看护 · 单日预约',p:45,pc:1,m:'1 人',ic:'sTrust',cls:'bg-b',cov:'b'},
+  {n:'禄口二小周末托管',d:'周末单日托管 · 含午餐与看护',p:90,pc:1,m:'1 人',ic:'family',cls:'bg-p',cov:'p'},
+  {n:'禄口三中接送托管',d:'单日上下学接送 · 全时段看护',p:65,pc:1,m:'1 人',ic:'cal',cls:'bg-t',cov:'o'},
+  {n:'禄口实验小学节假日托管',d:'节假日单日全时段看护',p:90,pc:1,m:'1 人',ic:'sun',cls:'bg-o',cov:'y',dark:1}
 ];
 S.trusteeship={title:'托管服务',render:function(){
   var h='';
@@ -1852,12 +1852,12 @@ function buildTrustSnapshot(amount){
     name:pk.n,count:cnt,jie:nj,song:ns,meal:nm,tutor:nt,
     jieSchool:pickState.trustJieSchool||'',songSchool:pickState.trustSchool||'',
     care:cl,house:'阳光花园 3栋2单元1802',
-    amount:amount,price:amount,period:BK_DATES[(pickState.trustDate===undefined?0:pickState.trustDate)],submit:'09-01 09:00',months:3
+    amount:amount,price:amount,period:BK_DATES[(pickState.trustDate===undefined?0:pickState.trustDate)],submit:'09-01 09:00'
   };
 }
 function trustOrderSnapshot(){
   if(lastTrustOrder)return lastTrustOrder;
-  return {name:'禄口一小课后托管',count:1,jie:true,song:false,meal:false,tutor:false,jieSchool:'禄口一小',songSchool:'',care:['上午 8-12','下午 12-18','晚上 18-21'],house:'阳光花园 3栋2单元1802',amount:1200,price:1200,period:'09-05',submit:'09-01 09:00',months:3};
+  return {name:'禄口一小课后托管',count:1,jie:true,song:false,meal:false,tutor:false,jieSchool:'禄口一小',songSchool:'',care:['上午 8-12','下午 12-18','晚上 18-21'],house:'阳光花园 3栋2单元1802',amount:45,price:45,period:'09-05',submit:'09-01 09:00'};
 }
 function trkv(k,v,cls){return '<div class="kv"><span class="k">'+k+'</span><span class="v'+(cls?' '+cls:'')+'">'+v+'</span></div>';}
 var openSchool=null;
@@ -2425,9 +2425,9 @@ var ORDERS=[
   {id:'BC20250902-008',type:1,t1:'昨日午餐',qty:1,price:18,oPrice:18,date:'09-03',sub:'09-02 11:05',st:'done',pay:'已结算',doneTime:'09-03 12:30',tags:['12:00送达','A套餐']},
   {id:'BC20250903-004',type:1,t1:'午餐 · 1 份',qty:1,price:18,oPrice:18,date:'09-04',sub:'09-03 09:40',st:'cancel',pay:'已取消',cancelTime:'09-03 14:25',tags:['12:00送达']},
   {id:'BC20250901-002',type:1,t1:'今日晚餐',qty:2,price:36,oPrice:36,date:'09-01',sub:'08-31 17:30',st:'done',pay:'已结算',doneTime:'09-01 17:40',tags:['17:30送达','B套餐']},
-  {id:'TG20250901-003',type:2,t1:'禄口一小课后托管',qty:1,price:1200,oPrice:1500,date:'10-01',sub:'09-01 09:00',st:'active',pay:'进行中',tags:['7岁·全日班','周一至周五']},
-  {id:'TG20250701-011',type:2,t1:'暑期托',qty:1,price:980,oPrice:980,date:'07-01',sub:'07-01 15:20',st:'cancel',pay:'已取消',cancelTime:'07-01 16:10',tags:['8岁·全日班']},
-  {id:'TG20250601-005',type:2,t1:'周末半日托',qty:1,price:600,oPrice:720,date:'06-01',sub:'05-28 14:00',st:'done',pay:'已结算',doneTime:'06-01 18:00',tags:['周六半天']},
+  {id:'TG20250901-003',type:2,t1:'禄口一小课后托管',qty:1,price:45,oPrice:45,date:'09-05',sub:'09-01 09:00',st:'active',pay:'进行中',tags:['7岁','09-05 课后时段']},
+  {id:'TG20250701-011',type:2,t1:'周末全天托管',qty:1,price:90,oPrice:90,date:'07-05',sub:'07-01 15:20',st:'cancel',pay:'已取消',cancelTime:'07-01 16:10',tags:['8岁','单日全时段']},
+  {id:'TG20250601-005',type:2,t1:'周末半日托管',qty:1,price:45,oPrice:45,date:'06-06',sub:'05-28 14:00',st:'done',pay:'已结算',doneTime:'06-01 18:00',tags:['周六 · 半日']},
   {id:'PZ20250903-002',type:3,t1:'医院就诊全程陪诊 · 3 小时',qty:3,price:240,oPrice:240,date:'09-05 09:00',sub:'09-03 16:00',st:'pending',pay:'待支付',tags:['陪诊员·李阿姨','北京协和医院']},
   {id:'PZ20250820-006',type:3,t1:'体检陪诊 · 2 小时',qty:2,price:160,oPrice:180,date:'08-22 08:30',sub:'08-20 10:30',st:'done',pay:'已支付',tags:['陪诊员·王阿姨','301医院体检中心']},
   {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-05 20:30',tags:['陪诊员·李阿姨','同济医院']},
@@ -2970,7 +2970,7 @@ S.coinRecharge={title:'账户充值',render:function(){
 var COIN_BALANCE=868;
 var COIN_LOG=[
   {t:'结算返还',a:126.00,d:'2026-09-01 10:00',sign:'+'},
-  {t:'托管单支出',a:1200.00,d:'2026-09-01 09:00',sign:'-'},
+  {t:'托管单支出',a:45.00,d:'2026-09-01 09:00',sign:'-'},
   {t:'报餐单支出',a:36.00,d:'2026-08-31 17:30',sign:'-'},
   {t:'余额充值',a:500.00,d:'2026-08-28 14:20',sign:'+'},
   {t:'托管单支出',a:980.00,d:'2026-07-01 15:20',sign:'-'},
@@ -2991,30 +2991,30 @@ S.bill={title:'我的账单',render:function(){
     return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
     + grpT('已结算账单')
     +'<div class="grp">'
-    +'<div class="cell tap" onclick="segState.billDetail=0;go(\'billDetail\')"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单</div><div class="cell-s">2026-08-01 已结清</div></div><div class="cell-v" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><div style="font-size:12px;color:var(--label3)">付款 <span style="color:var(--label)">¥1290.00</span></div><div style="font-size:12px;color:var(--label3)">退款 <span style="color:var(--accent)">-¥90.00</span></div><div style="font-weight:600;color:var(--green)">已结 ¥1200.00</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+    +'<div class="cell tap" onclick="segState.billDetail=0;go(\'billDetail\')"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单</div><div class="cell-s">2026-08-01 已结清</div></div><div class="cell-v" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><div style="font-size:12px;color:var(--label3)">付款 <span style="color:var(--label)">¥450.00</span></div><div style="font-size:12px;color:var(--label3)">退款 <span style="color:var(--accent)">-¥45.00</span></div><div style="font-weight:600;color:var(--green)">已结 ¥405.00</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
     +'<div class="cell tap" onclick="segState.billDetail=1;go(\'billDetail\')"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">8月报餐账单</div><div class="cell-s">2026-08-31 已结清</div></div><div class="cell-v" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><div style="font-size:12px;color:var(--label3)">付款 <span style="color:var(--label)">¥540.00</span></div><div style="font-size:12px;color:var(--label3)">退款 <span style="color:var(--accent)">-¥54.00</span></div><div style="font-weight:600;color:var(--green)">已结 ¥486.00</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结算合计</div><div class="cell-s">付款合计 ¥1830.00 · 退款合计 ¥144.00</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥1686.00</div></div>'
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结算合计</div><div class="cell-s">付款合计 ¥990.00 · 退款合计 ¥99.00</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥891.00</div></div>'
     +'</div>'
     + hint('仅托管与报餐产生账单，点击账单可查看结算明细');
   }
   return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
   +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">托管账单</div></div><div class="cell-v">¥1360.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">托管账单</div></div><div class="cell-v">¥405.00</div></div>'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">报餐账单</div></div><div class="cell-v">¥135.00</div></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">待结算合计</div></div>'
-  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1495.00</div></div>'
+  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥540.00</div></div>'
   +'</div>'
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldT=!pickState.billFoldT;render()"><span>托管单明细 · 共 6 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldT?'收起':'展开')+'</span></div>'
   +(pickState.billFoldT
   ?'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 9月服务费</div><div class="cell-s">09-01 09:00 · 全月 20 个托日 · ¥45/天</div></div><div class="cell-v" style="font-weight:600">¥900.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 9月1日</div><div class="cell-s">09-01 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="font-weight:600">¥45.00</div></div>'
   +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末全天托管 · 9月6日</div><div class="cell-s">09-06 09:00 · 全天看护 · ¥90/天</div></div><div class="cell-v">¥90.00</div></div>'
   +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末全天托管 · 9月13日</div><div class="cell-s">09-13 09:00 · 全天看护 · ¥90/天</div></div><div class="cell-v">¥90.00</div></div>'
   +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚托加时 · 9月9日</div><div class="cell-s">09-09 18:00 · 课后延时 2 小时 · ¥45/次</div></div><div class="cell-v">¥45.00</div></div>'
   +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚托加时 · 9月11日</div><div class="cell-s">09-11 18:00 · 课后延时 1.5 小时 · ¥45/次</div></div><div class="cell-v">¥45.00</div></div>'
   +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">节假日全天托管 · 中秋当日</div><div class="cell-s">09-20 08:30 · 全天看护 · ¥90/天</div></div><div class="cell-v">¥90.00</div></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">托管单小计</div><div class="cell-s">共 6 笔待结算</div></div>'
-  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1360.00</div></div>'
+  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥405.00</div></div>'
   +'</div>':'')
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldM=!pickState.billFoldM;render()"><span>报餐单明细 · 共 7 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldM?'收起':'展开')+'</span></div>'
   +(pickState.billFoldM
@@ -3039,12 +3039,12 @@ S.billDetail={title:'账单详情',render:function(){
     return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
     + grpT('8月托管账单 · 已结清')
     +'<div class="grp">'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">禄口一小课后托管 · 8月账单</div><div class="cell-s">结算时间 2026-08-01</div></div><div class="cell-v" style="color:var(--green);font-weight:600">已结清 ¥1200.00</div></div>'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">账单合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥1200.00</div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单 · 按天合计</div><div class="cell-s">结算时间 2026-08-01</div></div><div class="cell-v" style="color:var(--green);font-weight:600">已结清 ¥405.00</div></div>'
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">账单合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥405.00</div></div>'
     +'</div>'
     + grpT('结算明细')
     +'<div class="grp">'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">托管 · 禄口一小课后托管（8月整月）</div><div class="cell-s">08-01 ~ 08-31 · 全月服务费</div></div><div class="cell-v">¥1200.00</div></div>'
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月29日</div><div class="cell-s">08-29 09:00 · 全时段看护</div></div><div class="cell-v">¥90.00</div><div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月28日</div><div class="cell-s">08-28 16:30 · 课后时段</div></div><div class="cell-v">¥45.00</div></div><div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月22日</div><div class="cell-s">08-22 09:00 · 全时段看护</div></div><div class="cell-v">¥90.00</div></div><div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月21日</div><div class="cell-s">08-21 16:30 · 课后时段</div></div><div class="cell-v">¥45.00</div></div><div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月15日</div><div class="cell-s">08-15 09:00 · 全时段看护</div></div><div class="cell-v">¥90.00</div></div><div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月14日</div><div class="cell-s">08-14 16:30 · 课后时段</div></div><div class="cell-v">¥45.00</div></div></div>'
     +'</div>'
     + hint('已结算账单仅供查阅，不可再次操作');
   }
@@ -3729,15 +3729,15 @@ var SYS_MSGS=[
   {id:'m1',cat:0,ic:'bell',cls:'bg-o',t:'供水检修施工延期通知',s:'09-04 14:30 · 来自物业服务中心',un:true,
    h:'供水检修施工延期通知',b:'各位业主：<br><br>因施工方设备调配原因，原定本周六的供水检修施工延期至下周三 08:00-18:00 进行。检修期间将停止供水约 8 小时，请各位业主提前做好储水准备。<br><br>给您带来不便，敬请谅解。'},
   {id:'m2',cat:2,ic:'yen',cls:'bg-y',t:'托管账单出账提醒',s:'09-03 10:00 · 来自账务系统',un:true,
-   h:'9 月托管账单已出账',b:'您的 9 月托管服务账单已出账，本期金额 ¥688.00，请于 9 月 15 日前完成缴费。您可前往「我的-我的账单」查看账单明细并完成支付。'},
+   h:'9 月托管账单已出账',b:'您的 9 月托管服务账单已出账，本期金额 ¥405.00，请于 9 月 15 日前完成缴费。您可前往「我的-我的账单」查看账单明细并完成支付。'},
   {id:'m3',cat:1,ic:'cal',cls:'bg-br',t:'报餐服务恢复通知',s:'09-02 09:00 · 来自社区食堂',un:false,
    h:'社区食堂报餐服务恢复通知',b:'社区食堂设备检修已完成，报餐服务即日起恢复。下单截止时间仍为每日 10:00，欢迎各位业主继续使用。'},
   {id:'m6',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'08-31 18:00 · 来自账务系统',un:false,
    h:'8 月报餐账单已结算',b:'您的 8 月报餐服务账单已完成结算，合计金额 ¥486.00，结算时间 2026-08-31。您可前往「我的-我的账单」查看结算明细。'},
   {id:'m7',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'08-01 18:00 · 来自账务系统',un:false,
-   h:'8 月托管账单已结算',b:'您的 8 月托管服务账单已完成结算，合计金额 ¥1200.00，结算时间 2026-08-01。您可前往「我的-我的账单」查看结算明细。'},
+   h:'8 月托管账单已结算',b:'您的 8 月托管服务账单已完成结算，合计金额 ¥405.00，结算时间 2026-08-01。您可前往「我的-我的账单」查看结算明细。'},
   {id:'m8',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'07-01 18:00 · 来自账务系统',un:false,
-   h:'7 月托管账单已结算',b:'您的 7 月托管服务账单已完成结算，合计金额 ¥1200.00，结算时间 2026-07-01。您可前往「我的-我的账单」查看结算明细。'},
+   h:'7 月托管账单已结算',b:'您的 7 月托管服务账单已完成结算，合计金额 ¥450.00，结算时间 2026-07-01。您可前往「我的-我的账单」查看结算明细。'},
   {id:'m4',cat:1,ic:'wallet',cls:'bg-g',t:'账单退还结果',s:'09-01 16:20 · 来自结算系统',un:true,
    h:'7 月账单差价已退还',b:'您 7 月的报餐单与托管单已完成结算核算，退还差价 ¥126.00 已退回至顾好家币账户余额，可前往「我的-我的账单」查看结算明细。'}
 ];
