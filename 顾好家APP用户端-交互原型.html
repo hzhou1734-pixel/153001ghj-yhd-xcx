@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.217';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.218';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -2960,9 +2960,11 @@ S.coin={title:'顾好家币',render:function(){
 }};
 S.coinRecharge={title:'账户充值',render:function(){
   return grpT('充值金额')
-  +'<div class="grp"><div class="field"><span class="lb">金额</span><input placeholder="请输入充值金额" type="tel"></div></div>'
+  +'<div class="grp"><div class="field"><span class="lb">金额</span><input id="rechargeInput" placeholder="请输入充值金额" type="tel" value="'+(rechargeAmt||'')+'"></div></div>'
   +'<div class="pad"><div class="qlist">'
-  +'<div class="qbtn">¥100</div><div class="qbtn">¥300</div><div class="qbtn">¥500</div><div class="qbtn">¥1000</div></div></div>'
+  +[100,300,500,1000].map(function(n){
+    return '<div class="qbtn'+(rechargeAmt===n?' on':'')+'" onclick="pickAmt('+n+')">¥'+n+'</div>';
+  }).join('')+'</div></div>'
   + grpT('支付方式')
   +'<div class="grp">'
   +'<div class="cell tap" onclick="pickPay(\'wechat\')"><div class="cell-ic bg-g">'+ic('wechat',17)+'</div><div class="cell-bd"><div class="cell-t">微信支付</div></div>'
@@ -3505,6 +3507,8 @@ S.hrOrderDetail={title:'订单详情',render:function(){
 var payCtx=null;
 var payMethod='alipay';   /* 当前选中支付方式 'alipay' | 'wechat' */
 function pickPay(m){payMethod=m;render();}
+function pickAmt(n){rechargeAmt=n;render();}
+var rechargeAmt=300;
 function payNow(){if(payCtx&&payCtx.label==='陪诊单')escortDemoStatus='active';go('payResult');}
 function openEscortPay(){
   var dur=(pickState.escortDur===undefined?0:pickState.escortDur);
