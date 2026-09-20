@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.208';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.209';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -3222,10 +3222,10 @@ S.helperDetail={title:'需求详情',render:function(){
   + hint('需求已同步至物业后台，由楼栋管家跟进处理');
 }};
 
-/* ================= 钱袋子 / 人力资源 ================= */
+/* ================= 钱袋子（物业 / 膳食 / 托管） ================= */
 var MONEY_MONTHS=['2026-08','2026-07','2026-06'];   /* 倒序：0=最新 */
 var moneyMonthIdx=0;               /* 当前查看月份索引 */
-var moneyBagTab=0;                 /* 0=收入 1=支出 */
+var moneyBagTab=0;                 /* 0=物业钱袋子 1=膳食钱袋子 2=托管钱袋子 */
 var curReceipt=null;               /* 当前查看凭证的条目 id */
 var MONEY_BAG={
   '2026-08':{balance:'¥12,580',inc:'+8,600',exp:'-3,200',items:[
@@ -3250,6 +3250,58 @@ var MONEY_BAG={
     {id:'mb15',type:'inc',name:'场地租赁收入',date:'06-12',amt:'+¥1,400',ic:'cal',icls:'bg-g'}
   ]}
 };
+/* 膳食钱袋子：本月收入总额 + 早餐/中餐/晚餐均价 + 报餐业务收支明细 */
+var MEAL_NOTES=[['早餐均价','¥6'],['中餐均价','¥15'],['晚餐均价','¥15']];
+var MEAL_BAG={
+  '2026-08':{inc:'¥1,293',items:[
+    {id:'me1',type:'inc',name:'晚餐报餐收入 · 18 份',date:'08-31',amt:270,ic:'sMeal',icls:'bg-y'},
+    {id:'me2',type:'inc',name:'午餐报餐收入 · 30 份',date:'08-29',amt:450,ic:'sMeal',icls:'bg-y'},
+    {id:'me3',type:'exp',name:'食材采购（蔬菜 / 肉类）',date:'08-28',amt:860,ic:'img',icls:'bg-r'},
+    {id:'me4',type:'inc',name:'早餐报餐收入 · 28 份',date:'08-28',amt:168,ic:'sun',icls:'bg-y'},
+    {id:'me5',type:'exp',name:'餐盒与耗材采购',date:'08-26',amt:240,ic:'build',icls:'bg-r'},
+    {id:'me6',type:'inc',name:'午餐报餐收入 · 27 份',date:'08-26',amt:405,ic:'sMeal',icls:'bg-y'}
+  ]},
+  '2026-07':{inc:'¥1,056',items:[
+    {id:'me7',type:'inc',name:'晚餐报餐收入 · 22 份',date:'07-31',amt:330,ic:'sMeal',icls:'bg-y'},
+    {id:'me8',type:'inc',name:'午餐报餐收入 · 28 份',date:'07-28',amt:420,ic:'sMeal',icls:'bg-y'},
+    {id:'me9',type:'exp',name:'食材采购（米面粮油）',date:'07-26',amt:780,ic:'img',icls:'bg-r'},
+    {id:'me10',type:'inc',name:'早餐报餐收入 · 26 份',date:'07-25',amt:156,ic:'sun',icls:'bg-y'},
+    {id:'me11',type:'inc',name:'早餐报餐收入 · 25 份',date:'07-21',amt:150,ic:'sun',icls:'bg-y'}
+  ]},
+  '2026-06':{inc:'¥1,209',items:[
+    {id:'me12',type:'inc',name:'午餐报餐收入 · 25 份',date:'06-30',amt:375,ic:'sMeal',icls:'bg-y'},
+    {id:'me13',type:'inc',name:'晚餐报餐收入 · 20 份',date:'06-27',amt:300,ic:'sMeal',icls:'bg-y'},
+    {id:'me14',type:'exp',name:'食材采购（蔬菜 / 肉类）',date:'06-24',amt:700,ic:'img',icls:'bg-r'},
+    {id:'me15',type:'inc',name:'早餐报餐收入 · 24 份',date:'06-22',amt:144,ic:'sun',icls:'bg-y'},
+    {id:'me16',type:'inc',name:'午餐报餐收入 · 26 份',date:'06-18',amt:390,ic:'sMeal',icls:'bg-y'}
+  ]}
+};
+/* 托管钱袋子：本月收入总额 + 接/送/用餐/托管单价 + 托管业务收支明细 */
+var TRUST_NOTES=[['接','¥8/趟'],['送','¥8/趟'],['用餐','¥15/餐'],['托管','¥45/餐']];
+var TRUST_BAG={
+  '2026-08':{inc:'¥1,202',items:[
+    {id:'tr1',type:'inc',name:'托管费收入 · 全日托 12 人',date:'08-31',amt:540,ic:'sTrust',icls:'bg-g'},
+    {id:'tr2',type:'inc',name:'用餐费收入 · 午餐 26 餐',date:'08-30',amt:390,ic:'sMeal',icls:'bg-g'},
+    {id:'tr3',type:'exp',name:'接送车辆油耗与保养',date:'08-29',amt:180,ic:'build',icls:'bg-r'},
+    {id:'tr4',type:'inc',name:'接送趟次收入 · 早接 18 趟',date:'08-28',amt:144,ic:'sEscort',icls:'bg-g'},
+    {id:'tr5',type:'inc',name:'接送趟次收入 · 晚送 16 趟',date:'08-28',amt:128,ic:'sEscort',icls:'bg-g'},
+    {id:'tr6',type:'exp',name:'托管教具与图书采购',date:'08-25',amt:260,ic:'img',icls:'bg-r'}
+  ]},
+  '2026-07':{inc:'¥1,042',items:[
+    {id:'tr7',type:'inc',name:'托管费收入 · 全日托 10 人',date:'07-31',amt:450,ic:'sTrust',icls:'bg-g'},
+    {id:'tr8',type:'inc',name:'用餐费收入 · 午餐 24 餐',date:'07-29',amt:360,ic:'sMeal',icls:'bg-g'},
+    {id:'tr9',type:'inc',name:'接送趟次收入 · 早接 15 趟',date:'07-28',amt:120,ic:'sEscort',icls:'bg-g'},
+    {id:'tr10',type:'exp',name:'托管教具与图书采购',date:'07-26',amt:200,ic:'img',icls:'bg-r'},
+    {id:'tr11',type:'inc',name:'接送趟次收入 · 晚送 14 趟',date:'07-25',amt:112,ic:'sEscort',icls:'bg-g'}
+  ]},
+  '2026-06':{inc:'¥943',items:[
+    {id:'tr12',type:'inc',name:'托管费收入 · 全日托 9 人',date:'06-30',amt:405,ic:'sTrust',icls:'bg-g'},
+    {id:'tr13',type:'inc',name:'用餐费收入 · 午餐 22 餐',date:'06-27',amt:330,ic:'sMeal',icls:'bg-g'},
+    {id:'tr14',type:'exp',name:'接送车辆油耗与保养',date:'06-25',amt:150,ic:'build',icls:'bg-r'},
+    {id:'tr15',type:'inc',name:'接送趟次收入 · 早接 14 趟',date:'06-22',amt:112,ic:'sEscort',icls:'bg-g'},
+    {id:'tr16',type:'inc',name:'接送趟次收入 · 晚送 12 趟',date:'06-18',amt:96,ic:'sEscort',icls:'bg-g'}
+  ]}
+};
 function moneyMonthLabel(k){var y=k.substr(0,4),m=parseInt(k.substr(5,2),10);return y+'年'+m+'月';}
 function moneyMonth(d){
   var n=moneyMonthIdx+d;
@@ -3261,8 +3313,10 @@ function viewReceipt(id){curReceipt=id;render();}
 function closeReceipt(){curReceipt=null;render();}
 S.moneyBag={title:'小区钱袋子',render:function(){
   var mk=MONEY_MONTHS[moneyMonthIdx];
-  var d=MONEY_BAG[mk];
-  var list=d.items.filter(function(x){return moneyBagTab===0?(x.type==='inc'):(x.type==='exp');});
+  var isProp=(moneyBagTab===0);
+  var d=isProp?MONEY_BAG[mk]:(moneyBagTab===1?MEAL_BAG[mk]:TRUST_BAG[mk]);
+  var notes=moneyBagTab===1?MEAL_NOTES:(moneyBagTab===2?TRUST_NOTES:null);
+  var list=d.items;
   var curR=curReceipt?d.items.find(function(x){return x.id===curReceipt;}):null;
   var h='<div class="pad" style="padding-top:12px">'
     +'<div class="card" style="background:linear-gradient(135deg,#4FD8BC,#17A88A);color:#fff;padding:16px 18px">'
@@ -3270,12 +3324,23 @@ S.moneyBag={title:'小区钱袋子',render:function(){
       +'<div class="mb-a'+(moneyMonthIdx>=MONEY_MONTHS.length-1?' off':'')+'" onclick="moneyMonth(1)">'+ic('chevL',18)+'</div>'
       +'<div class="mb-m">'+moneyMonthLabel(mk)+'</div>'
       +'<div class="mb-a'+(moneyMonthIdx<=0?' off':'')+'" onclick="moneyMonth(-1)">'+ic('chevR',18)+'</div>'
-    +'</div>'
-    +'<div class="row between"><div><div style="font-size:12.5px;opacity:.9">本月结余</div>'
+    +'</div>';
+  if(isProp){
+    h+='<div class="row between" style="margin-top:12px"><div><div style="font-size:12.5px;opacity:.9">本月结余</div>'
     +'<div style="font-size:28px;font-weight:800;letter-spacing:-.8px;margin-top:5px">'+d.balance+'</div></div>'
     +'<div style="text-align:right"><div style="font-size:12.5px;opacity:.9">收入 / 支出</div>'
-    +'<div style="font-size:17px;font-weight:700;margin-top:6px">'+d.inc+' / '+d.exp+'</div></div></div>'
-    +'</div></div>'
+    +'<div style="font-size:17px;font-weight:700;margin-top:6px">'+d.inc+' / '+d.exp+'</div></div></div>';
+  }else{
+    h+='<div style="margin-top:12px"><div style="font-size:12.5px;opacity:.9">本月收入总额</div>'
+    +'<div style="font-size:28px;font-weight:800;letter-spacing:-.8px;margin-top:5px">'+d.inc+'</div></div>'
+    +'<div style="display:flex;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.28)">';
+    notes.forEach(function(n,i){
+      if(i)h+='<div style="width:1px;height:24px;background:rgba(255,255,255,.28)"></div>';
+      h+='<div style="flex:1;text-align:center"><div style="font-size:11px;opacity:.9">'+n[0]+'</div><div style="font-size:13px;font-weight:700;margin-top:3px">'+n[1]+'</div></div>';
+    });
+    h+='</div>';
+  }
+  h+='</div></div>'
     + grpT('收支明细')
     +'<div class="mb-tabs">'
       +'<div class="mb-t'+(moneyBagTab===0?' on':'')+'" onclick="moneyTab(0)">物业钱袋子</div>'
@@ -3284,17 +3349,19 @@ S.moneyBag={title:'小区钱袋子',render:function(){
     +'</div>'
     +'<div class="grp">'
     + list.map(function(x,i){
+        var amt=isProp?x.amt:((x.type==='inc'?'+¥':'-¥')+x.amt);
         var amtCls=x.type==='inc'?'var(--green)':'var(--red)';
         return (i?'<div class="sep"></div>':'')
           +'<div class="cell tap" onclick="viewReceipt(&apos;'+x.id+'&apos;)">'
           +'<div class="cell-ic '+x.icls+'">'+ic(x.ic,17)+'</div>'
           +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">'+x.name+'</div>'
           +'<div class="cell-s">'+x.date+' · 点击查看凭证</div></div>'
-          +'<div class="cell-v" style="color:'+amtCls+';font-weight:600">'+x.amt+'</div>'
+          +'<div class="cell-v" style="color:'+amtCls+';font-weight:600">'+amt+'</div>'
           +'</div>';
       }).join('')
     +'</div>';
   if(curR){
+    var rAmt=isProp?curR.amt:((curR.type==='inc'?'+¥':'-¥')+curR.amt);
     h+='<div class="rv-mask" onclick="closeReceipt()">'
       +'<div class="rv-box" onclick="event.stopPropagation()">'
       +'<div class="rv-img"><div class="rv-paper">'
@@ -3308,13 +3375,14 @@ S.moneyBag={title:'小区钱袋子',render:function(){
       +'<div class="rv-bd">'
         +'<div class="nm">'+curR.name+'</div>'
         +'<div class="mt">'+curR.date+' · '+moneyMonthLabel(mk)+'</div>'
-        +'<div class="am">'+curR.amt+'</div>'
+        +'<div class="am">'+rAmt+'</div>'
       +'</div>'
       +'<div class="rv-close" onclick="closeReceipt()">关闭</div>'
       +'</div></div>';
   }
   return h;
 }};
+
 /* ================= 人力资源（人才库 · 物业派单模式） ================= */
 /* 流程：编辑技能/上传凭证 → 物业审核 → 进入人才库；业主需求由物业后台匹配派单；
    双方线下对接交易，平台仅生成订单留痕、不做收费；服务完成后业主可在线评分 */
