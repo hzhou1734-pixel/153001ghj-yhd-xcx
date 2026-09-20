@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.227';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.228';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -2985,17 +2985,25 @@ S.coinDetail={title:'账户明细',render:function(){
       +'<div class="cell-v" style="font-weight:600;color:'+(x.sign==='+'?'var(--green)':'var(--accent)')+'">'+x.sign+'¥'+x.a.toFixed(2)+'</div></div>';
     }).join('')+'</div>';
 }};
+function billSettleCard(ico,icls,name,date,pay,refund,net,tab){
+  return '<div class="grp"><div class="cell tap" onclick="segState.billDetail='+tab+';go(\'billDetail\')">'
+    +'<div class="cell-ic '+icls+'">'+ic(ico,17)+'</div>'
+    +'<div class="cell-bd"><div class="cell-t">'+name+'</div>'
+    +'<div class="cell-s">'+date+'</div>'
+    +'<div class="cell-s" style="margin-top:2px">付款 <span style="color:var(--label)">'+pay+'</span> · 退款 <span style="color:var(--accent)">'+refund+'</span></div></div>'
+    +'<div class="cell-v" style="color:var(--green);font-weight:700;font-size:16px;white-space:nowrap">'+net+'</div>'
+    +'<div class="cell-ar">'+ic('chevR',16)+'</div></div></div>';
+}
 S.bill={title:'我的账单',render:function(){
   var cur=segState.bill||0;
   if(cur===1){
     return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
     + grpT('已结算账单')
+    + billSettleCard('sTrust','bg-b','8月托管账单','2026-08-01 已结清','¥450.00','-¥45.00','已结 ¥405.00',0)
+    + billSettleCard('sMeal','bg-o','8月报餐账单','2026-08-31 已结清','¥540.00','-¥54.00','已结 ¥486.00',1)
     +'<div class="grp">'
-    +'<div class="cell tap" onclick="segState.billDetail=0;go(\'billDetail\')"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单</div><div class="cell-s">2026-08-01 已结清</div></div><div class="cell-v" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><div style="font-size:12px;color:var(--label3)">付款 <span style="color:var(--label)">¥450.00</span></div><div style="font-size:12px;color:var(--label3)">退款 <span style="color:var(--accent)">-¥45.00</span></div><div style="font-weight:600;color:var(--green)">已结 ¥405.00</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-    +'<div class="cell tap" onclick="segState.billDetail=1;go(\'billDetail\')"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">8月报餐账单</div><div class="cell-s">2026-08-31 已结清</div></div><div class="cell-v" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><div style="font-size:12px;color:var(--label3)">付款 <span style="color:var(--label)">¥540.00</span></div><div style="font-size:12px;color:var(--label3)">退款 <span style="color:var(--accent)">-¥54.00</span></div><div style="font-weight:600;color:var(--green)">已结 ¥486.00</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
     +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结算合计</div><div class="cell-s">付款合计 ¥990.00 · 退款合计 ¥99.00</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥891.00</div></div>'
-    +'</div>'
-    + hint('仅托管与报餐产生账单，点击账单可查看结算明细');
+    +'</div>';
   }
   return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
   +'<div class="grp">'
