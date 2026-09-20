@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.239';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.240';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -1384,8 +1384,7 @@ S.certify={title:'房屋认证',render:function(){
   + btn('提交认证','toast(\'已提交，等待物业审核\');go(\'certList\')');
 }};
 S.certList={title:'我的认证',rightLabel:'+添加',rightFn:'go(\'certify\')',render:function(){
-  return '<div class="pad">'+hint('每个小区由对应物业后台独立审核维护')+'</div>'
-  +'<div class="grp">'
+  return '<div class="grp">'
   +'<div class="item noind">'+thumb('','home2',40,40,'')
   +'<div class="it-bd"><div class="it-t">阳光花园</div><div class="it-s">3栋2单元-1802 · 提交于 08-20</div></div><span class="tag g">已认证</span></div>'
   +'<div class="sep full"></div>'
@@ -1399,8 +1398,7 @@ S.certList={title:'我的认证',rightLabel:'+添加',rightFn:'go(\'certify\')',
   +'<div class="item noind" onclick="go(\'certReject2\')">'+thumb('p','home2',40,40,'')
   +'<div class="it-bd"><div class="it-t">翠湖小区</div><div class="it-s">6栋1单元-0501 · 提交于 09-02</div>'
   +'<div class="rj-line">'+ic('warn',12)+'<span>驳回：业主姓名与产权人不一致</span></div></div><span class="tag r">已驳回</span></div>'
-  +'</div>'
-  + hint('被驳回的认证会显示具体原因，修改后可重新提交');
+  +'</div>';
 }};
 
 /* 驳回原因详情：数据驱动，便于按不同驳回项复用。log 为驳回记录日志（最新在前） */
