@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.219';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.220';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -2960,7 +2960,7 @@ S.coin={title:'顾好家币',render:function(){
 }};
 S.coinRecharge={title:'账户充值',render:function(){
   return grpT('充值金额')
-  +'<div class="grp"><div class="field"><span class="lb">金额</span><input id="rechargeInput" placeholder="请输入充值金额" type="tel" value="'+(rechargeAmt||'')+'"></div></div>'
+  +'<div class="grp"><div class="field"><span class="lb">金额</span><input id="rechargeInput" placeholder="请输入充值金额" type="tel" value="'+(rechargeAmt||'')+'" style="caret-color:var(--label)"></div></div>'
   +'<div class="pad"><div class="qlist">'
   +[100,300,500,1000].map(function(n){
     return '<div class="qbtn'+(rechargeAmt===n?' on':'')+'" onclick="pickAmt('+n+')">¥'+n+'</div>';
@@ -2973,7 +2973,7 @@ S.coinRecharge={title:'账户充值',render:function(){
   +'<div class="cell tap" onclick="pickPay(\'alipay\')"><div class="cell-ic bg-b">'+ic('alipay',17)+'</div><div class="cell-bd"><div class="cell-t">支付宝支付</div></div>'
   +(payMethod==='alipay'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
   +'</div>'
-  +'<div class="pad"><button class="btn" onclick="toast(\'支付成功，账户已充值\');back()">确认充值</button></div>';
+  +'<div class="pad"><button class="btn" onclick="toast(\'充值成功\')">确认充值</button></div>';
 }};
 var COIN_BALANCE=868;
 var COIN_LOG=[
