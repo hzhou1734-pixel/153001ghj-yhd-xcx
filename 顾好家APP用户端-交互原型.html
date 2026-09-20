@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.202';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.203';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -1015,7 +1015,7 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
   sc.innerHTML=h;
   /* 底部下拉弹窗渲染到独立层：不进路由栈、不随内容滚动、不跳转页面 */
   var pk=document.getElementById('picker');
-  pk.innerHTML=pickerSheet()+schoolSheet()+houseSheet()+payDialogHTML();
+  pk.innerHTML=pickerSheet()+schoolSheet()+houseSheet()+payDialogHTML()+timeSheet();
   var tb=document.getElementById('tabbar');
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
@@ -1903,6 +1903,44 @@ function houseSheet(){
 }
 
 
+/* 上门时间选择弹窗：先选未来 7 天日期，再选时间段 */
+var openTime=null; /* null | 'date' | 'slot' */
+function openTimeSheet(){openTime='date';render();}
+function closeTimeSheet(){openTime=null;render();}
+function timeBackDate(){openTime='date';render();}
+function pickHelperDate(d){pickState.helperDate=d;openTime='slot';render();}
+function pickHelperSlot(s){pickState.helperSlot=s;openTime=null;render();}
+function helperDates(){
+  var out=[],wd=['周日','周一','周二','周三','周四','周五','周六'];
+  for(var i=0;i<7;i++){
+    var d=new Date();d.setDate(d.getDate()+i);
+    var m=('0'+(d.getMonth()+1)).slice(-2),dd=('0'+d.getDate()).slice(-2);
+    out.push(i===0?('今天 '+m+'-'+dd):(i===1?('明天 '+m+'-'+dd):(m+'-'+dd+' '+wd[d.getDay()])));
+  }
+  return out;
+}
+function timeSheet(){
+  if(!openTime)return '';
+  var dates=helperDates();
+  var slots=['08:00-10:00','10:00-12:00','12:00-14:00','14:00-16:00','16:00-18:00','18:00-20:00'];
+  var curD=pickState.helperDate||'',curS=pickState.helperSlot||'';
+  var h='<div class="mask" onclick="closeTimeSheet()"><div class="sheet" onclick="event.stopPropagation()">'
+    +'<div class="sh"><div class="x" onclick="closeTimeSheet()">'+ic('x',20)+'</div>'
+    +'<div class="t">'+(openTime==='date'?'选择上门日期':'选择时间段')+'</div><div class="ok" onclick="closeTimeSheet()">完成</div></div>';
+  var list=(openTime==='date')?dates:slots;
+  if(openTime==='slot')h+='<div class="sub" style="padding:0 18px 8px;font-size:12px;color:var(--label3)">已选日期：'+(curD||'—')+'　<span style="color:var(--brand)" onclick="timeBackDate()">重新选择日期</span></div>';
+  h+='<div class="grp" style="margin:0 14px 6px;border-radius:12px;overflow:hidden">';
+  list.forEach(function(v,i){
+    if(i)h+='<div class="sep full"></div>';
+    var on=(openTime==='date')?(v===curD):(v===curS);
+    var fn=(openTime==='date')?'pickHelperDate':'pickHelperSlot';
+    h+='<div class="cell tap" onclick="'+fn+'(\''+v+'\')">'
+      +'<div class="cell-bd"><div class="cell-t" style="font-weight:'+(on?'600':'400')+';color:'+(on?'var(--brand)':'inherit')+'">'+v+'</div></div>'
+      +(on?'<div class="cell-ar" style="color:var(--brand)">'+ic('check',19)+'</div>':'')+'</div>';
+  });
+  return h+'</div></div></div>';
+}
+
 /* ================= 顾好家币支付确认弹窗 ================= */
 var payConfirm=null;
 var payInsufficient=null;
@@ -2195,7 +2233,7 @@ S.helper={title:'提交服务订单',render:function(){
   +'<div class="it-s">'+hk.d+'</div>'
   +'<div style="margin-top:7px"><span class="price" style="font-size:18px">¥'+hk.p+'</span><span class="sub" style="font-size:11px;margin-left:4px">'+hk.u+'</span></div></div></div></div>'
   + grpT('服务时间')
-  +'<div class="grp"><div class="field"><span class="lb">上门时间</span><input placeholder="请选择上门服务时间"></div></div>'
+  + grp([{t:'上门时间',s:(pickState.helperDate&&pickState.helperSlot)?(pickState.helperDate+' '+pickState.helperSlot):'请选择上门服务时间',ar:1,on:'openTimeSheet()'}])
   + grpT('服务地址')
   +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="cell-t">服务地址</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div></div>'
   + grpT('备注')
