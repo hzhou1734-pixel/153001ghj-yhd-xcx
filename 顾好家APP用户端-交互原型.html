@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.207';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.208';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -2255,7 +2255,7 @@ S.community={tab:'community',title:'社区',nav:false,render:function(){
   ])
   + grp([
     {ic:'yen',icls:'bg-g',t:'小区钱袋子',s:'公共收支透明公示',ar:1,on:'go(\'moneyBag\')'},
-    {ic:'hr',icls:'bg-t',t:'人力资源',s:'邻里招聘、技能共享',ar:1,on:'go(\'hr\')'}
+    {ic:'hr',icls:'bg-t',t:'人力资源',s:'人才入驻 · 技能服务派单',ar:1,on:'go(\'hr\')'}
   ],'小区公开信息');
 }};
 
@@ -2919,7 +2919,7 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   /* ⑤ 社区权益 */
   + grp([
     {ic:'wallet',icls:'bg-g',t:'小区钱袋子',s:'可提现余额 ¥1,280.00',ar:1,on:'needCert(\'moneyBag\')'},
-    {ic:'hr',icls:'bg-t',t:'人力资源',s:'发布 / 查看邻里供需信息',ar:1,on:'needCert(\'hr\')'},
+    {ic:'hr',icls:'bg-t',t:'人力资源',s:'人才入驻 · 技能服务派单',ar:1,on:'needCert(\'hr\')'},
     {ic:'shield',icls:'bg-br',t:'业主认证',s:CERT==='ok'?'已认证 2 个房号':(CERT==='pending'?'审核中 1 个 · 已认证 2 个':'未认证 · 认证后开放全部权益'),ar:1,on:'go(\'certList\')'}
   ],'社区权益');
 }};
@@ -3315,52 +3315,143 @@ S.moneyBag={title:'小区钱袋子',render:function(){
   }
   return h;
 }};
-/* 人力资源详情：单条操作（编辑、显示/隐藏、删除），参照帖子单帖操作模式 */
-var hrVis={}; /* 信息显示状态：title -> true(显示)/false(隐藏)，缺省为显示 */
-var hrDel={}; /* 信息删除状态：title -> true(已删除) */
-function toggleHrVis(t){hrVis[t]=(hrVis[t]!==false)?false:true;toast(hrVis[t]===false?'信息已隐藏':'信息已显示');render();}
-function delHr(t){hrDel[t]=true;toast('信息已删除');back();}
-S.hr={title:'人力资源',rightLabel:'我的发布',rightFn:'go(\'hrMyPosts\')',render:function(){
+/* ================= 人力资源（人才库 · 物业派单模式） ================= */
+/* 流程：编辑技能/上传凭证 → 物业审核 → 进入人才库；业主需求由物业后台匹配派单；
+   双方线下对接交易，平台仅生成订单留痕、不做收费；服务完成后业主可在线评分 */
+var hrState='none'; /* 'none' 未录入 | 'in' 已录入人才库（原型演示：提交审核后进入已录入态） */
+var HR_ORDERS=[
+  {no:'HR20250918-001',t:'家电维修',cov:'o',ic:'build',amt:150,qty:1,time:'09-21 14:00 - 16:00',addr:'阳光花园 3栋2单元1802',st:'active',cu:'张先生',tel:'13800001234',sub:'09-18 10:20',acc:'09-18 11:05',fin:''},
+  {no:'HR20250910-003',t:'管道疏通',cov:'g',ic:'sHelper',amt:120,qty:1,time:'09-10 10:00 - 12:00',addr:'阳光花园 5栋1单元1101',st:'done',cu:'李女士',tel:'13900005678',sub:'09-09 16:40',acc:'09-09 17:20',fin:'09-10 12:05'},
+  {no:'HR20250905-002',t:'家电维修',cov:'o',ic:'build',amt:150,qty:2,time:'09-05 15:00 - 17:00',addr:'阳光花园 8栋2单元1503',st:'cancel',cu:'王先生',tel:'13700009012',sub:'09-04 09:15',acc:'09-04 10:02',fin:''}
+];
+var curHrOrder=0;
+function openHrOrder(i){curHrOrder=i;go('hrOrderDetail');}
+function hrStTag(st){
+  return st==='active'?'<span class="tag b">进行中</span>':st==='done'?'<span class="tag g">已完成</span>':'<span class="tag gy">已取消</span>';
+}
+function hrStats(){
+  var a=0,d=0,c=0;
+  HR_ORDERS.forEach(function(o){if(o.st==='active')a++;else if(o.st==='done')d++;else c++;});
+  return {acc:HR_ORDERS.length,act:a,done:d,cancel:c};
+}
+function submitHrCert(){
+  var re=(hrState==='in');
+  hrState='in';
+  toast(re?'修改已提交，物业审核通过后更新':'已提交物业审核，审核通过后进入人才库');
+  go('hr');
+}
+function confirmHrDone(){
+  var o=HR_ORDERS[curHrOrder];if(!o)return;
+  o.st='done';if(!o.fin)o.fin='09-21 16:30';
+  toast('订单已确认完成，金额由线下收取，线上仅留存订单记录');
+  render();
+}
+S.hr={title:'人力资源',render:function(){
+  if(hrState!=='in'){
+    /* 未录入：人才入驻引导（编辑技能 + 上传凭证 + 物业审核进人才库） */
+    return '<div class="pad"><div class="cover t" style="height:150px">'+ic('hr',42,'#fff',1.7)+'</div></div>'
+    +'<div class="pad"><div class="bold" style="font-size:20px;letter-spacing:-.3px">人才入驻</div>'
+    +'<div class="sub" style="margin-top:8px;line-height:1.7">编辑个人技能并上传凭证，提交物业审核；审核通过后资料进入小区人才库。业主的生活服务需求由物业后台匹配派单，双方线下对接交易，平台仅生成订单留痕、不做收费。</div></div>'
+    + grp([{ic:'doc',icls:'bg-t',t:'编辑技能与上传凭证',s:'提交后由物业审核，通过后进入人才库',ar:1,on:'go(\'hrCertApply\')'}])
+    +'<div style="height:8px"></div>';
+  }
+  /* 已录入：人才认证入口 + 订单信息统计 + 订单列表 */
+  var TABS=['全部','进行中','已完成','已取消'];
+  var STMAP={active:'进行中',done:'已完成',cancel:'已取消'};
+  var cur=(chipState.hr===undefined?0:chipState.hr);
+  var list=cur?HR_ORDERS.filter(function(o){return STMAP[o.st]===TABS[cur];}):HR_ORDERS;
+  var st=hrStats();
+  var rows=list.map(function(o){
+    return '<div class="item noind" onclick="openHrOrder('+HR_ORDERS.indexOf(o)+')">'+thumb(o.cov,o.ic,54,54)
+      +'<div class="it-bd"><div class="it-t">'+o.t+'</div>'
+      +'<div class="it-s">'+o.no+' · 数量 x'+o.qty+'</div>'
+      +'<div class="it-s">'+o.time+' · '+o.addr+'</div></div>'
+      +'<div style="text-align:right;flex-shrink:0"><span class="price" style="font-size:16px">¥'+o.amt+'</span>'
+      +'<div style="margin-top:4px">'+hrStTag(o.st)+'</div></div></div>';
+  });
   return '<div class="grp">'
-  +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('','hr',62,62)
-  +'<div class="it-bd"><div class="row" style="gap:6px;margin-bottom:3px"><span class="tag o">置顶</span></div>'
-  +'<div class="it-t">退休教师兼职家教</div><div class="it-s">物业 · 09-02</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('b','hr',62,62)
-  +'<div class="it-bd"><div class="it-t">周末家政阿姨招募</div><div class="it-s">王阿姨 · 08-30</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
-  +'</div>'
-  + fab('go(\'hrPublish\')')
-  +'<div style="height:8px"></div>';
+    +'<div class="item noind" onclick="go(\'hrCertView\')">'+avt(46)
+    +'<div class="it-bd"><div class="row" style="gap:6px;margin-bottom:3px"><div class="it-t" style="margin:0">李建国</div><span class="tag g">已认证</span></div>'
+    +'<div class="it-s">家电维修 · 管道疏通</div></div>'+ic('chevR',16,'var(--label4)')+'</div></div>'
+  +'<div class="svc-stats"><div class="st"><div class="sv-n">'+st.acc+'</div><div class="sv-l">已接单</div></div><div class="sv-sep"></div>'
+  +'<div class="st"><div class="sv-n">'+st.act+'</div><div class="sv-l">进行中</div></div><div class="sv-sep"></div>'
+  +'<div class="st"><div class="sv-n">'+st.done+'</div><div class="sv-l">已完成</div></div><div class="sv-sep"></div>'
+  +'<div class="st"><div class="sv-n">'+st.cancel+'</div><div class="sv-l">已取消</div></div></div>'
+  + grpT('订单列表')
+  + chips(TABS,'hr',0)
+  +'<div class="grp">'
+  +(rows.length?rows.join('<div class="sep full"></div>'):'<div class="pad" style="text-align:center;color:var(--label3);font-size:13px;padding:26px 0">暂无相关订单</div>')
+  +'</div><div style="height:8px"></div>';
 }};
-S.hrMyPosts={title:'我的发布',render:function(){
-  return '<div class="grp">'
-  +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('b','hr',62,62)
-  +'<div class="it-bd"><div class="it-t">周末家政阿姨招募</div><div class="it-s">提交 08-30 · 已通过审核</div></div><span class="tag g">已发布</span></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'hrEdit\')">'+thumb('gy','hr',62,62)
-  +'<div class="it-bd"><div class="it-t">钟点工求职</div><div class="it-s">提交 08-29 · 驳回：含敏感词</div></div><span class="tag r">已驳回</span></div>'
-  +'</div>'
-  +'<div style="height:8px"></div>';
-}};
-S.hrDetail={title:'资源详情',render:function(){
-  return '<div class="pad"><div class="cover" style="height:166px">'+ic('hr',42,'#fff',1.7)+'</div></div>'
-  +'<div class="pad"><div class="bold" style="font-size:20px;letter-spacing:-.3px">退休教师兼职家教</div>'
-  +'<div class="sub" style="margin-top:7px">物业 · 09-02 · 阳光花园</div></div>'
-  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.75;color:var(--label)">本人系本市重点小学退休教师，从教 30 余年，擅长小学语文、数学辅导。可提供工作日课后及周末上门家教服务，费用面议。</div></div>'
-  +'<div class="pad"><button class="btn sec" onclick="go(\'hrEdit\')">编辑信息</button></div>'
-  +'<div class="pad"><button class="btn sec" onclick="toggleHrVis(\'退休教师兼职家教\')" id="hrVisBtn">显示/隐藏</button></div>'
-  +'<div class="pad"><button class="btn warn" onclick="delHr(\'退休教师兼职家教\')">删除信息</button></div>';
-}};
-S.hrPublish={title:'发布信息',render:function(){
-  return '<div class="grp"><div class="field"><input placeholder="标题（必填）"></div></div>'
-  + grpT('正文内容')
-  +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-  +'<textarea rows="6" placeholder="详细描述您的技能或服务内容…"></textarea></div></div>'
-  + grpT('上传图片')
+/* 认证资料（已录入）：查看提交的资料，可发起修改（修改需物业重新审核） */
+S.hrCertView={title:'认证资料',render:function(){
+  return '<div class="pad" style="padding-top:16px"><span class="tag g">已通过审核</span>'
+  +'<div class="sub" style="margin-top:9px">资料已进入小区人才库，可接收物业后台派单</div></div>'
+  + grp([
+    {t:'姓名',v:'李建国'},
+    {t:'联系电话',v:'138****6688'},
+    {t:'服务类目',v:'家电维修 · 管道疏通'}
+  ],'基础资料')
+  + grpT('技能描述')
+  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.75;color:var(--label)">10 年水电维修经验，持低压电工证；擅长家电检修、管道疏通、水电安装，工具齐全，市区 30 分钟内响应。</div></div>'
+  + grpT('凭证资料')
   +'<div class="card"><div class="row" style="gap:10px">'
-  +'<div class="upbox" onclick="toast(\'上传图片\')">'+ic('camera',20)+'<span class="n">图片 0/9</span></div></div></div>'
-  + btn('提交发布','toast(\'已提交，等待物业审核\');go(\'hr\')')
-  + hint('提交后需经过敏感词比对，通过后由物业后台审核');
+  +'<div class="upbox">'+ic('doc',20)+'<span class="n">低压电工证</span></div>'
+  +'<div class="upbox">'+ic('doc',20)+'<span class="n">技能证书</span></div></div></div>'
+  + btn('修改认证资料','go(\'hrCertApply\')')
+  + hint('修改后需由物业后台审核通过后再更新；审核期间不影响生活帮手类订单');
+}};
+/* 人才认证（未录入=首次提交 / 已录入=修改资料） */
+S.hrCertApply={title:'人才认证',render:function(){
+  return (hrState==='in'?'<div class="pad">'+hint('修改认证资料后需由物业后台重新审核，审核期间不影响生活帮手类订单')+'</div>':'')
+  +'<div class="grp">'
+  +'<div class="field"><span class="lb">姓名</span><input value="李建国"></div>'
+  +'<div class="sep"></div>'
+  +'<div class="field"><span class="lb">联系电话</span><input value="13800006688" type="tel"></div>'
+  +'<div class="sep"></div>'
+  +'<div class="field"><span class="lb">服务类目</span><input value="家电维修 · 管道疏通"></div></div>'
+  + grpT('技能描述')
+  +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
+  +'<textarea rows="5">10 年水电维修经验，持低压电工证；擅长家电检修、管道疏通、水电安装，工具齐全。</textarea></div></div>'
+  + grpT('上传凭证（证书 / 资质照片）')
+  +'<div class="card"><div class="row" style="gap:10px">'
+  +'<div class="upbox" onclick="toast(\'上传凭证\')">'+ic('doc',20)+'<span class="n">低压电工证</span></div>'
+  +'<div class="upbox" onclick="toast(\'上传凭证\')">'+ic('plus',20)+'</div></div></div>'
+  + btn('提交物业审核','submitHrCert()')
+  + hint(hrState==='in'?'提交后由物业后台审核，通过后更新人才库资料':'审核通过后，您的资料将进入小区人才库');
+}};
+/* 派单订单详情（服务人员视角） */
+S.hrOrderDetail={title:'订单详情',render:function(){
+  var o=HR_ORDERS[curHrOrder]||HR_ORDERS[0];
+  var stTxt=o.st==='active'?'进行中':o.st==='done'?'已完成':'已取消';
+  var stSub=o.st==='active'?'物业后台已派单，请按约定时间上门服务':o.st==='done'?'订单已确认完成，服务金额由线下收取':'业主接单后取消的订单，仅留存记录';
+  var stCls=o.st==='active'?'b':o.st==='done'?'g':'gy';
+  return '<div class="pad" style="padding-top:20px"><span class="tag '+stCls+'">'+stTxt+'</span>'
+  +'<div class="sub" style="margin-top:9px">'+stSub+'</div></div>'
+  + grpT('服务信息')
+  +'<div class="grp">'
+  +'<div class="item noind">'+thumb(o.cov,o.ic,54,54)
+  +'<div class="it-bd"><div class="it-t">'+o.t+'</div><div class="it-s">订单编号 '+o.no+'</div></div>'
+  +'<div style="text-align:right;flex-shrink:0"><span class="price" style="font-size:17px">¥'+o.amt+'</span>'
+  +'<div class="sub" style="font-size:11px;margin-top:2px">数量 x'+o.qty+'</div></div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">上门时间</div></div><div class="cell-v">'+o.time+'</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">服务地址</div></div><div class="cell-v">'+o.addr+'</div></div>'
+  +'</div>'
+  + grp([
+    {t:'下单人',v:o.cu},
+    {ic:'phone',icls:'bg-g',t:'联系电话',v:o.tel,on:'location.href=\'tel:'+o.tel+'\''}
+  ])
+  + grpT('金额信息')
+  + grp([{t:'订单金额',ctl:'<span class="price" style="font-size:20px">¥'+o.amt+'.00</span>'}])
+  + hint('线上不做收款，所有金额由线下收取')
+  + grpT('订单日志')
+  +'<div class="card"><div class="log">'+ordLog([['订单提交',o.sub],['接单',o.acc],['完成',o.fin]])+'</div></div>'
+  +(o.st==='active'
+    ?'<div class="btn-fixed"><button class="btn" onclick="confirmHrDone()">确认完成</button></div>'
+      +'<div style="height:8px"></div>'+hint('完成后金额由线下收取，线上仅留存订单记录')
+    :'');
 }};
 
 /* ================= 支付流程（补充页面） ================= */
@@ -3716,21 +3807,6 @@ S.privacy={title:'隐私政策',render:function(){
   +'<b>四、信息的共享</b><br>除法律法规要求或经您明确同意外，我们不会向任何第三方共享您的个人信息。<br><br>'
   +'<b>五、您的权利</b><br>您可在「我的-个人信息」中查阅、更正您的个人信息，也可联系客服申请删除账号数据。</div>'
   +'</div>';
-}};
-
-/* ================= 内容编辑 / 驳回（补充页面） ================= */
-S.hrEdit={title:'编辑信息',render:function(){
-  return '<div class="pad">'+hint('修改后需重新进行敏感词比对，并由物业后台重新审核，审核通过后修改成功')+'</div>'
-  +'<div class="grp"><div class="field"><input placeholder="标题（必填）" value="退休教师兼职家教"></div></div>'
-  + grpT('正文内容')
-  +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-  +'<textarea rows="6">本人系本市重点小学退休教师，从教 30 余年，擅长小学语文、数学辅导。可提供工作日课后及周末上门家教服务，费用面议。</textarea></div></div>'
-  + grpT('上传图片')
-  +'<div class="card"><div class="row" style="gap:10px">'
-  +'<div class="upbox" onclick="toast(\'上传图片\')">'+ic('camera',20)+'<span class="n">图片 1/9</span></div>'
-  +'<div class="upbox" onclick="toast(\'上传图片\')">'+ic('plus',20)+'</div></div></div>'
-  + btn('提交修改','toast(\'已提交，等待物业重新审核\');back()')
-  + hint('提交后需经过敏感词比对，通过后由物业后台审核');
 }};
 
 /* ================= 编辑个人信息 ================= */
