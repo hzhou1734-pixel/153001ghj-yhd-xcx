@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.211';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.212';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -1026,7 +1026,7 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
 
 /* ================= iOS 组件 ================= */
 function grpT(t){return '<div class="grp-t">'+t+'</div>';}
-function grp(rows,title){
+function grp(rows,title,noSep){
   var h=title?grpT(title):'';
   h+='<div class="grp">';
   rows.forEach(function(r,i){
@@ -1039,7 +1039,7 @@ function grp(rows,title){
       +(r.ctl||'')
       +(r.ar?'<div class="cell-ar">'+ic('chevR',16)+'</div>':'')
       +'</div>';
-    if(i<rows.length-1&&rows[i+1])h+='<div class="sep'+(r.ic?'':' full')+'"></div>';
+    if(!noSep&&i<rows.length-1&&rows[i+1])h+='<div class="sep'+(r.ic?'':' full')+'"></div>';
   });
   return h+'</div>';
 }
@@ -3840,15 +3840,15 @@ S.settings={title:'系统设置',render:function(){
     {ic:'lock',icls:'bg-b',t:'隐私设置',s:'授权管理与个人信息',ar:1,on:'go(\'privacy\')'},
     {ic:'doc',icls:'bg-in',t:'用户协议',ar:1,on:'go(\'agreement\')'},
     {ic:'shield',icls:'bg-br',t:'隐私政策',ar:1,on:'go(\'privacy\')'}
-  ],'协议与隐私')
+  ],'协议与隐私',1)
   + grp([
     {ic:'trash',icls:'bg-r',t:'清除缓存',s:'清理图片与临时文件',v:'36.2MB',on:'clearCache()'},
     {ic:'sync',icls:'bg-t',t:'检查更新',s:'当前已是最新版本',v:APP_VER,on:'toast(\'当前已是最新版本\')'}
-  ],'通用')
+  ],'通用',1)
   + grp([
     {ic:'logout',icls:'bg-r',t:'退出登录',s:'退出后需重新登录使用',on:'doLogout()'},
     {ic:'me',icls:'bg-in',t:'注销账号',s:'注销后账号数据将无法恢复',ar:1,on:'go(\'delAccount\')'}
-  ],'关于与账号');
+  ],'关于与账号',1);
 }};
 S.agreement={title:'用户协议',render:function(){
   return '<div class="card">'
