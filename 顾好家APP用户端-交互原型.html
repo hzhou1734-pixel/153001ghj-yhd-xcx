@@ -865,9 +865,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.198';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.199';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
-var APP_BUILT='2026-09-19';
+var APP_BUILT='2026-09-20';
 
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
@@ -2223,6 +2223,8 @@ S.community={tab:'community',title:'社区',nav:false,render:function(){
 }};
 
 /* ================= 社区活动 ================= */
+var curAct=null;
+function openActivity(a){curAct=a;go('activityDetail');}
 var ACTIVITIES=[
   {n:'中秋邻里联欢会',when:'9月28日 18:30',bm:'报名 09-05 至 09-26',s:'中心广场 · 已报 86 人',st:'报名中',sc:'g',c:'',ty:'节日庆典'},
   {n:'少儿阅读营',when:'本周末 14:00',bm:'报名 09-01 至 09-12',s:'阅览室 · 已报 30 人',st:'报名中',sc:'g',c:'p',ty:'亲子活动'},
@@ -2232,15 +2234,15 @@ var ACTIVITIES=[
   {n:'重阳敬老慰问',when:'9月30日 10:00',bm:'报名 09-12 至 09-28',s:'各楼栋 · 0 人',st:'即将开始',sc:'b',c:'p',ty:'志愿服务'},
   {n:'暑期趣味运动会',when:'8月20日 已结束',bm:'报名 08-01 至 08-18',s:'中央草坪 · 128 人参与',st:'已结束',sc:'gy',c:'gy',ty:'亲子活动'}
 ];
-function actItem(a){
+function actItem(a,idx){
   /* 列表不显示「立即报名」按钮（报名中点击条目进详情报名）；右侧状态文字已删除 */
   var nw='display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
-  return '<div class="item noind" onclick="go(\'activityDetail\')">'+thumb(a.c,'cal',58,58)
+  return '<div class="item noind" onclick="openActivity(ACTIVITIES['+idx+'])">'+thumb(a.c,'cal',58,58)
     +'<div class="it-bd"><div class="it-t" style="'+nw+'">'+a.n+'</div><div class="it-s" style="'+nw+'">'+a.bm+'</div></div>'
     +'<span class="tag '+a.sc+'">'+a.st+'</span></div>';
 }
 function actItems(list){
-  return list.map(function(a,i){return (i?'<div class="sep full"></div>':'')+actItem(a);}).join('');
+  return list.map(function(a,i){return (i?'<div class="sep full"></div>':'')+actItem(a,ACTIVITIES.indexOf(a));}).join('');
 }
 S.communityList={title:'社区活动',render:function(){
   var TABS=['全部','即将开始','报名中','已结束'];
@@ -2273,9 +2275,10 @@ S.activityFilter={title:'筛选',nav:false,render:function(){
   +'</div></div>';
 }};
 S.activityDetail={title:'活动详情',render:function(){
+  var a=curAct||ACTIVITIES[0];
   return '<div class="pad"><div class="cover" style="height:172px">'+ic('cal',44,'#fff',1.7)+'</div></div>'
-  +'<div class="pad"><div class="bold" style="font-size:21px;letter-spacing:-.4px">中秋邻里联欢会</div>'
-  +'<div class="row" style="gap:8px;margin-top:9px"><span class="tag g">报名中</span><span class="tag br">节日庆典</span></div></div>'
+  +'<div class="pad"><div class="bold" style="font-size:21px;letter-spacing:-.4px">'+a.n+'</div>'
+  +'<div class="row" style="gap:8px;margin-top:9px"><span class="tag '+a.sc+'">'+a.st+'</span><span class="tag br">'+a.ty+'</span></div></div>'
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">报名时间</div></div><div class="cell-v">9-01 ~ 9-20</div></div>'
   +'<div class="sep"></div>'
@@ -2287,9 +2290,11 @@ S.activityDetail={title:'活动详情',render:function(){
   +'</div>'
   + grpT('活动介绍')
   +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.7;color:var(--label)">邻里齐聚，赏月品茗，趣味游戏与才艺展示。现场设置灯谜区、手工月饼 DIY 与儿童游乐区，欢迎携家人一同参加。活动免费，名额不限，欢迎广大业主积极参与。</div></div>'
-  +(pickState.actSigned
-    ?'<div class="pad"><button class="btn des">已报名</button></div>'
-    :'<div class="pad"><button class="btn" onclick="go(\'activitySignup\')">立即报名</button></div>');
+  +(a.st==='已结束'
+    ?''
+    :(pickState.actSigned
+      ?'<div class="pad"><button class="btn des">已提交报名</button></div>'
+      :'<div class="pad"><button class="btn" onclick="go(\'activitySignup\')">立即报名</button></div>'));
 }};
 S.activitySignup={title:'活动报名',render:function(){
   return ''
@@ -3160,7 +3165,7 @@ S.myBand={title:'我的手环',render:function(){
 /* ================= 报名 / 帖子 / 消息 ================= */
 S.mySignup={title:'我的报名',render:function(){
   return '<div class="grp">'
-  +'<div class="item noind" onclick="go(\'activityDetail\')">'+thumb('o','cal',62,62)
+  +'<div class="item noind" onclick="openActivity(ACTIVITIES.filter(function(x){return x.n===\'中秋邻里联欢会\';})[0])">'+thumb('o','cal',62,62)
   +'<div class="it-bd"><div class="it-t">中秋邻里联欢会</div><div class="it-s">活动时间 9-28 18:30 · 报名于 09-10</div></div><span class="tag g">报名成功</span></div>'
   +'</div>';
 }};
