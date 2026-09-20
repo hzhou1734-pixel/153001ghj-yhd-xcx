@@ -64,7 +64,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
         justify-content:center;border:2px solid #fff;box-sizing:content-box;}
 
 /* 垂直节奏基线：块间距 12px / 分区标题上 20px 下 8px / 页面首元素 12px */
-.grp-t{font-size:13px;color:var(--label2);margin:20px var(--pad) 8px;letter-spacing:-.1px;}
+.grp-t{font-size:17px;font-weight:600;color:var(--label);margin:20px var(--pad) 10px;letter-spacing:-.3px;}
 .grp{background:var(--card);border-radius:var(--r);margin:0 var(--pad) 12px;overflow:hidden;}
 /* 标题栏之后的首个元素：统一 12px 留白（小字分区标题 / 大分区标题各减） */
 .nav + .grp,.nav + .card,.nav + .metric,.nav + .hero,.nav + .carousel,.nav + .notice,
@@ -72,6 +72,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .nav + .empty,.nav + .agree{margin-top:12px;}
 .nav + .sect{margin-top:6px;}
 .nav + .grp-t{margin-top:12px;}
+.rev-head{display:flex;align-items:center;justify-content:space-between;margin:14px var(--pad) 10px;}
+.rev-head .grp-t{margin:0;}
+.rev-more{display:flex;align-items:center;gap:2px;font-size:13px;font-weight:400;color:var(--label2);cursor:pointer;}
+.rev-more:active{opacity:.6;}
+.svc-stats{display:flex;align-items:center;background:#fff;border-radius:14px;margin:14px var(--pad) 0;padding:14px 0;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+.svc-stats .st{flex:1;text-align:center;}
+.svc-stats .sv-n{font-size:19px;font-weight:700;color:var(--label);letter-spacing:-.4px;line-height:1.1;}
+.svc-stats .sv-l{font-size:11px;color:var(--label3);margin-top:4px;}
+.svc-stats .sv-sep{width:.5px;height:26px;background:var(--sep);}
 /* 一级页大标题栏已自带 26px 渐变过渡，其下首个元素不再叠加留白 */
 .nav-lg + .pad{padding-top:0;}
 .nav-lg + .grp,.nav-lg + .card,.nav-lg + .metric,.nav-lg + .stat3,
@@ -312,7 +321,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .rev-card .hd .meta .nm{font-size:14px;font-weight:600;color:var(--label);}
 .rev-card .hd .meta .stars-s{font-size:12px;color:var(--yellow);letter-spacing:1px;line-height:1;margin-top:3px;}
 .rev-card .hd .meta .stars-s .g{color:var(--fill-3);}
-.rev-card .hd .time{font-size:11px;color:var(--label3);}
+.rev-card .hd .time{font-size:11px;color:var(--label3);flex-shrink:0;white-space:nowrap;margin-left:8px;}
 .rev-card .tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;}
 .rev-card .tag-v{font-size:11px;color:var(--brand-d);background:var(--brand-fill);padding:2px 8px;border-radius:4px;}
 .rev-card .txt{font-size:14px;line-height:1.55;color:var(--label);}
@@ -385,6 +394,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .grp>.item:not(:last-child){border-bottom:.5px solid var(--sep);}
 .grp>.item{margin-left:55px;padding-left:0;padding-right:14px;}
 .grp>.item.noind{margin-left:0;padding-left:14px;}
+.mopt.on{background:var(--brand-fill);}
+.mopt.on .it-t{color:var(--brand);}
+.radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--sep);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;transition:all .12s;}
+.radio.on{background:var(--brand);border-color:var(--brand);}
 .thumb{border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,#D6F5EC,#A9E9D8);display:flex;
        align-items:center;justify-content:center;color:rgba(255,255,255,.95);overflow:hidden;}
 .thumb svg{width:22px;height:22px;}
@@ -477,6 +490,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .cover.b{background:linear-gradient(135deg,#9CCBF5,#4FA8E0);}
 .cover.p{background:linear-gradient(135deg,#C9B4F7,#AF52DE);}
 .cover.y{background:linear-gradient(135deg,#FFE08A,#FFCC00);}
+.cover.g{background:linear-gradient(135deg,#7BE39B,#34C759);}
+.cover.r{background:linear-gradient(135deg,#FF8C7A,#FF3B30);}
 .cover svg{width:38px;height:38px;}
 
 /* 富文本正文 */
@@ -546,6 +561,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .svc .ic.y{background:#FCE5A3;color:#8A5A00;}
 .svc .ic.g{background:#C9EBDD;color:#0E7C5F;}
 .svc .ic.r{background:#FCCFD2;color:#B8001F;}
+.svc .ic.c{background:#BFE9F5;color:#086E8C;}
 .svc .tx{font-size:11.5px;color:var(--label);letter-spacing:-.1px;}
 
 .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin:0 var(--pad) 12px;}
@@ -707,8 +723,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .ord-sum .os-cd .n{font-size:17px;font-weight:700;letter-spacing:-.4px;line-height:1.1;font-variant-numeric:tabular-nums;}
 .ord-sum .os-cd .l{font-size:11.5px;opacity:.88;margin-top:3px;}
 
-.ord-tabs{display:flex;margin:0 var(--pad) 12px;background:var(--card);border-radius:12px;padding:4px;}
-.ord-tabs .t{flex:1;text-align:center;padding:9px 0;font-size:14px;color:var(--label2);cursor:pointer;
+.ord-tabs{display:flex;justify-content:space-between;align-items:center;margin:0 var(--pad) 12px;background:var(--card);border-radius:12px;padding:4px 8px;}
+.ord-tabs .t{flex:0 1 auto;text-align:center;padding:9px 12px;font-size:14px;color:var(--label2);cursor:pointer;
   border-radius:9px;transition:background .12s,color .12s;letter-spacing:-.1px;font-weight:500;}
 .ord-tabs .t.on{background:var(--brand);color:#fff;font-weight:600;box-shadow:0 3px 8px rgba(43,196,160,.28);}
 
@@ -728,6 +744,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .ord-card .hd .ic.b{background:linear-gradient(135deg,#34D2A8,#17A88A);}
 .ord-card .hd .ic.o{background:linear-gradient(135deg,#FF9E73,#F2642A);}
 .ord-card .hd .ic.g{background:linear-gradient(135deg,#7FB6F0,#2585E6);}
+.ord-card .hd .ic.br{background:linear-gradient(135deg,#4ADBB9,#1DB894);}
 .ord-card .hd .ic svg{width:18px;height:18px;}
 .ord-card .hd .no{font-size:11.5px;color:var(--label3);font-variant-numeric:tabular-nums;letter-spacing:-.1px;}
 .ord-card .hd .st{font-size:11.5px;padding:3px 9px;border-radius:11px;font-weight:600;letter-spacing:-.1px;}
@@ -849,9 +866,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.118';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.243';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
-var APP_BUILT='2026-09-19';
+var APP_BUILT='2026-09-20';
 
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
@@ -978,7 +995,8 @@ function nav(t,rl,rf){var r=rl?'<div class="rt" onclick="'+rf+'">'+rl+'</div>':'
 function topLg(t,sub,acts){
   var a='';
   if(acts)acts.forEach(function(b){
-    a+='<div class="ab" onclick="go(\''+b[2]+'\')">'+ic(b[0],18)+(b[3]?'<span class="bd">'+b[3]+'</span>':'')+'</div>';
+    var fn=b[2].indexOf('tel:')===0?'location.href=\''+b[2]+'\'':'go(\''+b[2]+'\')';
+    a+='<div class="ab" onclick="'+fn+'">'+ic(b[0],18)+(b[3]?'<span class="bd">'+b[3]+'</span>':'')+'</div>';
   });
   return '<div class="nav-lg"><div class="hg"><div><div class="t">'+t+'</div>'+(sub?'<div class="s">'+sub+'</div>':'')+'</div>'
     +(a?'<div class="ac">'+a+'</div>':'')+'</div></div>';
@@ -987,24 +1005,29 @@ function tabbar(){var T=[['home','tabHome','首页'],['community','tabComm','社
   var c=(S[cur]&&S[cur].tab)?S[cur].tab:lastTab,h='';
   T.forEach(function(t){h+='<div class="tb'+(t[0]===c?' on':'')+'" onclick="go(\''+t[0]+'\')">'+ic(t[1],24)+t[2]+'</div>';});
   return h;}
+var lastRenderPage=null;
 function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
+  var samePage=(cur===lastRenderPage);
   if(s.nav!==false)h+=nav(s.title,s.rightLabel,s.rightFn);
   h+=s.render();
   var sc=document.getElementById('screen');
+  var keepTop=samePage?sc.scrollTop:0;
   sc.className=showTab?'screen with-tabbar':'screen';
   sc.innerHTML=h;
   /* 底部下拉弹窗渲染到独立层：不进路由栈、不随内容滚动、不跳转页面 */
   var pk=document.getElementById('picker');
-  pk.innerHTML=pickerSheet();
+  pk.innerHTML=pickerSheet()+schoolSheet()+houseSheet()+payDialogHTML()+timeSheet();
   var tb=document.getElementById('tabbar');
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
-  sc.scrollTop=0;
+  /* 路由切换回顶部；同页原地刷新（开关/弹窗等）保持滚动位置，避免页面晃动 */
+  sc.scrollTop=keepTop;
+  lastRenderPage=cur;
 }
 
 /* ================= iOS 组件 ================= */
 function grpT(t){return '<div class="grp-t">'+t+'</div>';}
-function grp(rows,title){
+function grp(rows,title,noSep){
   var h=title?grpT(title):'';
   h+='<div class="grp">';
   rows.forEach(function(r,i){
@@ -1017,7 +1040,7 @@ function grp(rows,title){
       +(r.ctl||'')
       +(r.ar?'<div class="cell-ar">'+ic('chevR',16)+'</div>':'')
       +'</div>';
-    if(i<rows.length-1&&rows[i+1])h+='<div class="sep'+(r.ic?'':' full')+'"></div>';
+    if(!noSep&&i<rows.length-1&&rows[i+1])h+='<div class="sep'+(r.ic?'':' full')+'"></div>';
   });
   return h+'</div>';
 }
@@ -1180,14 +1203,14 @@ function dlg(icn,t,s,ok,okFn,no){return '<div class="dialog-mask"><div class="di
 
 /* ================= 首页 ================= */
 S.home={tab:'home',title:'首页',nav:false,render:function(){
-  return topLg('首页','',[['bell','','noticeList',noticeBadge()],['sCall','','emergencyCall','']])
+  return topLg('首页','',[['bell','','noticeList',noticeBadge()]])
   +'<div class="row between" style="margin:0 var(--pad) 12px;cursor:pointer" onclick="go(\'communitySwitch\')">'
   +'<div class="row" style="gap:7px">'+ic('pin',17,'var(--brand)')+'<span class="bold" style="font-size:15px">'+CUR_COMMUNITY.name+' · '+CUR_COMMUNITY.detail+'</span></div>'
   +'<div class="row" style="gap:1px;color:var(--label2);font-size:13px">切换'+ic('chevR',14,'var(--label4)')+'</div></div>'
   +'<div class="carousel"><div class="track">'
   + slide('sHealth','社区便民服务升级','家政、维修、代办一站式直达','linear-gradient(135deg,#4FD8BC,#17A88A)','helperList')
   + slide('sEscort','健康小屋义诊活动','专业医生驻点，免费健康咨询','linear-gradient(135deg,#FF9E73,#F2642A)','healthHome')
-  + slide('sTrust','暑期托管开始报名','放心托管，寓教于乐过暑假','linear-gradient(135deg,#7CC0F5,#3A8FD1)','trusteeship')
+  + slide('sTrust','周末托管开放预约','单日托管，随约随托','linear-gradient(135deg,#7CC0F5,#3A8FD1)','trusteeship')
   + slide('sMeal','适老营养餐上线','低油低盐，每日新鲜配送','linear-gradient(135deg,#C9B4F7,#8E5FE0)','meal')
   + slide('sHelper','生活帮手随时响应','管家上门，需求快速跟进','linear-gradient(135deg,#5AC8FA,#0A84FF)','escortList')
   +'</div><div class="dot"><i class="on"></i><i></i><i></i><i></i><i></i></div></div>'
@@ -1197,8 +1220,8 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'<div class="card"><div class="grid">'
   + svc('sHealth','健康小屋','healthHome','g')+svc('sEscort','陪诊服务','escortList','o',1)
   + svc('sTrust','托管服务','trusteeship','b',1)+svc('sMeal','健康膳食','meal','p',1)
-  + svc('sProp','物业服务','物业服务系统','',0,'mini')+svc('sHelper','生活帮手','helperList','y',1)
-  + svc('sCall','一键呼叫','emergencyCall','r')
+  + svc('sProp','物业服务','跳转物业服务管理小程序','',0,'toast')+svc('sHelper','生活帮手','helperList','y',1)
+  + svc('cal','社区活动','communityList','r')+svc('doc','精彩内容','featuredList','c')
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+actItems(ACTIVITIES.filter(function(a){return a.st==='报名中';}))+'</div>'
@@ -1210,7 +1233,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
 function slide(i,t,s,bg,to){return '<div class="sl" style="background:'+bg+'" onclick="'+(to?'go(\''+to+'\')':'toast(\'该轮播暂未配置跳转\')')+'"><div class="em">'+ic(i,32,'#fff',1.9)+'</div>'
   +'<div class="tx"><div class="t">'+t+'</div><div class="s">'+s+'</div></div></div>';}
 /* need=true 时该服务需业主认证，未认证自动引导至认证页 */
-function svc(i,t,id,cls,need,mode){var fn=mode==='mini'?'goMini(\''+(id||t)+'\')':(need?'needCert(\''+id+'\')':'go(\''+id+'\')');return '<div class="svc" onclick="'+fn+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
+function svc(i,t,id,cls,need,mode){var fn=mode==='mini'?'goMini(\''+(id||t)+'\')':(mode==='toast'?'toast(\''+(id||t)+'\')':(need?'needCert(\''+id+'\')':(id.indexOf('tel:')===0?'location.href=\''+id+'\'':'go(\''+id+'\')')));return '<div class="svc" onclick="'+fn+'"><div class="ic '+(cls||'')+'">'+ic(i,25)+'</div><div class="tx">'+t+'</div></div>';}
 
 /* 跳转第三方小程序：先 toast 提示，0.4s 后切换到 miniJump 占位页 */
 function goMini(name){var _n=name||'小程序';toast('正在打开 '+_n+' …');setTimeout(function(){curMiniName=_n;go('miniJump');},420);}
@@ -1363,8 +1386,7 @@ S.certify={title:'房屋认证',render:function(){
   + btn('提交认证','toast(\'已提交，等待物业审核\');go(\'certList\')');
 }};
 S.certList={title:'我的认证',rightLabel:'+添加',rightFn:'go(\'certify\')',render:function(){
-  return '<div class="pad">'+hint('每个小区由对应物业后台独立审核维护')+'</div>'
-  +'<div class="grp">'
+  return '<div class="grp">'
   +'<div class="item noind">'+thumb('','home2',40,40,'')
   +'<div class="it-bd"><div class="it-t">阳光花园</div><div class="it-s">3栋2单元-1802 · 提交于 08-20</div></div><span class="tag g">已认证</span></div>'
   +'<div class="sep full"></div>'
@@ -1378,8 +1400,7 @@ S.certList={title:'我的认证',rightLabel:'+添加',rightFn:'go(\'certify\')',
   +'<div class="item noind" onclick="go(\'certReject2\')">'+thumb('p','home2',40,40,'')
   +'<div class="it-bd"><div class="it-t">翠湖小区</div><div class="it-s">6栋1单元-0501 · 提交于 09-02</div>'
   +'<div class="rj-line">'+ic('warn',12)+'<span>驳回：业主姓名与产权人不一致</span></div></div><span class="tag r">已驳回</span></div>'
-  +'</div>'
-  + hint('被驳回的认证会显示具体原因，修改后可重新提交');
+  +'</div>';
 }};
 
 /* 驳回原因详情：数据驱动，便于按不同驳回项复用。log 为驳回记录日志（最新在前） */
@@ -1482,8 +1503,7 @@ S.healthHome={title:'健康小屋',render:function(){
   + tile('report','历史检测报告','日报 · 周报 · 月报 · 年报','bg-br','healthReport')
   + tile('risk','健康风险评估','每周自动更新评估结果','bg-o','healthRisk')
   +'</div>'
-  +'<div class="pad"><button class="btn acc" onclick="go(\'emergencyCall\')">'+ic('phone',19)+' 紧急呼叫</button></div>'
-  +'<div class="pad" style="padding-top:0">'+hint('健康手环为 4G 模块，通过注册手机号与手环厂商账号匹配后自动同步数据，无需蓝牙配对；一个账号同时只能连接一个手环，断开连接后历史数据仍保留')+'</div>'
+  +'<div class="pad"><button class="btn acc" onclick="location.href=\'tel:120\';toast(\'正在呼叫 120 急救中心\')">'+ic('phone',19)+' 紧急呼叫</button></div>'
 }};
 function tile(i,t,s,cls,on){return '<div class="tile" onclick="go(\''+on+'\')"><div class="th '+cls+'">'+ic(i,19)+'</div>'
   +'<div class="tt">'+t+'</div><div class="ts">'+s+'</div></div>';}
@@ -1511,8 +1531,7 @@ S.healthData={title:'实时健康数据',render:function(){
   + metric('pulse','心率','78','次/分','正常范围 60 - 100 次/分',false,62)
   + metric('bp','血压','120/80','mmHg','正常范围 收缩压 90-139 / 舒张压 60-89 mmHg',false,55)
   + metric('drop','血脂','5.2','mmol/L','正常范围 总胆固醇 3.1-5.2 / 甘油三酯 0.4-1.7 mmol/L · 甘油三酯 1.6 偏高',true,80)
-  +'</div>'
-  +'<div class="pad">'+hint('数据每 30 分钟自动同步一次，异常数据以红色标注；下拉可同步最新数据，历史数据永久保存')+'</div>';
+  +'</div>';
 }};
 function metric(i,n,v,u,ref,ab,pct){
   return '<div class="metric tap" onclick="go(\'healthTrend\')"><div class="mh"><div class="mi" style="background:'+(ab?'var(--red)':'var(--brand)')+'">'+ic(i,15)+'</div>'
@@ -1614,46 +1633,39 @@ S.healthRisk={title:'健康风险评估',render:function(){
   +'<div class="pad"><button class="btn sec" onclick="go(\'riskReport\')">查看完整评估报告</button></div>'
   + hint('评估结果仅供参考，不能替代医疗诊断');
 }};
-S.emergencyCall={title:'紧急呼叫',render:function(){
-  return '<div class="pad" style="padding-top:56px;text-align:center">'
-  +'<div style="width:168px;height:168px;border-radius:50%;background:linear-gradient(145deg,#FF9E73,#F2642A);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin:0 auto 22px;color:#fff;box-shadow:0 14px 34px rgba(242,100,42,.4);cursor:pointer" onclick="toast(\'正在呼叫 120 急救中心\')">'
-  +ic('phone',44,'#fff',1.7)+'<span style="font-size:19px;font-weight:700">紧急呼叫</span></div>'
-  +'<div class="sub">点击直接调用系统拨号界面<br>呼叫号码由物业后台配置</div></div>'
-  + grpT('预设急救电话')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">急救中心</div><div class="cell-s">医疗急救</div></div><div class="cell-v">120</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">小区保安亭</div><div class="cell-s">物业 24 小时值班</div></div><div class="cell-v">0731-8888 6688</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">楼栋管家</div><div class="cell-s">王管家</div></div><div class="cell-v">138 0000 6688</div></div>'
-  +'</div>'
-  +'<div class="pad">'+hint('第三方手环收到的一键呼叫信息，平台能否收到由第三方手环决定')+'</div>';
-}};
 
 /* ================= 陪诊服务 ================= */
 /* 陪诊服务列表数据（由物业后台配置，列表页与详情页共用） */
 var ESCORT=[
-  {n:'医院就诊全程陪诊',d:'含挂号协助、问诊陪同、取药代领、报告解读',ph:320,pd:560,ic:'sEscort',cls:'bg-o',cov:'o',tag:'热门',tagc:'br'},
-  {n:'专家号预约陪诊',d:'三甲专家号预约 · 全程陪同就诊',ph:380,pd:680,ic:'star',cls:'bg-y',cov:'y',tag:'专家',tagc:'y'},
-  {n:'体检全程陪检',d:'体检项目引导、排队取号、报告代取',ph:260,pd:460,ic:'pulse',cls:'bg-r',cov:'r',tag:'体检',tagc:'r'},
-  {n:'夜间急诊陪诊',d:'夜间及节假日急诊陪同就医',ph:480,pd:960,ic:'sCall',cls:'bg-b',cov:'b',tag:'夜间',tagc:'b'},
-  {n:'代取药送药上门',d:'处方代取 · 药品配送到家',ph:60,pd:100,ic:'sMeal',cls:'bg-g',cov:'g',tag:'代办',tagc:'g'}
+  {n:'医院就诊全程陪诊',d:'含挂号协助、问诊陪同、取药代领、报告解读',ph:320,pd:560,ic:'sEscort',cls:'bg-o',cov:'o'},
+  {n:'专家号预约陪诊',d:'三甲专家号预约 · 全程陪同就诊',ph:380,pd:680,ic:'star',cls:'bg-y',cov:'y'},
+  {n:'体检全程陪检',d:'体检项目引导、排队取号、报告代取',ph:260,pd:460,ic:'pulse',cls:'bg-r',cov:'r'},
+  {n:'夜间急诊陪诊',d:'夜间及节假日急诊陪同就医',ph:480,pd:960,ic:'sCall',cls:'bg-b',cov:'b'},
+  {n:'代取药送药上门',d:'处方代取 · 药品配送到家',ph:60,pd:100,ic:'sMeal',cls:'bg-g',cov:'g'}
 ];
 S.escortList={title:'陪诊服务',render:function(){
   var h='';
   ESCORT.forEach(function(e,i){
     h+='<div class="item noind" onclick="openEscort('+i+')">'+thumb(e.cov,e.ic,54,54)
-      +'<div class="it-bd"><div class="it-t">'+e.n+'<span class="tag '+e.tagc+'" style="margin-left:6px">'+e.tag+'</span></div>'
+      +'<div class="it-bd"><div class="it-t">'+e.n+'</div>'
       +'<div class="it-s">'+e.d+'</div></div>'
       +'<div style="text-align:right;line-height:1.5"><div style="font-size:12px;color:var(--label3)">半天 <span class="price" style="font-size:15px">¥'+e.ph+'</span></div>'
       +'<div style="font-size:12px;color:var(--label3)">整天 <span class="price" style="font-size:15px">¥'+e.pd+'</span></div></div></div>';
     if(i<ESCORT.length-1)h+='<div class="sep"></div>';
   });
-  return '<div class="pad">'+hint('服务内容由各小区物业后台配置，切换小区后陪诊服务随之变化')+'</div>'
-  + grpT('陪诊服务列表')
-  +'<div class="grp">'+h+'</div>';
+  return '<div class="grp">'+h+'</div>';
 }};
 function openEscort(i){pickState.escortType=i;go('escortDetail');}
+function escortPriceHtml(e){
+  var c='';
+  if(e.ph!==undefined&&e.ph!==''){
+    c+='<div style="flex:1;background:rgba(43,196,160,.08);border:1px solid rgba(43,196,160,.22);border-radius:12px;padding:10px 14px"><div class="sub" style="margin-bottom:2px">半天</div><span class="price" style="font-size:24px">¥'+e.ph+'</span></div>';
+  }
+  if(e.pd!==undefined&&e.pd!==''){
+    c+='<div style="flex:1;background:rgba(43,196,160,.08);border:1px solid rgba(43,196,160,.22);border-radius:12px;padding:10px 14px"><div class="sub" style="margin-bottom:2px">整天</div><span class="price" style="font-size:24px">¥'+e.pd+'</span></div>';
+  }
+  return c? '<div class="row" style="gap:10px;margin-top:14px">'+c+'</div>' : '';
+}
 S.escortDetail={title:'服务详情',render:function(){
   var ei=(pickState.escortType===undefined?0:pickState.escortType);
   var e=ESCORT[ei];
@@ -1667,7 +1679,6 @@ S.escortDetail={title:'服务详情',render:function(){
       +'<li><strong>就诊陪同</strong>：协助挂号、排队、问诊沟通、取药取报告</li>'
       +'<li><strong>送回返程</strong>：陪护回家，整理药盒与下次复诊提示</li>'
     +'</ol>'
-    +'<div class="callout">'+ic('info',16)+'<div><strong>温馨提示</strong><br>预约后 <span class="hl">1 小时内</span>，陪诊员会主动电话确认；如需变更或取消，请提前 <span class="hl">2 小时</span>操作。</div></div>'
     +'<h2>服务内容</h2>'
     +'<table><thead><tr><th>项目</th><th>包含</th></tr></thead><tbody>'
       +'<tr><td>挂号协助</td><td>线上 / 现场均可</td></tr>'
@@ -1684,36 +1695,27 @@ S.escortDetail={title:'服务详情',render:function(){
     +'</ul>'
     +'<h2>陪诊员资质</h2>'
     +'<p>所有陪诊员均经过物业统一培训，<em>持健康证与急救证书上岗</em>，月度服务满意度需达到 95% 以上。</p>'
-    +'<div class="quote">“老人腿脚不便，张师傅全程搀扶，跑前跑后帮忙取报告，把我们子女没想到的都想到了。”<br><span style="font-size:12px;color:#A38200;margin-top:4px;display:inline-block">—— 阳光花园 8 栋业主 · 2026-08</span></div>'
-    +'<h2>现场实拍</h2>'
-    +'<div class="gallery">'
-      +'<div><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFB59A"/><stop offset="100%" stop-color="#FF7A45"/></linearGradient></defs><rect width="100" height="100" fill="url(#gA)"/><circle cx="30" cy="35" r="14" fill="#fff" opacity=".6"/><path d="M14 86 L40 60 L60 72 L86 42 L86 100 L14 100 Z" fill="#fff" opacity=".5"/></svg></div>'
-      +'<div><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gB" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#9CCBF5"/><stop offset="100%" stop-color="#4FA8E0"/></linearGradient></defs><rect width="100" height="100" fill="url(#gB)"/><circle cx="30" cy="35" r="14" fill="#fff" opacity=".6"/><path d="M14 86 L40 60 L60 72 L86 42 L86 100 L14 100 Z" fill="#fff" opacity=".5"/></svg></div>'
-      +'<div><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gC" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5AD1B5"/><stop offset="100%" stop-color="#17A88A"/></linearGradient></defs><rect width="100" height="100" fill="url(#gC)"/><circle cx="30" cy="35" r="14" fill="#fff" opacity=".6"/><path d="M14 86 L40 60 L60 72 L86 42 L86 100 L14 100 Z" fill="#fff" opacity=".5"/></svg></div>'
-    +'</div>'
-    +'<div class="divider">· · ·</div>'
-    +'<p style="font-size:13px;color:var(--label3);text-align:center;margin:6px 0 4px">服务由各小区物业提供，最终解释权归物业所有</p>'
     +'</div>';
   return '<div class="pad"><div class="cover o" style="height:168px">'+ic('sEscort',42,'#fff',1.7)+'</div></div>'
   +'<div class="pad">'
-  +'<div class="row between" style="margin-bottom:6px"><div class="bold" style="font-size:21px;letter-spacing:-.4px">'+e.n+'</div>'
-  +'<span class="tag '+e.tagc+'">'+e.tag+'</span></div>'
-  +'<div class="sub">'+e.d+'</div>'
-  +'<div class="row" style="gap:24px;margin-top:12px;align-items:baseline">'
-  +'<div><div class="sub" style="margin-bottom:3px">半天（4 小时）</div><span class="price" style="font-size:26px">¥'+e.ph+'</span></div>'
-  +'<div><div class="sub" style="margin-bottom:3px">整天（8 小时）</div><span class="price" style="font-size:26px">¥'+e.pd+'</span></div></div></div>'
-  +'<div class="pad">'+hint('点击「立即预约」开始下单 · 可同时申请多个小区')+'</div>'
-  + grp([{ic:'star',icls:'bg-y',t:'4.9 分 · 共 128 条评价',s:'点击查看用户真实评价',ar:true,on:'go(\'review\')'}])
+  +'<div class="bold" style="font-size:21px;letter-spacing:-.4px">'+e.n+'</div>'
+  +'<div class="sub" style="margin-top:6px">'+e.d+'</div>'
+  + escortPriceHtml(e)
+  +'</div>'
+  +'<div class="rev-head"><div class="grp-t">用户评价</div><div class="rev-more" onclick="go(\'review\')">查看更多'+ic('chevR',14)+'</div></div>'
+  +'<div class="grp">'+revCards(3)+'</div>'
   +'<div style="margin-top:6px"><div class="grp-t">服务详情</div>'+rich+'</div>'
-  +'<div class="pad"><button class="btn" onclick="go(\'escortBook\')">立即预约</button></div>';
+  +'<div class="btn-fixed"><button class="btn" onclick="go(\'escortBook\')">立即预约</button></div>';
 }};
+/* 预约可选日期（未来 7 天，陪诊与托管预约共用） */
+var BK_DATES=['09-05','09-06','09-07','09-08','09-09','09-10','09-11'],BK_WEEKS=['周五','周六','周日','周一','周二','周三','周四'];
 S.escortBook={title:'服务预约',render:function(){
-  var ds=['09-05','09-06','09-07','09-08','09-09','09-10','09-11'],ws=['周五','周六','周日','周一','周二','周三','周四'];
+  var ds=BK_DATES,ws=BK_WEEKS;
   var di=(pickState.escortDate===undefined?0:pickState.escortDate);
   var dur=(pickState.escortDur===undefined?0:pickState.escortDur);   /* 0=半天 1=一天 */
   var ei=(pickState.escortType===undefined?0:pickState.escortType);
   var ek=ESCORT[ei];
-  var DL=[['半天（4 小时）','¥'+ek.ph],['一天（8 小时）','¥'+ek.pd]];
+  var DL=[['半天','¥'+ek.ph],['一天','¥'+ek.pd]];
   var needPick=(pickState.escortPick===undefined?true:pickState.escortPick);
   var h='';
   ds.forEach(function(d,i){h+='<div class="d'+(i===di?' on':'')+'" onclick="pickEscortDate('+i+')"><div class="w">'+ws[i]+'</div><div class="n">'+d.slice(3)+'</div></div>';});
@@ -1726,43 +1728,41 @@ S.escortBook={title:'服务预约',render:function(){
   + grpT('陪诊日期（仅可选择未来 7 天内）')
   +'<div class="card"><div class="pick">'+h+'</div></div>'
   + grp([
-    {ic:'pin',icls:'bg-br',t:'是否需要接送',s:'需要则使用已认证房号',ctl:sw(needPick,'toggleEscortPick()')}
+    {ic:'pin',icls:'bg-br',t:'是否需要接送',s:'需要则使用已认证房号',ctl:sw(needPick,'toggleEscortPick()')},
+    needPick?{t:'陪诊地址',s:(pickState.escortHouse||'阳光花园 3栋2单元1802'),ar:1,on:'openHouseSheet()'}:null
   ])
-  +(needPick
-    ?'<div class="card"><div class="kv" style="padding:0"><span class="k">陪诊地址（认证房号）</span></div>'
-      +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
-      +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'仅可选择已认证房号\')">修改陪诊地址'+ic('chevR',14)+'</span></div></div>'
-    :'<div class="grp"><div class="field"><span class="lb">陪诊地址</span><input placeholder="请输入陪诊地址"></div></div>')
   + grpT('医院地址')
   +'<div class="grp"><div class="field"><span class="lb">医院</span><input value="市第一人民医院" style="flex:1"></div></div>'
+  + grpT('备注')
+  +'<div class="grp"><div class="field" style="flex-direction:column;align-items:stretch;gap:8px"><span class="lb" style="flex:0 0 auto">备注</span>'
+  +'<textarea id="escortNote" maxlength="500" placeholder="如有特殊需求请在此说明" oninput="onEscortNote(this)" style="width:100%;min-height:84px;border:0;outline:0;resize:none;font:14px/1.5 inherit;color:var(--text);background:transparent">'+(pickState.escortNote||'')+'</textarea>'
+  +'<div class="sub" style="text-align:right"><span id="escortNoteCnt">'+((pickState.escortNote||'').length)+'</span>/500</div></div></div>'
   + grp([{t:'订单金额合计',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
   + btn('下一步','go(\'payment\')');
 }};
 function pickEscortDate(i){pickState.escortDate=i;render();}
 function pickEscortDur(i){pickState.escortDur=i;render();}
 function toggleEscortPick(){pickState.escortPick=!pickState.escortPick;render();}
+function onEscortNote(el){pickState.escortNote=el.value;var c=document.getElementById('escortNoteCnt');if(c)c.textContent=el.value.length;}
 
 /* ================= 托管服务 ================= */
 /* 托管类型数据：列表页与详情页共用 */
 var TRUST=[
-  {n:'学期日托',d:'含午餐与课后看护 · 按月计费',p:1200,pc:1,m:'1 人',u:'/ 月',ic:'sTrust',cls:'bg-b',cov:'b',tag:'长期',tagc:'b'},
-  {n:'学期周末托',d:'仅周末两天 · 含午餐与看护',p:600,pc:1,m:'1 人',u:'/ 月',ic:'family',cls:'bg-p',cov:'p',tag:'周末',tagc:'p'},
-  {n:'寒假托',d:'寒假全时段看护 · 30 天套餐',p:2800,pc:30,m:'30 天',u:'/ 寒',ic:'cal',cls:'bg-t',cov:'o',tag:'假期',tagc:'o'},
-  {n:'暑假托',d:'暑假全时段看护 · 60 天套餐',p:5400,pc:60,m:'60 天',u:'/ 暑',ic:'sun',cls:'bg-o',cov:'y',tag:'假期',tagc:'o',dark:1}
+  {n:'禄口一小课后托管',d:'工作日课后看护 · 单日预约',p:45,pc:1,m:'1 人',ic:'sTrust',cls:'bg-b',cov:'b'},
+  {n:'禄口二小周末托管',d:'周末单日托管 · 含午餐与看护',p:90,pc:1,m:'1 人',ic:'family',cls:'bg-p',cov:'p'},
+  {n:'禄口三中接送托管',d:'单日上下学接送 · 全时段看护',p:65,pc:1,m:'1 人',ic:'cal',cls:'bg-t',cov:'o'},
+  {n:'禄口实验小学节假日托管',d:'节假日单日全时段看护',p:90,pc:1,m:'1 人',ic:'sun',cls:'bg-o',cov:'y',dark:1}
 ];
 S.trusteeship={title:'托管服务',render:function(){
   var h='';
   TRUST.forEach(function(t,i){
     h+='<div class="item noind" onclick="openTrust('+i+')">'+thumb(t.cov,t.ic,54,54)
-      +'<div class="it-bd"><div class="it-t">'+t.n+'<span class="tag '+t.tagc+'" style="margin-left:6px">'+t.tag+'</span></div>'
+      +'<div class="it-bd"><div class="it-t">'+t.n+'</div>'
       +'<div class="it-s">'+t.d+'</div></div>'
-      +'<div style="text-align:right"><span class="price" style="font-size:16px">¥'+t.p+'</span>'
-      +'<div class="sub" style="font-size:11px;margin-top:2px">'+t.u+'</div></div></div>';
+      +'<div style="text-align:right"><span class="price" style="font-size:16px">¥'+t.p+'</span></div></div>';
     if(i<TRUST.length-1)h+='<div class="sep"></div>';
   });
-  return '<div class="pad">'+hint('服务内容由各小区物业后台配置，切换小区后托管服务随之变化')+'</div>'
-  + grpT('托管服务列表')
-  +'<div class="grp">'+h+'</div>';
+  return '<div class="grp">'+h+'</div>';
 }};
 S.trustDetail={title:'托管详情',render:function(){
   var i=(pickState.trustType===undefined?0:pickState.trustType);
@@ -1772,82 +1772,276 @@ S.trustDetail={title:'托管详情',render:function(){
   var nj=(pickState.trustJie===undefined?true:pickState.trustJie);
   var ns=(pickState.trustSong===undefined?false:pickState.trustSong);
   var nm=(pickState.trustMeal===undefined?false:pickState.trustMeal);
+  var nt=(pickState.trustTutor===undefined?false:pickState.trustTutor);
   var care=pickState.trustCare||{};
   var CARE=[['上午 8-12','8:00-12:00'],['下午 12-18','12:00-18:00'],['晚上 18-21','18:00-21:00']];
   var ch='';
   CARE.forEach(function(c,idx){ch+='<div class="qbtn'+(care[idx]?' on':'')+'" onclick="toggleTrustCare('+idx+')">'+c[0]+'</div>';});
-  var amount=pk.p*cnt+(nm?18*cnt:0);
+  var careCount=0;for(var ci in care){if(care[ci])careCount++;}
+  var careMul=Math.pow(2,Math.max(0,careCount-1));
+  var amount=(pk.p+(nj?5:0)+(ns?5:0)+(nm?5:0)+(nt?5:0))*cnt*careMul;
+  var tdi=(pickState.trustDate===undefined?0:pickState.trustDate);
+  var dh='';
+  BK_DATES.forEach(function(d,i){dh+='<div class="d'+(i===tdi?' on':'')+'" onclick="pickTrustDate('+i+')"><div class="w">'+BK_WEEKS[i]+'</div><div class="n">'+d.slice(3)+'</div></div>';});
   return '<div class="pad"><div class="cover '+pk.cov+'" style="height:150px">'+ic(pk.ic,40,pk.dark?'#7A5B00':'#fff',1.7)+'</div></div>'
   +'<div class="pad">'
   +'<div class="row between"><div><div class="bold" style="font-size:20px">'+pk.n+'</div>'
   +'<div class="sub" style="margin-top:5px">'+pk.d+'</div></div>'
-  +'<div style="text-align:right"><span class="price" style="font-size:24px">¥'+pk.p+'</span><div class="sub">'+pk.u+'</div></div></div></div>'
+  +'<div style="text-align:right"><span class="price" style="font-size:24px">¥'+pk.p+'起</span></div></div></div>'
+  +'<div class="svc-stats">'+svcStats('4.9','2.3k+','97%')+'</div>'
+  +'<div class="rev-head"><div class="grp-t">用户评价</div><div class="rev-more" onclick="go(\'review\')">查看更多'+ic('chevR',14)+'</div></div>'
+  +'<div class="grp">'+revCards(3)+'</div>'
   + grp([
     {ic:'family',icls:'bg-b',t:'孩子数量',s:'按孩子数量计费 · 1 - 5 人',ctl:step('trustCount',{def:1,min:1,max:5})},
-    {ic:'pin',icls:'bg-br',t:'是否需要接',s:'从学校送到家里（认证房号）',ctl:sw(nj,'toggleTrustJie()')},
-    {ic:'pin',icls:'bg-o',t:'是否需要送',s:'从小区送到学校',ctl:sw(ns,'toggleTrustSong()')},
-    {ic:'sMeal',icls:'bg-y',t:'是否需要用餐',s:'用餐信息归属膳食单',ctl:sw(nm,'toggleTrustMeal()')}
+    {ic:'pin',icls:'bg-br',t:'是否需要接',ctl:sw(nj,'toggleTrustJie()')},
+    {ic:'pin',icls:'bg-o',t:'是否需要送',ctl:sw(ns,'toggleTrustSong()')},
+    {ic:'sMeal',icls:'bg-y',t:'是否需要用餐',ctl:sw(nm,'toggleTrustMeal()')},
+    {ic:'pencil',icls:'bg-g',t:'是否需要作业辅导',ctl:sw(nt,'toggleTrustTutor()')}
   ])
   +((nj||ns)
     ? grpT('接送设置')
       +'<div class="grp">'
-      +(nj?'<div class="cell"><div class="cell-bd"><div class="cell-t">接 · 学校</div><div class="cell-s">从学校送到家里</div></div><div class="cell-v">阳光小学</div></div>':'')
+      +(nj?'<div class="cell tap" onclick="openSchoolSheet(\'trustJieSchool\')"><div class="cell-bd"><div class="cell-t">接 · 学校</div><div class="cell-s">从学校送到家里</div></div><div class="cell-v">'+(pickState.trustJieSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
       +(nj&&ns?'<div class="sep full"></div>':'')
-      +(ns?'<div class="cell"><div class="cell-bd"><div class="cell-t">送 · 学校</div><div class="cell-s">从小区送到学校</div></div><div class="cell-v">阳光小学</div></div>':'')
+      +(ns?'<div class="cell tap" onclick="openSchoolSheet(\'trustSchool\')"><div class="cell-bd"><div class="cell-t">送 · 学校</div><div class="cell-s">从小区送到学校</div></div><div class="cell-v">'+(pickState.trustSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
       +((nj||ns)?'<div class="sep full"></div>':'')
-      +'<div class="cell"><div class="cell-bd"><div class="cell-t">接送地址</div><div class="cell-s">认证房号</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div>'
+      +'<div class="cell"><div class="cell-bd"><div class="cell-t">接送地址</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div>'
       +'</div>'
     :'')
   + grpT('看护时段（可多选）')
   +'<div class="pad"><div class="qlist">'+ch+'</div></div>'
-  + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
-  +'<div class="pad" style="padding-top:0">'+hint('附加费规则：选择上午托管后超过 12:30 计入下午场；超过 21:30 按 xx 元/小时收取附加费，不足 1 小时按 1 小时计算，具体金额由物业后台设置')+'</div>'
-  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','toast(\'托管订单已提交，等待物业后台派发托管老师\');go(\'orderTrustDetail\')')+'</div>';
+  + grpT('托管日期（仅可选择未来 7 天内）')
+  +'<div class="card"><div class="pick">'+dh+'</div></div>'
+  + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','submitTrust('+amount+')')+'</div>';
 }};
 function toggleTrustJie(){pickState.trustJie=!pickState.trustJie;render();}
 function toggleTrustSong(){pickState.trustSong=!pickState.trustSong;render();}
 function toggleTrustMeal(){pickState.trustMeal=!pickState.trustMeal;render();}
 function toggleTrustCare(i){var c=pickState.trustCare||{};c[i]=!c[i];pickState.trustCare=c;render();}
+function pickTrustDate(i){pickState.trustDate=i;render();}
+/* 提交托管单：未选学校/看护时段不允许提交 */
+function submitTrust(amount){
+  var nj=(pickState.trustJie===undefined?true:pickState.trustJie);
+  var ns=(pickState.trustSong===undefined?false:pickState.trustSong);
+  if(nj&&!pickState.trustJieSchool){toast('请选择接 · 学校');return;}
+  if(ns&&!pickState.trustSchool){toast('请选择送 · 学校');return;}
+  var cn=0,c=pickState.trustCare||{};for(var k in c){if(c[k])cn++;}
+  if(!cn){toast('请选择看护时段');return;}
+  openPayConfirm(amount,function(){toast('托管订单已提交，等待物业后台派发托管老师');buildTrustSnapshot(amount);trustDemoStatus='active';go('orderTrustDetail');});
+}
 function openTrust(i){pickState.trustType=i;go('trustDetail');}
+function toggleTrustTutor(){pickState.trustTutor=!pickState.trustTutor;render();}
+/* 托管单提交快照：保存提交时所选字段，供托管单详情按实际选择动态展示 */
+var lastTrustOrder=null;
+function buildTrustSnapshot(amount){
+  var i=(pickState.trustType===undefined?0:pickState.trustType);
+  var pk=TRUST[i];
+  var cnt=(pickState.trustCount===undefined?1:pickState.trustCount);
+  cnt=Math.max(1,Math.min(5,cnt));
+  var nj=(pickState.trustJie===undefined?true:pickState.trustJie);
+  var ns=(pickState.trustSong===undefined?false:pickState.trustSong);
+  var nm=(pickState.trustMeal===undefined?false:pickState.trustMeal);
+  var nt=(pickState.trustTutor===undefined?false:pickState.trustTutor);
+  var care=pickState.trustCare||{};
+  var CARE=[['上午 8-12','8:00-12:00'],['下午 12-18','12:00-18:00'],['晚上 18-21','18:00-21:00']];
+  var cl=[];
+  CARE.forEach(function(c,idx){if(care[idx])cl.push(c[0]);});
+  lastTrustOrder={
+    name:pk.n,count:cnt,jie:nj,song:ns,meal:nm,tutor:nt,
+    jieSchool:pickState.trustJieSchool||'',songSchool:pickState.trustSchool||'',
+    care:cl,house:'阳光花园 3栋2单元1802',
+    amount:amount,price:amount,period:BK_DATES[(pickState.trustDate===undefined?0:pickState.trustDate)],submit:'09-01 09:00'
+  };
+}
+function trustOrderSnapshot(){
+  if(lastTrustOrder)return lastTrustOrder;
+  return {name:'禄口一小课后托管',count:1,jie:true,song:false,meal:false,tutor:false,jieSchool:'禄口一小',songSchool:'',care:['上午 8-12','下午 12-18','晚上 18-21'],house:'阳光花园 3栋2单元1802',amount:45,price:45,period:'09-05',submit:'09-01 09:00'};
+}
+function trkv(k,v,cls){return '<div class="kv"><span class="k">'+k+'</span><span class="v'+(cls?' '+cls:'')+'">'+v+'</span></div>';}
+var openSchool=null;
+function openSchoolSheet(key){openSchool=key;render();}
+function closeSchoolSheet(){openSchool=null;render();}
+function pickSchool(nm){if(openSchool){pickState[openSchool]=nm;if(openSchool==='trustJieSchool')pickState.trustSchool=nm;}openSchool=null;render();}
+function schoolSheet(){
+  if(!openSchool)return '';
+  var SCHOOLS=['禄口一小','禄口二小','禄口三中','禄口实验小学'];
+  var cur=pickState[openSchool]||'';
+  var h='<div class="mask" onclick="closeSchoolSheet()"><div class="sheet" onclick="event.stopPropagation()">'
+    +'<div class="sh"><div class="x" onclick="closeSchoolSheet()">'+ic('x',20)+'</div>'
+    +'<div class="t">选择学校</div><div class="ok" onclick="closeSchoolSheet()">完成</div></div>'
+    +'<div class="grp" style="margin:0 14px 6px;border-radius:12px;overflow:hidden">';
+  SCHOOLS.forEach(function(v,i){
+    h+='<div class="cell tap" onclick="pickSchool(\''+v+'\')">'
+      +'<div class="cell-bd"><div class="cell-t" style="font-weight:'+(v===cur?'600':'400')+';color:'+(v===cur?'var(--brand)':'inherit')+'">'+v+'</div></div>'
+      +(v===cur?'<div class="cell-ar" style="color:var(--brand)">'+ic('check',19)+'</div>':'')+'</div>';
+  });
+  return h+'</div></div></div>';
+}
+/* 认证房号选择弹窗（当前小区 · 已认证房号） */
+var openHouse=false;
+function openHouseSheet(){openHouse=true;render();}
+function closeHouseSheet(){openHouse=false;render();}
+function pickHouse(nm){pickState.escortHouse=nm;pickState.mealHouse=nm;openHouse=false;render();}
+function houseSheet(){
+  if(!openHouse)return '';
+  var HOUSES=['阳光花园 3栋2单元1802','阳光花园 3栋2单元0704','阳光花园 5栋1单元1101','阳光花园 8栋2单元1503','阳光花园 12栋1单元0902'];
+  var cur=pickState.escortHouse||'阳光花园 3栋2单元1802';
+  var h='<div class="mask" onclick="closeHouseSheet()"><div class="sheet" onclick="event.stopPropagation()">'
+    +'<div class="sh"><div class="x" onclick="closeHouseSheet()">'+ic('x',20)+'</div>'
+    +'<div class="t">选择认证房号</div><div class="ok" onclick="closeHouseSheet()">完成</div></div>'
+    +'<div class="sub" style="padding:0 18px 8px;font-size:12px;color:var(--label3)">当前小区：阳光花园 · 仅显示已认证房号</div>'
+    +'<div class="grp" style="margin:0 14px 6px;border-radius:12px;overflow:hidden">';
+  HOUSES.forEach(function(v,i){
+    if(i)h+='<div class="sep full"></div>';
+    h+='<div class="cell tap" onclick="pickHouse(\''+v+'\')">'
+      +'<div class="cell-bd"><div class="cell-t" style="font-weight:'+(v===cur?'600':'400')+';color:'+(v===cur?'var(--brand)':'inherit')+'">'+v+'</div></div>'
+      +(v===cur?'<div class="cell-ar" style="color:var(--brand)">'+ic('check',19)+'</div>':'')+'</div>';
+  });
+  return h+'</div></div></div>';
+}
+
+
+/* 期望上门时间弹窗：同一弹窗内先选日期（未来7天横排）再选时间段（3列网格） */
+var openTime=null; /* null | 'time' */
+function openTimeSheet(){openTime='time';render();}
+function closeTimeSheet(){openTime=null;render();}
+function pickHelperDate(d){pickState.helperDate=d;render();}
+function pickHelperSlot(s){if(!pickState.helperDate)pickState.helperDate=helperDates()[0];pickState.helperSlot=s;openTime=null;render();}
+function helperDates(){
+  var out=[];
+  for(var i=0;i<7;i++){
+    var d=new Date();d.setDate(d.getDate()+i);
+    out.push((d.getMonth()+1)+'\u00b7'+d.getDate());
+  }
+  return out;
+}
+function timeSheet(){
+  if(!openTime)return '';
+  var dates=helperDates();
+  var slots=['8:00 - 9:00','9:00 - 10:00','10:00 - 11:00','11:00 - 12:00','12:00 - 13:00','13:00 - 14:00','14:00 - 15:00','15:00 - 16:00','17:00 - 18:00','18:00 - 19:00','19:00 - 20:00','20:00 - 21:00'];
+  var curD=pickState.helperDate||dates[0];
+  var curS=pickState.helperSlot||'';
+  var h='<div class="mask" onclick="closeTimeSheet()"><div class="sheet" onclick="event.stopPropagation()">'
+    +'<div class="sh"><div class="x" onclick="closeTimeSheet()">'+ic('x',20)+'</div>'
+    +'<div class="t">期望上门时间</div><div class="ok" onclick="closeTimeSheet()">完成</div></div>'
+    +'<div class="grp-t" style="margin:2px 18px 10px">上门日期</div>'
+    +'<div style="display:flex;gap:8px;overflow-x:auto;padding:0 18px 4px;-webkit-overflow-scrolling:touch">';
+  dates.forEach(function(v){
+    var on=(v===curD);
+    h+='<div onclick="pickHelperDate(\''+v+'\')" style="flex-shrink:0;min-width:52px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:14px;cursor:pointer;'
+      +(on?'background:#8A8A8E;color:#fff;font-weight:600;':'background:#F2F2F7;color:var(--label);')+'">'+v+'</div>';
+  });
+  h+='</div>'
+    +'<div class="grp-t" style="margin:18px 18px 10px">上门时间点</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 18px 20px">';
+  slots.forEach(function(v){
+    var on=(v===curS);
+    h+='<div onclick="pickHelperSlot(\''+v+'\')" style="height:44px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:13px;cursor:pointer;border:1px solid '
+      +(on?'var(--brand)':'var(--sep)')+';color:'+(on?'var(--brand)':'var(--label)')+';font-weight:'+(on?'600':'400')+';background:'+(on?'rgba(43,196,160,.07)':'#fff')+'">'+v+'</div>';
+  });
+  return h+'</div></div></div>';
+}
+
+/* ================= 顾好家币支付确认弹窗 ================= */
+var payConfirm=null;
+var payInsufficient=null;
+function openPayConfirm(amount,onOk){
+  if(COIN_BALANCE<amount){payInsufficient=amount;render();return;}
+  payConfirm={amount:amount,onOk:onOk};render();
+}
+function closePayConfirm(){payConfirm=null;render();}
+function confirmPay(){
+  var amt=payConfirm.amount,fn=payConfirm.onOk;
+  COIN_BALANCE-=amt;payConfirm=null;render();fn();
+}
+function goRecharge(){payInsufficient=null;render();go('coinRecharge');}
+function payDialogHTML(){
+  var h='';
+  if(payConfirm){
+    var amt=payConfirm.amount,left=COIN_BALANCE-amt;
+    h+='<div class="mask" onclick="closePayConfirm()"><div class="sheet" onclick="event.stopPropagation()" style="padding-bottom:26px">'
+      +'<div style="width:36px;height:4.5px;border-radius:3px;background:var(--label4);opacity:.5;margin:10px auto 0"></div>'
+      +'<div style="display:flex;flex-direction:column;align-items:center;padding:16px 20px 0">'
+      +'<div style="width:58px;height:58px;border-radius:50%;background:var(--brand-fill);display:flex;align-items:center;justify-content:center">'+ic('yen',28,'var(--brand)',1.7)+'</div>'
+      +'<div class="bold" style="font-size:17px;letter-spacing:-.3px;margin-top:12px">确认提交</div>'
+      +'<div class="row" style="align-items:baseline;gap:5px;margin-top:8px">'
+      +'<span class="bold" style="font-size:40px;letter-spacing:-1.5px;color:var(--brand)">-'+amt+'</span>'
+      +'<span style="font-size:13px;color:var(--label2)">顾好家币</span></div>'
+      +'<div class="row" style="background:var(--fill);border-radius:12px;margin-top:16px;width:100%;align-items:stretch">'
+      +'<div style="flex:1;text-align:center;padding:10px 0"><div style="font-size:11px;color:var(--label3);margin-bottom:3px">当前余额</div><div class="bold" style="font-size:15px">'+COIN_BALANCE+'</div></div>'
+      +'<div style="width:.5px;background:var(--sep);margin:9px 0"></div>'
+      +'<div style="flex:1;text-align:center;padding:10px 0"><div style="font-size:11px;color:var(--label3);margin-bottom:3px">支付后余额</div><div class="bold" style="font-size:15px;color:var(--brand)">'+left+'</div></div>'
+      +'</div>'
+      +'<div style="font-size:12px;color:var(--label3);margin-top:12px">提交后订单支付状态为「进行中」</div>'
+      +'</div>'
+      +'<div style="padding:18px 20px 0">'
+      +'<button class="btn" style="width:100%" onclick="confirmPay()">确认提交</button>'
+      +'<div style="text-align:center;padding:13px 0 2px;font-size:15px;color:var(--label2);cursor:pointer" onclick="closePayConfirm()">取消</div>'
+      +'</div></div></div>';
+  }
+  if(payInsufficient){
+    h+='<div class="mask" onclick="payInsufficient=null;render()"><div class="sheet" onclick="event.stopPropagation()" style="padding-bottom:26px">'
+      +'<div style="width:36px;height:4.5px;border-radius:3px;background:var(--label4);opacity:.5;margin:10px auto 0"></div>'
+      +'<div style="display:flex;flex-direction:column;align-items:center;padding:16px 20px 0">'
+      +'<div style="width:58px;height:58px;border-radius:50%;background:rgba(255,122,69,.12);display:flex;align-items:center;justify-content:center">'+ic('wallet',28,'var(--accent)',1.7)+'</div>'
+      +'<div class="bold" style="font-size:17px;letter-spacing:-.3px;margin-top:12px">顾好家币不足</div>'
+      +'<div style="font-size:14px;color:var(--label2);line-height:1.65;margin-top:8px;text-align:center">本次需支付 <b style="color:var(--accent)">'+payInsufficient+'</b> 顾好家币，当前余额不足<br>请先充值后再提交订单</div>'
+      +'</div>'
+      +'<div style="padding:18px 20px 0">'
+      +'<button class="btn" style="width:100%" onclick="goRecharge()">去充值</button>'
+      +'<div style="text-align:center;padding:13px 0 2px;font-size:15px;color:var(--label2);cursor:pointer" onclick="payInsufficient=null;render()">取消</div>'
+      +'</div></div></div>';
+  }
+  return h;
+}
 
 /* ================= 健康膳食 ================= */
 S.meal={title:'健康膳食',render:function(){
   var mc=(pickState.mealCount===undefined?2:pickState.mealCount);
   mc=Math.max(1,Math.min(10,mc));
-  var needDelivery=(pickState.mealDelivery===undefined?true:pickState.mealDelivery);
+  var needDelivery=(pickState.mealDelivery===undefined?false:pickState.mealDelivery);
   var mt=(pickState.mealType===undefined?1:pickState.mealType);   /* 0=早餐 1=午餐 2=晚餐 */
-  var MT=[['早餐','¥8'],['午餐','¥18'],['晚餐','¥18']];
-  var MENU=[
-    {t:'小米粥 · 水煮蛋 · 杂粮包',s:'清淡养胃 · 约 380 kcal',p:8},
-    {t:'清蒸鲈鱼 · 时蔬 · 米饭',s:'低油低盐 · 适老营养餐 · 约 520 kcal',p:18},
-    {t:'山药排骨汤 · 时蔬 · 杂粮饭',s:'易消化 · 约 480 kcal',p:18}
-  ];
-  var CUT=['前一日 19:00 截止','当日 10:00 截止','当日 14:00 截止'];
+  var MT=[['早餐','¥6 起'],['午餐','¥18 起'],['晚餐','¥16 起']];
+  var MENUS={
+    0:[{t:'小米粥 · 水煮蛋 · 杂粮包',s:'清淡养胃',p:8},
+       {t:'南瓜粥 · 蒸玉米 · 白煮蛋',s:'暖胃轻食',p:6},
+       {t:'燕麦牛奶 · 全麦面包 · 时令水果',s:'高纤饱腹',p:10}],
+    1:[{t:'清蒸鲈鱼 · 时蔬 · 米饭',s:'低油低盐 · 适老营养餐',p:18},
+       {t:'香菇滑鸡 · 西兰花 · 软米饭',s:'高蛋白低脂',p:20},
+       {t:'番茄炖牛腩 · 时蔬 · 杂粮饭',s:'补铁暖身',p:22}],
+    2:[{t:'山药排骨汤 · 时蔬 · 杂粮饭',s:'易消化',p:18},
+       {t:'虾仁蒸蛋 · 时蔬 · 米饭',s:'清淡软糯',p:16},
+       {t:'莲藕排骨汤 · 杂粮包 · 时蔬',s:'养胃安神',p:20}]
+  };
+  var mi=(pickState.mealItem===undefined?0:pickState.mealItem);
+  var list=MENUS[mt]; var m=list[mi]||list[0];
   var mh='';
   MT.forEach(function(x,i){mh+='<div class="d'+(i===mt?' on':'')+'" onclick="pickMealType('+i+')"><div class="w">'+x[0]+'</div><div class="n">'+x[1]+'</div></div>';});
-  var m=MENU[mt];
+  var opts='';
+  list.forEach(function(x,i){
+    var on=(i===mi);
+    opts+='<div class="item noind mopt'+(on?' on':'')+'" onclick="pickMealItem('+i+')">'+thumb('','sMeal',54,54,'')
+      +'<div class="it-bd"><div class="it-t">'+x.t+'</div><div class="it-s">'+x.s+'</div></div>'
+      +'<div style="flex-shrink:0;display:flex;align-items:center;gap:10px">'
+      +'<span class="price" style="font-size:16px">¥'+x.p+'</span>'
+      +'<span class="radio'+(on?' on':'')+'">'+(on?ic('check',13):'')+'</span></div></div>';
+  });
   return '<div class="sect"><div class="t">今日菜单</div><div class="m">9月5日 周六 · '+MT[mt][0]+'</div></div>'
   +'<div class="card"><div class="pick">'+mh+'</div></div>'
-  +'<div class="grp">'
-  +'<div class="item noind" onclick="go(\'mealDetail\')">'+thumb('','sMeal',54,54,'')
-  +'<div class="it-bd"><div class="it-t">'+m.t+'</div><div class="it-s">'+m.s+'</div></div>'
-  +'<span class="price" style="font-size:16px">¥'+m.p+'</span></div>'
-  +'</div>'
+  + grpT('可选套餐')
+  +'<div class="grp">'+opts+'</div>'
   + grp([
     {ic:'sMeal',icls:'bg-y',t:'报餐份数',s:'1 - 10 份',ctl:step('mealCount',{def:2,min:1,max:10})},
-    {ic:'pin',icls:'bg-br',t:'是否需要配送',s:'配送至已认证房号',ctl:sw(needDelivery,'toggleMealDelivery()')}
+    {ic:'pin',icls:'bg-br',t:'是否需要配送',s:'配送至已认证房号',ctl:sw(needDelivery,'toggleMealDelivery()')},
+    needDelivery?{t:'配送地址',s:(pickState.mealHouse||'阳光花园 3栋2单元1802'),ar:1,on:'openHouseSheet()'}:null
   ])
-  +(needDelivery
-    ?'<div class="card"><div class="kv" style="padding:0"><span class="k">配送地址</span></div>'
-      +'<div class="row between" style="margin-top:8px"><span style="font-size:15px">阳光花园 3栋2单元1802</span>'
-      +'<span class="row" style="gap:3px;color:var(--brand);font-size:14px;cursor:pointer" onclick="toast(\'可添加备注\')">备注'+ic('chevR',14)+'</span></div></div>'
-    :'')
-  + grp([{t:'预估金额（额度）',ctl:'<span class="price" style="font-size:20px">¥'+(m.p*mc)+'.00</span>'}])
-  +'<div class="pad" style="padding-top:0">'+hint('下单与取消截止时间 — 早餐：前一日 19:00；午餐：当日 10:00；晚餐：当日 14:00。当前选中'+MT[mt][0]+'，'+CUT[mt]+'。当日 14:00 后展示次日菜品，次日菜单未更新时显示缺省信息')+'</div>'
-  +'<div style="padding:4px var(--pad) 38px">'+btn('提交报餐','toast(\'报餐成功\');go(\'orderMealDetail\')')+'</div>';
+  + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+(m.p*mc)+'.00</span>'}])
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交报餐','openPayConfirm('+(m.p*mc)+',function(){mealDemoStatus=\'active\';toast(\'报餐成功\');go(\'orderMealDetail\')})')+'</div>';
 }};
 function toggleMealDelivery(){pickState.mealDelivery=!pickState.mealDelivery;render();}
-function pickMealType(i){pickState.mealType=i;render();}
+function pickMealType(i){pickState.mealType=i;pickState.mealItem=0;render();}
+function pickMealItem(i){pickState.mealItem=i;render();}
 
 S.mealDetail={title:'膳食详情',render:function(){
   var rich='<div class="rich">'
@@ -1895,10 +2089,12 @@ S.mealDetail={title:'膳食详情',render:function(){
   +'<span class="tag g">推荐</span></div>'
   +'<div class="sub">由营养师 + 三星主厨联合研发 · 每日新鲜配送</div>'
   +'<div class="row" style="gap:5px;margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">¥18</span><span class="sub">/ 份</span></div></div>'
+  +'<div class="svc-stats">'+svcStats('4.8','1.2k+','98%')+'</div>'
   +'<div class="pad">'+hint('点击「立即报餐」开始下单 · 截止时间为当日 20:00')+'</div>'
-  + grp([{ic:'star',icls:'bg-y',t:'4.8 分 · 共 96 条评价',s:'点击查看用户真实评价',ar:true,on:'go(\'review\')'}])
+  +'<div class="rev-head"><div class="grp-t">用户评价</div><div class="rev-more" onclick="go(\'review\')">查看更多'+ic('chevR',14)+'</div></div>'
+  +'<div class="grp">'+revCards(3)+'</div>'
   +'<div style="margin-top:6px"><div class="grp-t">膳食详情</div>'+rich+'</div>'
-  +'<div style="padding:4px var(--pad) 38px">'+btn('立即报餐','go(\'meal\')')+'</div>';
+  +'<div class="btn-fixed"><button class="btn" onclick="go(\'meal\')">立即报餐</button></div>';
 }};
 
 /* ================= 跳转第三方小程序占位 ================= */
@@ -1924,48 +2120,128 @@ S.miniJump={title:'跳转中',nav:false,render:function(){
 /* ================= 生活帮手 ================= */
 /* 生活帮手服务列表数据（内容由物业后台提交） */
 var HELPER=[
-  {n:'家政保洁',d:'全屋深度清洁 · 含厨卫除污',p:180,u:'/ 次',ic:'sHelper',cls:'bg-y',cov:'y'},
-  {n:'家电维修',d:'空调 / 洗衣机 / 冰箱上门检修',p:120,u:'/ 次起',ic:'sProp',cls:'bg-b',cov:'b'},
-  {n:'管道疏通',d:'厨卫下水道疏通 · 30 分钟响应',p:150,u:'/ 次',ic:'sHealth',cls:'bg-g',cov:'g'},
-  {n:'开锁换锁',d:'公安备案锁匠 · 24 小时上门',p:200,u:'/ 次',ic:'lock',cls:'bg-t',cov:'o'},
-  {n:'家具安装',d:'拆装、组装、墙面打孔挂件',p:160,u:'/ 次',ic:'home2',cls:'bg-p',cov:'p'},
-  {n:'适老改造',d:'扶手安装、防滑处理、无障碍改造',p:380,u:'/ 次起',ic:'family',cls:'bg-o',cov:'r'}
+  {n:'家政保洁',d:'全屋深度清洁 · 含厨卫除污',p:180,u:'/ 次',ic:'sHelper',cls:'bg-y',cov:'y',
+    info:'<p>由<strong>物业认证保洁人员</strong>上门服务，覆盖日常清扫、厨房除油、卫浴除污、玻璃擦拭等场景，工具与清洁剂均由服务方提供。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>全屋清扫</strong>：地面、桌面、家具表面除尘擦拭</li>'
+      +'<li><strong>厨卫除污</strong>：油烟机、瓷砖、马桶深度清洁</li>'
+      +'<li><strong>玻璃擦拭</strong>：门窗玻璃内外清洁</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>服务前确认范围，服务后由您验收签字</li>'
+      +'<li>面积约 90㎡ 内为标准单，超面积按补充协议计费</li>'
+    +'</ul>'},
+  {n:'家电维修',d:'空调 / 洗衣机 / 冰箱上门检修',p:120,u:'/ 次起',ic:'sProp',cls:'bg-b',cov:'b',
+    info:'<p>由<strong>持证维修师傅</strong>上门检修，覆盖空调、洗衣机、冰箱、油烟机等常见家电，故障先报价、后维修。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>故障检测</strong>：上门排查定位故障原因</li>'
+      +'<li><strong>维修更换</strong>：更换通用配件，提供维修质保</li>'
+      +'<li><strong>清洗保养</strong>：空调拆洗、洗衣机槽清洗可选</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>上门检测费 ¥120 起，维修费用另计并先报价</li>'
+      +'<li>更换配件质保 90 天</li>'
+    +'</ul>'},
+  {n:'管道疏通',d:'厨卫下水道疏通 · 30 分钟响应',p:150,u:'/ 次',ic:'sHealth',cls:'bg-g',cov:'g',
+    info:'<p>由<strong>专业疏通人员</strong>快速响应，覆盖厨房下水道、卫生间地漏、马桶堵塞等常见疏通场景。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>下水道疏通</strong>：厨卫管道高压疏通</li>'
+      +'<li><strong>地漏疏通</strong>：毛发、油污堵塞清理</li>'
+      +'<li><strong>马桶疏通</strong>：软硬物堵塞处理</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>市区 30 分钟内响应，夜间照常服务</li>'
+      +'<li>常规疏通 ¥150 / 次，特殊拆管另计</li>'
+    +'</ul>'},
+  {n:'开锁换锁',d:'公安备案锁匠 · 24 小时上门',p:200,u:'/ 次',ic:'lock',cls:'bg-t',cov:'o',
+    info:'<p>由<strong>公安备案锁匠</strong>提供上门开锁、换锁、配钥匙服务，身份核验后作业，保障居家安全。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>紧急开锁</strong>：门锁、车锁、保险柜</li>'
+      +'<li><strong>换锁升级</strong>：防盗锁芯更换</li>'
+      +'<li><strong>配钥匙</strong>：常规与芯片钥匙</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>24 小时上门，需出示身份与居住证明</li>'
+      +'<li>开锁 ¥200 / 次起，换锁材料费另计</li>'
+    +'</ul>'},
+  {n:'家具安装',d:'拆装、组装、墙面打孔挂件',p:160,u:'/ 次',ic:'home2',cls:'bg-p',cov:'p',
+    info:'<p>由<strong>专业师傅</strong>提供家具拆装、组装、墙面打孔与挂件安装服务，自带工具，保护墙面与地面。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>家具组装</strong>：床、柜、桌、架类成品组装</li>'
+      +'<li><strong>拆装搬运</strong>：旧家具拆装与移位</li>'
+      +'<li><strong>墙面作业</strong>：挂画、置物架、电视打孔安装</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>标准单含 2 件以内家具，超出按件计费</li>'
+      +'<li>高空或特殊墙体作业前先确认方案</li>'
+    +'</ul>'},
+  {n:'适老改造',d:'扶手安装、防滑处理、无障碍改造',p:380,u:'/ 次起',ic:'family',cls:'bg-o',cov:'r',
+    info:'<p>由<strong>适老化改造专员</strong>上门评估与施工，覆盖扶手安装、防滑处理、无障碍通道等居家安全改造。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>扶手安装</strong>：卫生间、走廊防滑扶手</li>'
+      +'<li><strong>防滑处理</strong>：地面防滑涂层与防滑垫铺设</li>'
+      +'<li><strong>无障碍改造</strong>：门槛坡道、夜间感应灯</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>先免费上门评估，出具改造方案与报价</li>'
+      +'<li>改造 ¥380 起，按实际工程量结算</li>'
+    +'</ul>'}
 ];
 S.helperList={title:'生活帮手',render:function(){
   var h='';
   HELPER.forEach(function(x,i){
     h+='<div class="item noind" onclick="openHelper('+i+')">'+thumb(x.cov,x.ic,54,54)
       +'<div class="it-bd"><div class="it-t">'+x.n+'</div><div class="it-s">'+x.d+'</div></div>'
-      +'<div style="text-align:right"><span class="price" style="font-size:16px">¥'+x.p+'</span>'
-      +'<div class="sub" style="font-size:11px;margin-top:2px">'+x.u+'</div></div></div>';
+      +'<div style="text-align:right"><span class="price" style="font-size:16px">¥'+x.p+'</span></div></div>';
     if(i<HELPER.length-1)h+='<div class="sep"></div>';
   });
-  return '<div class="pad">'+hint('所有收费的生活服务在此提交，服务内容由物业后台配置并派单')+'</div>'
-  + grpT('生活服务列表')
-  +'<div class="grp">'+h+'</div>';
+  return '<div class="grp">'+h+'</div>';
 }};
-function openHelper(i){pickState.helperType=i;go('helper');}
+function openHelper(i){pickState.helperType=i;go('helperInfo');}
+S.helperInfo={title:'服务详情',render:function(){
+  var hi=(pickState.helperType===undefined?0:pickState.helperType);
+  var x=HELPER[hi];
+  return '<div class="pad"><div class="cover '+x.cov+'" style="height:168px">'+ic(x.ic,42,'#fff',1.7)+'</div></div>'
+  +'<div class="pad">'
+  +'<div class="bold" style="font-size:21px;letter-spacing:-.4px">'+x.n+'</div>'
+  +'<div class="sub" style="margin-top:6px">'+x.d+'</div>'
+  +'<div class="row" style="margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">¥'+x.p+'</span></div></div>'
+  +'<div class="rev-head"><div class="grp-t">用户评价</div><div class="rev-more" onclick="go(\'review\')">查看更多'+ic('chevR',14)+'</div></div>'
+  +'<div class="grp">'+revCards(3)+'</div>'
+  +'<div class="grp-t" style="margin:16px var(--pad) 10px">服务详情</div>'
+  +'<div class="rich" style="padding:0 var(--pad)">'+x.info+'</div>'
+  +'<div class="btn-fixed"><button class="btn" onclick="go(\'helper\')">立即预约</button></div>';
+}};
 S.helper={title:'提交服务订单',render:function(){
   var hi=(pickState.helperType===undefined?0:pickState.helperType);
   var hk=HELPER[hi];
-  return '<div class="sect"><div class="t">'+hk.n+'</div><div class="m">¥'+hk.p+' '+hk.u+'</div></div>'
-  +'<div class="pad">'+hint('所有收费的生活服务在此提交，提交后由物业后台派单，员工端完成服务后订单完成')+'</div>'
-  + grpT('服务信息')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">服务内容</div></div><div class="cell-v">'+hk.n+' · '+hk.d+'</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">服务金额</div></div><div class="cell-v"><span class="price">¥'+hk.p+'.00</span></div></div>'
-  +'</div>'
+  return '<div class="grp" style="margin-top:14px">'
+  +'<div class="item noind">'+thumb(hk.cov,hk.ic,64,64)
+  +'<div class="it-bd"><div class="it-t" style="font-size:17px;letter-spacing:-.3px">'+hk.n+'</div>'
+  +'<div class="it-s">'+hk.d+'</div>'
+  +'<div style="margin-top:7px"><span class="price" style="font-size:18px">¥'+hk.p+'</span></div></div></div></div>'
   + grpT('服务时间')
-  +'<div class="grp"><div class="field"><span class="lb">上门时间</span><input placeholder="请选择上门服务时间"></div></div>'
+  + grp([{t:'上门时间',s:(pickState.helperDate&&pickState.helperSlot)?(pickState.helperDate+' '+pickState.helperSlot):'请选择上门服务时间',ar:1,on:'openTimeSheet()'}])
   + grpT('服务地址')
-  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="cell-t">服务地址</div><div class="cell-s">按认证房号显示</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div></div>'
+  +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="cell-t">服务地址</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div></div>'
   + grpT('备注')
   +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
   +'<textarea rows="4" placeholder="请描述服务需求与备注…"></textarea></div></div>'
   + grp([{t:'订单金额',ctl:'<span class="price" style="font-size:20px">¥'+hk.p+'.00</span>'}])
-  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','toast(\'订单已提交，等待物业后台派单\');go(\'ordersHelper\')')+'</div>'
-  + hint('线上提交订单；若涉及材料费，由服务人员在线下收取');
+  + hint('仅为预估金额，具体费用与线下服务人员沟通，系统不收取费用')
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','toast(\'订单已提交，等待物业后台派单\');go(\'ordersHelper\')')+'</div>';
 }};
 
 /* ================= 社区（Tab） ================= */
@@ -1978,34 +2254,34 @@ S.community={tab:'community',title:'社区',nav:false,render:function(){
   ])
   + grp([
     {ic:'yen',icls:'bg-g',t:'小区钱袋子',s:'公共收支透明公示',ar:1,on:'go(\'moneyBag\')'},
-    {ic:'hr',icls:'bg-t',t:'人力资源',s:'邻里招聘、技能共享',ar:1,on:'go(\'hr\')'}
+    {ic:'hr',icls:'bg-t',t:'人力资源',s:'人才入驻 · 技能服务派单',ar:1,on:'go(\'hr\')'}
   ],'小区公开信息');
 }};
 
 /* ================= 社区活动 ================= */
+var curAct=null;
+function openActivity(a){curAct=a;go('activityDetail');}
 var ACTIVITIES=[
-  {n:'中秋邻里联欢会',when:'9月28日 18:30',bm:'报名 09-05 至 09-26',s:'中心广场 · 已报 86/200',st:'报名中',sc:'g',c:'',ty:'节日庆典'},
-  {n:'少儿阅读营',when:'本周末 14:00',bm:'报名 09-01 至 09-12',s:'阅览室 · 30/30 人',st:'名额已满',sc:'gy',c:'p',ty:'亲子活动'},
-  {n:'重阳节健康讲座',when:'9月29日 14:00',bm:'报名 09-10 至 09-27',s:'活动中心 · 0/80 人',st:'即将开始',sc:'b',c:'b',ty:'健康讲座'},
-  {n:'邻里跳蚤市场',when:'9月12日 09:00',bm:'报名 09-02 至 09-10',s:'西门广场 · 42/100 人',st:'报名中',sc:'g',c:'o',ty:'节日庆典'},
-  {n:'秋季健步走',when:'9月25日 09:00',bm:'报名 09-08 至 09-23',s:'江畔绿道 · 18/60 人',st:'报名中',sc:'g',c:'y',ty:'健康讲座'},
-  {n:'重阳敬老慰问',when:'9月30日 10:00',bm:'报名 09-12 至 09-28',s:'各楼栋 · 0/40 人',st:'即将开始',sc:'b',c:'p',ty:'志愿服务'},
+  {n:'中秋邻里联欢会',when:'9月28日 18:30',bm:'报名 09-05 至 09-26',s:'中心广场 · 已报 86 人',st:'报名中',sc:'g',c:'',ty:'节日庆典'},
+  {n:'少儿阅读营',when:'本周末 14:00',bm:'报名 09-01 至 09-12',s:'阅览室 · 已报 30 人',st:'报名中',sc:'g',c:'p',ty:'亲子活动'},
+  {n:'重阳节健康讲座',when:'9月29日 14:00',bm:'报名 09-10 至 09-27',s:'活动中心 · 0 人',st:'即将开始',sc:'b',c:'b',ty:'健康讲座'},
+  {n:'邻里跳蚤市场',when:'9月12日 09:00',bm:'报名 09-02 至 09-10',s:'西门广场 · 已报 42 人',st:'报名中',sc:'g',c:'o',ty:'节日庆典'},
+  {n:'秋季健步走',when:'9月25日 09:00',bm:'报名 09-08 至 09-23',s:'江畔绿道 · 已报 18 人',st:'报名中',sc:'g',c:'y',ty:'健康讲座'},
+  {n:'重阳敬老慰问',when:'9月30日 10:00',bm:'报名 09-12 至 09-28',s:'各楼栋 · 0 人',st:'即将开始',sc:'b',c:'p',ty:'志愿服务'},
   {n:'暑期趣味运动会',when:'8月20日 已结束',bm:'报名 08-01 至 08-18',s:'中央草坪 · 128 人参与',st:'已结束',sc:'gy',c:'gy',ty:'亲子活动'}
 ];
-function actItem(a){
-  /* 状态按钮交互：报名中=立即报名可点；即将开始/名额已满/已结束=置灰不可点 */
-  var can=(a.st==='报名中');
-  var label=(a.st==='报名中')?'立即报名':(a.st==='名额已满'?'名额已满':(a.st==='已结束'?'已结束':'即将开始'));
-  var b='<div style="flex-shrink:0;margin-left:8px;opacity:'+(can?'1':'.45')+'"><div class="ab '+(can?'pri':'sec')+'" onclick="event.stopPropagation();'+(can?'go(\'activitySignup\')':'toast(\''+label+'，暂不可报名\')')+'">'+label+'</div></div>';
-  return '<div class="item noind" onclick="go(\'activityDetail\')">'+thumb(a.c,'cal',58,58)
-    +'<div class="it-bd"><div class="it-t">'+a.n+'</div><div class="it-s">'+a.bm+'</div></div>'
-    +'<span class="tag '+a.sc+'">'+a.st+'</span>'+b+'</div>';
+function actItem(a,idx){
+  /* 列表不显示「立即报名」按钮（报名中点击条目进详情报名）；右侧状态文字已删除 */
+  var nw='display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+  return '<div class="item noind" onclick="openActivity(ACTIVITIES['+idx+'])">'+thumb(a.c,'cal',58,58)
+    +'<div class="it-bd"><div class="it-t" style="'+nw+'">'+a.n+'</div><div class="it-s" style="'+nw+'">'+a.bm+'</div></div>'
+    +'<span class="tag '+a.sc+'">'+a.st+'</span></div>';
 }
 function actItems(list){
-  return list.map(function(a,i){return (i?'<div class="sep full"></div>':'')+actItem(a);}).join('');
+  return list.map(function(a,i){return (i?'<div class="sep full"></div>':'')+actItem(a,ACTIVITIES.indexOf(a));}).join('');
 }
 S.communityList={title:'社区活动',render:function(){
-  var TABS=['全部','即将开始','报名中','名额已满','已结束'];
+  var TABS=['全部','即将开始','报名中','已结束'];
   var cur=(chipState.communityList===undefined?0:chipState.communityList);
   var list=cur?ACTIVITIES.filter(function(x){return x.st===TABS[cur];}):ACTIVITIES;
   var h=searchBar('搜索活动名称或介绍','go(\'activityFilter\')')
@@ -2023,7 +2299,7 @@ S.activityFilter={title:'筛选',nav:false,render:function(){
   +'<div class="sh"><div class="x" onclick="closePanel()">'+ic('x',20)+'</div><div class="t">筛选活动</div><div class="ok" onclick="toast(\'已应用筛选条件\');closePanel()">确定</div></div>'
   +'<div class="pad"><div class="card">'
   +'<div class="bold" style="margin-bottom:10px;font-size:14px">活动状态</div><div class="qlist">'
-  +'<div class="qbtn on">全部</div><div class="qbtn">即将开始</div><div class="qbtn">报名中</div><div class="qbtn">名额已满</div><div class="qbtn">已结束</div></div></div></div>'
+  +'<div class="qbtn on">全部</div><div class="qbtn">即将开始</div><div class="qbtn">报名中</div><div class="qbtn">已结束</div></div></div></div>'
   +'<div class="pad"><div class="card">'
   +'<div class="bold" style="margin-bottom:10px;font-size:14px">活动时间</div><div class="qlist">'
   +'<div class="qbtn on">不限</div><div class="qbtn">本周</div><div class="qbtn">本月</div><div class="qbtn">近三个月</div><div class="qbtn">更早</div></div></div></div>'
@@ -2035,34 +2311,31 @@ S.activityFilter={title:'筛选',nav:false,render:function(){
   +'</div></div>';
 }};
 S.activityDetail={title:'活动详情',render:function(){
+  var a=curAct||ACTIVITIES[0];
   return '<div class="pad"><div class="cover" style="height:172px">'+ic('cal',44,'#fff',1.7)+'</div></div>'
-  +'<div class="pad"><div class="bold" style="font-size:21px;letter-spacing:-.4px">中秋邻里联欢会</div>'
-  +'<div class="row" style="gap:8px;margin-top:9px"><span class="tag g">报名中</span><span class="tag br">节日庆典</span></div></div>'
+  +'<div class="pad"><div class="row" style="gap:8px;align-items:center;flex-wrap:wrap"><div class="bold" style="font-size:21px;letter-spacing:-.4px">'+a.n+'</div><span class="tag '+a.sc+'" style="flex-shrink:0">'+a.st+'</span></div></div>'
   +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-br">'+ic('clock',17)+'</div><div class="cell-bd"><div class="cell-t">报名时间</div></div><div class="cell-v">9-01 ~ 9-20</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('cal',17)+'</div><div class="cell-bd"><div class="cell-t">活动时间</div></div><div class="cell-v">9-28 18:30</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('pin',17)+'</div><div class="cell-bd"><div class="cell-t">活动地点</div></div><div class="cell-v">中心广场</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-p">'+ic('family',17)+'</div><div class="cell-bd"><div class="cell-t">限制人数</div></div><div class="cell-v">200 人</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-p">'+ic('family',17)+'</div><div class="cell-bd"><div class="cell-t">已报名人数</div></div><div class="cell-v">86 人</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">报名时间</div></div><div class="cell-v">9-01 ~ 9-20</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">活动时间</div></div><div class="cell-v">9-28 18:30</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">活动地点</div></div><div class="cell-v">中心广场</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">已报名人数</div></div><div class="cell-v">86 人</div></div>'
   +'</div>'
   + grpT('活动介绍')
-  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.7;color:var(--label)">邻里齐聚，赏月品茗，趣味游戏与才艺展示。现场设置灯谜区、手工月饼 DIY 与儿童游乐区，欢迎携家人一同参加。活动免费，名额有限，报满即止。</div></div>'
-  +(pickState.actSigned
-    ?'<div class="pad"><button class="btn des">已报名</button></div>'
-    :'<div class="pad"><button class="btn" onclick="go(\'activitySignup\')">立即报名</button></div>');
+  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.7;color:var(--label)">邻里齐聚，赏月品茗，趣味游戏与才艺展示。现场设置灯谜区、手工月饼 DIY 与儿童游乐区，欢迎携家人一同参加。活动免费，名额不限，欢迎广大业主积极参与。</div></div>'
+  +(a.st==='已结束'
+    ?''
+    :(pickState.actSigned
+      ?'<div class="pad"><button class="btn des">已提交报名</button></div>'
+      :'<div class="pad"><button class="btn" onclick="go(\'activitySignup\')">立即报名</button></div>'));
 }};
 S.activitySignup={title:'活动报名',render:function(){
-  return '<div class="pad">'+hint('每个用户每个活动仅可报名一次')+'</div>'
+  return ''
   +'<div class="grp">'
   +'<div class="field"><span class="lb">姓名</span><input placeholder="请输入姓名"></div>'
   +'<div class="sep"></div>'
   +'<div class="field"><span class="lb">手机号</span><input placeholder="请输入手机号" type="tel"></div>'
   +'</div>'
-  + grpT('备注（选填）')
+  + grpT('备注')
   +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
   +'<textarea rows="3" placeholder="如有特殊需求请在此说明…"></textarea></div></div>'
   + btn('提交报名','pickState.actSigned=true;toast(\'报名成功，已同步至物业后台\');go(\'mySignup\')');
@@ -2124,8 +2397,7 @@ S.noticeDetail={title:'通知详情',render:function(){
 
 /* ================= 精彩内容 ================= */
 S.featuredList={title:'小区资讯',render:function(){
-  return '<div class="pad">'+hint('未认证用户也可查看全部内容')+'</div>'
-  +'<div class="grp">'
+  return '<div class="grp">'
   +'<div class="item noind" onclick="go(\'articleDetail\')">'+thumb('b','doc',66,66)
   +'<div class="it-bd"><div class="it-t">垃圾分类新指南来了</div><div class="it-s">了解四分类标准，共建整洁小区</div><div class="it-s">09-03 · 物业服务中心</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
   +'<div class="sep full"></div>'
@@ -2149,18 +2421,18 @@ S.articleDetail={title:'资讯详情',render:function(){
 /* 订单数据：type 1=报餐 2=托管 3=陪诊；status: pending待支付 / active进行中 / done已完成 / cancel已取消 / refund退款中 */
 var ORDERS=[
   {id:'BC20250904-001',type:1,t1:'明日午餐',qty:2,price:36,oPrice:36,date:'09-05',sub:'09-04 10:20',st:'active',pay:'已确认',tags:['12:00送达','A套餐']},
-  {id:'BC20250902-008',type:1,t1:'昨日午餐',qty:1,price:18,oPrice:18,date:'09-03',sub:'09-02 11:05',st:'done',pay:'已结算',tags:['12:00送达','A套餐']},
-  {id:'BC20250903-004',type:1,t1:'午餐 · 1 份',qty:1,price:18,oPrice:18,date:'09-04',sub:'09-03 09:40',st:'cancel',pay:'已取消',tags:['12:00送达']},
-  {id:'BC20250901-002',type:1,t1:'今日晚餐',qty:2,price:36,oPrice:36,date:'09-01',sub:'08-31 17:30',st:'done',pay:'已结算',tags:['17:30送达','B套餐']},
-  {id:'TG20250901-003',type:2,t1:'学期日托',qty:1,price:1200,oPrice:1500,date:'10-01 至 12-31',sub:'09-01 09:00',st:'active',pay:'进行中',tags:['7岁·全日班','周一至周五']},
-  {id:'TG20250701-011',type:2,t1:'暑期托',qty:1,price:980,oPrice:980,date:'07-01 至 08-30',sub:'07-01 15:20',st:'cancel',pay:'已取消',tags:['8岁·全日班']},
-  {id:'TG20250601-005',type:2,t1:'周末半日托',qty:1,price:600,oPrice:720,date:'06-01 至 06-30',sub:'05-28 14:00',st:'done',pay:'已结算',tags:['周六半天']},
+  {id:'BC20250902-008',type:1,t1:'昨日午餐',qty:1,price:18,oPrice:18,date:'09-03',sub:'09-02 11:05',st:'done',pay:'已结算',doneTime:'09-03 12:30',tags:['12:00送达','A套餐']},
+  {id:'BC20250903-004',type:1,t1:'午餐 · 1 份',qty:1,price:18,oPrice:18,date:'09-04',sub:'09-03 09:40',st:'cancel',pay:'已取消',cancelTime:'09-03 14:25',tags:['12:00送达']},
+  {id:'BC20250901-002',type:1,t1:'今日晚餐',qty:2,price:36,oPrice:36,date:'09-01',sub:'08-31 17:30',st:'done',pay:'已结算',doneTime:'09-01 17:40',tags:['17:30送达','B套餐']},
+  {id:'TG20250901-003',type:2,t1:'禄口一小课后托管',qty:1,price:45,oPrice:45,date:'09-05',sub:'09-01 09:00',st:'active',pay:'进行中',tags:['7岁','09-05 课后时段']},
+  {id:'TG20250701-011',type:2,t1:'周末全天托管',qty:1,price:90,oPrice:90,date:'07-05',sub:'07-01 15:20',st:'cancel',pay:'已取消',cancelTime:'07-01 16:10',tags:['8岁','单日全时段']},
+  {id:'TG20250601-005',type:2,t1:'周末半日托管',qty:1,price:45,oPrice:45,date:'06-06',sub:'05-28 14:00',st:'done',pay:'已结算',doneTime:'06-01 18:00',tags:['周六 · 半日']},
   {id:'PZ20250903-002',type:3,t1:'医院就诊全程陪诊 · 3 小时',qty:3,price:240,oPrice:240,date:'09-05 09:00',sub:'09-03 16:00',st:'pending',pay:'待支付',tags:['陪诊员·李阿姨','北京协和医院']},
   {id:'PZ20250820-006',type:3,t1:'体检陪诊 · 2 小时',qty:2,price:160,oPrice:180,date:'08-22 08:30',sub:'08-20 10:30',st:'done',pay:'已支付',tags:['陪诊员·王阿姨','301医院体检中心']},
-  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',tags:['陪诊员·李阿姨','同济医院']},
+  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-05 20:30',tags:['陪诊员·李阿姨','同济医院']},
   {id:'SH20250904-001',type:4,t1:'家政保洁 · 全屋深度清洁',qty:1,price:180,oPrice:180,date:'09-05 09:00',sub:'09-04 15:30',st:'active',pay:'线下收取',tags:['上门 09:00','3栋2单元-1802']},
   {id:'SH20250902-003',type:4,t1:'空调维修 · 挂机加氟',qty:1,price:260,oPrice:260,date:'09-02 14:00',sub:'09-01 20:10',st:'done',pay:'线下收取',tags:['上门 14:00','师傅·王师傅']},
-  {id:'SH20250828-002',type:4,t1:'水电维修 · 厨房水管更换',qty:1,price:150,oPrice:150,date:'08-29 10:00',sub:'08-28 09:20',st:'cancel',pay:'已取消',tags:['上门 10:00']}
+  {id:'SH20250828-002',type:4,t1:'水电维修 · 厨房水管更换',qty:1,price:150,oPrice:150,date:'08-29 10:00',sub:'08-28 09:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-28 11:40',tags:['上门 10:00']}
 ];
 var ordTypeLabels=['报餐单','托管单','陪诊单','生活帮手单'];
 var ordTypeIcons={1:'sMeal',2:'sTrust',3:'sEscort',4:'sHelper'};
@@ -2179,19 +2451,22 @@ function ordSummary(type){
   return {total:total,p:p,a:a,d:d,c:c,r:r};
 }
 /* 状态名按订单类型区分（以需求文档为准）：
-   报餐单=已报餐/已取消/已完成；托管单=进行中/已取消/已完成；陪诊单=待支付/进行中/已完成/已取消；生活帮手单=进行中/已完成/已取消 */
+   报餐单=进行中/已取消/已完成；托管单=进行中/已取消/已完成；陪诊单=待支付/进行中/已完成/已取消；生活帮手单=进行中/已完成/已取消
+   注：报餐单确认顾好家币支付后即为「进行中」，无「待支付」状态 */
 function ordStatusText(s,type){
-  if(type===1)return s==='done'?'已完成':s==='cancel'?'已取消':'已报餐';
+  if(type===1)return s==='done'?'已完成':s==='cancel'?'已取消':'进行中';
   if(type===2||type===4)return s==='done'?'已完成':s==='cancel'?'已取消':'进行中';
   return s==='pending'?'待支付':s==='active'?'进行中':s==='done'?'已完成':s==='cancel'?'已取消':s==='refund'?'退款中':'-';
 }
 function ordStatusCls(s){return s==='pending'?'pending':s==='active'?'active':s==='done'?'done':s==='cancel'?'cancel':'refund';}
 /* 订单详情跳转映射 */
+var curOrder=null;
 function openOrder(id){
   var o=ORDERS.filter(function(x){return x.id===id;})[0];
   if(!o)return;
+  curOrder=o;
   if(o.type===1){mealDemoStatus=o.st;go('orderMealDetail');}
-  else if(o.type===2){trustDemoStatus=o.st;go('orderTrustDetail');}
+  else if(o.type===2){trustDemoStatus=o.st;var s=trustOrderSnapshot();s.id=o.id;s.price=o.price;s.amount=o.price;s.period=o.date;s.submit=o.sub;lastTrustOrder=s;go('orderTrustDetail');}
   else if(o.type===3){escortDemoStatus=o.st;openEscortDetail(o.id);}
   else if(o.type===4){helperDemoStatus=o.st;go('orderHelperDetail');}
 }
@@ -2205,11 +2480,9 @@ function orderCard(o){
     actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'订单已复制\')">取消订单</div>'
       +'<div class="ab warm" onclick="event.stopPropagation();toast(\'打开支付\')">去支付</div>';
   }else if(o.st==='active'){
-    actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'联系客服\')">联系管家</div>';
+    actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'已提交取消申请，等待物业后台审核\')">取消订单</div>';
   }else if(o.st==='done'){
     actions='<div class="ab pri" onclick="event.stopPropagation();toast(\'再次预约\')">再次预约</div>';
-  }else if(o.st==='cancel'){
-    actions='<div class="ab pri" onclick="event.stopPropagation();toast(\'重新预约\')">重新预约</div>';
   }else if(o.st==='refund'){
     actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'查看详情\')">退款详情</div>';
   }
@@ -2272,10 +2545,6 @@ function orderListHTML(type,sub,curTab){
     +'</div>'
     +'<div class="ord-st">'+chips.join('')+'</div>'
     +(list.length?list.map(orderCard).join(''):'<div class="pad">'+empty('post','暂无相关订单','切换其他分类或筛选试试')+'</div>')
-    +(pendingCount>1?'<div class="pad" style="padding-top:0"><div class="card" style="background:linear-gradient(135deg,#FFF2EA,#FFE3D2);border:1px solid #FFD9C7;padding:14px 16px">'
-        +'<div class="row between"><div><div class="bold" style="font-size:14.5px;color:#C2541A">批量结算待支付订单</div>'
-          +'<div class="sub" style="margin-top:4px">共 '+pendingCount+' 笔 · 合计 <b style="color:#C2541A">¥'+pendingAmt.toFixed(2)+'</b></div></div>'
-          +'<div style="background:#F2642A;color:#fff;padding:8px 16px;border-radius:18px;font-size:13px;font-weight:600;cursor:pointer" onclick="toast(\'打开收银台\');go(\'orderSettlement\')">去结算</div></div></div></div>':'')
     +'<div style="height:24px"></div>';
 }
 function setOrdType(t){
@@ -2283,21 +2552,22 @@ function setOrdType(t){
   if(t===1)go('orders');
   else if(t===2)go('ordersTrust');
   else if(t===3)go('ordersEscort');
+  else if(t===4)go('ordersHelper');
 }
 S.orders={tab:'orders',title:'订单',nav:false,render:function(){
-  return topLg('订单','所有订单',[['wallet','','orderSettlement','']])
+  return topLg('订单','所有订单',[])
     + orderListHTML(1,'报餐订单 · 营养到家','orders');
 }};
 S.ordersTrust={tab:'orders',title:'订单',nav:false,render:function(){
-  return topLg('订单','所有订单',[['wallet','','orderSettlement','']])
+  return topLg('订单','所有订单',[])
     + orderListHTML(2,'托管订单 · 安心托付','ordersTrust');
 }};
 S.ordersEscort={tab:'orders',title:'订单',nav:false,render:function(){
-  return topLg('订单','所有订单',[['wallet','','orderSettlement','']])
+  return topLg('订单','所有订单',[])
     + orderListHTML(3,'陪诊订单 · 暖心陪伴','ordersEscort');
 }};
 S.ordersHelper={tab:'orders',title:'订单',nav:false,render:function(){
-  return topLg('订单','所有订单',[['wallet','','orderSettlement','']])
+  return topLg('订单','所有订单',[])
     + orderListHTML(4,'生活帮手订单 · 上门服务','ordersHelper');
 }};
 S.orderSearch={title:'订单搜索',nav:false,render:function(){
@@ -2315,24 +2585,29 @@ S.orderSearch={title:'订单搜索',nav:false,render:function(){
   +'</div></div>';
 }};
 
-/* 报餐单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
-var mealDemoStatus='pending';
+/* 报餐单详情状态演示：报餐确认支付后直接为 active（进行中），无 pending（待支付）状态 */
+var mealDemoStatus='active';
 
 /* ================= 订单详情 ================= */
+/* 订单日志：未发生的节点（时间值为 '—' 或空）不显示整行（节点名称+值均不显示） */
+function ordLog(items){
+  var lines=[];
+  items.forEach(function(it){
+    var v=it[1];
+    if(v===''||v==='—')return;
+    lines.push(it[0]+'：'+v);
+  });
+  return lines.join('<br>');
+}
 S.orderMealDetail={title:'报餐单详情',render:function(){
   var st=mealDemoStatus;
-  var stext=ordStatusText(st),scls=ordStatusCls(st);
-  var payText={pending:'未支付',active:'未支付',done:'已结算',cancel:'已取消'}[st];
-  var payCls={pending:'o',active:'o',done:'g',cancel:'gy'}[st];
+  var stext=ordStatusText(st,1),scls=ordStatusCls(st);
+  var payText={pending:'待支付',active:'已支付',done:'已支付',cancel:'已取消'}[st];
+  var payCls={pending:'o',active:'g',done:'g',cancel:'gy'}[st];
 
   var btns='';
-  if(st==='pending'){
-    btns='<div class="btn-row"><button class="btn sec" onclick="toast(&apos;已取消报餐（当日 20:00 前）&apos;)">取消订单</button>'
-       +'<button class="btn" onclick="go(&apos;orderSettlement&apos;)">订单结算</button></div>'
-       +'<div class="pad"><button class="btn acc" onclick="openAddReview(1)">'+ic('star',18)+' 服务评价</button></div>';
-  }else if(st==='active'){
-    btns='<div class="btn-row"><button class="btn sec" onclick="toast(&apos;已取消报餐（当日 20:00 前）&apos;)">取消订单</button>'
-       +'<button class="btn" onclick="go(&apos;orderSettlement&apos;)">订单结算</button></div>';
+  if(st==='active'){
+    btns='<div class="btn-row"><button class="btn sec" onclick="toast(&apos;已取消报餐（当日 20:00 前）&apos;)">取消订单</button></div>';
   }else if(st==='done'){
     btns='<div class="pad"><button class="btn acc" onclick="openAddReview(1)">'+ic('star',18)+' 服务评价</button></div>';
   }
@@ -2343,7 +2618,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="st s-'+scls+'">'+stext+'</div></div>'
   +'<div class="bd">'
   +'<div class="ti">明日午餐<span class="qty">× 2</span></div>'
-  +'<div class="meta"><div class="m">'+ic('clock',11)+'配送 / 使用：09-05</div><div class="m">'+ic('pin',11)+'提交：09-04 10:20</div></div>'
+  +'<div class="meta"><div class="m">'+ic('clock',11)+'配送 / 使用：09-05</div><div class="m">'+ic('pin',11)+'提交：'+(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')+'</div></div>'
   +'<div class="sum"><div class="l">共 <b>2</b> 份</div><div><span class="pn">¥36.00</span></div></div>'
   +'</div></div>'
   +'<div class="ord-section"><div class="st">菜单信息</div>'
@@ -2354,77 +2629,62 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="ord-section"><div class="st">支付信息</div>'
   +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥36.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
-  +'<div class="kv"><span class="k">支付方式</span><span class="v">/</span></div>'
+  +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">提交：09-04 10:20<br>结算：—<br>取消：—</div></div>'
+  +'<div class="log">'+ordLog([['提交',(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')],['结算','—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—'],['完成',(st==='done'&&curOrder&&curOrder.doneTime)?curOrder.doneTime:'—']])+'</div></div>'
   + btns;
-  return '<div class="ord-card" style="margin-top:12px">'
-  +'<div class="hd"><div class="l"><div class="ic b">'+ic('sMeal',18)+'</div>'
-  +'<div><div>报餐单</div><div class="no">#BC20250904-001</div></div></div>'
-  +'<div class="st s-active">已确认</div></div>'
-  +'<div class="bd">'
-  +'<div class="ti">明日午餐<span class="qty">× 2</span></div>'
-  +'<div class="meta"><div class="m">'+ic('clock',11)+'配送 / 使用：09-05</div><div class="m">'+ic('pin',11)+'提交：09-04 10:20</div></div>'
-  +'<div class="sum"><div class="l">共 <b>2</b> 份</div><div><span class="pn">¥36.00</span></div></div>'
-  +'</div></div>'
-  +'<div class="ord-section"><div class="st">菜单信息</div>'
-  +'<div class="kv"><span class="k">明日午餐</span><span class="v">¥18.00 × 2</span></div>'
-  +'<div class="kv"><span class="k">报餐日期</span><span class="v b">09-05</span></div>'
-  +'<div class="kv"><span class="k">套餐规格</span><span class="v">A套餐 · 12:00送达</span></div>'
-  +'</div>'
-  +'<div class="ord-section"><div class="st">支付信息</div>'
-  +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥36.00</span></div>'
-  +'<div class="kv"><span class="k">支付状态</span><span class="v o">未支付</span></div>'
-  +'<div class="kv"><span class="k">支付方式</span><span class="v">/</span></div>'
-  +'</div>'
-  +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">提交：09-04 10:20<br>结算：—<br>取消：—</div></div>'
-  +'<div class="btn-row"><button class="btn sec" onclick="toast(\'已取消报餐（当日 20:00 前）\')">取消订单</button>'
-  +'<button class="btn" onclick="go(\'orderSettlement\')">订单结算</button></div>'
-  +'<div class="pad"><button class="btn acc" onclick="openAddReview(1)">'+ic('star',18)+' 服务评价</button></div>';
 }};
 /* 托管单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
 var trustDemoStatus='active';
 S.orderTrustDetail={title:'托管单详情',render:function(){
   var st=trustDemoStatus;
   var stext=ordStatusText(st,2),scls=ordStatusCls(st);
-  var payText={pending:'未支付',active:'未支付',done:'已结算',cancel:'已取消'}[st];
-  var payCls={pending:'o',active:'o',done:'g',cancel:'gy'}[st];
+  var payText={pending:'未支付',active:'已支付',done:'已结算',cancel:'已取消'}[st];
+  var payCls={pending:'o',active:'g',done:'g',cancel:'gy'}[st];
+  var o=trustOrderSnapshot();
+
+  /* 托管信息：按提交时所选字段动态生成 */
+  var info='';
+  info+=trkv('托管项目',o.name,'b');
+  info+=trkv('托管人数',o.count+' 人','b');
+  info+=trkv('是否需要接',o.jie?'是':'否',o.jie?'g':null);
+  if(o.jie)info+=trkv('接 · 学校',o.jieSchool||'请选择学校');
+  info+=trkv('是否需要送',o.song?'是':'否',o.song?'g':null);
+  if(o.song)info+=trkv('送 · 学校',o.songSchool||'请选择学校');
+  if(o.jie||o.song)info+=trkv('接送地址',o.house);
+  info+=trkv('是否需要用餐',o.meal?'是':'否',o.meal?'g':null);
+  info+=trkv('是否需要作业辅导',o.tutor?'是':'否',o.tutor?'g':null);
+  info+=trkv('看护时段',(o.care&&o.care.length)
+    ?'<div style="text-align:right"><div style="color:var(--label);font-weight:500">'+o.period+'</div><div style="margin-top:3px">'+o.care.join(' · ')+'</div></div>'
+    :'未选择');
 
   var btns='';
   if(st==='pending'){
-    btns=btn('订单结算','go(&apos;orderSettlement&apos;)')
-      +'<div class="pad"><button class="btn acc" onclick="openAddReview(2)">'+ic('star',18)+' 服务评价</button></div>';
+    btns='<div class="pad"><button class="btn acc" onclick="openAddReview(2)">'+ic('star',18)+' 服务评价</button></div>';
   }else if(st==='active'){
-    btns=btn('订单结算','go(&apos;orderSettlement&apos;)')
-      +'<div class="pad"><button class="btn sec" onclick="toast(&apos;订单开始时间前 1 小时可取消订单&apos;)">取消订单</button></div>';
+    btns='<div class="pad"><button class="btn sec" onclick="toast(&apos;订单开始时间前 1 小时可取消订单&apos;)">取消订单</button></div>';
   }else if(st==='done'){
     btns='<div class="pad"><button class="btn acc" onclick="openAddReview(2)">'+ic('star',18)+' 服务评价</button></div>';
   }
 
   return '<div class="ord-card" style="margin-top:12px">'
   +'<div class="hd"><div class="l"><div class="ic o">'+ic('sTrust',18)+'</div>'
-  +'<div><div>托管单</div><div class="no">#TG20250901-003</div></div></div>'
+  +'<div><div>托管单</div><div class="no">#'+(o.id||'TG20250901-003')+'</div></div></div>'
   +'<div class="st s-'+scls+'">'+stext+'</div></div>'
   +'<div class="bd">'
-  +'<div class="ti">学期日托<span class="qty">· 1 人</span></div>'
-  +'<div class="meta"><div class="m">'+ic('clock',11)+'托管时间：10-01 至 12-31</div><div class="m">'+ic('pin',11)+'提交：09-01 09:00</div></div>'
-  +'<div class="sum"><div class="l">服务周期 <b>3</b> 个月</div><div><span class="pn">¥1200.00</span></div></div>'
+  +'<div class="ti">'+o.name+'<span class="qty">· '+o.count+' 人</span></div>'
+  +'<div class="meta"><div class="m">'+ic('pin',11)+'提交：'+o.submit+'</div></div>'
+  +'<div class="sum"><div class="l">实付金额 <b>¥'+o.price.toFixed(2)+'</b></div><div><span class="pn">¥'+o.price.toFixed(2)+'</span></div></div>'
   +'</div></div>'
-  +'<div class="ord-section"><div class="st">托管信息</div>'
-  +'<div class="kv"><span class="k">托管项目</span><span class="v b">学期日托</span></div>'
-  +'<div class="kv"><span class="k">托管人数</span><span class="v">1 人</span></div>'
-  +'<div class="kv"><span class="k">是否接送</span><span class="v g">是</span></div>'
-  +'<div class="kv"><span class="k">接送地址</span><span class="v">阳光花园 3栋2单元1802</span></div>'
-  +'</div>'
+  +'<div class="ord-section"><div class="st">托管信息</div>'+info+'</div>'
   +'<div class="ord-section"><div class="st">支付信息</div>'
-  +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥1200.00</span></div>'
+  +'<div class="kv"><span class="k">实付金额</span><span class="v pr">¥'+o.price.toFixed(2)+'</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">提交：09-01 09:00<br>结算：—<br>取消：—</div></div>'
+  +'<div class="log">'+ordLog([['提交',o.submit],['结算','—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—'],['完成',(st==='done'&&curOrder&&curOrder.doneTime)?curOrder.doneTime:'—']])+'</div></div>'
   + btns;
 }};
 /* 陪诊单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
@@ -2477,7 +2737,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="kv"><span class="k">附加费用</span><span class="v '+(st==='active'?'pr':'')+'">'+(st==='active'?'¥60.00（陪诊员已上传 · 待支付）':'¥0.00')+'</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">提交：2026-09-03 16:00<br>支付：'+(paid?'2026-09-03 16:05':'—')+'<br>取消：—</div></div>'
+  +'<div class="log">'+ordLog([['提交','2026-09-03 16:00'],['支付',paid?'2026-09-03 16:05':'—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—']])+'</div></div>'
   + btns;
 }};
 S.orderHelperDetail={title:'生活帮手单详情',render:function(){
@@ -2488,8 +2748,6 @@ S.orderHelperDetail={title:'生活帮手单详情',render:function(){
     btns='<div class="pad"><button class="btn sec" onclick="toast(&apos;已提交取消申请，等待物业后台审核&apos;)">取消订单</button></div>';
   }else if(st==='done'){
     btns='<div class="pad"><button class="btn acc" onclick="openAddReview(4)">'+ic('star',18)+' 服务评价</button></div>';
-  }else{
-    btns='<div class="pad"><button class="btn sec" onclick="toast(&apos;已重新提交服务需求&apos;)">重新预约</button></div>';
   }
   return '<div class="ord-card" style="margin-top:12px">'
   +'<div class="hd"><div class="l"><div class="ic br">'+ic('sHelper',18)+'</div>'
@@ -2505,7 +2763,7 @@ S.orderHelperDetail={title:'生活帮手单详情',render:function(){
   +'<div class="kv"><span class="k">服务数量</span><span class="v">1 次</span></div>'
   +'<div class="kv"><span class="k">服务价格</span><span class="v">¥180.00</span></div>'
   +'<div class="kv"><span class="k">上门时间</span><span class="v">09-05 09:00</span></div>'
-  +'<div class="kv"><span class="k">服务地址</span><span class="v">阳光花园 3栋2单元-1802（认证房号）</span></div>'
+  +'<div class="kv"><span class="k">服务地址</span><span class="v">阳光花园 3栋2单元-1802</span></div>'
   +'</div>'
   +(st!=='cancel'
    ?'<div class="ord-section"><div class="st">服务人员</div>'
@@ -2518,9 +2776,9 @@ S.orderHelperDetail={title:'生活帮手单详情',render:function(){
   +'<div class="kv"><span class="k">支付方式</span><span class="v">线上不做订单支付，由线下收取</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
-  +'<div class="log">下单：2026-09-04 15:30<br>支付：—（线下收取）<br>完成：'+(st==='done'?'2026-09-05 11:20':'—')+'<br>取消：'+(st==='cancel'?'2026-09-04 18:00':'—')+'</div></div>'
+  +'<div class="log">'+ordLog([['下单','2026-09-04 15:30'],['支付','—（线下收取）'],['完成',st==='done'?'2026-09-05 11:20':'—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—']])+'</div></div>'
   + btns
-  + hint('取消订单需在上门服务时间前申请，由物业后台审核通过后生效；涉及材料费由线下收取');
+  ;
 }};
 
 /* ================= 结算 / 评价 / 退款 ================= */
@@ -2545,105 +2803,41 @@ S.orderSettlement={title:'订单结算',render:function(){
   +'</div>'
   + btn('立即结算','go(\'payment\')');
 }};
-S.review={title:'服务评价',render:function(){
-  /* 模拟评价数据（商城风格） */
+function revCards(limit, showMore){
+  /* 模拟评价数据：仅含头像首字、昵称、评星、评价时间，无文字与图片内容 */
   var REVIEWS=[
-    {nm:'张**',t:'2026-09-04',score:5,
-      txt:'师傅非常专业，全程陪同我妈就诊，挂号取药一条龙，老人家特别感动。张师傅人也很耐心，问什么都细心解答，强烈推荐！',
-      tags:['专业耐心','准时可靠','服务周到'],sku:'医院就诊全程陪诊 · 3 小时',
-      imgs:['#5AD1B5','#17A88A','#FFD15C'],
-      merchant:true,reply:'感谢您的好评，张师傅会继续用心服务每一位业主！',
-      helpful:8,date:'09-04'},
-    {nm:'李**',t:'2026-09-03',score:5,
-      txt:'第一次预约陪诊，本来还有点担心，结果出乎意料的好。师傅提前 10 分钟到，还帮忙准备了轮椅，省了很大力气。',
-      tags:['准时到达','设备齐全','细心体贴'],sku:'体检陪诊 · 2 小时',
-      imgs:['#FF8C7A','#FFC1B3'],
-      merchant:true,reply:'感谢您的反馈，轮椅服务已纳入陪诊标配，欢迎再次预约。',
-      helpful:12,date:'09-03'},
-    {nm:'王**',t:'2026-08-29',score:4,
-      txt:'整体不错，师傅服务态度好，就是到了医院排队时间比较久，希望后续能提前帮忙预约号源。',
-      tags:['态度好'],sku:'医院就诊全程陪诊 · 3 小时',
-      imgs:[],
-      merchant:true,reply:'您好，已记录您的建议，后续会与医院协调代挂号服务。',
-      helpful:3,date:'08-29'},
-    {nm:'赵**',t:'2026-08-25',score:5,
-      txt:'老人腿脚不便，师傅全程搀扶，跑前跑后帮忙取报告，效率很高。值得信赖！',
-      tags:['专业耐心','体贴周到'],sku:'复诊陪诊 · 2 小时',
-      imgs:['#5AD1B5'],
-      merchant:false,reply:'',
-      helpful:5,date:'08-25'},
-    {nm:'陈**',t:'2026-08-22',score:5,
-      txt:'陪着老人家做了全套体检，每个科室都陪同，最后把报告整理好发给我，省心。',
-      tags:['高效省心','细致认真'],sku:'体检陪诊 · 4 小时',
-      imgs:['#17A88A','#FFD15C','#FF8C7A','#5AD1B5'],
-      merchant:true,reply:'感谢认可，张师傅团队的细致服务是物业培训的核心要求。',
-      helpful:15,date:'08-22'}
+    {nm:'张**',t:'2026-09-04 14:30',score:5},
+    {nm:'李**',t:'2026-09-03 19:08',score:5},
+    {nm:'王**',t:'2026-08-29 10:15',score:4},
+    {nm:'赵**',t:'2026-08-25 16:42',score:5},
+    {nm:'陈**',t:'2026-08-22 09:05',score:5}
   ];
-  /* 平均评分与分布 */
-  var allScore=0, dist=[0,0,0,0,0];
-  REVIEWS.forEach(function(r){allScore+=r.score;dist[r.score-1]++;});
-  var avg=(allScore/REVIEWS.length).toFixed(1);
-  var pct=[5,4,3,2,1].map(function(s){return Math.round(dist[s-1]/REVIEWS.length*100);});
-
-  /* 头像取首字 */
-  function ava(nm){return nm.charAt(0);}
-  /* 星级 */
-  function starsS(n){var h='';for(var i=0;i<5;i++)h+=i<n?'★':'☆';return h;}
-  /* 标签占位图片：用 SVG 渐变模拟"现场照" */
-  function imgSvg(c){return '<svg viewBox="0 0 74 74" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g'+c.slice(1)+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="'+c+'"/><stop offset="100%" stop-color="#fff"/></linearGradient></defs><rect width="74" height="74" fill="url(#g'+c.slice(1)+')"/><circle cx="22" cy="30" r="10" fill="#fff" opacity=".6"/><path d="M14 60 L32 38 L46 52 L60 32 L60 74 L14 74 Z" fill="#fff" opacity=".5"/></svg>';}
-
-  var html='<div class="rev-sum">'
-    +'<div class="l"><div class="n">'+avg+'</div><div class="u">综合评分</div></div>'
-    +'<div class="r">'
-    +'<div class="row1">'+starsS(Math.round(avg))+' <span class="n">'+REVIEWS.length+' 条评价</span></div>'
-    +'<div class="bar"><span class="lbl">5星</span><div class="b"><div class="f" style="width:'+pct[0]+'%"></div></div><span style="width:28px;text-align:right">'+pct[0]+'%</span></div>'
-    +'<div class="bar"><span class="lbl">4星</span><div class="b"><div class="f" style="width:'+pct[1]+'%"></div></div><span style="width:28px;text-align:right">'+pct[1]+'%</span></div>'
-    +'<div class="bar"><span class="lbl">3星</span><div class="b"><div class="f" style="width:'+pct[2]+'%"></div></div><span style="width:28px;text-align:right">'+pct[2]+'%</span></div>'
+  var list=limit?REVIEWS.slice(0,limit):REVIEWS;
+  var h='<div class="rev-list">';
+  list.forEach(function(r){
+    var st='';for(var i=0;i<5;i++)st+=i<r.score?'<span>★</span>':'<span class="g">★</span>';
+    h+='<div class="rev-card"><div class="hd">'
+      +'<div class="ava">'+r.nm.charAt(0)+'</div>'
+      +'<div class="meta"><div class="nm">'+r.nm+'</div><div class="stars-s">'+st+'</div></div>'
+      +'<div class="time">'+r.t.substring(5)+'</div>'
     +'</div></div>';
-
-  /* 评价筛选 */
-  var filters=[{n:'全部',c:REVIEWS.length,on:true},{n:'好评',c:5},{n:'4-5星',c:5},{n:'有图',c:4}];
-  var fhtml='<div class="rev-filter">';
-  filters.forEach(function(f,i){fhtml+='<div class="rev-chip'+(f.on?' on':'')+'" onclick="pickRevFilter(this,'+i+')">'+f.n+'<span class="n">'+f.c+'</span></div>';});
-  fhtml+='</div>';
-
-  /* 评价列表 */
-  var lhtml='';
-  REVIEWS.forEach(function(r){
-    var starsHtml='';for(var i=0;i<5;i++)starsHtml+=i<r.score?'<span>★</span>':'<span class="g">★</span>';
-    var imgsHtml='';
-    r.imgs.forEach(function(c){imgsHtml+='<div class="img" onclick="toast(\'查看图片\')">'+imgSvg(c)+'</div>';});
-    var tagsHtml='';
-    r.tags.forEach(function(tg){tagsHtml+='<span class="tag-v">'+tg+'</span>';});
-    var merchHtml='';
-    if(r.merchant){
-      merchHtml='<div class="merchant">'+ic('shop',13,'#17A88A')+' <b>物业陪诊服务中心</b><br>'+r.reply
-        +'<span class="reply" onclick="toast(\'已展开完整回复\')">展开</span></div>';
-    }
-    lhtml+='<div class="rev-card">'
-      +'<div class="hd">'
-        +'<div class="ava">'+ava(r.nm)+'</div>'
-        +'<div class="meta">'
-          +'<div class="nm">'+r.nm+'</div>'
-          +'<div class="stars-s">'+starsHtml+'</div>'
-        +'</div>'
-        +'<div class="time">'+r.t.substring(5)+'</div>'
-      +'</div>'
-      +(tagsHtml?'<div class="tags">'+tagsHtml+'</div>':'')
-      +'<div class="txt">'+r.txt+'</div>'
-      +(imgsHtml?'<div class="imgs">'+imgsHtml+'</div>':'')
-      +'<div class="sku"><span class="lt"><b>'+r.sku+'</b></span></div>'
-      +merchHtml
-    +'</div>';
   });
-
-  return html+fhtml+lhtml;
-}};
-/* 评价筛选切换 */
-function pickRevFilter(el){
-  var p=el.parentNode;var ch=p.querySelectorAll('.rev-chip');
-  for(var i=0;i<ch.length;i++)ch[i].classList.remove('on');
-  el.classList.add('on');
+  h+='</div>';
+  if(showMore && REVIEWS.length>list.length){
+    h+='<div class="sep full"></div>'
+      +'<div class="cell tap" onclick="go(\'review\')"><div class="cell-bd"><div class="cell-t">查看更多评价</div></div>'
+      +'<div class="cell-ar">'+ic('chevR',16)+'</div></div>';
+  }
+  return h;
+}
+S.review={title:'服务评价',render:function(){return revCards();}};
+/* 服务数据条：评分 / 已服务 / 好评率 */
+function svcStats(score,sold,rate){
+  return '<div class="st"><div class="sv-n">'+score+'</div><div class="sv-l">综合评分</div></div>'
+    +'<div class="sv-sep"></div>'
+    +'<div class="st"><div class="sv-n">'+sold+'</div><div class="sv-l">已服务</div></div>'
+    +'<div class="sv-sep"></div>'
+    +'<div class="st"><div class="sv-n">'+rate+'</div><div class="sv-l">好评率</div></div>';
 }
 /* ================= 添加评价（订单完成态入口） ================= */
 var addReviewType=1;          /* 1报餐 2托管 3陪诊 */
@@ -2655,7 +2849,7 @@ function pickReviewScore(n){reviewScore=n;render();}
 function toggleReviewTag(i){reviewTagsSel[i]=!reviewTagsSel[i];render();}
 function submitReview(){toast('评价提交成功，感谢您的反馈');back();}
 S.addReview={title:'添加评价',render:function(){
-  var svcName=addReviewType===1?'明日午餐 · 营养套餐':addReviewType===2?'学期日托 · 安心托付':'医院就诊全程陪诊 · 3 小时';
+  var svcName=addReviewType===1?'明日午餐 · 营养套餐':addReviewType===2?'禄口一小课后托管 · 安心托付':'医院就诊全程陪诊 · 3 小时';
   var stars='<div class="rv-stars">';
   for(var i=1;i<=5;i++)stars+='<span class="'+(i<=reviewScore?'on':'')+'" onclick="pickReviewScore('+i+')">★</span>';
   stars+='</div>';
@@ -2673,8 +2867,7 @@ S.addReview={title:'添加评价',render:function(){
       +stars
       +'<div class="rv-score-txt">'+scoreTxt+'</div>'
     +'</div>'
-    + btn('提交评价','submitReview()','acc')
-    + hint('服务评价仅支持 1-5 星评分，不做文字与图片评价');
+    + btn('提交评价','submitReview()','acc');
 }};
 S.refund={title:'退款申请',render:function(){
   return '<div class="pad" style="padding-top:12px">'
@@ -2709,25 +2902,22 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   +'</div>'
   /* ③ 我的服务 */
   + grp([
-    {ic:'wallet',icls:'bg-t',t:'顾好家币',s:'余额 ¥868.00 · 可用于托管、报餐支付',ar:1,on:'go(\'coin\')'},
-    {ic:'yen',icls:'bg-o',t:'我的账单',s:'报餐 / 托管两类账单',ar:1,on:'go(\'bill\')'},
-    {ic:'signup',icls:'bg-y',t:'我的报名',s:'社区活动报名记录',ar:1,on:'go(\'mySignup\')'},
-    {ic:'sHelper',icls:'bg-br',t:'我的需求',s:'生活帮手需求进度跟进',ar:1,on:'needCert(\'myHelper\')'},
-    {ic:'msg',icls:'bg-b',t:'系统消息',s:'服务通知与账单提醒',ar:1,on:'go(\'sysMsg\')',badge:sysMsgBadge()}
-  ],'我的服务')
+    {ic:'wallet',icls:'bg-t',t:'顾好家币',ar:1,on:'go(\'coin\')'},
+    {ic:'yen',icls:'bg-o',t:'我的账单',ar:1,on:'go(\'bill\')'},
+    {ic:'signup',icls:'bg-y',t:'我的报名',ar:1,on:'go(\'mySignup\')'}
+  ],'我的服务',1)
   /* ④ 家庭与设备 */
   + grp([
-    {ic:'family',icls:'bg-b',t:'我的家庭',s:'2 个房号 · 4 位家庭成员',ar:1,on:'needCert(\'family\')'},
-    {ic:'butler',icls:'bg-p',t:'我的管家',s:'李婷 · 3栋楼栋管家',ar:1,on:'needCert(\'butler\')'},
-    {ic:'phone',icls:'bg-r',t:'一键呼叫',s:'紧急联系与常用号码',ar:1,on:'go(\'callMine\')'},
-    {ic:'watch',icls:'bg-t',t:'我的手环',s:'已连接 · 数据同步中',ar:1,on:'go(\'myBand\')'}
-  ],'家庭与设备')
+    {ic:'family',icls:'bg-b',t:'我的家庭',ar:1,on:'needCert(\'family\')'},
+    {ic:'butler',icls:'bg-p',t:'我的管家',ar:1,on:'needCert(\'butler\')'},
+    {ic:'watch',icls:'bg-t',t:'我的手环',ar:1,on:'go(\'myBand\')'}
+  ],'家庭与设备',1)
   /* ⑤ 社区权益 */
   + grp([
-    {ic:'wallet',icls:'bg-g',t:'小区钱袋子',s:'可提现余额 ¥1,280.00',ar:1,on:'needCert(\'moneyBag\')'},
-    {ic:'hr',icls:'bg-t',t:'人力资源',s:'发布 / 查看邻里供需信息',ar:1,on:'needCert(\'hr\')'},
-    {ic:'shield',icls:'bg-br',t:'业主认证',s:CERT==='ok'?'已认证 2 个房号':(CERT==='pending'?'审核中 1 个 · 已认证 2 个':'未认证 · 认证后开放全部权益'),ar:1,on:'go(\'certList\')'}
-  ],'社区权益');
+    {ic:'wallet',icls:'bg-g',t:'小区钱袋子',ar:1,on:'needCert(\'moneyBag\')'},
+    {ic:'hr',icls:'bg-t',t:'人力资源',ar:1,on:'needCert(\'hr\')'},
+    {ic:'shield',icls:'bg-br',t:'业主认证',ar:1,on:'go(\'certList\')'}
+  ],'社区权益',1);
 }};
 
 /* ================= 个人信息 ================= */
@@ -2753,22 +2943,19 @@ S.personInfo={title:'个人信息',render:function(){
 S.coin={title:'顾好家币',render:function(){
   return '<div class="card" style="margin:14px var(--pad);background:linear-gradient(135deg,#2BC4A0,#17A88A);color:#fff;padding:20px 18px">'
   +'<div style="font-size:13px;opacity:.9">账户余额</div>'
-  +'<div style="font-size:32px;font-weight:700;margin:8px 0 16px;letter-spacing:-.5px">¥ 868.00</div>'
+  +'<div style="font-size:32px;font-weight:700;margin:8px 0 16px;letter-spacing:-.5px">¥ '+COIN_BALANCE.toFixed(2)+'</div>'
   +'<div style="display:flex;gap:10px">'
   +'<div style="flex:1;background:rgba(255,255,255,.2);border-radius:12px;padding:11px 0;text-align:center;font-size:14px;font-weight:600;cursor:pointer" onclick="go(\'coinRecharge\')">账户充值</div>'
   +'<div style="flex:1;background:rgba(255,255,255,.2);border-radius:12px;padding:11px 0;text-align:center;font-size:14px;font-weight:600;cursor:pointer" onclick="go(\'coinDetail\')">账户明细</div>'
-  +'</div></div>'
-  + grp([
-    {ic:'sTrust',icls:'bg-o',t:'托管单支付',s:'下单按最高价预收，结算后退差价',ar:1,on:'go(\'ordersTrust\')'},
-    {ic:'sMeal',icls:'bg-b',t:'报餐单支付',s:'下单即扣，结算后退差价',ar:1,on:'go(\'orders\')'}
-  ],'余额可用于')
-  + hint('顾好家币可用于托管单、报餐单支付；每月 1 号结算上月账单后，差价自动退还至账户余额');
+  +'</div></div>';
 }};
 S.coinRecharge={title:'账户充值',render:function(){
   return grpT('充值金额')
-  +'<div class="grp"><div class="field"><span class="lb">金额</span><input placeholder="请输入充值金额" type="tel"></div></div>'
+  +'<div class="grp"><div class="field"><span class="lb">金额</span><input id="rechargeInput" placeholder="请输入充值金额" type="tel" value="'+(rechargeAmt||'')+'" style="caret-color:var(--label)"></div></div>'
   +'<div class="pad"><div class="qlist">'
-  +'<div class="qbtn">¥100</div><div class="qbtn">¥300</div><div class="qbtn">¥500</div><div class="qbtn">¥1000</div></div></div>'
+  +[100,300,500,1000].map(function(n){
+    return '<div class="qbtn'+(rechargeAmt===n?' on':'')+'" onclick="pickAmt('+n+')">¥'+n+'</div>';
+  }).join('')+'</div></div>'
   + grpT('支付方式')
   +'<div class="grp">'
   +'<div class="cell tap" onclick="pickPay(\'wechat\')"><div class="cell-ic bg-g">'+ic('wechat',17)+'</div><div class="cell-bd"><div class="cell-t">微信支付</div></div>'
@@ -2777,12 +2964,12 @@ S.coinRecharge={title:'账户充值',render:function(){
   +'<div class="cell tap" onclick="pickPay(\'alipay\')"><div class="cell-ic bg-b">'+ic('alipay',17)+'</div><div class="cell-bd"><div class="cell-t">支付宝支付</div></div>'
   +(payMethod==='alipay'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
   +'</div>'
-  +'<div class="pad"><button class="btn" onclick="toast(\'支付成功，账户已充值\');back()">确认充值</button></div>'
-  + hint('充值金额即时到账，顾好家币可用于平台内托管单、报餐单支付');
+  +'<div class="pad"><button class="btn" onclick="toast(\'充值成功\')">确认充值</button></div>';
 }};
+var COIN_BALANCE=868;
 var COIN_LOG=[
   {t:'结算返还',a:126.00,d:'2026-09-01 10:00',sign:'+'},
-  {t:'托管单支出',a:1200.00,d:'2026-09-01 09:00',sign:'-'},
+  {t:'托管单支出',a:45.00,d:'2026-09-01 09:00',sign:'-'},
   {t:'报餐单支出',a:36.00,d:'2026-08-31 17:30',sign:'-'},
   {t:'余额充值',a:500.00,d:'2026-08-28 14:20',sign:'+'},
   {t:'托管单支出',a:980.00,d:'2026-07-01 15:20',sign:'-'},
@@ -2793,74 +2980,61 @@ S.coinDetail={title:'账户明细',render:function(){
   var list=COIN_LOG.filter(function(x){return cur===0?true:(cur===1?x.sign==='+':x.sign==='-');});
   return '<div class="pad">'+seg(['全部','收入','支出'],'coinLog')+'</div>'
   +'<div class="grp">'+list.map(function(x,i){
-      return (i?'<div class="sep full"></div>':'')
-      +'<div class="cell"><div class="cell-bd"><div class="cell-t">'+x.t+'</div><div class="cell-s">'+x.d+'</div></div>'
+      return '<div class="cell"><div class="cell-bd"><div class="cell-t">'+x.t+'</div><div class="cell-s">'+x.d+'</div></div>'
       +'<div class="cell-v" style="font-weight:600;color:'+(x.sign==='+'?'var(--green)':'var(--accent)')+'">'+x.sign+'¥'+x.a.toFixed(2)+'</div></div>';
-    }).join('')+'</div>'
-  + hint('变动类目：余额充值、托管单支出、报餐单支出、结算返还');
+    }).join('')+'</div>';
 }};
+function billSettleCard(ico,icls,name,date,pay,refund,net,tab){
+  return '<div class="grp"><div class="cell tap" onclick="segState.billDetail='+tab+';go(\'billDetail\')">'
+    +'<div class="cell-ic '+icls+'">'+ic(ico,17)+'</div>'
+    +'<div class="cell-bd"><div class="cell-t">'+name+'</div>'
+    +'<div class="cell-s">'+date+'</div>'
+    +'<div class="cell-s" style="margin-top:3px">付款 <span style="color:var(--label)">'+pay+'</span></div>'
+    +'<div class="cell-s" style="margin-top:2px">退款 <span style="color:var(--accent)">'+refund+'</span></div></div>'
+    +'<div class="cell-v" style="color:var(--green);font-weight:700;font-size:16px;white-space:nowrap">'+net+'</div>'
+    +'<div class="cell-ar">'+ic('chevR',16)+'</div></div></div>';
+}
 S.bill={title:'我的账单',render:function(){
   var cur=segState.bill||0;
   if(cur===1){
     return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
     + grpT('已结算账单')
+    + billSettleCard('sTrust','bg-b','8月托管账单','2026-08-01 已结清','¥450.00','-¥45.00','已结 ¥405.00',0)
+    + billSettleCard('sMeal','bg-o','8月报餐账单','2026-08-31 已结清','¥540.00','-¥54.00','已结 ¥486.00',1)
     +'<div class="grp">'
-    +'<div class="cell tap" onclick="segState.billDetail=0;go(\'billDetail\')"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单</div><div class="cell-s">2026-08-01 已结清</div></div><div class="cell-v" style="color:var(--green)">已结 ¥1200.00</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-    +'<div class="sep"></div>'
-    +'<div class="cell tap" onclick="segState.billDetail=1;go(\'billDetail\')"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">8月报餐账单</div><div class="cell-s">2026-08-31 已结清</div></div><div class="cell-v" style="color:var(--green)">已结 ¥486.00</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-    +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结算合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥1686.00</div></div>'
-    +'</div>'
-    + hint('仅托管与报餐产生账单，点击账单可查看结算明细');
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结算合计</div><div class="cell-s">付款合计 <span style="color:var(--label)">¥990.00</span></div><div class="cell-s" style="margin-top:2px">退款合计 <span style="color:var(--accent)">¥99.00</span></div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥891.00</div></div>'
+    +'</div>';
   }
   return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
   +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">托管账单</div></div><div class="cell-v">¥1200.00</div></div>'
-  +'<div class="sep"></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">报餐账单</div></div><div class="cell-v">¥54.00</div></div>'
-  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">托管账单</div></div><div class="cell-v">¥315.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">报餐账单</div></div><div class="cell-v">¥135.00</div></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">待结算合计</div></div>'
-  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1254.00</div></div>'
+  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥450.00</div></div>'
   +'</div>'
-  +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldT=!pickState.billFoldT;render()"><span>托管单明细 · 共 6 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldT?'收起':'展开')+'</span></div>'
+  +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldT=!pickState.billFoldT;render()"><span>托管单明细 · 共 4 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldT?'收起':'展开')+'</span></div>'
   +(pickState.billFoldT
   ?'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">学期日托 · 9月服务费</div><div class="cell-s">09-01 09:00 · 全月托管</div></div><div class="cell-v" style="font-weight:600">¥1200.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末临时托管 · 半天</div><div class="cell-s">09-06 13:00 · 4 小时</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末临时托管 · 半天</div><div class="cell-s">09-13 13:00 · 4 小时</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚托加时 · 2 小时</div><div class="cell-s">09-09 18:00 · 课后延托</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚托加时 · 1.5 小时</div><div class="cell-s">09-11 18:00 · 课后延托</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">节假日托管 · 全天</div><div class="cell-s">09-20 08:30 · 中秋当日</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">托管单小计</div><div class="cell-s">共 6 笔待结算</div></div>'
-  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1200.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 9月1日</div><div class="cell-s">09-01 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="font-weight:600">¥45.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末全天托管 · 9月6日</div><div class="cell-s">09-06 09:00 · 全天看护 · ¥90/天</div></div><div class="cell-v">¥90.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末全天托管 · 9月13日</div><div class="cell-s">09-13 09:00 · 全天看护 · ¥90/天</div></div><div class="cell-v">¥90.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">节假日全天托管 · 9月20日</div><div class="cell-s">09-20 08:30 · 全天看护 · ¥90/天</div></div><div class="cell-v">¥90.00</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">托管单小计</div><div class="cell-s">共 4 笔待结算</div></div>'
+  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥315.00</div></div>'
   +'</div>':'')
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldM=!pickState.billFoldM;render()"><span>报餐单明细 · 共 7 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldM?'收起':'展开')+'</span></div>'
   +(pickState.billFoldM
   ?'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">09-04 10:20 · 午餐套餐</div></div><div class="cell-v" style="font-weight:600">¥36.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">09-01 12:10 · 午餐套餐</div></div><div class="cell-v">¥18.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">09-02 11:45 · 午餐套餐</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">09-08 10:30 · 午餐套餐</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">09-15 12:05 · 晚餐套餐</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">09-22 11:50 · 午餐套餐</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">09-28 12:15 · 晚餐套餐</div></div><div class="cell-v">¥0.00</div></div>'
-  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 2 份</div><div class="cell-s">09-04 10:20 · 两荤一素 · ¥15/份</div></div><div class="cell-v" style="font-weight:600">¥30.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 1 份</div><div class="cell-s">09-01 12:10 · 两荤一素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 1 份</div><div class="cell-s">09-02 11:45 · 两荤一素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 2 份</div><div class="cell-s">09-08 10:30 · 两荤一素 · ¥15/份</div></div><div class="cell-v">¥30.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚餐报餐 · 1 份</div><div class="cell-s">09-15 12:05 · 一荤两素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 1 份</div><div class="cell-s">09-22 11:50 · 两荤一素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚餐报餐 · 1 份</div><div class="cell-s">09-28 12:15 · 一荤两素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">报餐单小计</div><div class="cell-s">共 7 笔待结算</div></div>'
-  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥54.00</div></div>'
-  +'</div>':'')
-  + hint('账单结算无需用户操作：每月 1 号由物业后台完成预收核算并填写成本金额后，系统自动结算上月的托管单与报餐单，低于预收金额的部分自动退还差价');
+  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥135.00</div></div>'
+  +'</div>':'');
 }};
 
 /* ================= 账单详情（已结算二级页 · 托管/报餐分 tab） ================= */
@@ -2868,39 +3042,42 @@ S.billDetail={title:'账单详情',render:function(){
   var cur=segState.billDetail||0;
   if(cur===0){
     return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
-    + grpT('8月托管账单 · 已结清')
     +'<div class="grp">'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">学期日托 · 8月账单</div><div class="cell-s">结算时间 2026-08-01</div></div><div class="cell-v" style="color:var(--green);font-weight:600">已结清 ¥1200.00</div></div>'
-    +'<div class="sep full"></div>'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">账单合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥1200.00</div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单</div><div class="cell-s">结算时间 2026-08-01 · 共 7 笔</div></div><span class="tag g">已结清</span></div>'
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">付款</div></div><div class="cell-v" style="color:var(--label)">¥450.00</div></div>'
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">退款</div></div><div class="cell-v" style="color:var(--accent)">-¥45.00</div></div>'
+    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥405.00</div></div>'
     +'</div>'
     + grpT('结算明细')
     +'<div class="grp">'
-    +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">托管 · 学期日托（8月整月）</div><div class="cell-s">08-01 ~ 08-31 · 全月服务费</div></div><div class="cell-v">¥1200.00</div></div>'
-    +'</div>'
-    + hint('已结算账单仅供查阅，不可再次操作');
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月29日</div><div class="cell-s">08-29 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥90.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月28日</div><div class="cell-s">08-28 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月22日</div><div class="cell-s">08-22 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥90.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月21日</div><div class="cell-s">08-21 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月20日</div><div class="cell-s">08-20 16:30 · 当日取消 · 全额退款</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">退款 -¥45.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月15日</div><div class="cell-s">08-15 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥90.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月14日</div><div class="cell-s">08-14 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'</div>';
   }
   return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
-  + grpT('8月报餐账单 · 已结清')
   +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">健康膳食 · 8月账单</div><div class="cell-s">结算时间 2026-08-31</div></div><div class="cell-v" style="color:var(--green);font-weight:600">已结清 ¥486.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">账单合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥486.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">8月报餐账单</div><div class="cell-s">结算时间 2026-08-31 · 共 4 笔</div></div><span class="tag g">已结清</span></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">付款</div></div><div class="cell-v" style="color:var(--label)">¥540.00</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">退款</div></div><div class="cell-v" style="color:var(--accent)">-¥54.00</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥486.00</div></div>'
   +'</div>'
   + grpT('结算明细')
   +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">08-25 10:20</div></div><div class="cell-v">¥36.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">08-30 12:10</div></div><div class="cell-v">¥18.00</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份 × 14 天</div><div class="cell-s">08-01 ~ 08-14 · 午餐套餐</div></div><div class="cell-v">¥432.00</div></div>'
-  +'</div>'
-  + hint('已结算账单仅供查阅，不可再次操作');
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">08-25 10:20 · 午餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥36.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">08-30 12:10 · 午餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥18.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 3 份</div><div class="cell-s">08-18 11:50 · 当日停餐 · 全额退款</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥54.00</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">退款 -¥54.00</div></div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份 × 14 天</div><div class="cell-s">08-01 ~ 08-14 · 午餐套餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥432.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+  +'</div>';
 }};
 
 /* ================= 我的家庭 ================= */
 S.family={title:'我的家庭',render:function(){
-  return '<div class="pad">'+hint('每个房号最多绑定 5 个租户、5 个家庭成员；家庭成员与租户的角色权限没有区别')+'</div>'
+  return ''
   +'<div class="grp">'
   +'<div class="item noind" onclick="go(\'familyMembers\')"><div class="cell-ic bg-br">'+ic('home2',17)+'</div>'
   +'<div class="it-bd"><div class="it-t">阳光花园 3栋2单元-1802</div><div class="it-s">家庭成员 3 · 租户 1</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
@@ -2931,16 +3108,16 @@ S.familyMembers={title:'成员列表',render:function(){
   +'</div>';
 }};
 S.memberRole={title:'成员设置',render:function(){
-  return '<div class="pad" style="padding-top:16px;text-align:center">'+avt(72)+'<div class="bold" style="font-size:18px;margin-top:12px">爸爸</div>'
+  return '<div class="pad" style="padding-top:22px;text-align:center">'
+  +'<div style="display:flex;justify-content:center">'+avt(78)+'</div>'
+  +'<div class="bold" style="font-size:19px;margin-top:12px">爸爸</div>'
   +'<div class="sub" style="margin-top:4px">09-01 加入 · 阳光花园 3栋2单元-1802</div></div>'
   + grpT('成员角色')
   +'<div class="grp">'
   +'<div class="cell tap" onclick="toast(\'已设为家庭成员\');back()"><div class="cell-bd"><div class="cell-t">家庭成员</div></div><div style="color:var(--brand);display:flex">'+ic('check',19)+'</div></div>'
-  +'<div class="sep full"></div>'
   +'<div class="cell tap" onclick="toast(\'已设为租户\');back()"><div class="cell-bd"><div class="cell-t">租户</div></div></div>'
   +'</div>'
-  +'<div class="pad">'+hint('解除绑定后，该账号无法再提交本小区的报餐、托管、陪诊订单，已生成的订单不受影响')+'</div>'
-  +'<div class="pad" style="padding-top:0"><button class="btn warn" onclick="toast(\'已解除绑定，该账号无法再提交本小区订单\');go(\'familyMembers\')">解除绑定</button></div>';
+  +'<div class="pad" style="padding-top:20px"><button class="btn warn" onclick="toast(\'已解除绑定，该账号无法再提交本小区订单\');go(\'familyMembers\')">解除绑定</button></div>';
 }};
 S.invitePoster={title:'邀请成员',render:function(){
   return '<div class="pad" style="padding-top:24px">'
@@ -2995,14 +3172,13 @@ S.myBand={title:'我的手环',render:function(){
   + grp([
     {ic:'trash',icls:'bg-r',t:'断开连接',ar:1,on:'toast(\'已断开连接，历史数据仍保留\')'},
     {ic:'chart',icls:'bg-b',t:'历史数据',ar:1,on:'go(\'healthData\')'}
-  ],'设备管理')
-  + hint('用户与手环的绑定依据授权的注册手机号码：与当前账号手机号一致即自动绑定并同步该账号下所有数据，因此一个账号只能绑定一个手环');
+  ],'设备管理');
 }};
 
 /* ================= 报名 / 帖子 / 消息 ================= */
 S.mySignup={title:'我的报名',render:function(){
   return '<div class="grp">'
-  +'<div class="item noind" onclick="go(\'activityDetail\')">'+thumb('o','cal',62,62)
+  +'<div class="item noind" onclick="pickState.actSigned=true;openActivity(ACTIVITIES.filter(function(x){return x.n===\'中秋邻里联欢会\';})[0])">'+thumb('o','cal',62,62)
   +'<div class="it-bd"><div class="it-t">中秋邻里联欢会</div><div class="it-s">活动时间 9-28 18:30 · 报名于 09-10</div></div><span class="tag g">报名成功</span></div>'
   +'</div>';
 }};
@@ -3027,10 +3203,10 @@ S.helperDetail={title:'需求详情',render:function(){
   + hint('需求已同步至物业后台，由楼栋管家跟进处理');
 }};
 
-/* ================= 钱袋子 / 人力资源 ================= */
+/* ================= 钱袋子（物业 / 膳食 / 托管） ================= */
 var MONEY_MONTHS=['2026-08','2026-07','2026-06'];   /* 倒序：0=最新 */
 var moneyMonthIdx=0;               /* 当前查看月份索引 */
-var moneyBagTab=0;                 /* 0=收入 1=支出 */
+var moneyBagTab=0;                 /* 0=物业钱袋子 1=膳食钱袋子 2=托管钱袋子 */
 var curReceipt=null;               /* 当前查看凭证的条目 id */
 var MONEY_BAG={
   '2026-08':{balance:'¥12,580',inc:'+8,600',exp:'-3,200',items:[
@@ -3055,6 +3231,58 @@ var MONEY_BAG={
     {id:'mb15',type:'inc',name:'场地租赁收入',date:'06-12',amt:'+¥1,400',ic:'cal',icls:'bg-g'}
   ]}
 };
+/* 膳食钱袋子：本月收入总额 + 早餐/中餐/晚餐均价 + 报餐业务收支明细 */
+var MEAL_NOTES=[['早餐均价','¥6'],['中餐均价','¥15'],['晚餐均价','¥15']];
+var MEAL_BAG={
+  '2026-08':{inc:'¥1,293',items:[
+    {id:'me1',type:'inc',name:'晚餐报餐收入 · 18 份',date:'08-31',amt:270,ic:'sMeal',icls:'bg-y'},
+    {id:'me2',type:'inc',name:'午餐报餐收入 · 30 份',date:'08-29',amt:450,ic:'sMeal',icls:'bg-y'},
+    {id:'me3',type:'exp',name:'食材采购（蔬菜 / 肉类）',date:'08-28',amt:860,ic:'img',icls:'bg-r'},
+    {id:'me4',type:'inc',name:'早餐报餐收入 · 28 份',date:'08-28',amt:168,ic:'sun',icls:'bg-y'},
+    {id:'me5',type:'exp',name:'餐盒与耗材采购',date:'08-26',amt:240,ic:'build',icls:'bg-r'},
+    {id:'me6',type:'inc',name:'午餐报餐收入 · 27 份',date:'08-26',amt:405,ic:'sMeal',icls:'bg-y'}
+  ]},
+  '2026-07':{inc:'¥1,056',items:[
+    {id:'me7',type:'inc',name:'晚餐报餐收入 · 22 份',date:'07-31',amt:330,ic:'sMeal',icls:'bg-y'},
+    {id:'me8',type:'inc',name:'午餐报餐收入 · 28 份',date:'07-28',amt:420,ic:'sMeal',icls:'bg-y'},
+    {id:'me9',type:'exp',name:'食材采购（米面粮油）',date:'07-26',amt:780,ic:'img',icls:'bg-r'},
+    {id:'me10',type:'inc',name:'早餐报餐收入 · 26 份',date:'07-25',amt:156,ic:'sun',icls:'bg-y'},
+    {id:'me11',type:'inc',name:'早餐报餐收入 · 25 份',date:'07-21',amt:150,ic:'sun',icls:'bg-y'}
+  ]},
+  '2026-06':{inc:'¥1,209',items:[
+    {id:'me12',type:'inc',name:'午餐报餐收入 · 25 份',date:'06-30',amt:375,ic:'sMeal',icls:'bg-y'},
+    {id:'me13',type:'inc',name:'晚餐报餐收入 · 20 份',date:'06-27',amt:300,ic:'sMeal',icls:'bg-y'},
+    {id:'me14',type:'exp',name:'食材采购（蔬菜 / 肉类）',date:'06-24',amt:700,ic:'img',icls:'bg-r'},
+    {id:'me15',type:'inc',name:'早餐报餐收入 · 24 份',date:'06-22',amt:144,ic:'sun',icls:'bg-y'},
+    {id:'me16',type:'inc',name:'午餐报餐收入 · 26 份',date:'06-18',amt:390,ic:'sMeal',icls:'bg-y'}
+  ]}
+};
+/* 托管钱袋子：本月收入总额 + 接/送/用餐/托管单价 + 托管业务收支明细 */
+var TRUST_NOTES=[['接','¥8/趟'],['送','¥8/趟'],['用餐','¥15/餐'],['托管','¥45/餐']];
+var TRUST_BAG={
+  '2026-08':{inc:'¥1,202',items:[
+    {id:'tr1',type:'inc',name:'托管费收入 · 全日托 12 人',date:'08-31',amt:540,ic:'sTrust',icls:'bg-g'},
+    {id:'tr2',type:'inc',name:'用餐费收入 · 午餐 26 餐',date:'08-30',amt:390,ic:'sMeal',icls:'bg-g'},
+    {id:'tr3',type:'exp',name:'接送车辆油耗与保养',date:'08-29',amt:180,ic:'build',icls:'bg-r'},
+    {id:'tr4',type:'inc',name:'接送趟次收入 · 早接 18 趟',date:'08-28',amt:144,ic:'sEscort',icls:'bg-g'},
+    {id:'tr5',type:'inc',name:'接送趟次收入 · 晚送 16 趟',date:'08-28',amt:128,ic:'sEscort',icls:'bg-g'},
+    {id:'tr6',type:'exp',name:'托管教具与图书采购',date:'08-25',amt:260,ic:'img',icls:'bg-r'}
+  ]},
+  '2026-07':{inc:'¥1,042',items:[
+    {id:'tr7',type:'inc',name:'托管费收入 · 全日托 10 人',date:'07-31',amt:450,ic:'sTrust',icls:'bg-g'},
+    {id:'tr8',type:'inc',name:'用餐费收入 · 午餐 24 餐',date:'07-29',amt:360,ic:'sMeal',icls:'bg-g'},
+    {id:'tr9',type:'inc',name:'接送趟次收入 · 早接 15 趟',date:'07-28',amt:120,ic:'sEscort',icls:'bg-g'},
+    {id:'tr10',type:'exp',name:'托管教具与图书采购',date:'07-26',amt:200,ic:'img',icls:'bg-r'},
+    {id:'tr11',type:'inc',name:'接送趟次收入 · 晚送 14 趟',date:'07-25',amt:112,ic:'sEscort',icls:'bg-g'}
+  ]},
+  '2026-06':{inc:'¥943',items:[
+    {id:'tr12',type:'inc',name:'托管费收入 · 全日托 9 人',date:'06-30',amt:405,ic:'sTrust',icls:'bg-g'},
+    {id:'tr13',type:'inc',name:'用餐费收入 · 午餐 22 餐',date:'06-27',amt:330,ic:'sMeal',icls:'bg-g'},
+    {id:'tr14',type:'exp',name:'接送车辆油耗与保养',date:'06-25',amt:150,ic:'build',icls:'bg-r'},
+    {id:'tr15',type:'inc',name:'接送趟次收入 · 早接 14 趟',date:'06-22',amt:112,ic:'sEscort',icls:'bg-g'},
+    {id:'tr16',type:'inc',name:'接送趟次收入 · 晚送 12 趟',date:'06-18',amt:96,ic:'sEscort',icls:'bg-g'}
+  ]}
+};
 function moneyMonthLabel(k){var y=k.substr(0,4),m=parseInt(k.substr(5,2),10);return y+'年'+m+'月';}
 function moneyMonth(d){
   var n=moneyMonthIdx+d;
@@ -3066,8 +3294,10 @@ function viewReceipt(id){curReceipt=id;render();}
 function closeReceipt(){curReceipt=null;render();}
 S.moneyBag={title:'小区钱袋子',render:function(){
   var mk=MONEY_MONTHS[moneyMonthIdx];
-  var d=MONEY_BAG[mk];
-  var list=d.items.filter(function(x){return moneyBagTab===0?(x.type==='inc'):(x.type==='exp');});
+  var isProp=(moneyBagTab===0);
+  var d=isProp?MONEY_BAG[mk]:(moneyBagTab===1?MEAL_BAG[mk]:TRUST_BAG[mk]);
+  var notes=moneyBagTab===1?MEAL_NOTES:(moneyBagTab===2?TRUST_NOTES:null);
+  var list=d.items;
   var curR=curReceipt?d.items.find(function(x){return x.id===curReceipt;}):null;
   var h='<div class="pad" style="padding-top:12px">'
     +'<div class="card" style="background:linear-gradient(135deg,#4FD8BC,#17A88A);color:#fff;padding:16px 18px">'
@@ -3075,12 +3305,23 @@ S.moneyBag={title:'小区钱袋子',render:function(){
       +'<div class="mb-a'+(moneyMonthIdx>=MONEY_MONTHS.length-1?' off':'')+'" onclick="moneyMonth(1)">'+ic('chevL',18)+'</div>'
       +'<div class="mb-m">'+moneyMonthLabel(mk)+'</div>'
       +'<div class="mb-a'+(moneyMonthIdx<=0?' off':'')+'" onclick="moneyMonth(-1)">'+ic('chevR',18)+'</div>'
-    +'</div>'
-    +'<div class="row between"><div><div style="font-size:12.5px;opacity:.9">本月结余</div>'
+    +'</div>';
+  if(isProp){
+    h+='<div class="row between" style="margin-top:12px"><div><div style="font-size:12.5px;opacity:.9">本月结余</div>'
     +'<div style="font-size:28px;font-weight:800;letter-spacing:-.8px;margin-top:5px">'+d.balance+'</div></div>'
     +'<div style="text-align:right"><div style="font-size:12.5px;opacity:.9">收入 / 支出</div>'
-    +'<div style="font-size:17px;font-weight:700;margin-top:6px">'+d.inc+' / '+d.exp+'</div></div></div>'
-    +'</div></div>'
+    +'<div style="font-size:17px;font-weight:700;margin-top:6px">'+d.inc+' / '+d.exp+'</div></div></div>';
+  }else{
+    h+='<div style="margin-top:12px"><div style="font-size:12.5px;opacity:.9">本月收入总额</div>'
+    +'<div style="font-size:28px;font-weight:800;letter-spacing:-.8px;margin-top:5px">'+d.inc+'</div></div>'
+    +'<div style="display:flex;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.28)">';
+    notes.forEach(function(n,i){
+      if(i)h+='<div style="width:1px;height:24px;background:rgba(255,255,255,.28)"></div>';
+      h+='<div style="flex:1;text-align:center"><div style="font-size:11px;opacity:.9">'+n[0]+'</div><div style="font-size:13px;font-weight:700;margin-top:3px">'+n[1]+'</div></div>';
+    });
+    h+='</div>';
+  }
+  h+='</div></div>'
     + grpT('收支明细')
     +'<div class="mb-tabs">'
       +'<div class="mb-t'+(moneyBagTab===0?' on':'')+'" onclick="moneyTab(0)">物业钱袋子</div>'
@@ -3089,17 +3330,19 @@ S.moneyBag={title:'小区钱袋子',render:function(){
     +'</div>'
     +'<div class="grp">'
     + list.map(function(x,i){
+        var amt=isProp?x.amt:((x.type==='inc'?'+¥':'-¥')+x.amt);
         var amtCls=x.type==='inc'?'var(--green)':'var(--red)';
         return (i?'<div class="sep"></div>':'')
           +'<div class="cell tap" onclick="viewReceipt(&apos;'+x.id+'&apos;)">'
           +'<div class="cell-ic '+x.icls+'">'+ic(x.ic,17)+'</div>'
           +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">'+x.name+'</div>'
           +'<div class="cell-s">'+x.date+' · 点击查看凭证</div></div>'
-          +'<div class="cell-v" style="color:'+amtCls+';font-weight:600">'+x.amt+'</div>'
+          +'<div class="cell-v" style="color:'+amtCls+';font-weight:600">'+amt+'</div>'
           +'</div>';
       }).join('')
     +'</div>';
   if(curR){
+    var rAmt=isProp?curR.amt:((curR.type==='inc'?'+¥':'-¥')+curR.amt);
     h+='<div class="rv-mask" onclick="closeReceipt()">'
       +'<div class="rv-box" onclick="event.stopPropagation()">'
       +'<div class="rv-img"><div class="rv-paper">'
@@ -3113,59 +3356,143 @@ S.moneyBag={title:'小区钱袋子',render:function(){
       +'<div class="rv-bd">'
         +'<div class="nm">'+curR.name+'</div>'
         +'<div class="mt">'+curR.date+' · '+moneyMonthLabel(mk)+'</div>'
-        +'<div class="am">'+curR.amt+'</div>'
+        +'<div class="am">'+rAmt+'</div>'
       +'</div>'
       +'<div class="rv-close" onclick="closeReceipt()">关闭</div>'
       +'</div></div>';
   }
   return h;
 }};
-/* 人力资源详情：单条操作（编辑、显示/隐藏、删除），参照帖子单帖操作模式 */
-var hrVis={}; /* 信息显示状态：title -> true(显示)/false(隐藏)，缺省为显示 */
-var hrDel={}; /* 信息删除状态：title -> true(已删除) */
-function toggleHrVis(t){hrVis[t]=(hrVis[t]!==false)?false:true;toast(hrVis[t]===false?'信息已隐藏':'信息已显示');render();}
-function delHr(t){hrDel[t]=true;toast('信息已删除');back();}
-S.hr={title:'人力资源',rightLabel:'我的发布',rightFn:'go(\'hrMyPosts\')',render:function(){
+
+/* ================= 人力资源（人才库 · 物业派单模式） ================= */
+/* 流程：编辑技能/上传凭证 → 物业审核 → 进入人才库；业主需求由物业后台匹配派单；
+   双方线下对接交易，平台仅生成订单留痕、不做收费；服务完成后业主可在线评分 */
+var hrState='none'; /* 'none' 未录入 | 'in' 已录入人才库（原型演示：提交审核后进入已录入态） */
+var HR_ORDERS=[
+  {no:'HR20250918-001',t:'家电维修',cov:'o',ic:'build',amt:150,qty:1,time:'09-21 14:00 - 16:00',addr:'阳光花园 3栋2单元1802',st:'active',cu:'张先生',tel:'13800001234',sub:'09-18 10:20',acc:'09-18 11:05',fin:''},
+  {no:'HR20250910-003',t:'管道疏通',cov:'g',ic:'sHelper',amt:120,qty:1,time:'09-10 10:00 - 12:00',addr:'阳光花园 5栋1单元1101',st:'done',cu:'李女士',tel:'13900005678',sub:'09-09 16:40',acc:'09-09 17:20',fin:'09-10 12:05'},
+  {no:'HR20250905-002',t:'家电维修',cov:'o',ic:'build',amt:150,qty:2,time:'09-05 15:00 - 17:00',addr:'阳光花园 8栋2单元1503',st:'cancel',cu:'王先生',tel:'13700009012',sub:'09-04 09:15',acc:'09-04 10:02',fin:''}
+];
+var curHrOrder=0;
+function openHrOrder(i){curHrOrder=i;go('hrOrderDetail');}
+function hrStTag(st){
+  return st==='active'?'<span class="tag b">进行中</span>':st==='done'?'<span class="tag g">已完成</span>':'<span class="tag gy">已取消</span>';
+}
+function hrStats(){
+  var a=0,d=0,c=0;
+  HR_ORDERS.forEach(function(o){if(o.st==='active')a++;else if(o.st==='done')d++;else c++;});
+  return {acc:HR_ORDERS.length,act:a,done:d,cancel:c};
+}
+function submitHrCert(){
+  var re=(hrState==='in');
+  hrState='in';
+  toast(re?'修改已提交，物业审核通过后更新':'已提交认证，审核通过后进入人才库');
+  go('hr');
+}
+function confirmHrDone(){
+  var o=HR_ORDERS[curHrOrder];if(!o)return;
+  o.st='done';if(!o.fin)o.fin='09-21 16:30';
+  toast('订单已确认完成，金额由线下收取，线上仅留存订单记录');
+  render();
+}
+S.hr={title:'人力资源',render:function(){
+  if(hrState!=='in'){
+    /* 未录入：人才入驻引导（编辑技能 + 上传凭证 + 物业审核进人才库） */
+    return '<div class="pad"><div class="cover t" style="height:150px">'+ic('hr',42,'#fff',1.7)+'</div></div>'
+    +'<div class="pad"><div class="bold" style="font-size:20px;letter-spacing:-.3px">人才入驻</div>'
+    +'<div class="sub" style="margin-top:8px;line-height:1.7">编辑个人技能并上传凭证，提交物业审核；审核通过后资料进入小区人才库。业主的生活服务需求由物业后台匹配派单，双方线下对接交易，平台仅生成订单留痕、不做收费。</div></div>'
+    + grp([{ic:'doc',icls:'bg-t',t:'编辑技能与上传凭证',s:'提交后由物业审核，通过后进入人才库',ar:1,on:'go(\'hrCertApply\')'}])
+    +'<div style="height:8px"></div>';
+  }
+  /* 已录入：人才认证入口 + 订单信息统计 + 订单列表 */
+  var TABS=['全部','进行中','已完成','已取消'];
+  var STMAP={active:'进行中',done:'已完成',cancel:'已取消'};
+  var cur=(chipState.hr===undefined?0:chipState.hr);
+  var list=cur?HR_ORDERS.filter(function(o){return STMAP[o.st]===TABS[cur];}):HR_ORDERS;
+  var st=hrStats();
+  var rows=list.map(function(o){
+    return '<div class="item noind" onclick="openHrOrder('+HR_ORDERS.indexOf(o)+')">'+thumb(o.cov,o.ic,54,54)
+      +'<div class="it-bd"><div class="it-t">'+o.t+'</div>'
+      +'<div class="it-s">'+o.no+' · 数量 x'+o.qty+'</div>'
+      +'<div class="it-s">'+o.time+' · '+o.addr+'</div></div>'
+      +'<div style="text-align:right;flex-shrink:0"><span class="price" style="font-size:16px">¥'+o.amt+'</span>'
+      +'<div style="margin-top:4px">'+hrStTag(o.st)+'</div></div></div>';
+  });
   return '<div class="grp">'
-  +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('','hr',62,62)
-  +'<div class="it-bd"><div class="row" style="gap:6px;margin-bottom:3px"><span class="tag o">置顶</span></div>'
-  +'<div class="it-t">退休教师兼职家教</div><div class="it-s">物业 · 09-02</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('b','hr',62,62)
-  +'<div class="it-bd"><div class="it-t">周末家政阿姨招募</div><div class="it-s">王阿姨 · 08-30</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
-  +'</div>'
-  + fab('go(\'hrPublish\')')
-  +'<div style="height:8px"></div>';
+    +'<div class="item noind" onclick="go(\'hrCertView\')">'+avt(46)
+    +'<div class="it-bd"><div class="row" style="gap:6px;margin-bottom:3px"><div class="it-t" style="margin:0">李建国</div><span class="tag g">已认证</span></div>'
+    +'<div class="it-s">家电维修 · 管道疏通</div></div>'+ic('chevR',16,'var(--label4)')+'</div></div>'
+  +'<div class="svc-stats"><div class="st"><div class="sv-n">'+st.acc+'</div><div class="sv-l">已接单</div></div><div class="sv-sep"></div>'
+  +'<div class="st"><div class="sv-n">'+st.act+'</div><div class="sv-l">进行中</div></div><div class="sv-sep"></div>'
+  +'<div class="st"><div class="sv-n">'+st.done+'</div><div class="sv-l">已完成</div></div><div class="sv-sep"></div>'
+  +'<div class="st"><div class="sv-n">'+st.cancel+'</div><div class="sv-l">已取消</div></div></div>'
+  + grpT('订单列表')
+  + chips(TABS,'hr',0)
+  +'<div class="grp">'
+  +(rows.length?rows.join('<div class="sep full"></div>'):'<div class="pad" style="text-align:center;color:var(--label3);font-size:13px;padding:26px 0">暂无相关订单</div>')
+  +'</div><div style="height:8px"></div>';
 }};
-S.hrMyPosts={title:'我的发布',render:function(){
-  return '<div class="grp">'
-  +'<div class="item noind" onclick="go(\'hrDetail\')">'+thumb('b','hr',62,62)
-  +'<div class="it-bd"><div class="it-t">周末家政阿姨招募</div><div class="it-s">提交 08-30 · 已通过审核</div></div><span class="tag g">已发布</span></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="item noind" onclick="go(\'hrEdit\')">'+thumb('gy','hr',62,62)
-  +'<div class="it-bd"><div class="it-t">钟点工求职</div><div class="it-s">提交 08-29 · 驳回：含敏感词</div></div><span class="tag r">已驳回</span></div>'
-  +'</div>'
-  +'<div style="height:8px"></div>';
-}};
-S.hrDetail={title:'资源详情',render:function(){
-  return '<div class="pad"><div class="cover" style="height:166px">'+ic('hr',42,'#fff',1.7)+'</div></div>'
-  +'<div class="pad"><div class="bold" style="font-size:20px;letter-spacing:-.3px">退休教师兼职家教</div>'
-  +'<div class="sub" style="margin-top:7px">物业 · 09-02 · 阳光花园</div></div>'
-  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.75;color:var(--label)">本人系本市重点小学退休教师，从教 30 余年，擅长小学语文、数学辅导。可提供工作日课后及周末上门家教服务，费用面议。</div></div>'
-  +'<div class="pad"><button class="btn sec" onclick="go(\'hrEdit\')">编辑信息</button></div>'
-  +'<div class="pad"><button class="btn sec" onclick="toggleHrVis(\'退休教师兼职家教\')" id="hrVisBtn">显示/隐藏</button></div>'
-  +'<div class="pad"><button class="btn warn" onclick="delHr(\'退休教师兼职家教\')">删除信息</button></div>';
-}};
-S.hrPublish={title:'发布信息',render:function(){
-  return '<div class="grp"><div class="field"><input placeholder="标题（必填）"></div></div>'
-  + grpT('正文内容')
-  +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-  +'<textarea rows="6" placeholder="详细描述您的技能或服务内容…"></textarea></div></div>'
-  + grpT('上传图片')
+/* 认证资料（已录入）：查看提交的资料，可发起修改（修改需物业重新审核） */
+S.hrCertView={title:'认证资料',render:function(){
+  return grp([
+    {t:'姓名',v:'李建国'},
+    {t:'联系电话',v:'138****6688'},
+    {t:'服务类目',v:'家电维修 · 管道疏通'}
+  ],'基础资料')
+  + grpT('技能描述')
+  +'<div class="card"><div class="sub" style="font-size:14px;line-height:1.75;color:var(--label)">10 年水电维修经验，持低压电工证；擅长家电检修、管道疏通、水电安装，工具齐全，市区 30 分钟内响应。</div></div>'
+  + grpT('凭证资料')
   +'<div class="card"><div class="row" style="gap:10px">'
-  +'<div class="upbox" onclick="toast(\'上传图片\')">'+ic('camera',20)+'<span class="n">图片 0/9</span></div></div></div>'
-  + btn('提交发布','toast(\'已提交，等待物业审核\');go(\'hr\')')
-  + hint('提交后需经过敏感词比对，通过后由物业后台审核');
+  +'<div class="upbox">'+ic('doc',20)+'<span class="n">低压电工证</span></div>'
+  +'<div class="upbox">'+ic('doc',20)+'<span class="n">技能证书</span></div></div></div>'
+  + btn('修改认证资料','go(\'hrCertApply\')');
+}};
+/* 人才认证（未录入=首次提交 / 已录入=修改资料） */
+S.hrCertApply={title:'人才认证',render:function(){
+  return (hrState==='in'?'<div class="pad">'+hint('修改认证资料后需由物业后台重新审核，审核期间不影响生活帮手类订单')+'</div>':'')
+  +'<div class="grp">'
+  +'<div class="field"><span class="lb">姓名</span><input value="李建国"></div>'
+  +'<div class="sep"></div>'
+  +'<div class="field"><span class="lb">联系电话</span><input value="13800006688" type="tel"></div>'
+  +'<div class="sep"></div>'
+  +'<div class="field"><span class="lb">服务类目</span><input value="家电维修 · 管道疏通"></div></div>'
+  + grpT('技能描述')
+  +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
+  +'<textarea rows="5">10 年水电维修经验，持低压电工证；擅长家电检修、管道疏通、水电安装，工具齐全。</textarea></div></div>'
+  + grpT('上传凭证（证书 / 资质照片）')
+  +'<div class="card"><div class="row" style="gap:10px">'
+  +'<div class="upbox" onclick="toast(\'上传凭证\')">'+ic('doc',20)+'<span class="n">低压电工证</span></div>'
+  +'<div class="upbox" onclick="toast(\'上传凭证\')">'+ic('plus',20)+'</div></div></div>'
+  + btn('提交认证','submitHrCert()');
+}};
+/* 派单订单详情（服务人员视角） */
+S.hrOrderDetail={title:'订单详情',render:function(){
+  var o=HR_ORDERS[curHrOrder]||HR_ORDERS[0];
+  var stSub=o.st==='active'?'物业后台已派单，请按约定时间上门服务':o.st==='done'?'订单已确认完成，服务金额由线下收取':'业主接单后取消的订单，仅留存记录';
+  var btns=o.st==='active'
+    ?'<div class="btn-fixed"><button class="btn" onclick="confirmHrDone()">确认完成</button></div><div style="height:8px"></div>'
+    :'';
+  return '<div class="ord-card" style="margin-top:12px">'
+  +'<div class="hd"><div class="l"><div class="ic '+o.cov+'">'+ic(o.ic,18)+'</div>'
+  +'<div><div>'+o.t+'</div><div class="no">#'+o.no+'</div></div></div>'
+  +'<div class="st s-'+o.st+'">'+(o.st==='active'?'进行中':o.st==='done'?'已完成':'已取消')+'</div></div>'
+  +'<div class="bd">'
+  +'<div class="ti">'+stSub+'</div>'
+  +'<div class="meta"><div class="m">'+ic('clock',11)+'上门时间：'+o.time+'</div><div class="m">'+ic('pin',11)+o.addr+'</div></div>'
+  +'<div class="sum"><div class="l">服务数量 <b>'+o.qty+'</b> · 线下收取</div><div><span class="pn">¥'+o.amt+'.00</span></div></div>'
+  +'</div></div>'
+  +'<div class="ord-section"><div class="st">联系业主</div>'
+  +'<div class="kv"><span class="k">下单人</span><span class="v">'+o.cu+'</span></div>'
+  +'<div class="kv"><span class="k">联系电话</span><span class="v" style="display:flex;align-items:center;gap:8px">'+o.tel
+  +'<div class="cell-call" style="width:24px;height:24px" onclick="event.stopPropagation();location.href=\'tel:'+o.tel+'\'">'+ic('phone',13,'#fff')+'</div></span></div>'
+  +'</div>'
+  +'<div class="ord-section"><div class="st">金额信息</div>'
+  +'<div class="kv"><span class="k">订单金额</span><span class="v pr">¥'+o.amt+'.00</span></div>'
+  +'<div class="kv"><span class="k">收款方式</span><span class="v">线上不做收款，服务金额由线下收取</span></div>'
+  +'</div>'
+  +'<div class="ord-section"><div class="st">订单日志</div>'
+  +'<div class="log">'+ordLog([['订单提交',o.sub],['接单',o.acc],['完成',o.fin]])+'</div></div>'
+  + btns;
 }};
 
 /* ================= 支付流程（补充页面） ================= */
@@ -3173,13 +3500,15 @@ S.hrPublish={title:'发布信息',render:function(){
 var payCtx=null;
 var payMethod='alipay';   /* 当前选中支付方式 'alipay' | 'wechat' */
 function pickPay(m){payMethod=m;render();}
+function pickAmt(n){rechargeAmt=n;render();}
+var rechargeAmt=300;
 function payNow(){if(payCtx&&payCtx.label==='陪诊单')escortDemoStatus='active';go('payResult');}
 function openEscortPay(){
   var dur=(pickState.escortDur===undefined?0:pickState.escortDur);
   var _ei=(pickState.escortType===undefined?0:pickState.escortType);
   var _ek=ESCORT[_ei];
   var amount=(dur===0?_ek.ph:_ek.pd);
-  payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+(dur===0?'半天（4 小时）':'一天（8 小时）'),no:'PZ20250905-001',count:'1 单'};
+  payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+(dur===0?'半天':'一天'),no:'PZ20250905-001',count:'1 单'};
   payMethod='alipay';
   go('payment');
 }
@@ -3189,12 +3518,7 @@ S.payment={title:'收银台',render:function(){
   var m=payMethod;
   return '<div class="pad" style="padding-top:22px;text-align:center">'
   +'<div class="sub">待支付金额</div>'
-  +'<div style="font-size:36px;font-weight:800;letter-spacing:-1.2px;margin-top:8px">¥'+amt+'</div>'
-  +'<div class="sub" style="margin-top:7px">'+c.sub+'</div></div>'
-  + grpT('订单明细')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">'+c.label+' #'+c.no+'</div><div class="cell-s">'+c.sub+'</div></div><div class="cell-v">¥'+amt+'</div></div>'
-  +'</div>'
+  +'<div style="font-size:36px;font-weight:800;letter-spacing:-1.2px;margin-top:8px">¥'+amt+'</div></div>'
   + grpT('支付方式')
   +'<div class="grp">'
   +'<div class="cell tap" onclick="pickPay(\'alipay\')"><div class="cell-ic bg-b">'+ic('alipay',17)+'</div>'
@@ -3218,8 +3542,6 @@ S.payResult={title:'支付结果',nav:false,render:function(){
   +'<div class="bold" style="font-size:22px;letter-spacing:-.3px">支付成功</div>'
   +'<div class="sub" style="margin-top:8px">¥'+amt+' · '+mName+'支付</div></div>'
   +'<div class="grp" style="margin-top:22px">'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">结算订单</div></div><div class="cell-v">'+c.count+'</div></div>'
-  +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付方式</div></div><div class="cell-v">'+mName+'</div></div>'
   +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">支付时间</div></div><div class="cell-v">09-05 09:50</div></div>'
@@ -3227,8 +3549,7 @@ S.payResult={title:'支付结果',nav:false,render:function(){
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">交易单号</div></div><div class="cell-v" style="font-size:12.5px">20260905095000123456</div></div>'
   +'</div>'
   +'<div class="pad" style="padding-top:16px"><button class="btn" onclick="go(\'orders\')">查看订单</button></div>'
-  +'<div class="pad"><button class="btn sec" onclick="go(\'home\')">返回首页</button></div>'
-  +'<div class="pad">'+hint('已完成结算的订单可在订单详情中提交服务评价')+'</div>';
+  +'<div class="pad"><button class="btn sec" onclick="go(\'home\')">返回首页</button></div>';
 }};
 S.wechatFail={title:'微信登录',nav:false,render:function(){
   return '<div class="pad" style="padding-top:76px;text-align:center">'
@@ -3381,8 +3702,7 @@ S.refundProgress={title:'退款进度',render:function(){
 
 /* ================= 个人设置子类页（补充页面） ================= */
 S.changePhone={title:'换绑手机号',render:function(){
-  return '<div class="pad">'+hint('换绑需验证新手机号码，验证通过后立即生效')+'</div>'
-  +'<div class="grp">'
+  return '<div class="grp">'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">当前号码</div></div><div class="cell-v">138****6688</div></div>'
   +'</div>'
   + grpT('新手机号码')
@@ -3392,8 +3712,7 @@ S.changePhone={title:'换绑手机号',render:function(){
   +'<div class="sep full"></div>'
   +'<div class="field"><span class="lb">验证码</span><input placeholder="请输入验证码" type="tel"></div>'
   +'</div>'
-  +'<div class="pad"><button class="btn" onclick="toast(\'换绑成功，请使用新号码登录\');back()">确认换绑</button></div>'
-  + hint('验证通过后原号码立即失效，后续需使用新号码登录');
+  +'<div class="pad"><button class="btn" onclick="toast(\'换绑成功，请使用新号码登录\');back()">确认换绑</button></div>';
 }};
 S.bandRename={title:'修改名称',render:function(){
   return '<div class="pad">'+hint('该名称仅在本系统内生效，用于区分多台手环设备，不会修改手环厂商的原始名称')+'</div>'
@@ -3413,15 +3732,15 @@ var SYS_MSGS=[
   {id:'m1',cat:0,ic:'bell',cls:'bg-o',t:'供水检修施工延期通知',s:'09-04 14:30 · 来自物业服务中心',un:true,
    h:'供水检修施工延期通知',b:'各位业主：<br><br>因施工方设备调配原因，原定本周六的供水检修施工延期至下周三 08:00-18:00 进行。检修期间将停止供水约 8 小时，请各位业主提前做好储水准备。<br><br>给您带来不便，敬请谅解。'},
   {id:'m2',cat:2,ic:'yen',cls:'bg-y',t:'托管账单出账提醒',s:'09-03 10:00 · 来自账务系统',un:true,
-   h:'9 月托管账单已出账',b:'您的 9 月托管服务账单已出账，本期金额 ¥688.00，请于 9 月 15 日前完成缴费。您可前往「我的-我的账单」查看账单明细并完成支付。'},
+   h:'9 月托管账单已出账',b:'您的 9 月托管服务账单已出账，本期金额 ¥315.00，请于 9 月 15 日前完成缴费。您可前往「我的-我的账单」查看账单明细并完成支付。'},
   {id:'m3',cat:1,ic:'cal',cls:'bg-br',t:'报餐服务恢复通知',s:'09-02 09:00 · 来自社区食堂',un:false,
    h:'社区食堂报餐服务恢复通知',b:'社区食堂设备检修已完成，报餐服务即日起恢复。下单截止时间仍为每日 10:00，欢迎各位业主继续使用。'},
   {id:'m6',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'08-31 18:00 · 来自账务系统',un:false,
    h:'8 月报餐账单已结算',b:'您的 8 月报餐服务账单已完成结算，合计金额 ¥486.00，结算时间 2026-08-31。您可前往「我的-我的账单」查看结算明细。'},
   {id:'m7',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'08-01 18:00 · 来自账务系统',un:false,
-   h:'8 月托管账单已结算',b:'您的 8 月托管服务账单已完成结算，合计金额 ¥1200.00，结算时间 2026-08-01。您可前往「我的-我的账单」查看结算明细。'},
+   h:'8 月托管账单已结算',b:'您的 8 月托管服务账单已完成结算，合计金额 ¥405.00，结算时间 2026-08-01。您可前往「我的-我的账单」查看结算明细。'},
   {id:'m8',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'07-01 18:00 · 来自账务系统',un:false,
-   h:'7 月托管账单已结算',b:'您的 7 月托管服务账单已完成结算，合计金额 ¥1200.00，结算时间 2026-07-01。您可前往「我的-我的账单」查看结算明细。'},
+   h:'7 月托管账单已结算',b:'您的 7 月托管服务账单已完成结算，合计金额 ¥450.00，结算时间 2026-07-01。您可前往「我的-我的账单」查看结算明细。'},
   {id:'m4',cat:1,ic:'wallet',cls:'bg-g',t:'账单退还结果',s:'09-01 16:20 · 来自结算系统',un:true,
    h:'7 月账单差价已退还',b:'您 7 月的报餐单与托管单已完成结算核算，退还差价 ¥126.00 已退回至顾好家币账户余额，可前往「我的-我的账单」查看结算明细。'}
 ];
@@ -3470,8 +3789,7 @@ S.delVerify={title:'注销账号',render:function(){
   +'<div class="grp">'
   +'<div class="inp-row"><input id="delCode" placeholder="请输入验证码" type="tel" value="123456"><button class="code-btn" onclick="sendCode(this)">获取验证码</button></div>'
   +'</div>'
-  +'<div class="pad"><button class="btn" onclick="doDelAccount()">确认注销</button></div>'
-  + hint('验证码将发送至注册手机号，校验通过后账号立即注销，账号数据全部移除。注销条件：当前账号所有账单已结清；若为认证户主账号，需先移交户主权限，由物业审核通过后完成移交');
+  +'<div class="pad"><button class="btn" onclick="doDelAccount()">确认注销</button></div>';
 }};
 function doDelAccount(){
   var c=(document.getElementById('delCode')||{}).value||'';
@@ -3496,15 +3814,15 @@ S.settings={title:'系统设置',render:function(){
     {ic:'lock',icls:'bg-b',t:'隐私设置',s:'授权管理与个人信息',ar:1,on:'go(\'privacy\')'},
     {ic:'doc',icls:'bg-in',t:'用户协议',ar:1,on:'go(\'agreement\')'},
     {ic:'shield',icls:'bg-br',t:'隐私政策',ar:1,on:'go(\'privacy\')'}
-  ],'协议与隐私')
+  ],'协议与隐私',1)
   + grp([
     {ic:'trash',icls:'bg-r',t:'清除缓存',s:'清理图片与临时文件',v:'36.2MB',on:'clearCache()'},
     {ic:'sync',icls:'bg-t',t:'检查更新',s:'当前已是最新版本',v:APP_VER,on:'toast(\'当前已是最新版本\')'}
-  ],'通用')
+  ],'通用',1)
   + grp([
     {ic:'logout',icls:'bg-r',t:'退出登录',s:'退出后需重新登录使用',on:'doLogout()'},
     {ic:'me',icls:'bg-in',t:'注销账号',s:'注销后账号数据将无法恢复',ar:1,on:'go(\'delAccount\')'}
-  ],'关于与账号');
+  ],'关于与账号',1);
 }};
 S.agreement={title:'用户协议',render:function(){
   return '<div class="card">'
@@ -3516,7 +3834,7 @@ S.agreement={title:'用户协议',render:function(){
   +'<b>三、社区服务规范</b><br>您通过本平台发布的内容不得违反法律法规及社区公约，平台有权对违规内容进行处理。<br><br>'
   +'<b>四、服务的变更与中止</b><br>平台有权根据运营需要对服务内容进行调整、中断或终止，并提前予以公告。<br><br>'
   +'<b>五、免责声明</b><br>因不可抗力、网络故障等原因导致服务无法正常提供的，平台不承担相应责任。</div>'
-  +'</div>'+hint('本协议适用于顾好家 APP 全部功能模块');
+  +'</div>';
 }};
 S.privacy={title:'隐私政策',render:function(){
   return '<div class="card">'
@@ -3529,21 +3847,6 @@ S.privacy={title:'隐私政策',render:function(){
   +'<b>四、信息的共享</b><br>除法律法规要求或经您明确同意外，我们不会向任何第三方共享您的个人信息。<br><br>'
   +'<b>五、您的权利</b><br>您可在「我的-个人信息」中查阅、更正您的个人信息，也可联系客服申请删除账号数据。</div>'
   +'</div>';
-}};
-
-/* ================= 内容编辑 / 驳回（补充页面） ================= */
-S.hrEdit={title:'编辑信息',render:function(){
-  return '<div class="pad">'+hint('修改后需重新进行敏感词比对，并由物业后台重新审核，审核通过后修改成功')+'</div>'
-  +'<div class="grp"><div class="field"><input placeholder="标题（必填）" value="退休教师兼职家教"></div></div>'
-  + grpT('正文内容')
-  +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
-  +'<textarea rows="6">本人系本市重点小学退休教师，从教 30 余年，擅长小学语文、数学辅导。可提供工作日课后及周末上门家教服务，费用面议。</textarea></div></div>'
-  + grpT('上传图片')
-  +'<div class="card"><div class="row" style="gap:10px">'
-  +'<div class="upbox" onclick="toast(\'上传图片\')">'+ic('camera',20)+'<span class="n">图片 1/9</span></div>'
-  +'<div class="upbox" onclick="toast(\'上传图片\')">'+ic('plus',20)+'</div></div></div>'
-  + btn('提交修改','toast(\'已提交，等待物业重新审核\');back()')
-  + hint('提交后需经过敏感词比对，通过后由物业后台审核');
 }};
 
 /* ================= 编辑个人信息 ================= */
