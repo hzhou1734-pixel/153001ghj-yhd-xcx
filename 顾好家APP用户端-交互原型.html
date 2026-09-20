@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.210';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.211';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -3727,8 +3727,7 @@ S.refundProgress={title:'退款进度',render:function(){
 
 /* ================= 个人设置子类页（补充页面） ================= */
 S.changePhone={title:'换绑手机号',render:function(){
-  return '<div class="pad">'+hint('换绑需验证新手机号码，验证通过后立即生效')+'</div>'
-  +'<div class="grp">'
+  return '<div class="grp">'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">当前号码</div></div><div class="cell-v">138****6688</div></div>'
   +'</div>'
   + grpT('新手机号码')
@@ -3738,8 +3737,7 @@ S.changePhone={title:'换绑手机号',render:function(){
   +'<div class="sep full"></div>'
   +'<div class="field"><span class="lb">验证码</span><input placeholder="请输入验证码" type="tel"></div>'
   +'</div>'
-  +'<div class="pad"><button class="btn" onclick="toast(\'换绑成功，请使用新号码登录\');back()">确认换绑</button></div>'
-  + hint('验证通过后原号码立即失效，后续需使用新号码登录');
+  +'<div class="pad"><button class="btn" onclick="toast(\'换绑成功，请使用新号码登录\');back()">确认换绑</button></div>';
 }};
 S.bandRename={title:'修改名称',render:function(){
   return '<div class="pad">'+hint('该名称仅在本系统内生效，用于区分多台手环设备，不会修改手环厂商的原始名称')+'</div>'
