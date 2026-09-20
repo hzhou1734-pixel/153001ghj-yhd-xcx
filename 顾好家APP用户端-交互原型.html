@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.236';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.237';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -3466,35 +3466,31 @@ S.hrCertApply={title:'人才认证',render:function(){
 /* 派单订单详情（服务人员视角） */
 S.hrOrderDetail={title:'订单详情',render:function(){
   var o=HR_ORDERS[curHrOrder]||HR_ORDERS[0];
-  var stTxt=o.st==='active'?'进行中':o.st==='done'?'已完成':'已取消';
   var stSub=o.st==='active'?'物业后台已派单，请按约定时间上门服务':o.st==='done'?'订单已确认完成，服务金额由线下收取':'业主接单后取消的订单，仅留存记录';
-  var stCls=o.st==='active'?'b':o.st==='done'?'g':'gy';
-  return '<div class="pad" style="padding-top:20px"><span class="tag '+stCls+'">'+stTxt+'</span>'
-  +'<div class="sub" style="margin-top:9px">'+stSub+'</div></div>'
-  + grpT('服务信息')
-  +'<div class="grp">'
-  +'<div class="item noind">'+thumb(o.cov,o.ic,54,54)
-  +'<div class="it-bd"><div class="it-t">'+o.t+'</div><div class="it-s">订单编号 '+o.no+'</div></div>'
-  +'<div style="text-align:right;flex-shrink:0"><span class="price" style="font-size:17px">¥'+o.amt+'</span>'
-  +'<div class="sub" style="font-size:11px;margin-top:2px">数量 x'+o.qty+'</div></div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">上门时间</div></div><div class="cell-v">'+o.time+'</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell"><div class="cell-bd"><div class="cell-t">服务地址</div></div><div class="cell-v">'+o.addr+'</div></div>'
+  var btns=o.st==='active'
+    ?'<div class="btn-fixed"><button class="btn" onclick="confirmHrDone()">确认完成</button></div><div style="height:8px"></div>'
+    :'';
+  return '<div class="ord-card" style="margin-top:12px">'
+  +'<div class="hd"><div class="l"><div class="ic '+o.cov+'">'+ic(o.ic,18)+'</div>'
+  +'<div><div>'+o.t+'</div><div class="no">#'+o.no+'</div></div></div>'
+  +'<div class="st s-'+o.st+'">'+(o.st==='active'?'进行中':o.st==='done'?'已完成':'已取消')+'</div></div>'
+  +'<div class="bd">'
+  +'<div class="ti">'+stSub+'</div>'
+  +'<div class="meta"><div class="m">'+ic('clock',11)+'上门时间：'+o.time+'</div><div class="m">'+ic('pin',11)+o.addr+'</div></div>'
+  +'<div class="sum"><div class="l">服务数量 <b>'+o.qty+'</b> · 线下收取</div><div><span class="pn">¥'+o.amt+'.00</span></div></div>'
+  +'</div></div>'
+  +'<div class="ord-section"><div class="st">联系业主</div>'
+  +'<div class="kv"><span class="k">下单人</span><span class="v">'+o.cu+'</span></div>'
+  +'<div class="kv"><span class="k">联系电话</span><span class="v" style="display:flex;align-items:center;gap:8px">'+o.tel
+  +'<div class="cell-call" style="width:24px;height:24px" onclick="event.stopPropagation();location.href=\'tel:'+o.tel+'\'">'+ic('phone',13,'#fff')+'</div></span></div>'
   +'</div>'
-  + grp([
-    {t:'下单人',v:o.cu},
-    {ic:'phone',icls:'bg-g',t:'联系电话',v:o.tel,on:'location.href=\'tel:'+o.tel+'\''}
-  ])
-  + grpT('金额信息')
-  + grp([{t:'订单金额',ctl:'<span class="price" style="font-size:20px">¥'+o.amt+'.00</span>'}])
-  + hint('线上不做收款，所有金额由线下收取')
-  + grpT('订单日志')
-  +'<div class="card"><div class="log">'+ordLog([['订单提交',o.sub],['接单',o.acc],['完成',o.fin]])+'</div></div>'
-  +(o.st==='active'
-    ?'<div class="btn-fixed"><button class="btn" onclick="confirmHrDone()">确认完成</button></div>'
-      +'<div style="height:8px"></div>'+hint('完成后金额由线下收取，线上仅留存订单记录')
-    :'');
+  +'<div class="ord-section"><div class="st">金额信息</div>'
+  +'<div class="kv"><span class="k">订单金额</span><span class="v pr">¥'+o.amt+'.00</span></div>'
+  +'<div class="kv"><span class="k">收款方式</span><span class="v">线上不做收款，服务金额由线下收取</span></div>'
+  +'</div>'
+  +'<div class="ord-section"><div class="st">订单日志</div>'
+  +'<div class="log">'+ordLog([['订单提交',o.sub],['接单',o.acc],['完成',o.fin]])+'</div></div>'
+  + btns;
 }};
 
 /* ================= 支付流程（补充页面） ================= */
