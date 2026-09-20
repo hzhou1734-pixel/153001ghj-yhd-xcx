@@ -865,7 +865,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.237';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.238';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-20';
 
@@ -3043,33 +3043,35 @@ S.billDetail={title:'账单详情',render:function(){
   if(cur===0){
     return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
     +'<div class="grp">'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单</div><div class="cell-s">结算时间 2026-08-01 · 共 6 笔</div></div><span class="tag g">已结清</span></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">8月托管账单</div><div class="cell-s">结算时间 2026-08-01 · 共 7 笔</div></div><span class="tag g">已结清</span></div>'
     +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">付款</div></div><div class="cell-v" style="color:var(--label)">¥450.00</div></div>'
     +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">退款</div></div><div class="cell-v" style="color:var(--accent)">-¥45.00</div></div>'
     +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥405.00</div></div>'
     +'</div>'
     + grpT('结算明细')
     +'<div class="grp">'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月29日</div><div class="cell-s">08-29 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="font-weight:600">¥90.00</div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月28日</div><div class="cell-s">08-28 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="font-weight:600">¥45.00</div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月22日</div><div class="cell-s">08-22 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="font-weight:600">¥90.00</div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月21日</div><div class="cell-s">08-21 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="font-weight:600">¥45.00</div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月15日</div><div class="cell-s">08-15 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="font-weight:600">¥90.00</div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月14日</div><div class="cell-s">08-14 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="font-weight:600">¥45.00</div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月29日</div><div class="cell-s">08-29 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥90.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月28日</div><div class="cell-s">08-28 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月22日</div><div class="cell-s">08-22 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥90.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月21日</div><div class="cell-s">08-21 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月20日</div><div class="cell-s">08-20 16:30 · 当日取消 · 全额退款</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">退款 -¥45.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月15日</div><div class="cell-s">08-15 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥90.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月14日</div><div class="cell-s">08-14 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
     +'</div>';
   }
   return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
   +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">8月报餐账单</div><div class="cell-s">结算时间 2026-08-31 · 共 3 笔</div></div><span class="tag g">已结清</span></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">8月报餐账单</div><div class="cell-s">结算时间 2026-08-31 · 共 4 笔</div></div><span class="tag g">已结清</span></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">付款</div></div><div class="cell-v" style="color:var(--label)">¥540.00</div></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">退款</div></div><div class="cell-v" style="color:var(--accent)">-¥54.00</div></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥486.00</div></div>'
   +'</div>'
   + grpT('结算明细')
   +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">08-25 10:20 · 午餐</div></div><div class="cell-v" style="font-weight:600">¥36.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">08-30 12:10 · 午餐</div></div><div class="cell-v" style="font-weight:600">¥18.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份 × 14 天</div><div class="cell-s">08-01 ~ 08-14 · 午餐套餐</div></div><div class="cell-v" style="font-weight:600">¥432.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">08-25 10:20 · 午餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥36.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">08-30 12:10 · 午餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥18.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 3 份</div><div class="cell-s">08-18 11:50 · 当日停餐 · 全额退款</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥54.00</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">退款 -¥54.00</div></div></div>'
+  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份 × 14 天</div><div class="cell-s">08-01 ~ 08-14 · 午餐套餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥432.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
   +'</div>';
 }};
 
