@@ -789,15 +789,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .ord-section .kv .v.o{color:#F2642A;font-weight:600;}
 .ord-section .kv .v.gy{color:var(--label3);}
 .ord-section .log{padding:12px 14px;font-size:13.5px;color:var(--label2);line-height:1.9;}
-.ord-section .fee-item{padding:12px 14px;border-bottom:.5px solid var(--sep);}
+.ord-section .fee-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:.5px solid var(--sep);}
 .ord-section .fee-item:last-of-type{border-bottom:none;}
-.ord-section .fee-hd{display:flex;align-items:center;justify-content:space-between;}
+.ord-section .fee-img{width:54px;height:54px;border-radius:11px;background:linear-gradient(135deg,#EAF6F1,#D6EFE6);display:flex;align-items:center;justify-content:center;color:var(--brand);flex-shrink:0;cursor:pointer;}
+.ord-section .fee-bd{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .ord-section .fee-t{font-size:14.5px;font-weight:600;color:var(--label);letter-spacing:-.2px;}
-.ord-section .fee-amt{font-size:15px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;}
-.ord-section .fee-vch{display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin-top:7px;font-size:12.5px;color:var(--label2);}
-.ord-section .fee-vch .vch-name{color:var(--label);}
-.ord-section .fee-vch .vch-no{font-variant-numeric:tabular-nums;color:var(--label3);}
-.ord-section .fee-vch .vch-view{margin-left:auto;color:var(--brand-d);font-weight:600;cursor:pointer;padding:2px 9px;background:var(--brand-fill);border-radius:8px;flex-shrink:0;}
+.ord-section .fee-amt{font-size:15px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;flex-shrink:0;}
 .ord-section .fee-total{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#FAFAFA;font-size:13.5px;color:var(--label2);font-weight:600;}
 .ord-section .fee-empty{padding:16px 14px;font-size:13px;color:var(--label3);line-height:1.7;text-align:center;}
 
@@ -877,7 +874,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.254';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.255';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -2804,11 +2801,11 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   var hasEscort=(st==='active'||st==='done');
   var paid=(st==='active'||st==='done'||st==='refund');
   var showFees=(st==='active'||st==='done'||st==='refund');
-  /* 陪诊员上传的附加费明细（多条），金额合计应与下方支付信息中的附加费用一致 */
+  /* 陪诊员上传的附加费明细（多条），每条仅含：文字标题 t、价格 amt、凭证图片 img */
   var addFees=[
-    {t:'挂号费',amt:15,vch:'门诊挂号缴费凭证',no:'GH20260905-0183'},
-    {t:'打车费',amt:28,vch:'出租车乘车发票',no:'1102-8845'},
-    {t:'检查费',amt:17,vch:'检查项目缴费凭证',no:'JC20260905-2207'}
+    {t:'挂号费',amt:15,img:'门诊挂号缴费凭证'},
+    {t:'打车费',amt:28,img:'出租车乘车发票'},
+    {t:'检查费',amt:17,img:'检查项目缴费凭证'}
   ];
   var feeTotal=addFees.reduce(function(a,b){return a+b.amt;},0);
 
@@ -2846,10 +2843,8 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +(showFees
     ? addFees.map(function(f){
         return '<div class="fee-item">'
-          +'<div class="fee-hd"><span class="fee-t">'+f.t+'</span><span class="fee-amt">¥'+f.amt+'.00</span></div>'
-          +'<div class="fee-vch"><span class="vch-name">'+f.vch+'</span>'
-          +'<span class="vch-no">'+f.no+'</span>'
-          +'<span class="vch-view" onclick="toast(\'查看凭证：'+f.vch+'（'+f.no+'）\')">查看凭证</span></div>'
+          +'<div class="fee-img" onclick="toast(\'查看'+f.t+'凭证照片：'+f.img+'\')">'+ic('img',22)+'</div>'
+          +'<div class="fee-bd"><span class="fee-t">'+f.t+'</span><span class="fee-amt">¥'+f.amt+'.00</span></div>'
           +'</div>';
       }).join('')
       +'<div class="fee-total"><span>附加费合计</span><span class="fee-amt">¥'+feeTotal+'.00</span></div>'
