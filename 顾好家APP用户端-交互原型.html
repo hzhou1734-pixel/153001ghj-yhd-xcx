@@ -882,7 +882,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.264';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.265';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -1869,7 +1869,7 @@ S.trusteeship={title:'托管服务',render:function(){
       +'<div style="text-align:right"><span class="price" style="font-size:16px">¥'+t.p+'</span></div></div>';
     if(i<TRUST.length-1)h+='<div class="sep"></div>';
   });
-  return '<div class="grp">'+h+'</div>';
+  return tenantBlockNote('托管')+'<div class="grp">'+h+'</div>';
 }};
 S.trustDetail={title:'托管详情',render:function(){
   var i=(pickState.trustType===undefined?0:pickState.trustType);
@@ -1934,6 +1934,7 @@ function toggleTrustCare(i){var c=pickState.trustCare||{};c[i]=!c[i];pickState.t
 function pickTrustDate(i){pickState.trustDate=i;render();}
 /* 提交托管单：未选学校/看护时段不允许提交 */
 function submitTrust(amount){
+  if(currentRole==='tenant' && !tenantAuth.trust){toast('该租户账号未获得托管授权，无法提交托管订单');render();return;}
   var nj=(pickState.trustJie===undefined?true:pickState.trustJie);
   var ns=(pickState.trustSong===undefined?false:pickState.trustSong);
   var nt=(pickState.trustTutor===undefined?false:pickState.trustTutor);
@@ -2091,7 +2092,7 @@ function openPayConfirm(amount,onOk){
 function closePayConfirm(){payConfirm=null;render();}
 function confirmPay(){
   var amt=payConfirm.amount,fn=payConfirm.onOk;
-  COIN_BALANCE-=amt;payConfirm=null;render();fn();
+  COIN_BALANCE-=amt;var rq=roomQ();if(rq)rq.used+=amt;payConfirm=null;render();fn();
 }
 function goRecharge(){payInsufficient=null;render();go('coinRecharge');}
 function payDialogHTML(){
@@ -2167,7 +2168,7 @@ S.meal={title:'健康膳食',render:function(){
   var DELIVERY_FEE=3;
   var deliveryAmt=needDelivery?DELIVERY_FEE:0;
   var total=subtotal+deliveryAmt;
-  return '<div class="sect"><div class="t">今日菜单</div><div class="m">9月5日 周六 · '+MT[mt][0]+'</div></div>'
+  return tenantBlockNote('报餐')+'<div class="sect"><div class="t">今日菜单</div><div class="m">9月5日 周六 · '+MT[mt][0]+'</div></div>'
   +'<div class="card"><div class="pick">'+mh+'</div></div>'
   +hint('每餐独立下单，不支持跨早餐 / 午餐 / 晚餐合并报餐')
   + grpT('可选套餐（点击 + 选择份数）')
@@ -2184,7 +2185,7 @@ S.meal={title:'健康膳食',render:function(){
   +'<div style="padding:4px var(--pad) 38px">'
     +(totalQty===0
       ? btn('请选择套餐','toast(\'请至少选择 1 份套餐\')','des')
-      : btn('提交报餐','openPayConfirm('+total+',function(){mealDemoStatus=\'active\';toast(\'报餐成功\');go(\'orderMealDetail\')})'))
+      : btn('提交报餐','mealSubmit('+total+')'))
   +'</div>';
 }};
 function toggleMealDelivery(){pickState.mealDelivery=!pickState.mealDelivery;render();}
@@ -2204,6 +2205,10 @@ function mealCounter(mt,i){
     +'<button onclick="mealQtyAdj('+mt+','+i+',-1)">'+ic('minus',15)+'</button>'
     +'<div class="n">'+v+'</div>'
     +'<button onclick="mealQtyAdj('+mt+','+i+',1)">'+ic('plus',15)+'</button></div>';
+}
+function mealSubmit(total){
+  if(currentRole==='tenant' && !tenantAuth.meal){toast('该租户账号未获得报餐授权，无法提交报餐订单');return;}
+  openPayConfirm(total,function(){mealDemoStatus='active';toast('报餐成功');go('orderMealDetail');});
 }
 
 S.mealDetail={title:'膳食详情',render:function(){
@@ -3107,6 +3112,7 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   ],'家庭与设备',1)
   /* ⑤ 社区权益 */
   + grp([
+    {ic:'home2',icls:'bg-br',t:'物业后台（演示）',s:'按房号设置顾好家币额度',ar:1,on:'go(\'propBackend\')'},
     {ic:'wallet',icls:'bg-g',t:'小区钱袋子',ar:1,on:'needCert(\'moneyBag\')'},
     {ic:'hr',icls:'bg-t',t:'人力资源',ar:1,on:'go(\'hr\')'},
     {ic:'shield',icls:'bg-br',t:'业主认证',ar:1,on:'go(\'certList\')'}
@@ -3133,14 +3139,33 @@ S.personInfo={title:'个人信息',render:function(){
 
 /* ================= 我的账单 ================= */
 /* ================= 顾好家币（账户余额 / 充值 / 明细） ================= */
-S.coin={title:'顾好家币',render:function(){
-  return '<div class="card" style="margin:14px var(--pad);background:linear-gradient(135deg,#2BC4A0,#17A88A);color:#fff;padding:20px 18px">'
-  +'<div style="font-size:13px;opacity:.9">账户余额</div>'
-  +'<div style="font-size:32px;font-weight:700;margin:8px 0 16px;letter-spacing:-.5px">¥ '+COIN_BALANCE.toFixed(2)+'</div>'
-  +'<div style="display:flex;gap:10px">'
-  +'<div style="flex:1;background:rgba(255,255,255,.2);border-radius:12px;padding:11px 0;text-align:center;font-size:14px;font-weight:600;cursor:pointer" onclick="go(\'coinRecharge\')">账户充值</div>'
-  +'<div style="flex:1;background:rgba(255,255,255,.2);border-radius:12px;padding:11px 0;text-align:center;font-size:14px;font-weight:600;cursor:pointer" onclick="go(\'coinDetail\')">账户明细</div>'
-  +'</div></div>';
+S.coin={title:'房号共享额度',render:function(){
+  var q=roomQ();var remain=q.quota-q.used;
+  return ''
+  +'<div class="card" style="margin:14px var(--pad);background:linear-gradient(135deg,#2BC4A0,#17A88A);color:#fff;padding:20px 18px">'
+  +'<div style="font-size:13px;opacity:.9">房号共享额度 · '+ROOM_KEY+'</div>'
+  +'<div style="font-size:30px;font-weight:700;margin:8px 0 14px;letter-spacing:-.5px">¥ '+remain.toFixed(2)+'</div>'
+  +'<div style="display:flex;gap:10px;font-size:12.5px;opacity:.92">'
+  +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">总额度<br><b style="font-size:15px">¥'+q.quota.toFixed(2)+'</b></div>'
+  +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">已使用<br><b style="font-size:15px">¥'+q.used.toFixed(2)+'</b></div>'
+  +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">剩余<br><b style="font-size:15px">¥'+remain.toFixed(2)+'</b></div>'
+  +'</div></div>'
+  +'<div class="pad">'+hint('同一房号下所有业主与家人账号合用同一额度，由物业后台按房号统一配置；本房号全部成员的托管、报餐等账单将整合后从该共享额度中扣减。')+'</div>'
+  +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center"><span>共用该额度的成员</span><span style="font-size:12px;color:var(--label3)">4 人 · '+ROOM_KEY+'</span></div>'
+  +'<div class="grp">'
+  +'<div class="cell"><div class="cell-ic" style="background:none">'+avt(34)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:15px">爸爸</div><div class="cell-s">家庭成员</div></div><span class="tag br">家庭成员</span></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic" style="background:none">'+avt(34)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:15px">妈妈</div><div class="cell-s">家庭成员</div></div><span class="tag br">家庭成员</span></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic" style="background:none">'+avt(34)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:15px">小明</div><div class="cell-s">家庭成员</div></div><span class="tag br">家庭成员</span></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell"><div class="cell-ic" style="background:none">'+avt(34)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:15px">租客小王</div><div class="cell-s">租户 · '+(tenantAuth.trust?'已授权托管/报餐':'未授权')+'</div></div><span class="tag gy">租户</span></div>'
+  +'</div>'
+  +'<div class="grp">'
+  +'<div class="cell tap" onclick="go(\'coinRecharge\')"><div class="cell-ic bg-t">'+ic('wallet',17)+'</div><div class="cell-bd"><div class="cell-t">额度充值</div><div class="cell-s">由业主统一为房号充值</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell tap" onclick="go(\'coinDetail\')"><div class="cell-ic bg-gy">'+ic('doc',17)+'</div><div class="cell-bd"><div class="cell-t">账户明细</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'</div>';
 }};
 S.coinRecharge={title:'账户充值',render:function(){
   return grpT('充值金额')
@@ -3168,6 +3193,26 @@ var COIN_LOG=[
   {t:'托管单支出',a:980.00,d:'2026-07-01 15:20',sign:'-'},
   {t:'报餐单支出',a:18.00,d:'2026-06-30 11:05',sign:'-'}
 ];
+/* ===== 房号顾好家币额度：由物业后台按房号设置；同房号下业主/家人/租户账号合用同一额度，账单整合后从中扣减 ===== */
+var ROOM_QUOTA={
+  '阳光花园 3栋2单元-1802':{quota:1000,used:132},
+  '玫瑰新城 5栋1单元-0903':{quota:600,used:0}
+};
+var ROOM_KEY='阳光花园 3栋2单元-1802';        /* 当前登录房号（业主视角） */
+function roomQ(){return ROOM_QUOTA[ROOM_KEY];}
+function roomRemaining(){var q=roomQ();return q?q.quota-q.used:0;}
+/* 演示身份切换：owner=业主 family=家庭成员 tenant=租户（用于演示租户授权效果） */
+var currentRole='owner';
+function setRole(r){currentRole=r;render();}
+/* 租户授权状态：业主授权后租户可用托管、报餐；收回后不可用 */
+var tenantAuth={trust:true,meal:true};
+function toggleTenantAuth(k){tenantAuth[k]=!tenantAuth[k];render();}
+/* 租户未授权时的下单拦截提示（托管 / 报餐） */
+function tenantBlockNote(kind){
+  if(currentRole==='tenant' && !tenantAuth[kind])
+    return hint('当前为租户身份且未获得'+kind+'授权，无法提交'+kind+'订单；请联系业主在「我的 - 我的家庭 - 成员」中授权。');
+  return '';
+}
 S.coinDetail={title:'账户明细',render:function(){
   var cur=segState.coinLog||0;
   var list=COIN_LOG.filter(function(x){return cur===0?true:(cur===1?x.sign==='+':x.sign==='-');});
@@ -3187,10 +3232,28 @@ function billSettleCard(ico,icls,name,date,pay,refund,net,tab){
     +'<div class="cell-v" style="color:var(--green);font-weight:700;font-size:16px;white-space:nowrap">'+net+'</div>'
     +'<div class="cell-ar">'+ic('chevR',16)+'</div></div></div>';
 }
+/* 本房号账单整合卡：所有成员（业主 + 家人 + 租户）的托管/报餐/陪诊/生活帮手账单合并，统一从房号共享额度扣减 */
+function billIntegrateCard(){
+  var remain=roomRemaining();
+  return '<div class="card" style="margin:14px var(--pad);background:linear-gradient(135deg,#2BC4A0,#17A88A);color:#fff;padding:16px 18px">'
+    +'<div style="font-size:13px;opacity:.9">本房号账单整合（业主 + 家人 + 租户）</div>'
+    +'<div style="display:flex;gap:8px;margin-top:10px;font-size:12px;opacity:.92">'
+    +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">托管<br><b style="font-size:15px">¥315.00</b></div>'
+    +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">报餐<br><b style="font-size:15px">¥135.00</b></div>'
+    +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">陪诊<br><b style="font-size:15px">¥480.00</b></div>'
+    +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">生活帮手<br><b style="font-size:15px">¥180.00</b></div>'
+    +'</div>'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.28)">'
+    +'<div style="font-size:13px;opacity:.9">待结算合计 <b style="font-size:16px">¥1,110.00</b></div>'
+    +'<div style="font-size:13px;opacity:.9">共享额度剩余 <b style="font-size:16px">¥'+remain.toFixed(0)+'</b></div>'
+    +'</div></div>'
+    +'<div class="pad" style="padding-top:0">'+hint('同一房号下所有成员的托管、报餐、陪诊、生活帮手账单已整合，统一从房号共享额度中扣减；业主可为房号统一充值。')+'</div>';
+}
 S.bill={title:'我的账单',render:function(){
   var cur=segState.bill||0;
   if(cur===1){
-    return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
+    return billIntegrateCard()
+    +'<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
     + grpT('已结算账单')
     + billSettleCard('sTrust','bg-b','8月托管账单','2026-08-01 已结清','¥450.00','-¥45.00','已结 ¥405.00',0)
     + billSettleCard('sMeal','bg-o','8月报餐账单','2026-08-31 已结清','¥540.00','-¥54.00','已结 ¥486.00',1)
@@ -3198,12 +3261,16 @@ S.bill={title:'我的账单',render:function(){
     +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结算合计</div><div class="cell-s">付款合计 <span style="color:var(--label)">¥990.00</span></div><div class="cell-s" style="margin-top:2px">退款合计 <span style="color:var(--accent)">¥99.00</span></div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥891.00</div></div>'
     +'</div>';
   }
-  return '<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
+  return billIntegrateCard()
+  +'<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
+  +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center"><span>本房号待结算整合</span><span style="font-size:12px;color:var(--label3)">业主 + 家人 + 租户</span></div>'
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">托管账单</div></div><div class="cell-v">¥315.00</div></div>'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">报餐账单</div></div><div class="cell-v">¥135.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-t">'+ic('sEscort',17)+'</div><div class="cell-bd"><div class="cell-t">陪诊账单</div></div><div class="cell-v">¥480.00</div></div>'
+  +'<div class="cell"><div class="cell-ic bg-gy">'+ic('shield',17)+'</div><div class="cell-bd"><div class="cell-t">生活帮手账单</div></div><div class="cell-v">¥180.00</div></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">待结算合计</div></div>'
-  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥450.00</div></div>'
+  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1,110.00</div></div>'
   +'</div>'
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldT=!pickState.billFoldT;render()"><span>托管单明细 · 共 4 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldT?'收起':'展开')+'</span></div>'
   +(pickState.billFoldT
@@ -3264,9 +3331,44 @@ S.billDetail={title:'账单详情',render:function(){
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">08-25 10:20 · 午餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥36.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">08-30 12:10 · 午餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥18.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 3 份</div><div class="cell-s">08-18 11:50 · 当日停餐 · 全额退款</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥54.00</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">退款 -¥54.00</div></div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份 × 14 天</div><div class="cell-s">08-01 ~ 08-14 · 午餐套餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥432.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-  +'</div>';
+    +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份 × 14 天</div><div class="cell-s">08-01 ~ 08-14 · 午餐套餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥432.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
+    +'</div>';
 }};
+
+/* ================= 物业后台（演示）：按房号设置顾好家币额度 ================= */
+var propRoomKey='阳光花园 3栋2单元-1802';
+S.propBackend={title:'物业后台',render:function(){
+  var keys=Object.keys(ROOM_QUOTA);
+  return '<div class="pad">'+hint('物业后台 · 按房号配置顾好家币额度。额度为房号级共享额度，同房号下业主、家人、租户账号共用，所有账单整合后从额度中扣减。')+'</div>'
+  + grpT('房号额度配置')
+  +'<div class="grp">'+keys.map(function(k){
+      var q=ROOM_QUOTA[k];var remain=q.quota-q.used;
+      return '<div class="cell tap" onclick="propRoomKey=\''+k+'\';go(\'propRoomQuota\')">'
+        +'<div class="cell-ic bg-t">'+ic('home2',17)+'</div>'
+        +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">'+k+'</div>'
+        +'<div class="cell-s">总额度 ¥'+q.quota.toFixed(2)+' · 已用 ¥'+q.used.toFixed(2)+'</div></div>'
+        +'<div class="cell-v" style="color:'+(remain<q.quota*0.2?'var(--accent)':'var(--green)')+'">剩 ¥'+remain.toFixed(0)+'</div>'
+        +'<div class="cell-ar">'+ic('chevR',16)+'</div></div>';
+    }).join('')+'</div>';
+}};
+S.propRoomQuota={title:'房号额度',render:function(){
+  var q=ROOM_QUOTA[propRoomKey];
+  return grpT('房号 · '+propRoomKey)
+  +'<div class="grp"><div class="field"><span class="lb">顾好家币额度（元）</span><input id="quotaInput" type="tel" value="'+q.quota+'" style="caret-color:var(--label)"></div></div>'
+  +'<div class="card" style="margin:12px var(--pad)">'
+  +'<div class="kv"><span class="k">已使用额度</span><span class="v">¥'+q.used.toFixed(2)+'</span></div>'
+  +'<div class="kv"><span class="k">调整后剩余</span><span class="v pr">¥'+(q.quota-q.used).toFixed(2)+'</span></div>'
+  +'</div>'
+  +'<div class="pad">'+hint('降低额度时不可低于已使用额度（¥'+q.used.toFixed(2)+'）。保存后，该房号下所有业主、家人、租户账号将共用新额度。')+'</div>'
+  +'<div class="pad"><button class="btn" onclick="saveRoomQuota()">保存额度</button></div>';
+}};
+function saveRoomQuota(){
+  var el=document.getElementById('quotaInput');if(!el){toast('请输入额度');return;}
+  var v=parseFloat(el.value);if(isNaN(v)||v<=0){toast('请输入有效的额度金额');return;}
+  var q=ROOM_QUOTA[propRoomKey];
+  if(v<q.used){toast('额度不可低于已使用额度 ¥'+q.used.toFixed(2));return;}
+  q.quota=v;toast('已保存，'+propRoomKey+' 额度已更新为 ¥'+v.toFixed(2));back();
+}
 
 /* ================= 我的家庭 ================= */
 S.family={title:'我的家庭',render:function(){
@@ -3283,35 +3385,65 @@ S.family={title:'我的家庭',render:function(){
   ]);
 }};
 S.familyMembers={title:'成员列表',render:function(){
-  return grpT('家庭成员 · 3')
+  var rTxt=currentRole==='owner'?'业主':currentRole==='family'?'家庭成员':'租户';
+  return '<div class="pad">'+hint('演示：当前体验身份为「'+rTxt+'」。切换为「租户」后，可在未授权状态下验证其无法使用托管、报餐。')+'</div>'
+  + grpT('演示身份切换')
   +'<div class="grp">'
-  +'<div class="cell tap" onclick="go(\'memberRole\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
+  +'<div class="cell tap" onclick="setRole(\'owner\')"><div class="cell-bd"><div class="cell-t">业主（我）</div><div class="cell-s">房号额度所有者，可授权租户</div></div>'+(currentRole==='owner'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell tap" onclick="setRole(\'family\')"><div class="cell-bd"><div class="cell-t">家庭成员</div><div class="cell-s">共用房号额度，无需授权</div></div>'+(currentRole==='family'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
+  +'<div class="sep full"></div>'
+  +'<div class="cell tap" onclick="setRole(\'tenant\')"><div class="cell-bd"><div class="cell-t">租户</div><div class="cell-s">'+(tenantAuth.trust?'已授权托管/报餐':'未授权 · 不可用托管/报餐')+'</div></div>'+(currentRole==='tenant'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
+  +'</div>'
+  + grpT('家庭成员 · 3')
+  +'<div class="grp">'
+  +'<div class="cell tap" onclick="openMember(\'爸爸\',\'family\',false)"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
   +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">爸爸</div><div class="cell-s">09-01 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="go(\'memberRole\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
+  +'<div class="cell tap" onclick="openMember(\'妈妈\',\'family\',false)"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
   +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">妈妈</div><div class="cell-s">09-01 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="go(\'memberRole\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
+  +'<div class="cell tap" onclick="openMember(\'小明\',\'family\',false)"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
   +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">小明</div><div class="cell-s">09-02 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'</div>'
   + grpT('租户 · 1')
   +'<div class="grp">'
-  +'<div class="cell tap" onclick="go(\'memberRole\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">租客小王</div><div class="cell-s">09-10 加入</div></div><span class="tag gy">租户</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'<div class="cell tap" onclick="openMember(\'租客小王\',\'tenant\',true)"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
+  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">租客小王</div><div class="cell-s">09-10 加入 · '+(tenantAuth.trust?'已授权':'未授权')+'</div></div><span class="tag gy">租户</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'</div>';
 }};
 S.memberRole={title:'成员设置',render:function(){
-  return '<div class="pad" style="padding-top:22px;text-align:center">'
-  +'<div style="display:flex;justify-content:center">'+avt(78)+'</div>'
-  +'<div class="bold" style="font-size:19px;margin-top:12px">爸爸</div>'
-  +'<div class="sub" style="margin-top:4px">09-01 加入 · 阳光花园 3栋2单元-1802</div></div>'
-  + grpT('成员角色')
-  +'<div class="grp">'
-  +'<div class="cell tap" onclick="toast(\'已设为家庭成员\');back()"><div class="cell-bd"><div class="cell-t">家庭成员</div></div><div style="color:var(--brand);display:flex">'+ic('check',19)+'</div></div>'
-  +'<div class="cell tap" onclick="toast(\'已设为租户\');back()"><div class="cell-bd"><div class="cell-t">租户</div></div></div>'
-  +'</div>'
-  +'<div class="pad" style="padding-top:20px"><button class="btn warn" onclick="toast(\'已解除绑定，该账号无法再提交本小区订单\');go(\'familyMembers\')">解除绑定</button></div>';
+  var m=memberCtx;
+  var h='<div class="pad" style="padding-top:22px;text-align:center">'
+    +'<div style="display:flex;justify-content:center">'+avt(78)+'</div>'
+    +'<div class="bold" style="font-size:19px;margin-top:12px">'+m.name+'</div>'
+    +'<div class="sub" style="margin-top:4px">'+ROOM_KEY+' · '+(m.tenant?'租户':'家庭成员')+'</div></div>';
+  if(m.tenant){
+    h+= grpT('租户授权（业主操作）')
+      +'<div class="grp">'
+      +'<div class="cell"><div class="cell-bd"><div class="cell-t">托管授权</div><div class="cell-s">'+(tenantAuth.trust?'已授权 · 可使用托管服务':'未授权 · 不可使用托管')+'</div></div>'+sw(tenantAuth.trust,'toggleTenantAuth(\'trust\')')+'</div>'
+      +'<div class="sep full"></div>'
+      +'<div class="cell"><div class="cell-bd"><div class="cell-t">报餐授权</div><div class="cell-s">'+(tenantAuth.meal?'已授权 · 可使用报餐服务':'未授权 · 不可使用报餐')+'</div></div>'+sw(tenantAuth.meal,'toggleTenantAuth(\'meal\')')+'</div>'
+      +'</div>'
+      +'<div class="pad">'+hint('未授权或收回授权后，该租户账号将无法提交托管、报餐订单。')+'</div>'
+      +'<div class="grp">'
+      +'<div class="cell tap" onclick="setRole(\'tenant\');toast(\'已切换为租户身份，可前往托管 / 报餐体验授权效果\');go(\'home\')"><div class="cell-bd"><div class="cell-t">以此租户身份体验</div><div class="cell-s">切换后测试授权 / 未授权下单</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+      +'</div>';
+  }else{
+    h+= grpT('成员角色')
+      +'<div class="grp">'
+      +'<div class="cell tap" onclick="toast(\'已设为家庭成员\');back()"><div class="cell-bd"><div class="cell-t">家庭成员</div></div><div style="color:var(--brand);display:flex">'+ic('check',19)+'</div></div>'
+      +'<div class="cell tap" onclick="toast(\'已设为租户\');back()"><div class="cell-bd"><div class="cell-t">租户</div></div></div>'
+      +'</div>'
+      +'<div class="grp">'
+      +'<div class="cell tap" onclick="setRole(\'family\');toast(\'已切换为家庭成员身份\');go(\'home\')"><div class="cell-bd"><div class="cell-t">以此身份体验</div><div class="cell-s">切换当前演示身份</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+      +'</div>';
+  }
+  h+='<div class="pad" style="padding-top:20px"><button class="btn warn" onclick="toast(\'已解除绑定，该账号无法再提交本小区订单\');go(\'familyMembers\')">解除绑定</button></div>';
+  return h;
 }};
+var memberCtx={name:'爸爸',role:'family',tenant:false};
+function openMember(name,role,tenant){memberCtx={name:name,role:role,tenant:!!tenant};render();}
 S.invitePoster={title:'邀请成员',render:function(){
   return '<div class="pad" style="padding-top:24px">'
   +'<div class="card" style="padding:18px;text-align:center">'
