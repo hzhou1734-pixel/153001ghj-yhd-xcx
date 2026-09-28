@@ -866,7 +866,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.246';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.247';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -1577,7 +1577,7 @@ S.careInfo={title:'服务详情',render:function(){
   +'<div class="sub" style="margin-top:6px">'+x.d+'</div></div>'
   +'<div class="grp-t" style="margin:16px var(--pad) 10px">服务详情</div>'
   +'<div class="rich" style="padding:0 var(--pad)">'+x.info+'</div>'
-  +'<div class="btn-fixed"><button class="btn" onclick="toast(\'已提交预约申请，管家将与您电话确认上门时间\')">立即预约</button></div>';
+  +'<div class="btn-fixed"><button class="btn" onclick="pickState.careOrder=true;go(\'helper\')">立即预约</button></div>';
 }};
 function tile(i,t,s,cls,on){return '<div class="tile" onclick="go(\''+on+'\')"><div class="th '+cls+'">'+ic(i,19)+'</div>'
   +'<div class="tt">'+t+'</div><div class="ts">'+s+'</div></div>';}
@@ -2296,16 +2296,17 @@ S.helperInfo={title:'服务详情',render:function(){
   +'<div class="grp">'+revCards(3)+'</div>'
   +'<div class="grp-t" style="margin:16px var(--pad) 10px">服务详情</div>'
   +'<div class="rich" style="padding:0 var(--pad)">'+x.info+'</div>'
-  +'<div class="btn-fixed"><button class="btn" onclick="go(\'helper\')">立即预约</button></div>';
+  +'<div class="btn-fixed"><button class="btn" onclick="pickState.careOrder=false;go(\'helper\')">立即预约</button></div>';
 }};
 S.helper={title:'提交服务订单',render:function(){
-  var hi=(pickState.helperType===undefined?0:pickState.helperType);
-  var hk=HELPER[hi];
+  var isCare=(pickState.careOrder===true);
+  var hk = isCare ? CARE[(pickState.careType===undefined?0:pickState.careType)] : HELPER[(pickState.helperType===undefined?0:pickState.helperType)];
+  var price = (hk.p!==undefined)? hk.p : 0;
   return '<div class="grp" style="margin-top:14px">'
   +'<div class="item noind">'+thumb(hk.cov,hk.ic,64,64)
   +'<div class="it-bd"><div class="it-t" style="font-size:17px;letter-spacing:-.3px">'+hk.n+'</div>'
   +'<div class="it-s">'+hk.d+'</div>'
-  +'<div style="margin-top:7px"><span class="price" style="font-size:18px">¥'+hk.p+'</span></div></div></div></div>'
+  +'<div style="margin-top:7px"><span class="price" style="font-size:18px">¥'+price+'</span></div></div></div></div>'
   + grpT('服务时间')
   + grp([{t:'上门时间',s:(pickState.helperDate&&pickState.helperSlot)?(pickState.helperDate+' '+pickState.helperSlot):'请选择上门服务时间',ar:1,on:'openTimeSheet()'}])
   + grpT('服务地址')
@@ -2313,9 +2314,13 @@ S.helper={title:'提交服务订单',render:function(){
   + grpT('备注')
   +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
   +'<textarea rows="4" placeholder="请描述服务需求与备注…"></textarea></div></div>'
-  + grp([{t:'订单金额',ctl:'<span class="price" style="font-size:20px">¥'+hk.p+'.00</span>'}])
-  + hint('仅为预估金额，具体费用与线下服务人员沟通，系统不收取费用')
-  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','toast(\'订单已提交，等待物业后台派单\');go(\'ordersHelper\')')+'</div>';
+  + grp([{t:'订单金额',ctl:'<span class="price" style="font-size:20px">¥'+price+'.00</span>'}])
+  + (isCare
+      ? hint('本服务为社区公益服务，不收取任何费用')
+      : hint('仅为预估金额，具体费用与线下服务人员沟通，系统不收取费用'))
+  +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单', isCare
+      ? 'toast(\'公益服务预约已提交，管家将电话与您确认上门时间\');go(\'healthHome\')'
+      : 'toast(\'订单已提交，等待物业后台派单\');go(\'ordersHelper\')')+'</div>';
 }};
 
 /* ================= 社区（Tab） ================= */
