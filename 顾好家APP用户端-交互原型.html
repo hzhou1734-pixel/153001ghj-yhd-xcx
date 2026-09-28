@@ -268,6 +268,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .step button:active{background:rgba(43,196,160,.14);}
 .step .n{min-width:44px;text-align:center;font-size:16px;font-weight:600;height:32px;line-height:32px;color:var(--label);
         border-left:1px solid var(--sep);border-right:1px solid var(--sep);letter-spacing:-.2px;}
+.step-add{width:30px;height:30px;border-radius:15px;border:1px solid var(--brand);color:var(--brand);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--card);
+  box-shadow:0 1px 3px rgba(43,196,160,.13);transition:background .15s;flex-shrink:0;}
+.step-add:active{background:rgba(43,196,160,.14);}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:2px var(--pad) 12px;}
 .cml-chips{padding-bottom:8px;}
 .chips::-webkit-scrollbar{height:0;}
@@ -874,7 +878,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.259';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.260';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -2126,8 +2130,6 @@ function payDialogHTML(){
 
 /* ================= 健康膳食 ================= */
 S.meal={title:'健康膳食',render:function(){
-  var mc=(pickState.mealCount===undefined?2:pickState.mealCount);
-  mc=Math.max(1,Math.min(10,mc));
   var needDelivery=(pickState.mealDelivery===undefined?false:pickState.mealDelivery);
   var mt=(pickState.mealType===undefined?1:pickState.mealType);   /* 0=早餐 1=午餐 2=晚餐 */
   var MT=[['早餐','¥6 起'],['午餐','¥18 起'],['晚餐','¥16 起']];
@@ -2142,34 +2144,61 @@ S.meal={title:'健康膳食',render:function(){
        {t:'虾仁蒸蛋 · 时蔬 · 米饭',s:'清淡软糯',p:16},
        {t:'莲藕排骨汤 · 杂粮包 · 时蔬',s:'养胃安神',p:20}]
   };
-  var mi=(pickState.mealItem===undefined?0:pickState.mealItem);
-  var list=MENUS[mt]; var m=list[mi]||list[0];
+  var list=MENUS[mt];
   var mh='';
   MT.forEach(function(x,i){mh+='<div class="d'+(i===mt?' on':'')+'" onclick="pickMealType('+i+')"><div class="w">'+x[0]+'</div><div class="n">'+x[1]+'</div></div>';});
   var opts='';
   list.forEach(function(x,i){
-    var on=(i===mi);
-    opts+='<div class="item noind mopt'+(on?' on':'')+'" onclick="pickMealItem('+i+')">'+thumb('','sMeal',54,54,'')
-      +'<div class="it-bd"><div class="it-t">'+x.t+'</div><div class="it-s">'+x.s+'</div></div>'
-      +'<div style="flex-shrink:0;display:flex;align-items:center;gap:10px">'
-      +'<span class="price" style="font-size:16px">¥'+x.p+'</span>'
-      +'<span class="radio'+(on?' on':'')+'">'+(on?ic('check',13):'')+'</span></div></div>';
+    var q=getMealQty(mt,i);
+    opts+='<div class="item noind mopt'+(q>0?' on':'')+'">'+thumb('','sMeal',54,54,'')
+      +'<div class="it-bd"><div class="it-t">'+x.t+'</div><div class="it-s">'+x.s+'</div>'
+      +'<div style="font-size:15px;font-weight:600;color:var(--brand);margin-top:5px">¥'+x.p+'<span style="font-size:12px;color:var(--label2);font-weight:400"> / 份</span></div></div>'
+      +'<div style="flex-shrink:0;display:flex;align-items:center">'+mealCounter(mt,i)+'</div></div>';
   });
+  /* 金额：套餐小计 + 配送费（按需） */
+  var subtotal=0,totalQty=0;
+  list.forEach(function(x,i){var q=getMealQty(mt,i);subtotal+=q*x.p;totalQty+=q;});
+  var DELIVERY_FEE=3;
+  var deliveryAmt=needDelivery?DELIVERY_FEE:0;
+  var total=subtotal+deliveryAmt;
   return '<div class="sect"><div class="t">今日菜单</div><div class="m">9月5日 周六 · '+MT[mt][0]+'</div></div>'
   +'<div class="card"><div class="pick">'+mh+'</div></div>'
-  + grpT('可选套餐')
+  +hint('每餐独立下单，不支持跨早餐 / 午餐 / 晚餐合并报餐')
+  + grpT('可选套餐（点击 + 选择份数）')
   +'<div class="grp">'+opts+'</div>'
   + grp([
-    {ic:'sMeal',icls:'bg-y',t:'报餐份数',s:'1 - 10 份',ctl:step('mealCount',{def:2,min:1,max:10})},
     {ic:'pin',icls:'bg-br',t:'是否需要配送',s:'配送至已认证房号',ctl:sw(needDelivery,'toggleMealDelivery()')},
     needDelivery?{t:'配送地址',s:(pickState.mealHouse||'阳光花园 3栋2单元1802'),ar:1,on:'openHouseSheet()'}:null
   ])
-  + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+(m.p*mc)+'.00</span>'}])
-  +'<div style="padding:4px var(--pad) 38px">'+btn('提交报餐','openPayConfirm('+(m.p*mc)+',function(){mealDemoStatus=\'active\';toast(\'报餐成功\');go(\'orderMealDetail\')})')+'</div>';
+  + grp([
+    {t:'套餐小计',s:(totalQty>0?('共 '+totalQty+' 份'):'尚未选择套餐'),ctl:'<span class="price" style="font-size:17px">¥'+subtotal+'.00</span>'},
+    needDelivery?{ic:'pin',icls:'bg-br',t:'配送费',s:'统一配送至房号',ctl:'<span class="price" style="font-size:16px">¥'+deliveryAmt+'.00</span>'}:null
+  ])
+  + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+total+'.00</span>'}])
+  +'<div style="padding:4px var(--pad) 38px">'
+    +(totalQty===0
+      ? btn('请选择套餐','toast(\'请至少选择 1 份套餐\')','des')
+      : btn('提交报餐','openPayConfirm('+total+',function(){mealDemoStatus=\'active\';toast(\'报餐成功\');go(\'orderMealDetail\')})'))
+  +'</div>';
 }};
 function toggleMealDelivery(){pickState.mealDelivery=!pickState.mealDelivery;render();}
-function pickMealType(i){pickState.mealType=i;pickState.mealItem=0;render();}
-function pickMealItem(i){pickState.mealItem=i;render();}
+function pickMealType(i){pickState.mealType=i;render();}
+function getMealQty(mt,i){if(pickState.mealQty===undefined)return 0;return pickState.mealQty[mt+'_'+i]||0;}
+function mealQtyAdj(mt,i,d){
+  if(pickState.mealQty===undefined)pickState.mealQty={};
+  var k=mt+'_'+i;
+  var v=(pickState.mealQty[k]===undefined?0:pickState.mealQty[k])+d;
+  if(v<0)v=0;if(v>10)v=10;
+  pickState.mealQty[k]=v;render();
+}
+function mealCounter(mt,i){
+  var v=getMealQty(mt,i);
+  if(v<=0)return '<div class="step-add" onclick="mealQtyAdj('+mt+','+i+',1)">'+ic('plus',18)+'</div>';
+  return '<div class="step">'
+    +'<button onclick="mealQtyAdj('+mt+','+i+',-1)">'+ic('minus',15)+'</button>'
+    +'<div class="n">'+v+'</div>'
+    +'<button onclick="mealQtyAdj('+mt+','+i+',1)">'+ic('plus',15)+'</button></div>';
+}
 
 S.mealDetail={title:'膳食详情',render:function(){
   var rich='<div class="rich">'
@@ -2750,15 +2779,18 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="bd">'
   +'<div class="ti">明日午餐<span class="qty">× 2</span></div>'
   +'<div class="meta"><div class="m">'+ic('clock',11)+'配送 / 使用：09-05</div><div class="m">'+ic('pin',11)+'提交：'+(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')+'</div></div>'
-  +'<div class="sum"><div class="l">共 <b>2</b> 份</div><div><span class="pn">¥36.00</span></div></div>'
+  +'<div class="sum"><div class="l">共 <b>2</b> 份</div><div><span class="pn">¥39.00</span></div></div>'
   +'</div></div>'
   +'<div class="ord-section"><div class="st">菜单信息</div>'
-  +'<div class="kv"><span class="k">明日午餐</span><span class="v">¥18.00 × 2</span></div>'
+  +'<div class="kv"><span class="k">清蒸鲈鱼 · 时蔬 · 米饭</span><span class="v">¥18.00 × 2</span></div>'
+  +'<div class="kv"><span class="k">套餐小计</span><span class="v">¥36.00</span></div>'
+  +'<div class="kv"><span class="k">配送方式</span><span class="v b">物业配送</span></div>'
+  +'<div class="kv"><span class="k">配送费</span><span class="v">¥3.00</span></div>'
   +'<div class="kv"><span class="k">报餐日期</span><span class="v b">09-05</span></div>'
   +'<div class="kv"><span class="k">套餐规格</span><span class="v">A套餐 · 12:00送达</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">支付信息</div>'
-  +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥36.00</span></div>'
+  +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥39.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
