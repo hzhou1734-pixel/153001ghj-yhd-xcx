@@ -866,7 +866,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.244';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.245';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -1504,13 +1504,81 @@ S.healthHome={title:'健康小屋',render:function(){
   + tile('risk','健康风险评估','每周自动更新评估结果','bg-o','healthRisk')
   +'</div>'
   +'<div class="pad"><button class="btn acc" onclick="location.href=\'tel:120\';toast(\'正在呼叫 120 急救中心\')">'+ic('phone',19)+' 紧急呼叫</button></div>'
-  +'<div class="sect"><div class="t">生活服务帮手</div><div class="m" onclick="go(\'helperList\')">全部服务'+ic('chevR',14)+'</div></div>'
+  +'<div class="sect"><div class="t">生活服务帮手</div></div>'
   + grp([
-    {ic:'heart',icls:'bg-r',t:'上门关爱探访',s:'管家上门探望老人，关注生活起居与健康状态',v:'<span class="price">¥0</span>',ar:1,on:"toast('已提交「上门关爱探访」预约，管家将与您电话确认上门时间')"},
-    {ic:'family',icls:'bg-o',t:'老幼家庭巡访',s:'上门看一眼家中老人与孩子情况，异常及时反馈家属',v:'<span class="price">¥0</span>',ar:1,on:"toast('已提交「老幼家庭巡访」预约，管家将与您电话确认上门时间')"},
-    {ic:'sHealth',icls:'bg-g',t:'健康上门随访',s:'为行动不便老人上门测量心率血压，数据同步健康小屋',v:'<span class="price">¥0</span>',ar:1,on:"toast('已提交「健康上门随访」预约，管家将与您电话确认上门时间')"},
-    {ic:'phone',icls:'bg-b',t:'独居电话问安',s:'每日定时电话问候独居老人，了解需求并跟进反馈',v:'<span class="price">¥0</span>',ar:1,on:"toast('已提交「独居电话问安」预约，管家将与您确认回访安排')"}
+    {ic:'heart',icls:'bg-r',t:'上门关爱探访',s:'管家上门探望老人，关注生活起居与健康状态',ar:1,on:'careOpen(0)'},
+    {ic:'family',icls:'bg-o',t:'老幼家庭巡访',s:'上门看一眼家中老人与孩子情况，异常及时反馈家属',ar:1,on:'careOpen(1)'},
+    {ic:'sHealth',icls:'bg-g',t:'健康上门随访',s:'为行动不便老人上门测量心率血压，数据同步健康小屋',ar:1,on:'careOpen(2)'},
+    {ic:'phone',icls:'bg-b',t:'独居电话问安',s:'每日定时电话问候独居老人，了解需求并跟进反馈',ar:1,on:'careOpen(3)'}
   ])
+}};
+/* 健康小屋 · 生活服务帮手（免费关爱服务，价格 ¥0 不展示价格栏） */
+var CARE=[
+  {n:'上门关爱探访',d:'管家上门探望老人，关注生活起居与健康状态',ic:'heart',cls:'bg-r',cov:'r',
+    info:'<p>由<strong>社区管家</strong>定期上门探望老人，面对面了解生活起居、身体状况与实际需求，探访情况将同步反馈家属。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>上门探访</strong>：与老人面对面交流，关注情绪与生活状态</li>'
+      +'<li><strong>情况记录</strong>：记录健康与生活需求，异常情况及时反馈家属</li>'
+      +'<li><strong>需求转介</strong>：有服务需求时协助对接物业与社区资源</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>本服务为社区公益服务，不收取任何费用</li>'
+      +'<li>预约后管家将与您电话确认上门时间</li>'
+    +'</ul>'},
+  {n:'老幼家庭巡访',d:'上门看一眼家中老人与孩子情况，异常及时反馈家属',ic:'family',cls:'bg-o',cov:'o',
+    info:'<p>针对家中<strong>有老人或儿童</strong>的家庭，管家上门巡访看一眼家中老幼情况，让在外家属安心。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>上门巡访</strong>：看一眼老人与孩子的居家状况</li>'
+      +'<li><strong>安全检查</strong>：燃气、用电、门窗等居家安全隐患提醒</li>'
+      +'<li><strong>反馈家属</strong>：巡访情况拍照或文字反馈家属</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>本服务为社区公益服务，不收取任何费用</li>'
+      +'<li>巡访频率与反馈方式可按家庭需求约定</li>'
+    +'</ul>'},
+  {n:'健康上门随访',d:'为行动不便老人上门测量心率血压，数据同步健康小屋',ic:'sHealth',cls:'bg-g',cov:'g',
+    info:'<p>由<strong>健康小屋工作人员</strong>为行动不便的老人提供上门健康随访，测量数据自动同步至健康小屋档案。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>上门测量</strong>：心率、血压等基础健康指标测量</li>'
+      +'<li><strong>数据同步</strong>：测量结果同步健康小屋，可查看趋势</li>'
+      +'<li><strong>异常提醒</strong>：指标异常时提醒就医并告知家属</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>本服务为社区公益服务，不收取任何费用</li>'
+      +'<li>测量结果仅供参考，不作为诊断依据</li>'
+    +'</ul>'},
+  {n:'独居电话问安',d:'每日定时电话问候独居老人，了解需求并跟进反馈',ic:'phone',cls:'bg-b',cov:'b',
+    info:'<p>为<strong>独居老人</strong>提供每日定时电话问候，确认当日状况，让家属远程也能放心。</p>'
+    +'<h2>服务内容</h2>'
+    +'<ul>'
+      +'<li><strong>定时问安</strong>：每日固定时段电话问候</li>'
+      +'<li><strong>情况确认</strong>：了解老人当日身体与生活状况</li>'
+      +'<li><strong>异常跟进</strong>：连续未接听或状态异常时上门核实并通知家属</li>'
+    +'</ul>'
+    +'<h2>服务说明</h2>'
+    +'<ul>'
+      +'<li>本服务为社区公益服务，不收取任何费用</li>'
+      +'<li>问安时段可与家属协商确定</li>'
+    +'</ul>'}
+];
+function careOpen(i){pickState.careType=i;go('careInfo');}
+S.careInfo={title:'服务详情',render:function(){
+  var ci=(pickState.careType===undefined?0:pickState.careType);
+  var x=CARE[ci];
+  return '<div class="pad"><div class="cover '+x.cov+'" style="height:168px">'+ic(x.ic,42,'#fff',1.7)+'</div></div>'
+  +'<div class="pad">'
+  +'<div class="bold" style="font-size:21px;letter-spacing:-.4px">'+x.n+'</div>'
+  +'<div class="sub" style="margin-top:6px">'+x.d+'</div>'
+  +'<div class="row" style="margin-top:12px;align-items:center;gap:6px"><span class="tag g">公益服务 · 免费</span></div></div>'
+  +'<div class="grp-t" style="margin:16px var(--pad) 10px">服务详情</div>'
+  +'<div class="rich" style="padding:0 var(--pad)">'+x.info+'</div>'
+  +'<div class="btn-fixed"><button class="btn" onclick="toast(\'已提交预约申请，管家将与您电话确认上门时间\')">立即预约</button></div>';
 }};
 function tile(i,t,s,cls,on){return '<div class="tile" onclick="go(\''+on+'\')"><div class="th '+cls+'">'+ic(i,19)+'</div>'
   +'<div class="tt">'+t+'</div><div class="ts">'+s+'</div></div>';}
