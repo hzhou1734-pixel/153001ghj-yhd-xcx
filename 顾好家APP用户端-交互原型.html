@@ -866,7 +866,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.249';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.250';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -2877,21 +2877,21 @@ S.orderSettlement={title:'订单结算',render:function(){
   + btn('立即结算','go(\'payment\')');
 }};
 function revCards(limit, showMore){
-  /* 模拟评价数据：仅含头像首字、昵称、评星、评价时间，无文字与图片内容 */
+  /* 模拟评价数据：统一匿名展示，默认头像，仅含评星、评价时间，无文字与图片内容 */
   var REVIEWS=[
-    {nm:'张**',t:'2026-09-04 14:30',score:5},
-    {nm:'李**',t:'2026-09-03 19:08',score:5},
-    {nm:'王**',t:'2026-08-29 10:15',score:4},
-    {nm:'赵**',t:'2026-08-25 16:42',score:5},
-    {nm:'陈**',t:'2026-08-22 09:05',score:5}
+    {t:'2026-09-04 14:30',score:5},
+    {t:'2026-09-03 19:08',score:5},
+    {t:'2026-08-29 10:15',score:4},
+    {t:'2026-08-25 16:42',score:5},
+    {t:'2026-08-22 09:05',score:5}
   ];
   var list=limit?REVIEWS.slice(0,limit):REVIEWS;
   var h='<div class="rev-list">';
   list.forEach(function(r){
     var st='';for(var i=0;i<5;i++)st+=i<r.score?'<span>★</span>':'<span class="g">★</span>';
     h+='<div class="rev-card"><div class="hd">'
-      +'<div class="ava">'+r.nm.charAt(0)+'</div>'
-      +'<div class="meta"><div class="nm">'+r.nm+'</div><div class="stars-s">'+st+'</div></div>'
+      +avt(38)
+      +'<div class="meta"><div class="nm">匿名</div><div class="stars-s">'+st+'</div></div>'
       +'<div class="time">'+r.t.substring(5)+'</div>'
     +'</div></div>';
   });
