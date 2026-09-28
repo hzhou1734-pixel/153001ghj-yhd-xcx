@@ -874,7 +874,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.257';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.258';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -1876,7 +1876,7 @@ S.trustDetail={title:'托管详情',render:function(){
   CARE.forEach(function(c,idx){ch+='<div class="qbtn'+(care[idx]?' on':'')+'" onclick="toggleTrustCare('+idx+')">'+c[0]+'</div>';});
   var careCount=0;for(var ci in care){if(care[ci])careCount++;}
   var careMul=Math.pow(2,Math.max(0,careCount-1));
-  var amount=(pk.p+(nj?5:0)+(ns?5:0)+(nm?5:0)+(nt?5:0))*cnt*careMul;
+  var amount=(pk.p+(nj?5:0)+(ns?5:0)+(nt?5:0))*cnt*careMul;
   var tdi=(pickState.trustDate===undefined?0:pickState.trustDate);
   var dh='';
   BK_DATES.forEach(function(d,i){dh+='<div class="d'+(i===tdi?' on':'')+'" onclick="pickTrustDate('+i+')"><div class="w">'+BK_WEEKS[i]+'</div><div class="n">'+d.slice(3)+'</div></div>';});
@@ -1892,8 +1892,7 @@ S.trustDetail={title:'托管详情',render:function(){
     {ic:'family',icls:'bg-b',t:'孩子数量',s:'按孩子数量计费 · 1 - 5 人',ctl:step('trustCount',{def:1,min:1,max:5})},
     {ic:'pin',icls:'bg-br',t:'是否需要接',ctl:sw(nj,'toggleTrustJie()')},
     {ic:'pin',icls:'bg-o',t:'是否需要送',ctl:sw(ns,'toggleTrustSong()')},
-    {ic:'sMeal',icls:'bg-y',t:'是否需要用餐',ctl:sw(nm,'toggleTrustMeal()')},
-    {ic:'pencil',icls:'bg-g',t:'是否需要作业辅导',ctl:sw(nt,'toggleTrustTutor()')}
+    {ic:'shield',icls:'bg-g',t:'是否需要看护',ctl:sw(nt,'toggleTrustTutor()')}
   ])
   +((nj||ns)
     ? grpT('接送设置')
@@ -1910,6 +1909,8 @@ S.trustDetail={title:'托管详情',render:function(){
   + grpT('托管日期（仅可选择未来 7 天内）')
   +'<div class="card"><div class="pick">'+dh+'</div></div>'
   + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
+  + hint('预估金额为最高金额，实际费用以服务结束后的结算金额为准（含可选的接/送、看护等附加项）')
+  +'<div class="ord-section"><div class="st">超时说明</div><div class="log" style="padding:12px 14px;line-height:1.9">如实际看护时长超出所选看护时段，超时部分按 <b style="color:var(--accent)">¥10/小时</b> 计费（不足 1 小时按 1 小时计），以实际发生时长为准。</div></div>'
   +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','submitTrust('+amount+')')+'</div>';
 }};
 function toggleTrustJie(){pickState.trustJie=!pickState.trustJie;render();}
@@ -2753,8 +2754,7 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   info+=trkv('是否需要送',o.song?'是':'否',o.song?'g':null);
   if(o.song)info+=trkv('送 · 学校',o.songSchool||'请选择学校');
   if(o.jie||o.song)info+=trkv('接送地址',o.house);
-  info+=trkv('是否需要用餐',o.meal?'是':'否',o.meal?'g':null);
-  info+=trkv('是否需要作业辅导',o.tutor?'是':'否',o.tutor?'g':null);
+  info+=trkv('是否需要看护',o.tutor?'是':'否',o.tutor?'g':null);
   info+=trkv('看护时段',(o.care&&o.care.length)
     ?'<div style="text-align:right"><div style="color:var(--label);font-weight:500">'+o.period+'</div><div style="margin-top:3px">'+o.care.join(' · ')+'</div></div>'
     :'未选择');
@@ -2783,6 +2783,7 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
+  +'<div class="ord-section"><div class="st">备注说明</div><div class="log" style="padding:12px 14px;line-height:1.9">预估金额为最高金额，实际费用以服务结束后的结算金额为准。<br>超时说明：如实际看护时长超出所选看护时段，超时部分按 <b style="color:var(--accent)">¥10/小时</b> 计费（不足 1 小时按 1 小时计），以实际发生时长为准。</div></div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">'+ordLog([['提交',o.submit],['结算','—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—'],['完成',(st==='done'&&curOrder&&curOrder.doneTime)?curOrder.doneTime:'—']])+'</div></div>'
   + btns;
