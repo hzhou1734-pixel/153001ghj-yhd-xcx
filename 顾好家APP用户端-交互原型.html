@@ -878,7 +878,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.278';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.279';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -1800,10 +1800,10 @@ var BK_DATES=['09-05','09-06','09-07','09-08','09-09','09-10','09-11'],BK_WEEKS=
 S.escortBook={title:'服务预约',render:function(){
   var ds=BK_DATES,ws=BK_WEEKS;
   var di=(pickState.escortDate===undefined?0:pickState.escortDate);
-  var dur=(pickState.escortDur===undefined?0:pickState.escortDur);   /* 0=半天 1=一天 */
+  var dur=(pickState.escortDur===undefined?0:pickState.escortDur);   /* 0=半天 1=整天 */
   var ei=(pickState.escortType===undefined?0:pickState.escortType);
   var ek=ESCORT[ei];
-  var DL=[['半天','¥'+ek.ph],['一天','¥'+ek.pd]];
+  var DL=[['半天','¥'+ek.ph],['整天','¥'+ek.pd]];
   var needPick=(pickState.escortPick===undefined?true:pickState.escortPick);
   var h='';
   ds.forEach(function(d,i){h+='<div class="d'+(i===di?' on':'')+'" onclick="pickEscortDate('+i+')"><div class="w">'+ws[i]+'</div><div class="n">'+d.slice(3)+'</div></div>';});
@@ -1835,7 +1835,7 @@ function escortSubmit(){
   var e=ESCORT[ei];
   var dur=(pickState.escortDur===undefined?0:pickState.escortDur);
   var amount=(dur===0?e.ph:e.pd);
-  var durText=(dur===0?'半天':'一天');
+  var durText=(dur===0?'半天':'整天');
   var ymd=new Date().toISOString().slice(0,10).replace(/-/g,'');
   var newId='PZ'+ymd+'-'+String(Math.floor(Math.random()*900)+100);
   ORDERS.unshift({id:newId,type:3,t1:e.n+' · '+durText, qty:1, price:amount, oPrice:amount, date:'—', sub:new Date().toISOString().slice(0,16).replace('T',' '), st:'pending', pay:'待支付', tags:['预估金额·待陪诊完成后支付']});
@@ -2606,9 +2606,9 @@ var ORDERS=[
   {id:'TG20250901-003',type:2,t1:'禄口一小课后托管',qty:1,price:45,oPrice:45,date:'09-05',sub:'09-01 09:00',st:'active',pay:'进行中',tags:['7岁','09-05 课后时段']},
   {id:'TG20250701-011',type:2,t1:'周末全天托管',qty:1,price:90,oPrice:90,date:'07-05',sub:'07-01 15:20',st:'cancel',pay:'已取消',cancelTime:'07-01 16:10',tags:['8岁','单日全时段']},
   {id:'TG20250601-005',type:2,t1:'周末半日托管',qty:1,price:45,oPrice:45,date:'06-06',sub:'05-28 14:00',st:'done',pay:'已结算',doneTime:'06-01 18:00',tags:['周六 · 半日']},
-  {id:'PZ20250903-002',type:3,t1:'医院就诊全程陪诊 · 3 小时',qty:3,price:240,oPrice:240,date:'09-05 09:00',sub:'09-03 16:00',st:'pending',pay:'待支付',tags:['陪诊员·李阿姨','北京协和医院']},
-  {id:'PZ20250820-006',type:3,t1:'体检陪诊 · 2 小时',qty:2,price:160,oPrice:180,date:'08-22 08:30',sub:'08-20 10:30',st:'done',pay:'已支付',tags:['陪诊员·王阿姨','301医院体检中心']},
-  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-05 20:30',tags:['陪诊员·李阿姨','同济医院']},
+  {id:'PZ20250903-002',type:3,t1:'医院就诊全程陪诊 · 半天',qty:3,price:240,oPrice:240,date:'09-05 09:00',sub:'09-03 16:00',st:'pending',pay:'待支付',tags:['陪诊员·李阿姨','北京协和医院']},
+  {id:'PZ20250820-006',type:3,t1:'体检陪诊 · 整天',qty:2,price:160,oPrice:180,date:'08-22 08:30',sub:'08-20 10:30',st:'done',pay:'已支付',tags:['陪诊员·王阿姨','301医院体检中心']},
+  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 半天',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-05 20:30',tags:['陪诊员·李阿姨','同济医院']},
   {id:'SH20250904-001',type:4,t1:'家政保洁 · 全屋深度清洁',qty:1,price:180,oPrice:180,date:'09-05 09:00',sub:'09-04 15:30',st:'active',pay:'线下收取',tags:['上门 09:00','3栋2单元-1802']},
   {id:'SH20250902-003',type:4,t1:'空调维修 · 挂机加氟',qty:1,price:260,oPrice:260,date:'09-02 14:00',sub:'09-01 20:10',st:'done',pay:'线下收取',tags:['上门 14:00','师傅·王师傅']},
   {id:'SH20250828-002',type:4,t1:'水电维修 · 厨房水管更换',qty:1,price:150,oPrice:150,date:'08-29 10:00',sub:'08-28 09:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-28 11:40',tags:['上门 10:00']}
@@ -2898,6 +2898,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   var feeTotal=addFees.reduce(function(a,b){return a+b.amt;},0);
   var baseFee=240; /* 基础服务费（预估金额） */
   var payAmt=baseFee+(showFees?feeTotal:0); /* 支付金额 = 基础费 + 附加费总和 */
+  var durText=((pickState.escortDur||0)===0?'半天':'整天');
 
   var btns='';
   if(st==='pending'){
@@ -2914,14 +2915,14 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div><div>陪诊单</div><div class="no">#'+curEscortOrder+'</div></div></div>'
   +'<div class="st s-'+scls+'">'+stext+'</div></div>'
   +'<div class="bd">'
-  +'<div class="ti">医院就诊全程陪诊<span class="qty">· 3 小时</span></div>'
+  +'<div class="ti">医院就诊全程陪诊<span class="qty">· '+durText+'</span></div>'
   +'<div class="meta"><div class="m">'+ic('clock',11)+'陪诊日期：09-05 09:00</div><div class="m">'+ic('pin',11)+'提交：2026-09-03 16:00</div></div>'
-  +'<div class="sum"><div class="l">服务时长 <b>3</b> 小时</div><div><span class="pn '+(st==='pending'?'pending':'')+'">¥240.00</span></div></div>'
+  +'<div class="sum"><div class="l">服务时长 <b>'+durText+'</b></div><div><span class="pn '+(st==='pending'?'pending':'')+'">¥240.00</span></div></div>'
   +'</div></div>'
   +'<div class="ord-section"><div class="st">陪诊信息</div>'
   +'<div class="kv"><span class="k">服务名称</span><span class="v b">医院就诊全程陪诊</span></div>'
   +'<div class="kv"><span class="k">陪诊日期</span><span class="v">09-05 09:00</span></div>'
-  +'<div class="kv"><span class="k">服务时长</span><span class="v">3 小时</span></div>'
+  +'<div class="kv"><span class="k">服务时长</span><span class="v">'+durText+'</span></div>'
   +'<div class="kv"><span class="k">陪诊地址</span><span class="v">市第一人民医院</span></div>'
   +(hasEscort
     ?'<div class="kv"><span class="k">陪诊员</span><span class="v" style="display:flex;align-items:center;gap:8px">张师傅<div class="cell-call" style="width:24px;height:24px" onclick="event.stopPropagation();toast(&apos;正在呼叫 张师傅…&apos;)">'+ic('phone',13,'#fff')+'</div></span></div>'
@@ -3058,7 +3059,7 @@ function pickReviewScore(n){reviewScore=n;render();}
 function toggleReviewTag(i){reviewTagsSel[i]=!reviewTagsSel[i];render();}
 function submitReview(){toast('评价提交成功，感谢您的反馈');back();}
 S.addReview={title:'添加评价',render:function(){
-  var svcName=addReviewType===1?'明日午餐 · 营养套餐':addReviewType===2?'禄口一小课后托管 · 安心托付':'医院就诊全程陪诊 · 3 小时';
+  var svcName=addReviewType===1?'明日午餐 · 营养套餐':addReviewType===2?'禄口一小课后托管 · 安心托付':'医院就诊全程陪诊 · 半天';
   var stars='<div class="rv-stars">';
   for(var i=1;i<=5;i++)stars+='<span class="'+(i<=reviewScore?'on':'')+'" onclick="pickReviewScore('+i+')">★</span>';
   stars+='</div>';
@@ -3846,7 +3847,7 @@ var rechargeAmt=300;
 function payNow(){if(payCtx&&payCtx.label==='陪诊单')escortDemoStatus='active';go('payResult');}
 function openEscortOrderPay(amt){
   /* 订单支付：支付整个订单金额（基础费 + 附加费） */
-  payCtx={amount:amt||300,label:'陪诊单',sub:'医院就诊全程陪诊 · 3 小时',no:'PZ20250905-001',count:'1 单'};
+  payCtx={amount:amt||300,label:'陪诊单',sub:'医院就诊全程陪诊 · 半天',no:'PZ20250905-001',count:'1 单'};
   payMethod='alipay';
   go('payment');
 }
@@ -3855,7 +3856,7 @@ function openEscortPay(){
   var _ei=(pickState.escortType===undefined?0:pickState.escortType);
   var _ek=ESCORT[_ei];
   var amount=(dur===0?_ek.ph:_ek.pd);
-  payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+(dur===0?'半天':'一天'),no:'PZ20250905-001',count:'1 单'};
+  payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+(dur===0?'半天':'整天'),no:'PZ20250905-001',count:'1 单'};
   payMethod='alipay';
   /* 支付完成后清除待支付拦截，并将待支付陪诊单标记为已支付 */
   escortUnpaid=false;
