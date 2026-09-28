@@ -878,7 +878,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.272';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.273';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -2827,21 +2827,25 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   var payCls={pending:'o',active:'g',done:'g',cancel:'gy'}[st];
   var o=trustOrderSnapshot();
 
-  /* 托管信息：按提交时所选字段动态生成 */
+  /* 托管信息：按提交时所选字段动态生成（接/送/看护三选一，仅展示所选内容） */
   var info='';
   info+=trkv('托管项目',o.name,'b');
   info+=trkv('托管人数',o.count+' 人','b');
-  info+=trkv('是否需要接',o.jie?'是':'否',o.jie?'g':null);
-  if(o.jie)info+=trkv('接 · 学校',o.jieSchool||'请选择学校');
-  if(o.jie)info+=trkv('接 · 时间',o.jieTime||'-');
-  info+=trkv('是否需要送',o.song?'是':'否',o.song?'g':null);
-  if(o.song)info+=trkv('送 · 学校',o.songSchool||'请选择学校');
-  if(o.song)info+=trkv('送 · 时间',o.songTime||'-');
-  if(o.jie||o.song)info+=trkv('接送地址',o.house);
-  info+=trkv('是否需要看护',o.tutor?'是':'否',o.tutor?'g':null);
-  info+=trkv('看护时段',(o.tutor&&o.care&&o.care.length)
-    ?'<div style="text-align:right"><div style="color:var(--label);font-weight:500">'+o.period+'</div><div style="margin-top:3px">'+o.care.join(' · ')+'</div></div>'
-    :'无需看护');
+  if(o.jie){
+    info+=trkv('接 · 学校',o.jieSchool||'请选择学校');
+    info+=trkv('接 · 时间',o.jieTime||'-');
+    info+=trkv('接送地址',o.house);
+  }else if(o.song){
+    info+=trkv('送 · 学校',o.songSchool||'请选择学校');
+    info+=trkv('送 · 时间',o.songTime||'-');
+    info+=trkv('接送地址',o.house);
+  }else if(o.tutor){
+    info+=trkv('看护时段',(o.care&&o.care.length)
+      ?'<div style="text-align:right"><div style="color:var(--label);font-weight:500">'+o.period+'</div><div style="margin-top:3px">'+o.care.join(' · ')+'</div></div>'
+      :'-');
+  }else{
+    info+=trkv('服务类型','普通托管（不含接送 / 看护）');
+  }
 
   var btns='';
   if(st==='pending'){
