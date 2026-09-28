@@ -866,7 +866,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.252';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.253';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -1725,7 +1725,13 @@ S.escortList={title:'陪诊服务',render:function(){
   });
   return '<div class="grp">'+h+'</div>';
 }};
-function openEscort(i){pickState.escortType=i;go('escortDetail');}
+function hasPendingEscortOrder(){
+  return escortUnpaid;
+}
+function openEscort(i){
+  if(hasPendingEscortOrder()){toast('您当前有待支付的陪诊订单，请先完成支付后再下单');return;}
+  pickState.escortType=i;go('escortDetail');
+}
 function escortPriceHtml(e){
   var c='';
   if(e.ph!==undefined&&e.ph!==''){
@@ -1805,9 +1811,24 @@ S.escortBook={title:'服务预约',render:function(){
   +'<div class="grp"><div class="field" style="flex-direction:column;align-items:stretch;gap:8px"><span class="lb" style="flex:0 0 auto">备注</span>'
   +'<textarea id="escortNote" maxlength="500" placeholder="如有特殊需求请在此说明" oninput="onEscortNote(this)" style="width:100%;min-height:84px;border:0;outline:0;resize:none;font:14px/1.5 inherit;color:var(--text);background:transparent">'+(pickState.escortNote||'')+'</textarea>'
   +'<div class="sub" style="text-align:right"><span id="escortNoteCnt">'+((pickState.escortNote||'').length)+'</span>/500</div></div></div>'
-  + grp([{t:'订单金额合计',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
-  + btn('下一步','go(\'payment\')');
+  + grp([{t:'预估金额（合计）',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
+  + hint('当前订单金额为预估金额，附加费为陪诊人员垫付的挂号费、打车费等，以实际陪诊服务中发生金额为准，若有对应金额陪诊人员在订单完成时会提交缴费凭证')
+  + btn('提交订单','escortSubmit()');
 }};
+function escortSubmit(){
+  if(hasPendingEscortOrder()){toast('您当前有待支付的陪诊订单，请先完成支付后再下单');render();return;}
+  var ei=(pickState.escortType===undefined?0:pickState.escortType);
+  var e=ESCORT[ei];
+  var dur=(pickState.escortDur===undefined?0:pickState.escortDur);
+  var amount=(dur===0?e.ph:e.pd);
+  var durText=(dur===0?'半天':'一天');
+  var ymd=new Date().toISOString().slice(0,10).replace(/-/g,'');
+  var newId='PZ'+ymd+'-'+String(Math.floor(Math.random()*900)+100);
+  ORDERS.unshift({id:newId,type:3,t1:e.n+' · '+durText, qty:1, price:amount, oPrice:amount, date:'—', sub:new Date().toISOString().slice(0,16).replace('T',' '), st:'pending', pay:'待支付', tags:['预估金额·待陪诊完成后支付']});
+  escortUnpaid=true;
+  toast('订单已提交，预估金额 ¥'+amount+'.00，待陪诊完成后一次性支付');
+  go('ordersEscort');
+}
 function pickEscortDate(i){pickState.escortDate=i;render();}
 function pickEscortDur(i){pickState.escortDur=i;render();}
 function toggleEscortPick(){pickState.escortPick=!pickState.escortPick;render();}
@@ -2760,6 +2781,7 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
 }};
 /* 陪诊单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
 var escortDemoStatus='pending';
+var escortUnpaid=false;   /* 是否有待支付的陪诊订单（用于拦截重复下单） */
 var curEscortOrder='PZ20250903-002';
 function openEscortDetail(no){curEscortOrder=no;go('orderEscortDetail');}
 
@@ -3581,6 +3603,9 @@ function openEscortPay(){
   var amount=(dur===0?_ek.ph:_ek.pd);
   payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+(dur===0?'半天':'一天'),no:'PZ20250905-001',count:'1 单'};
   payMethod='alipay';
+  /* 支付完成后清除待支付拦截，并将待支付陪诊单标记为已支付 */
+  escortUnpaid=false;
+  ORDERS.forEach(function(o){if(o.type===3 && o.st==='pending'){o.st='active';o.pay='进行中';}});
   go('payment');
 }
 S.payment={title:'收银台',render:function(){
