@@ -866,9 +866,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.243';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.244';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
-var APP_BUILT='2026-09-20';
+var APP_BUILT='2026-09-28';
 
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
@@ -1486,13 +1486,13 @@ S.communitySwitch={title:'我的小区',render:function(){
 S.healthHome={title:'健康小屋',render:function(){
   var on=(pickState.bandOn===undefined?true:pickState.bandOn);
   return '<div class="pad">'
-  +'<div class="card" style="background:linear-gradient(135deg,#E4FBF4,#C8F2E5);display:flex;align-items:center;justify-content:space-between;gap:12px">'
-  +'<div class="row" style="gap:11px"><div style="width:42px;height:42px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--brand)">'+ic('watch',23)+'</div>'
+  +'<div class="card" style="background:linear-gradient(135deg,#E4FBF4,#C8F2E5);display:flex;align-items:center;justify-content:space-between;gap:8px">'
+  +'<div class="row" style="gap:9px;min-width:0"><div style="width:42px;height:42px;flex:none;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--brand)">'+ic('watch',23)+'</div>'
   +(on
-    ?'<div><div class="bold" style="font-size:15px">Huawei Band 7</div><div class="sub" style="margin-top:3px">最后同步：09-08 14:20</div></div></div>'
-      +'<div class="row" style="gap:8px">'
-      +'<button class="btn sec" style="width:auto;padding:9px 12px;font-size:13px;margin:0" onclick="pickState.bandOn=false;toast(\'已取消连接，历史数据仍保留\');render()">取消连接</button>'
-      +'<button class="btn" style="width:auto;padding:9px 12px;font-size:13px;margin:0" onclick="toast(\'更换设备后新数据覆盖后续记录\')">更换设备</button></div>'
+    ?'<div style="min-width:0"><div class="bold" style="font-size:14.5px;white-space:nowrap">Huawei Band 7</div><div class="sub" style="margin-top:3px;white-space:nowrap">最后同步：09-08 14:20</div></div></div>'
+      +'<div class="row" style="gap:6px;flex:none">'
+      +'<button class="btn sec" style="width:auto;padding:9px 10px;font-size:12px;margin:0" onclick="pickState.bandOn=false;toast(\'已取消连接，历史数据仍保留\');render()">取消连接</button>'
+      +'<button class="btn" style="width:auto;padding:9px 10px;font-size:12px;margin:0" onclick="toast(\'更换设备后新数据覆盖后续记录\')">更换设备</button></div>'
     :'<div><div class="bold" style="font-size:15px">您还未连接健康手环，点击去连接</div><div class="sub" style="margin-top:3px">将通过注册手机号自动匹配并同步数据</div></div></div>'
       +'<button class="btn" style="width:auto;padding:9px 16px;font-size:14px;margin:0" onclick="go(\'bandConnect\')">去连接</button>')
   +'</div></div>'
@@ -1504,6 +1504,13 @@ S.healthHome={title:'健康小屋',render:function(){
   + tile('risk','健康风险评估','每周自动更新评估结果','bg-o','healthRisk')
   +'</div>'
   +'<div class="pad"><button class="btn acc" onclick="location.href=\'tel:120\';toast(\'正在呼叫 120 急救中心\')">'+ic('phone',19)+' 紧急呼叫</button></div>'
+  +'<div class="sect"><div class="t">生活服务帮手</div><div class="m" onclick="go(\'helperList\')">全部服务'+ic('chevR',14)+'</div></div>'
+  + grp([
+    {ic:'heart',icls:'bg-r',t:'上门关爱探访',s:'管家上门探望老人，关注生活起居与健康状态',v:'<span class="price">¥0</span>',ar:1,on:"toast('已提交「上门关爱探访」预约，管家将与您电话确认上门时间')"},
+    {ic:'family',icls:'bg-o',t:'老幼家庭巡访',s:'上门看一眼家中老人与孩子情况，异常及时反馈家属',v:'<span class="price">¥0</span>',ar:1,on:"toast('已提交「老幼家庭巡访」预约，管家将与您电话确认上门时间')"},
+    {ic:'sHealth',icls:'bg-g',t:'健康上门随访',s:'为行动不便老人上门测量心率血压，数据同步健康小屋',v:'<span class="price">¥0</span>',ar:1,on:"toast('已提交「健康上门随访」预约，管家将与您电话确认上门时间')"},
+    {ic:'phone',icls:'bg-b',t:'独居电话问安',s:'每日定时电话问候独居老人，了解需求并跟进反馈',v:'<span class="price">¥0</span>',ar:1,on:"toast('已提交「独居电话问安」预约，管家将与您确认回访安排')"}
+  ])
 }};
 function tile(i,t,s,cls,on){return '<div class="tile" onclick="go(\''+on+'\')"><div class="th '+cls+'">'+ic(i,19)+'</div>'
   +'<div class="tt">'+t+'</div><div class="ts">'+s+'</div></div>';}
