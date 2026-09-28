@@ -878,7 +878,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.267';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.268';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -1920,11 +1920,20 @@ S.trustDetail={title:'托管详情',render:function(){
   +'<div class="card"><div class="pick">'+dh+'</div></div>'
   + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
   + hint('预估金额为最高金额，实际费用以服务结束后的结算金额为准（含可选的接/送、看护等附加项）')
-  +'<div class="ord-section"><div class="st">超时说明</div><div class="log" style="padding:12px 14px;line-height:1.9">如实际看护时长超出所选看护时段，超时部分按 <b style="color:var(--accent)">¥10/小时</b> 计费（不足 1 小时按 1 小时计），以实际发生时长为准。</div></div>'
+  +(nt?'<div class="ord-section"><div class="st">超时说明</div><div class="log" style="padding:12px 14px;line-height:1.9">如实际看护时长超出所选看护时段，超时部分按 <b style="color:var(--accent)">¥10/小时</b> 计费（不足 1 小时按 1 小时计），以实际发生时长为准。</div></div>':'')
   +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','submitTrust('+amount+')')+'</div>';
 }};
-function toggleTrustJie(){pickState.trustJie=!pickState.trustJie;render();}
-function toggleTrustSong(){pickState.trustSong=!pickState.trustSong;render();}
+/* 接/送/看护 三选一：开启一项时自动关闭并清空其它两项 */
+function toggleTrustJie(){
+  var on=!(pickState.trustJie===undefined?true:pickState.trustJie);
+  if(on){pickState.trustSong=false;pickState.trustTutor=false;pickState.trustCare={};}
+  pickState.trustJie=on;render();
+}
+function toggleTrustSong(){
+  var on=!(pickState.trustSong===undefined?false:pickState.trustSong);
+  if(on){pickState.trustJie=false;pickState.trustTutor=false;pickState.trustCare={};}
+  pickState.trustSong=on;render();
+}
 function toggleTrustMeal(){pickState.trustMeal=!pickState.trustMeal;render();}
 function toggleTrustCare(i){var c=pickState.trustCare||{};c[i]=!c[i];pickState.trustCare=c;render();}
 function pickTrustDate(i){pickState.trustDate=i;render();}
@@ -1943,7 +1952,12 @@ function submitTrust(amount){
   openPayConfirm(amount,function(){toast('托管订单已提交，等待物业后台派发托管老师');buildTrustSnapshot(amount);trustDemoStatus='active';go('orderTrustDetail');});
 }
 function openTrust(i){pickState.trustType=i;go('trustDetail');}
-function toggleTrustTutor(){pickState.trustTutor=!pickState.trustTutor;if(!pickState.trustTutor)pickState.trustCare={};render();}
+function toggleTrustTutor(){
+  var on=!(pickState.trustTutor===undefined?false:pickState.trustTutor);
+  if(on){pickState.trustJie=false;pickState.trustSong=false;}
+  if(!on)pickState.trustCare={};
+  pickState.trustTutor=on;render();
+}
 /* 托管单提交快照：保存提交时所选字段，供托管单详情按实际选择动态展示 */
 var lastTrustOrder=null;
 function buildTrustSnapshot(amount){
