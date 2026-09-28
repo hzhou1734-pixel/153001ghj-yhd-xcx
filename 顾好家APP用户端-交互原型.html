@@ -878,7 +878,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.282';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.283';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -2665,6 +2665,7 @@ function orderCard(o){
   }else if(o.st==='refund'){
     actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'查看详情\')">退款详情</div>';
   }
+  var isEs=(o.type===3); /* 陪诊单无份数概念，隐藏数量 */
   var html='<div class="ord-card" onclick="openOrder(\''+o.id+'\')">'
     +'<div class="hd">'
         +'<div class="l">'
@@ -2674,13 +2675,13 @@ function orderCard(o){
         +'<div class="st s-'+scls+'">'+stext+'</div>'
     +'</div>'
     +'<div class="bd">'
-        +'<div class="ti">'+o.t1+(o.qty>1?'<span class="qty">× '+o.qty+'</span>':'')+'</div>'
+        +'<div class="ti">'+o.t1+((o.qty>1&&!isEs)?'<span class="qty">× '+o.qty+'</span>':'')+'</div>'
         +'<div class="meta">'
           +'<div class="m">'+ic('clock',11)+' 配送 / 使用：'+o.date+'</div>'
           +'<div class="m">'+ic('pin',11)+' 提交：'+o.sub+'</div>'
         +'</div>'
         +'<div class="sum">'
-          +'<div class="l">共 <b>'+o.qty+'</b> 份订单</div>'
+          +'<div class="l">'+(isEs?'':'共 <b>'+o.qty+'</b> 份订单')+'</div>'
           +'<div>'+(o.price<o.oPrice?'<span class="p">¥'+o.oPrice.toFixed(2)+'</span>':'')
             +'<span class="pn '+pnCls+'">¥'+o.price.toFixed(2)+'</span></div>'
         +'</div>'
