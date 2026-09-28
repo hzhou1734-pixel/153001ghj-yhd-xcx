@@ -874,7 +874,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.255';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.256';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -2808,6 +2808,8 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
     {t:'检查费',amt:17,img:'检查项目缴费凭证'}
   ];
   var feeTotal=addFees.reduce(function(a,b){return a+b.amt;},0);
+  var baseFee=240; /* 基础服务费（预估金额） */
+  var payAmt=baseFee+(showFees?feeTotal:0); /* 支付金额 = 基础费 + 附加费总和 */
 
   var btns='';
   if(st==='pending'){
@@ -2815,7 +2817,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
        +'<button class="btn" style="flex:1" onclick="openEscortPay()">订单支付</button></div>';
   }else if(st==='active'){
     btns='<div class="pad"><button class="btn" onclick="toast(&apos;正在呼叫 管家…&apos;)">'+ic('phone',18)+' 联系管家</button></div>'
-      +'<div class="pad" style="padding-top:0"><button class="btn warn" onclick="toast(&apos;打开收银台&apos;);go(&apos;payment&apos;)">支付附加账单 ¥60.00</button></div>'
+      +'<div class="pad" style="padding-top:0"><button class="btn warn" onclick="toast(&apos;打开收银台&apos;);go(&apos;payment&apos;)">支付附加账单 ¥'+feeTotal+'.00</button></div>'
       +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="go(&apos;refund&apos;)">申请退款</button></div>';
   }else if(st==='done'){
     btns='<div class="pad"><button class="btn acc" onclick="openAddReview(3)">'+ic('star',18)+' 服务评价</button></div>';
@@ -2851,7 +2853,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
     : '<div class="fee-empty">暂无需支付的附加费用，待陪诊服务完成后由陪诊员上传缴费凭证</div>')
   +'</div>'
   +'<div class="ord-section"><div class="st">支付信息</div>'
-  +'<div class="kv"><span class="k">支付金额</span><span class="v pr">¥240.00</span></div>'
+  +'<div class="kv"><span class="k">支付金额</span><span class="v pr">¥'+payAmt+'.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
   +'<div class="kv"><span class="k">支付方式</span><span class="v">'+(paid?'支付宝':'/')+'</span></div>'
   +'<div class="kv"><span class="k">附加费用</span><span class="v '+(st==='active'?'pr':'')+'">'+(st==='active'?'¥'+feeTotal+'.00（陪诊员已上传 '+addFees.length+' 笔 · 待支付）':'¥0.00')+'</span></div>'
