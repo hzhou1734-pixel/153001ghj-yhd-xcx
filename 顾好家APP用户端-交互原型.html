@@ -878,7 +878,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.279';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.280';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -3054,8 +3054,13 @@ var addReviewType=1;          /* 1报餐 2托管 3陪诊 */
 var reviewScore=5;            /* 当前评分（默认 5 星） */
 var reviewTagsSel={};         /* 选中标签索引集合 */
 var REVIEW_TAGS=['专业耐心','准时可靠','服务周到','态度亲切','细心体贴','性价比高'];
-function openAddReview(type){addReviewType=type;reviewScore=5;reviewTagsSel={};go('addReview');}
+var reviewText='';             /* 文字评价内容 */
+var reviewPhotos=[];           /* 评价上传图片（原型占位） */
+function openAddReview(type){addReviewType=type;reviewScore=5;reviewTagsSel={};reviewText='';reviewPhotos=[];go('addReview');}
 function pickReviewScore(n){reviewScore=n;render();}
+function addReviewPhoto(){if(reviewPhotos.length>=6){toast('最多上传 6 张图片');return;}reviewPhotos.push(reviewPhotos.length+1);render();}
+function removeReviewPhoto(i){reviewPhotos.splice(i,1);render();}
+function setReviewText(v){reviewText=v;}
 function toggleReviewTag(i){reviewTagsSel[i]=!reviewTagsSel[i];render();}
 function submitReview(){toast('评价提交成功，感谢您的反馈');back();}
 S.addReview={title:'添加评价',render:function(){
@@ -3067,16 +3072,38 @@ S.addReview={title:'添加评价',render:function(){
   var tagHtml='<div class="rv-tags">';
   REVIEW_TAGS.forEach(function(tg,i){tagHtml+='<div class="rv-tag'+(reviewTagsSel[i]?' on':'')+'" onclick="toggleReviewTag('+i+')">'+tg+'</div>';});
   tagHtml+='</div>';
+  /* 陪诊评价专属：陪诊人员信息 + 文字输入 + 图片上传 */
+  var escortBlock='',textBlock='',photoBlock='';
+  if(addReviewType===3){
+    escortBlock='<div style="margin:0 var(--pad) 12px;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px">'
+      +'<div style="width:44px;height:44px;border-radius:50%;flex:0 0 44px;background:linear-gradient(145deg,#5AD1B5,#17A88A);display:flex;align-items:center;justify-content:center">'+ic('user',24,'#fff')+'</div>'
+      +'<div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--ink)">张师傅</div><div style="font-size:12px;color:var(--label3);margin-top:2px">陪诊员 · 工号 E1024</div></div>'
+      +'<span class="tag g" style="font-size:12px;padding:4px 10px">已实名</span>'
+      +'</div>';
+    textBlock=grpT('文字评价（选填）')
+      +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
+      +'<textarea rows="3" placeholder="说说本次陪诊服务的感受，或对陪诊人员的建议…" oninput="setReviewText(this.value)">'+reviewText+'</textarea></div></div>';
+    var photosHtml=reviewPhotos.map(function(p,i){
+      return '<div style="position:relative;width:72px;height:72px;border-radius:12px;background:rgba(43,196,160,.08);border:1px solid var(--line);display:flex;align-items:center;justify-content:center">'+ic('img',24,'var(--brand)')
+        +'<div style="position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:10px;background:#FF5A5F;color:#fff;font-size:13px;line-height:20px;text-align:center" onclick="removeReviewPhoto('+i+')">×</div></div>';
+    }).join('');
+    var addTile=reviewPhotos.length<6?'<div style="width:72px;height:72px;border-radius:12px;border:1.5px dashed #C9D2DA;background:#fff;display:flex;align-items:center;justify-content:center" onclick="addReviewPhoto()">'+ic('add',24,'#9AA6B0')+'</div>':'';
+    photoBlock=grpT('上传图片（选填，最多 6 张）')
+      +'<div class="grp" style="padding:14px"><div style="display:flex;flex-wrap:wrap;gap:10px">'+photosHtml+addTile+'</div></div>';
+  }
   return '<div style="height:12px"></div>'
     +'<div class="rv-svc">'
       +'<div class="ic '+ordTypeCls[addReviewType]+'">'+ic(ordTypeIcons[addReviewType],20)+'</div>'
       +'<div><div class="t">'+ordTypeLabels[addReviewType-1]+'</div><div class="s">'+svcName+'</div></div>'
     +'</div>'
+    + escortBlock
     +'<div class="rv-rate">'
       +'<div class="rv-rate-t">为本次服务评分</div>'
       +stars
       +'<div class="rv-score-txt">'+scoreTxt+'</div>'
     +'</div>'
+    + textBlock
+    + photoBlock
     + btn('提交评价','submitReview()','acc');
 }};
 S.refund={title:'退款申请',render:function(){
