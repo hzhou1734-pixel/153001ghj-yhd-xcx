@@ -866,7 +866,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.247';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.248';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -1524,7 +1524,6 @@ var CARE=[
     +'</ul>'
     +'<h2>服务说明</h2>'
     +'<ul>'
-      +'<li>本服务为社区公益服务，不收取任何费用</li>'
       +'<li>预约后管家将与您电话确认上门时间</li>'
     +'</ul>'},
   {n:'老幼家庭巡访',d:'上门看一眼家中老人与孩子情况，异常及时反馈家属',ic:'family',cls:'bg-o',cov:'o',
@@ -1537,7 +1536,6 @@ var CARE=[
     +'</ul>'
     +'<h2>服务说明</h2>'
     +'<ul>'
-      +'<li>本服务为社区公益服务，不收取任何费用</li>'
       +'<li>巡访频率与反馈方式可按家庭需求约定</li>'
     +'</ul>'},
   {n:'健康上门随访',d:'为行动不便老人上门测量心率血压，数据同步健康小屋',ic:'sHealth',cls:'bg-g',cov:'g',
@@ -1550,7 +1548,6 @@ var CARE=[
     +'</ul>'
     +'<h2>服务说明</h2>'
     +'<ul>'
-      +'<li>本服务为社区公益服务，不收取任何费用</li>'
       +'<li>测量结果仅供参考，不作为诊断依据</li>'
     +'</ul>'},
   {n:'独居电话问安',d:'每日定时电话问候独居老人，了解需求并跟进反馈',ic:'phone',cls:'bg-b',cov:'b',
@@ -1563,7 +1560,6 @@ var CARE=[
     +'</ul>'
     +'<h2>服务说明</h2>'
     +'<ul>'
-      +'<li>本服务为社区公益服务，不收取任何费用</li>'
       +'<li>问安时段可与家属协商确定</li>'
     +'</ul>'}
 ];
@@ -2306,7 +2302,7 @@ S.helper={title:'提交服务订单',render:function(){
   +'<div class="item noind">'+thumb(hk.cov,hk.ic,64,64)
   +'<div class="it-bd"><div class="it-t" style="font-size:17px;letter-spacing:-.3px">'+hk.n+'</div>'
   +'<div class="it-s">'+hk.d+'</div>'
-  +'<div style="margin-top:7px"><span class="price" style="font-size:18px">¥'+price+'</span></div></div></div></div>'
+  +(isCare?'':'<div style="margin-top:7px"><span class="price" style="font-size:18px">¥'+price+'</span></div>')+'</div></div></div>'
   + grpT('服务时间')
   + grp([{t:'上门时间',s:(pickState.helperDate&&pickState.helperSlot)?(pickState.helperDate+' '+pickState.helperSlot):'请选择上门服务时间',ar:1,on:'openTimeSheet()'}])
   + grpT('服务地址')
@@ -2314,10 +2310,8 @@ S.helper={title:'提交服务订单',render:function(){
   + grpT('备注')
   +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
   +'<textarea rows="4" placeholder="请描述服务需求与备注…"></textarea></div></div>'
-  + grp([{t:'订单金额',ctl:'<span class="price" style="font-size:20px">¥'+price+'.00</span>'}])
-  + (isCare
-      ? hint('本服务为社区公益服务，不收取任何费用')
-      : hint('仅为预估金额，具体费用与线下服务人员沟通，系统不收取费用'))
+  + (isCare?'':grp([{t:'订单金额',ctl:'<span class="price" style="font-size:20px">¥'+price+'.00</span>'}]))
+  + (isCare?'':hint('仅为预估金额，具体费用与线下服务人员沟通，系统不收取费用'))
   +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单', isCare
       ? 'toast(\'公益服务预约已提交，管家将电话与您确认上门时间\');go(\'healthHome\')'
       : 'toast(\'订单已提交，等待物业后台派单\');go(\'ordersHelper\')')+'</div>';
