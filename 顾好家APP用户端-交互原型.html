@@ -791,6 +791,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .ord-section .kv .v.b{font-weight:600;color:var(--label);}
 .ord-section .kv .v.g{color:var(--brand-d);font-weight:600;}
 .ord-section .kv .v.o{color:#F2642A;font-weight:600;}
+.ord-section .photo-row{display:flex;gap:10px;padding:14px;flex-wrap:wrap;}
+.ord-section .photo-thumb{width:74px;height:74px;border-radius:12px;overflow:hidden;cursor:pointer;background:var(--fill);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.ord-section .photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
 .ord-section .kv .v.gy{color:var(--label3);}
 .ord-section .log{padding:12px 14px;font-size:13.5px;color:var(--label2);line-height:1.9;}
 .ord-section .fee-item{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 14px;border-bottom:.5px solid var(--sep);}
@@ -878,7 +881,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.285';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.286';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-28';
 
@@ -1028,7 +1031,7 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
   sc.innerHTML=h;
   /* 底部下拉弹窗渲染到独立层：不进路由栈、不随内容滚动、不跳转页面 */
   var pk=document.getElementById('picker');
-  pk.innerHTML=pickerSheet()+schoolSheet()+houseSheet()+payDialogHTML()+timeSheet();
+  pk.innerHTML=pickerSheet()+schoolSheet()+houseSheet()+payDialogHTML()+timeSheet()+imgPreviewHTML();
   var tb=document.getElementById('tabbar');
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
@@ -2139,10 +2142,40 @@ function payDialogHTML(){
       +'</div>'
       +'<div style="padding:18px 20px 0">'
       +'<button class="btn" style="width:100%" onclick="goRecharge()">去充值</button>'
-      +'<div style="text-align:center;padding:13px 0 2px;font-size:15px;color:var(--label2);cursor:pointer" onclick="payInsufficient=null;render()">取消</div>'
-      +'</div></div></div>';
+    +'<div style="text-align:center;padding:13px 0 2px;font-size:15px;color:var(--label2);cursor:pointer" onclick="payInsufficient=null;render()">取消</div>'
+    +'</div></div></div>';
   }
   return h;
+}
+/* 报餐送达图片：已完成订单展示，点击缩略图可全屏预览 */
+function svgPhoto(bg1,bg2,c1,c2,c3,label){
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600">'
+    +'<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+bg1+'"/><stop offset="1" stop-color="'+bg2+'"/></linearGradient></defs>'
+    +'<rect width="600" height="600" fill="url(#bg)"/>'
+    +'<circle cx="300" cy="270" r="170" fill="#ffffff" opacity="0.96"/>'
+    +'<ellipse cx="300" cy="290" rx="120" ry="66" fill="#eef3ee"/>'
+    +'<circle cx="255" cy="270" r="34" fill="'+c1+'"/>'
+    +'<circle cx="345" cy="282" r="40" fill="'+c2+'"/>'
+    +'<circle cx="300" cy="320" r="30" fill="'+c3+'"/>'
+    +'<rect x="0" y="520" width="600" height="80" fill="rgba(0,0,0,0.32)"/>'
+    +'<text x="30" y="568" fill="#ffffff" font-size="30" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-weight="600">'+label+'</text>'
+    +'</svg>';
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
+var DELIVER_PHOTOS=[
+  svgPhoto('#34D2A8','#0F8E75','#F2A65A','#5BBF8A','#E76F51','送达实拍 · 午餐 A套餐'),
+  svgPhoto('#5BBF8A','#17A88A','#E9C46A','#F4A261','#2A9D8F','送达实拍 · 09-05 12:00')
+];
+var imgPreview=null;
+function openImgPreview(src){imgPreview=src;render();}
+function closeImgPreview(){imgPreview=null;render();}
+function imgPreviewHTML(){
+  if(!imgPreview)return '';
+  return '<div class="dialog-mask" onclick="closeImgPreview()" style="background:rgba(0,0,0,.92)">'
+    +'<img src="'+imgPreview+'" onclick="event.stopPropagation()" style="max-width:92%;max-height:80%;border-radius:16px;box-shadow:0 12px 44px rgba(0,0,0,.5)"/>'
+    +'<div onclick="closeImgPreview()" style="position:absolute;top:18px;right:18px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer">'+ic('x',20,'#fff')+'</div>'
+    +'<div style="position:absolute;bottom:30px;left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-size:13px">点击空白处关闭</div>'
+    +'</div>';
 }
 
 /* ================= 健康膳食 ================= */
@@ -2814,6 +2847,9 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
+  + (st==='done'?'<div class="ord-section"><div class="st">送达图片</div><div class="photo-row">'
+      + DELIVER_PHOTOS.map(function(p,i){return '<div class="photo-thumb" onclick="openImgPreview(DELIVER_PHOTOS['+i+'])"><img src="'+p+'"/></div>';}).join('')
+      + '</div></div>':'')
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">'+ordLog([['提交',(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')],['结算','—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—'],['完成',(st==='done'&&curOrder&&curOrder.doneTime)?curOrder.doneTime:'—']])+'</div></div>'
   + (st==='active'?'<div style="padding:0 var(--pad) 6px">'+hint('取消订单说明：报餐需在 <b>当日 20:00 前</b> 取消，逾期将无法取消；已支付金额将原路退回至您的顾好家币账户。'):'')
