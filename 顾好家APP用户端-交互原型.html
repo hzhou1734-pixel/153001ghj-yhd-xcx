@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.321';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.322';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -980,12 +980,14 @@ var userNickname='顾家小林';
 function needCert(id){go(id);}
 /* 当前小区：name=小区名 detail=小区+楼栋副标题 */
 var CUR_COMMUNITY={name:'阳光花园',detail:'3栋2单元'};
-/* 切换小区：toast 提示 + 更新当前小区 + 返回首页 */
+/* 切换小区：toast 提示 + 更新当前小区；从人力资源页进入时切换后返回原页，否则回首页 */
+var communitySwitchBack=false;
 function pickCommunity(name,detail){
   CUR_COMMUNITY.name=name;
   CUR_COMMUNITY.detail=detail;
   toast('已切换至 '+name);
-  go('home');
+  if(communitySwitchBack){communitySwitchBack=false;back();}
+  else go('home');
 }
 /* 验证码 60 秒倒计时：局部更新按钮文本，不触发整页重绘 */
 function sendCode(b){
@@ -3956,6 +3958,10 @@ S.hr={title:'人力资源',render:function(){
       +'<div style="margin-top:4px">'+hrStTag(o.st)+'</div></div></div>';
   });
   return '<div class="grp">'
+    +'<div class="item noind" onclick="communitySwitchBack=true;go(\'communitySwitch\')">'+thumb('','home2',34,34,'')
+    +'<div class="it-bd"><div class="it-t" style="margin:0">当前小区：'+CUR_COMMUNITY.name+'</div><div class="it-s">切换小区后查看对应人才库订单</div></div>'
+    +'<span style="font-size:12px;color:var(--brand);font-weight:600">切换</span>'+ic('chevR',16,'var(--label4)')+'</div></div>'
+    +'<div class="grp">'
     +'<div class="item noind" onclick="go(\'hrCertView\')">'+avt(46)
     +'<div class="it-bd"><div class="row" style="gap:6px;margin-bottom:3px"><div class="it-t" style="margin:0">李建国</div><span class="tag g">已认证</span></div>'
     +'<div class="it-s">家电维修 · 管道疏通</div></div>'+ic('chevR',16,'var(--label4)')+'</div></div>'
