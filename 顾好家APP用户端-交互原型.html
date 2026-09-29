@@ -881,7 +881,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.289';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.290';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -2225,7 +2225,7 @@ S.meal={title:'健康膳食',render:function(){
   ])
   + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+total+'.00</span>'}])
   +'<div style="padding:4px var(--pad) 38px">'
-    + hint('取消订单说明：<br>早餐：前一天晚上7点之前下单，晚上7点后无法下单无法取消订单<br>午餐：当天早上10点之前下单，早上10点后无法下单无法取消订单<br>晚餐：当天中午2点之前下单，中午2点后无法下单无法取消订单<br>已支付金额将原路退回至您的顾好家币账户。')
+    + hint('<div style="text-align:left;line-height:1.9"><b>取消订单说明</b><br>· 早餐：前一天晚上7点之前下单，晚上7点后无法下单无法取消订单<br>· 午餐：当天早上10点之前下单，早上10点后无法下单无法取消订单<br>· 晚餐：当天中午2点之前下单，中午2点后无法下单无法取消订单</div>')
     +(totalQty===0
       ? btn('请选择套餐','toast(\'请至少选择 1 份套餐\')','des')
       : btn('提交报餐','mealSubmit('+total+')'))
