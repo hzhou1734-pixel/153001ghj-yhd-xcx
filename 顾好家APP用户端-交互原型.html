@@ -100,6 +100,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .cell-ar{color:var(--label4);display:flex;flex-shrink:0;}
 .cell-ar svg{width:16px;height:16px;}
 .sep{height:.5px;background:var(--sep);margin-left:55px;}
+.bill-rows > .cell:not(:last-child){border-bottom:.5px solid var(--sep);}
 .sep.full{margin-left:0;}
 .bg-g{background:var(--green);}.bg-b{background:var(--blue);}.bg-o{background:var(--orange);}
 .bg-r{background:var(--red);}.bg-p{background:var(--purple);}.bg-t{background:var(--teal);}
@@ -680,6 +681,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .sheet .sh .x svg{width:20px;height:20px;}
 .sheet .sh .t{font-size:17px;font-weight:600;letter-spacing:-.3px;}
 .sheet .sh .ok{color:var(--brand);font-size:16px;font-weight:600;cursor:pointer;}
+.sheet-bar{width:38px;height:5px;border-radius:3px;background:var(--sep);margin:8px auto 2px;}
+.sheet-title{font-size:17px;font-weight:600;text-align:center;padding:4px 16px 12px;letter-spacing:-.3px;color:var(--ink);}
 /* 网格选择器（楼栋/房号等较多选项） */
 .pkr-grid{display:grid;gap:9px;padding:0 14px 6px;}
 .pkr-grid .it{padding:12px 6px;background:var(--card);border:1px solid transparent;border-radius:10px;text-align:center;
@@ -791,6 +794,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .ord-section .kv .v.b{font-weight:600;color:var(--label);}
 .ord-section .kv .v.g{color:var(--brand-d);font-weight:600;}
 .ord-section .kv .v.o{color:#F2642A;font-weight:600;}
+.ord-section .photo-row{display:flex;gap:10px;padding:14px;flex-wrap:wrap;}
+.ord-section .photo-thumb{width:74px;height:74px;border-radius:12px;overflow:hidden;cursor:pointer;background:var(--fill);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.ord-section .photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
 .ord-section .kv .v.gy{color:var(--label3);}
 .ord-section .log{padding:12px 14px;font-size:13.5px;color:var(--label2);line-height:1.9;}
 .ord-section .fee-item{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 14px;border-bottom:.5px solid var(--sep);}
@@ -878,9 +884,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.275';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.319';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
-var APP_BUILT='2026-09-28';
+var APP_BUILT='2026-09-29';
 
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
@@ -939,6 +945,7 @@ var P={
   shield:'M12 3.4 19 6v6.2c0 4.3-3 7.2-7 8.6-4-1.4-7-4.3-7-8.6V6zM9.2 12l2.3 2.3L15.4 10.2',
   butler:'M12 3.6l2.9 2 3-1v5.3c0 3-1.8 5.4-4.3 6.5M12 3.6 9.1 5.6l-3-1v5.3c0 3 1.8 5.4 4.3 6.5',
   yen:'M12 20.6a8.6 8.6 0 1 0 0-17.2 8.6 8.6 0 0 0 0 17.2zM8.6 8.2 12 12.4l3.4-4.2M9 12.4h6M9 15.4h6M12 12.4v5',
+  moneybag:'M9.6 6.4h4.8M9.6 6.4 8.2 3.6M14.4 6.4l1.4-2.8M9.6 6.4c-3 1.9-5 4.7-5 7.8a6.3 6.3 0 0 0 6.3 6.3h2.2a6.3 6.3 0 0 0 6.3-6.3c0-3.1-2-5.9-5-7.8M10.5 11.2l1.5 1.9 1.5-1.9M10.9 13.1h2.2M10.9 15h2.2M12 13.1v3.4',
   hr:'M3.6 8.6h16.8v10.2H3.6zM9 8.6V6.2h6v2.4M3.6 13.2h16.8',
   post:'M6 3.5h8.2l3.8 3.8v13.2H6zM9.4 12.4h5.2M9.4 16h3.6',
   msg:'M20 13.2a7 7 0 0 1-7 7H8.6l-4.2 2v-5.6a7 7 0 0 1 7.6-7h1.4a7 7 0 0 1 6.6 3.6z',
@@ -966,6 +973,9 @@ var hist=[],cur='home',lastTab='home',S={},agreeOn={};
 /* 用户登录后默认为已认证状态 */
 var CERT='ok';
 var CERT_TXT={ok:'已认证',pending:'审核中',none:'未认证'};
+/* 个人信息：头像/昵称可点击弹窗修改 */
+var userAvatar='linear-gradient(145deg,#5AD1B5,#17A88A)';
+var userNickname='顾家小林';
 /* 认证已默认通过，需认证功能直接放行 */
 function needCert(id){go(id);}
 /* 当前小区：name=小区名 detail=小区+楼栋副标题 */
@@ -1028,7 +1038,7 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
   sc.innerHTML=h;
   /* 底部下拉弹窗渲染到独立层：不进路由栈、不随内容滚动、不跳转页面 */
   var pk=document.getElementById('picker');
-  pk.innerHTML=pickerSheet()+schoolSheet()+houseSheet()+payDialogHTML()+timeSheet();
+  pk.innerHTML=pickerSheet()+schoolSheet()+houseSheet()+payDialogHTML()+timeSheet()+imgPreviewHTML()+profileSheetHTML()+memberIdSheetHTML();
   var tb=document.getElementById('tabbar');
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
@@ -1217,7 +1227,7 @@ function dlg(icn,t,s,ok,okFn,no){return '<div class="dialog-mask"><div class="di
 
 /* ================= 首页 ================= */
 S.home={tab:'home',title:'首页',nav:false,render:function(){
-  return topLg('首页','',[['bell','','noticeList',noticeBadge()]])
+  return topLg('首页','',[['bell','','sysMsg',sysMsgBadge()]])
   +'<div class="row between" style="margin:0 var(--pad) 12px;cursor:pointer" onclick="go(\'communitySwitch\')">'
   +'<div class="row" style="gap:7px">'+ic('pin',17,'var(--brand)')+'<span class="bold" style="font-size:15px">'+CUR_COMMUNITY.name+' · '+CUR_COMMUNITY.detail+'</span></div>'
   +'<div class="row" style="gap:1px;color:var(--label2);font-size:13px">切换'+ic('chevR',14,'var(--label4)')+'</div></div>'
@@ -1235,7 +1245,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   + svc('sHealth','健康小屋','healthHome','g')+svc('sEscort','陪诊服务','escortList','o',1)
   + svc('sTrust','托管服务','trusteeship','b',1)+svc('sMeal','健康膳食','meal','p',1)
   + svc('sProp','物业服务','跳转物业服务管理小程序','',0,'toast')+svc('sHelper','生活帮手','helperList','y',1)
-  + svc('cal','社区活动','communityList','r')+svc('doc','精彩内容','featuredList','c')
+  + svc('cal','社区活动','communityList','r')+svc('moneybag','小区钱袋子','moneyBag','c')
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+actItems(ACTIVITIES.filter(function(a){return a.st==='报名中';}))+'</div>'
@@ -1800,10 +1810,10 @@ var BK_DATES=['09-05','09-06','09-07','09-08','09-09','09-10','09-11'],BK_WEEKS=
 S.escortBook={title:'服务预约',render:function(){
   var ds=BK_DATES,ws=BK_WEEKS;
   var di=(pickState.escortDate===undefined?0:pickState.escortDate);
-  var dur=(pickState.escortDur===undefined?0:pickState.escortDur);   /* 0=半天 1=一天 */
+  var dur=(pickState.escortDur===undefined?0:pickState.escortDur);   /* 0=半天 1=整天 */
   var ei=(pickState.escortType===undefined?0:pickState.escortType);
   var ek=ESCORT[ei];
-  var DL=[['半天','¥'+ek.ph],['一天','¥'+ek.pd]];
+  var DL=[['半天','¥'+ek.ph],['整天','¥'+ek.pd]];
   var needPick=(pickState.escortPick===undefined?true:pickState.escortPick);
   var h='';
   ds.forEach(function(d,i){h+='<div class="d'+(i===di?' on':'')+'" onclick="pickEscortDate('+i+')"><div class="w">'+ws[i]+'</div><div class="n">'+d.slice(3)+'</div></div>';});
@@ -1835,7 +1845,7 @@ function escortSubmit(){
   var e=ESCORT[ei];
   var dur=(pickState.escortDur===undefined?0:pickState.escortDur);
   var amount=(dur===0?e.ph:e.pd);
-  var durText=(dur===0?'半天':'一天');
+  var durText=(dur===0?'半天':'整天');
   var ymd=new Date().toISOString().slice(0,10).replace(/-/g,'');
   var newId='PZ'+ymd+'-'+String(Math.floor(Math.random()*900)+100);
   ORDERS.unshift({id:newId,type:3,t1:e.n+' · '+durText, qty:1, price:amount, oPrice:amount, date:'—', sub:new Date().toISOString().slice(0,16).replace('T',' '), st:'pending', pay:'待支付', tags:['预估金额·待陪诊完成后支付']});
@@ -1919,7 +1929,7 @@ S.trustDetail={title:'托管详情',render:function(){
   + grpT('服务日期（仅可选择未来 7 天内）')
   +'<div class="card"><div class="pick">'+dh+'</div></div>'
   + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+amount+'.00</span>'}])
-  + hint('预估金额为单次最高金额，实际费用以服务结束后的结算金额为准（含可选的接/送、看护等附加项）')
+  + hint('预估金额为单次最高金额，实际费用以服务结束后的结算金额为准')
   +(nt?'<div class="ord-section"><div class="st">超时说明</div><div class="log" style="padding:12px 14px;line-height:2">如实际看护时长超出所选看护时段：<br>· 选择 <b style="color:var(--accent)">上午场</b>，超时 1 小时后额外计费（含下午场）；<br>· 选择 <b style="color:var(--accent)">下午场</b>，超时 1 小时后额外计费（含晚上场）；<br>· 选择 <b style="color:var(--accent)">晚上场</b>，超时每小时 <b style="color:var(--accent)">¥100</b>。</div></div>':'')
   +'<div style="padding:4px var(--pad) 38px">'+btn('提交订单','submitTrust('+amount+')')+'</div>';
 }};
@@ -2139,10 +2149,84 @@ function payDialogHTML(){
       +'</div>'
       +'<div style="padding:18px 20px 0">'
       +'<button class="btn" style="width:100%" onclick="goRecharge()">去充值</button>'
-      +'<div style="text-align:center;padding:13px 0 2px;font-size:15px;color:var(--label2);cursor:pointer" onclick="payInsufficient=null;render()">取消</div>'
-      +'</div></div></div>';
+    +'<div style="text-align:center;padding:13px 0 2px;font-size:15px;color:var(--label2);cursor:pointer" onclick="payInsufficient=null;render()">取消</div>'
+    +'</div></div></div>';
   }
   return h;
+}
+/* 报餐送达图片：已完成订单展示，点击缩略图可全屏预览 */
+function svgPhoto(bg1,bg2,c1,c2,c3,label){
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600">'
+    +'<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+bg1+'"/><stop offset="1" stop-color="'+bg2+'"/></linearGradient></defs>'
+    +'<rect width="600" height="600" fill="url(#bg)"/>'
+    +'<circle cx="300" cy="270" r="170" fill="#ffffff" opacity="0.96"/>'
+    +'<ellipse cx="300" cy="290" rx="120" ry="66" fill="#eef3ee"/>'
+    +'<circle cx="255" cy="270" r="34" fill="'+c1+'"/>'
+    +'<circle cx="345" cy="282" r="40" fill="'+c2+'"/>'
+    +'<circle cx="300" cy="320" r="30" fill="'+c3+'"/>'
+    +'<rect x="0" y="520" width="600" height="80" fill="rgba(0,0,0,0.32)"/>'
+    +'<text x="30" y="568" fill="#ffffff" font-size="30" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-weight="600">'+label+'</text>'
+    +'</svg>';
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
+var DELIVER_PHOTOS=[
+  svgPhoto('#34D2A8','#0F8E75','#F2A65A','#5BBF8A','#E76F51','送达实拍 · 午餐 A套餐'),
+  svgPhoto('#5BBF8A','#17A88A','#E9C46A','#F4A261','#2A9D8F','送达实拍 · 09-05 12:00')
+];
+var imgPreview=null;
+function openImgPreview(src){imgPreview=src;render();}
+function closeImgPreview(){imgPreview=null;render();}
+function imgPreviewHTML(){
+  if(!imgPreview)return '';
+  return '<div class="dialog-mask" onclick="closeImgPreview()" style="background:rgba(0,0,0,.92)">'
+    +'<img src="'+imgPreview+'" onclick="event.stopPropagation()" style="max-width:92%;max-height:80%;border-radius:16px;box-shadow:0 12px 44px rgba(0,0,0,.5)"/>'
+    +'<div onclick="closeImgPreview()" style="position:absolute;top:18px;right:18px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer">'+ic('x',20,'#fff')+'</div>'
+    +'<div style="position:absolute;bottom:30px;left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-size:13px">点击空白处关闭</div>'
+    +'</div>';
+}
+
+/* ================= 个人信息：更换头像 / 昵称弹窗 ================= */
+var profileSheet=null; /* 'avatar' | 'nickname' | null */
+var AVATAR_OPTS=[
+  'linear-gradient(145deg,#5AD1B5,#17A88A)',
+  'linear-gradient(145deg,#6DB8F2,#3A7BD5)',
+  'linear-gradient(145deg,#FBD07A,#F2994A)',
+  'linear-gradient(145deg,#B693F6,#7C5CFC)',
+  'linear-gradient(145deg,#F6A6C1,#E85D9C)',
+  'linear-gradient(145deg,#7FE0D4,#2BB7A8)'
+];
+function openProfileSheet(type){profileSheet=type;render();}
+function closeProfileSheet(){profileSheet=null;render();}
+function setUserAvatar(bg){userAvatar=bg;profileSheet=null;render();toast('头像已更新');}
+function saveNickname(){var v=document.getElementById('nickInput');if(!v)return;var t=v.value.trim();if(!t){toast('请输入昵称');return;}userNickname=t;profileSheet=null;render();toast('昵称已更新');}
+function profileSheetHTML(){
+  if(!profileSheet)return '';
+  var body='';
+  if(profileSheet==='avatar'){
+    body='<div style="padding:4px 0 10px">'
+      +'<div onclick="toast(\'打开相机拍摄\')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer">'
+        +'<div style="width:40px;height:40px;border-radius:12px;background:rgba(43,196,160,.1);display:flex;align-items:center;justify-content:center;flex:0 0 40px">'+ic('camera',22,'var(--brand)',2)+'</div>'
+        +'<div style="flex:1;font-size:16px;color:var(--ink)">打开相机拍摄</div>'
+        +'<div style="color:#B5BCC4">'+ic('chevR',16)+'</div>'
+      +'</div>'
+      +'<div style="height:1px;background:var(--line);margin:0 18px"></div>'
+      +'<div onclick="toast(\'打开相册选择\')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer">'
+        +'<div style="width:40px;height:40px;border-radius:12px;background:rgba(43,196,160,.1);display:flex;align-items:center;justify-content:center;flex:0 0 40px">'+ic('img',22,'var(--brand)',2)+'</div>'
+        +'<div style="flex:1;font-size:16px;color:var(--ink)">打开相册选择</div>'
+        +'<div style="color:#B5BCC4">'+ic('chevR',16)+'</div>'
+      +'</div>'
+    +'</div>';
+  }else{
+    body='<div style="padding:16px 16px 4px"><input id="nickInput" value="'+userNickname.replace(/"/g,'&quot;')+'" maxlength="12" placeholder="请输入昵称" style="width:100%;height:46px;border:1px solid var(--line);border-radius:12px;padding:0 14px;font-size:15px;color:var(--ink);background:#F6F8FA;box-sizing:border-box;caret-color:var(--brand)"></div>'
+      +'<div style="padding:14px 16px 18px"><button class="btn" onclick="saveNickname()">保存</button></div>';
+  }
+  var title=profileSheet==='avatar'?'更换头像':'修改昵称';
+  return '<div class="mask" onclick="closeProfileSheet()" style="background:rgba(0,0,0,.4)">'
+    +'<div class="sheet" onclick="event.stopPropagation()">'
+      +'<div class="sheet-bar"></div>'
+      +'<div class="sheet-title">'+title+'</div>'
+      +body
+    +'</div></div>';
 }
 
 /* ================= 健康膳食 ================= */
@@ -2168,9 +2252,9 @@ S.meal={title:'健康膳食',render:function(){
   list.forEach(function(x,i){
     var q=getMealQty(mt,i);
     opts+='<div class="item noind mopt'+(q>0?' on':'')+'">'+thumb('','sMeal',54,54,'')
-      +'<div class="it-bd"><div class="it-t">'+x.t+'</div><div class="it-s">'+x.s+'</div>'
-      +'<div style="font-size:15px;font-weight:600;color:var(--brand);margin-top:5px">¥'+x.p+'<span style="font-size:12px;color:var(--label2);font-weight:400"> / 份</span></div></div>'
-      +'<div style="flex-shrink:0;display:flex;align-items:center">'+mealCounter(mt,i)+'</div></div>';
+      +'<div class="it-bd"><div class="it-t" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+x.t+'</div><div class="it-s">'+x.s+'</div>'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px"><div style="font-size:15px;font-weight:600;color:var(--brand)">¥'+x.p+'<span style="font-size:12px;color:var(--label2);font-weight:400"> / 份</span></div>'
+      +'<div style="display:flex;align-items:center">'+mealCounter(mt,i)+'</div></div></div></div>';
   });
   /* 金额：套餐小计 + 配送费（按需） */
   var subtotal=0,totalQty=0;
@@ -2180,8 +2264,7 @@ S.meal={title:'健康膳食',render:function(){
   var total=subtotal+deliveryAmt;
   return tenantBlockNote('报餐')+'<div class="sect"><div class="t">今日菜单</div><div class="m">9月5日 周六 · '+MT[mt][0]+'</div></div>'
   +'<div class="card"><div class="pick">'+mh+'</div></div>'
-  +hint('每餐独立下单，不支持跨早餐 / 午餐 / 晚餐合并报餐')
-  + grpT('可选套餐（点击 + 选择份数）')
+  + grpT('可选套餐')
   +'<div class="grp">'+opts+'</div>'
   + grp([
     {ic:'pin',icls:'bg-br',t:'是否需要配送',s:'配送至已认证房号',ctl:sw(needDelivery,'toggleMealDelivery()')},
@@ -2193,6 +2276,7 @@ S.meal={title:'健康膳食',render:function(){
   ])
   + grp([{t:'预估金额',ctl:'<span class="price" style="font-size:20px">¥'+total+'.00</span>'}])
   +'<div style="padding:4px var(--pad) 38px">'
+    + hint('<div style="text-align:left;line-height:1.9"><b>取消订单说明</b><br>· 早餐：前一天晚上7点之前下单，晚上7点后无法下单无法取消订单<br>· 午餐：当天早上10点之前下单，早上10点后无法下单无法取消订单<br>· 晚餐：当天中午2点之前下单，中午2点后无法下单无法取消订单</div>')
     +(totalQty===0
       ? btn('请选择套餐','toast(\'请至少选择 1 份套餐\')','des')
       : btn('提交报餐','mealSubmit('+total+')'))
@@ -2219,6 +2303,12 @@ function mealCounter(mt,i){
 function mealSubmit(total){
   if(currentRole==='tenant' && !tenantAuth.meal){toast('该租户账号未获得报餐授权，无法提交报餐订单');return;}
   openPayConfirm(total,function(){mealDemoStatus='active';toast('报餐成功');go('orderMealDetail');});
+}
+/* 报餐取消 / 下单截止说明：按早 / 午 / 晚 区分 */
+function mealCancelRule(idx){
+  if(idx===0)return '早餐：前一天晚上 7 点之前下单，晚上 7 点后无法下单、无法取消订单';
+  if(idx===2)return '晚餐：当天中午 2 点之前下单，中午 2 点后无法下单、无法取消订单';
+  return '午餐：当天早上 10 点之前下单，早上 10 点后无法下单、无法取消订单';
 }
 
 S.mealDetail={title:'膳食详情',render:function(){
@@ -2268,7 +2358,7 @@ S.mealDetail={title:'膳食详情',render:function(){
   +'<div class="sub">由营养师 + 三星主厨联合研发 · 每日新鲜配送</div>'
   +'<div class="row" style="gap:5px;margin-top:12px;align-items:baseline"><span class="price" style="font-size:26px">¥18</span><span class="sub">/ 份</span></div></div>'
   +'<div class="svc-stats">'+svcStats('4.8','1.2k+','98%')+'</div>'
-  +'<div class="pad">'+hint('点击「立即报餐」开始下单 · 截止时间为当日 20:00')+'</div>'
+  +'<div class="pad">'+hint('点击「立即报餐」开始下单 · 各餐别下单 / 取消截止时间详见下单页说明')+'</div>'
   +'<div class="rev-head"><div class="grp-t">用户评价</div><div class="rev-more" onclick="go(\'review\')">查看更多'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+revCards(3)+'</div>'
   +'<div style="margin-top:6px"><div class="grp-t">膳食详情</div>'+rich+'</div>'
@@ -2425,7 +2515,7 @@ S.helper={title:'提交服务订单',render:function(){
 
 /* ================= 社区（Tab） ================= */
 S.community={tab:'community',title:'社区',nav:false,render:function(){
-  return topLg('社区','',[['bell','','noticeList',noticeBadge()]])
+  return topLg('社区','',[['bell','','sysMsg',sysMsgBadge()]])
   + grp([
     {ic:'cal',icls:'bg-br',t:'社区活动',s:'报名邻里活动，查看最新动态',ar:1,on:'go(\'communityList\')'},
     {ic:'bell',icls:'bg-o',t:'社区通知',s:'物业公告、停水停电提醒',ar:1,on:'go(\'noticeList\')',badge:noticeBadge()},
@@ -2463,7 +2553,7 @@ S.communityList={title:'社区活动',render:function(){
   var TABS=['全部','即将开始','报名中','已结束'];
   var cur=(chipState.communityList===undefined?0:chipState.communityList);
   var list=cur?ACTIVITIES.filter(function(x){return x.st===TABS[cur];}):ACTIVITIES;
-  var h=searchBar('搜索活动名称或介绍','go(\'activityFilter\')')
+  var h=searchBar('搜索活动名称或介绍','')
     + chips(TABS,'communityList',0,'cml-chips');
   if(!list.length){
     h+='<div class="pad">'+empty('cal','暂无'+TABS[cur]+'的活动','看看其他状态的活动吧')+'</div>';
@@ -2599,16 +2689,16 @@ S.articleDetail={title:'资讯详情',render:function(){
 /* ================= 订单（Tab · 重构） ================= */
 /* 订单数据：type 1=报餐 2=托管 3=陪诊；status: pending待支付 / active进行中 / done已完成 / cancel已取消 / refund退款中 */
 var ORDERS=[
-  {id:'BC20250904-001',type:1,t1:'明日午餐',qty:2,price:36,oPrice:36,date:'09-05',sub:'09-04 10:20',st:'active',pay:'已确认',tags:['12:00送达','A套餐']},
+  {id:'BC20250904-001',type:1,t1:'午餐',qty:2,price:36,oPrice:36,date:'09-05',sub:'09-04 10:20',st:'active',pay:'已确认',tags:['12:00送达','A套餐']},
   {id:'BC20250902-008',type:1,t1:'昨日午餐',qty:1,price:18,oPrice:18,date:'09-03',sub:'09-02 11:05',st:'done',pay:'已结算',doneTime:'09-03 12:30',tags:['12:00送达','A套餐']},
   {id:'BC20250903-004',type:1,t1:'午餐 · 1 份',qty:1,price:18,oPrice:18,date:'09-04',sub:'09-03 09:40',st:'cancel',pay:'已取消',cancelTime:'09-03 14:25',tags:['12:00送达']},
   {id:'BC20250901-002',type:1,t1:'今日晚餐',qty:2,price:36,oPrice:36,date:'09-01',sub:'08-31 17:30',st:'done',pay:'已结算',doneTime:'09-01 17:40',tags:['17:30送达','B套餐']},
   {id:'TG20250901-003',type:2,t1:'禄口一小课后托管',qty:1,price:45,oPrice:45,date:'09-05',sub:'09-01 09:00',st:'active',pay:'进行中',tags:['7岁','09-05 课后时段']},
   {id:'TG20250701-011',type:2,t1:'周末全天托管',qty:1,price:90,oPrice:90,date:'07-05',sub:'07-01 15:20',st:'cancel',pay:'已取消',cancelTime:'07-01 16:10',tags:['8岁','单日全时段']},
   {id:'TG20250601-005',type:2,t1:'周末半日托管',qty:1,price:45,oPrice:45,date:'06-06',sub:'05-28 14:00',st:'done',pay:'已结算',doneTime:'06-01 18:00',tags:['周六 · 半日']},
-  {id:'PZ20250903-002',type:3,t1:'医院就诊全程陪诊 · 3 小时',qty:3,price:240,oPrice:240,date:'09-05 09:00',sub:'09-03 16:00',st:'pending',pay:'待支付',tags:['陪诊员·李阿姨','北京协和医院']},
-  {id:'PZ20250820-006',type:3,t1:'体检陪诊 · 2 小时',qty:2,price:160,oPrice:180,date:'08-22 08:30',sub:'08-20 10:30',st:'done',pay:'已支付',tags:['陪诊员·王阿姨','301医院体检中心']},
-  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 4 小时',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-05 20:30',tags:['陪诊员·李阿姨','同济医院']},
+  {id:'PZ20250903-002',type:3,t1:'医院就诊全程陪诊 · 半天',qty:3,price:240,oPrice:240,date:'09-05 09:00',sub:'09-03 16:00',st:'pending',pay:'待支付',tags:['陪诊员·李阿姨','北京协和医院']},
+  {id:'PZ20250820-006',type:3,t1:'体检陪诊 · 整天',qty:2,price:160,oPrice:180,date:'08-22 08:30',sub:'08-20 10:30',st:'done',pay:'已支付',tags:['陪诊员·王阿姨','301医院体检中心']},
+  {id:'PZ20250805-001',type:3,t1:'老人复诊陪诊 · 半天',qty:4,price:320,oPrice:320,date:'08-06 09:30',sub:'08-05 19:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-05 20:30',tags:['陪诊员·李阿姨','同济医院']},
   {id:'SH20250904-001',type:4,t1:'家政保洁 · 全屋深度清洁',qty:1,price:180,oPrice:180,date:'09-05 09:00',sub:'09-04 15:30',st:'active',pay:'线下收取',tags:['上门 09:00','3栋2单元-1802']},
   {id:'SH20250902-003',type:4,t1:'空调维修 · 挂机加氟',qty:1,price:260,oPrice:260,date:'09-02 14:00',sub:'09-01 20:10',st:'done',pay:'线下收取',tags:['上门 14:00','师傅·王师傅']},
   {id:'SH20250828-002',type:4,t1:'水电维修 · 厨房水管更换',qty:1,price:150,oPrice:150,date:'08-29 10:00',sub:'08-28 09:20',st:'cancel',pay:'已取消',cancelTime:'2026-08-28 11:40',tags:['上门 10:00']}
@@ -2644,7 +2734,7 @@ function openOrder(id){
   var o=ORDERS.filter(function(x){return x.id===id;})[0];
   if(!o)return;
   curOrder=o;
-  if(o.type===1){mealDemoStatus=o.st;go('orderMealDetail');}
+  if(o.type===1){mealDemoStatus=o.st;mealDemoType=(o.t1.indexOf('早')>=0?0:(o.t1.indexOf('晚')>=0?2:1));go('orderMealDetail');}
   else if(o.type===2){trustDemoStatus=o.st;var s=trustOrderSnapshot();s.id=o.id;s.price=o.price;s.amount=o.price;s.period=o.date;s.submit=o.sub;lastTrustOrder=s;go('orderTrustDetail');}
   else if(o.type===3){escortDemoStatus=o.st;openEscortDetail(o.id);}
   else if(o.type===4){helperDemoStatus=o.st;go('orderHelperDetail');}
@@ -2661,10 +2751,11 @@ function orderCard(o){
   }else if(o.st==='active'){
     actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'已提交取消申请，等待物业后台审核\')">取消订单</div>';
   }else if(o.st==='done'){
-    actions='<div class="ab pri" onclick="event.stopPropagation();toast(\'再次预约\')">再次预约</div>';
+    actions='';
   }else if(o.st==='refund'){
     actions='<div class="ab sec" onclick="event.stopPropagation();toast(\'查看详情\')">退款详情</div>';
   }
+  var isEs=(o.type===3); /* 陪诊单无份数概念，隐藏数量 */
   var html='<div class="ord-card" onclick="openOrder(\''+o.id+'\')">'
     +'<div class="hd">'
         +'<div class="l">'
@@ -2674,13 +2765,13 @@ function orderCard(o){
         +'<div class="st s-'+scls+'">'+stext+'</div>'
     +'</div>'
     +'<div class="bd">'
-        +'<div class="ti">'+o.t1+(o.qty>1?'<span class="qty">× '+o.qty+'</span>':'')+'</div>'
+        +'<div class="ti">'+o.t1+((o.qty>1&&!isEs)?'<span class="qty">× '+o.qty+'</span>':'')+'</div>'
         +'<div class="meta">'
           +'<div class="m">'+ic('clock',11)+' 配送 / 使用：'+o.date+'</div>'
           +'<div class="m">'+ic('pin',11)+' 提交：'+o.sub+'</div>'
         +'</div>'
         +'<div class="sum">'
-          +'<div class="l">共 <b>'+o.qty+'</b> 份订单</div>'
+          +'<div class="l">'+(isEs?'':'共 <b>'+o.qty+'</b> 份订单')+'</div>'
           +'<div>'+(o.price<o.oPrice?'<span class="p">¥'+o.oPrice.toFixed(2)+'</span>':'')
             +'<span class="pn '+pnCls+'">¥'+o.price.toFixed(2)+'</span></div>'
         +'</div>'
@@ -2766,6 +2857,7 @@ S.orderSearch={title:'订单搜索',nav:false,render:function(){
 
 /* 报餐单详情状态演示：报餐确认支付后直接为 active（进行中），无 pending（待支付）状态 */
 var mealDemoStatus='active';
+var mealDemoType=1;   /* 0=早餐 1=午餐 2=晚餐 */
 
 /* ================= 订单详情 ================= */
 /* 订单日志：未发生的节点（时间值为 '—' 或空）不显示整行（节点名称+值均不显示） */
@@ -2786,7 +2878,7 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
 
   var btns='';
   if(st==='active'){
-    btns='<div class="btn-row"><button class="btn sec" onclick="toast(&apos;已取消报餐（当日 20:00 前）&apos;)">取消订单</button></div>';
+    btns='<div class="btn-row"><button class="btn sec" onclick="toast(&apos;已取消报餐&apos;)">取消订单</button></div>';
   }else if(st==='done'){
     btns='<div class="pad"><button class="btn acc" onclick="openAddReview(1)">'+ic('star',18)+' 服务评价</button></div>';
   }
@@ -2796,27 +2888,31 @@ S.orderMealDetail={title:'报餐单详情',render:function(){
   +'<div><div>报餐单</div><div class="no">#BC20250904-001</div></div></div>'
   +'<div class="st s-'+scls+'">'+stext+'</div></div>'
   +'<div class="bd">'
-  +'<div class="ti">明日午餐<span class="qty">× 2</span></div>'
+  +'<div class="ti">午餐<span class="qty">× 2</span></div>'
   +'<div class="meta"><div class="m">'+ic('clock',11)+'配送 / 使用：09-05</div><div class="m">'+ic('pin',11)+'提交：'+(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')+'</div></div>'
-  +'<div class="sum"><div class="l">共 <b>2</b> 份</div><div><span class="pn">¥39.00</span></div></div>'
+  +'<div class="sum"><div class="l">共 <b>2</b> 份</div><div><span class="pn">¥41.00</span></div></div>'
   +'</div></div>'
   +'<div class="ord-section"><div class="st">菜单信息</div>'
-  +'<div class="kv"><span class="k">清蒸鲈鱼 · 时蔬 · 米饭</span><span class="v">¥18.00 × 2</span></div>'
-  +'<div class="kv"><span class="k">套餐小计</span><span class="v">¥36.00</span></div>'
+  +'<div class="kv"><span class="k">清蒸鲈鱼 · 时蔬 · 米饭</span><span class="v">¥18.00 × 1</span></div>'
+  +'<div class="kv"><span class="k">香菇滑鸡 · 西兰花 · 软米饭</span><span class="v">¥20.00 × 1</span></div>'
+  +'<div class="kv"><span class="k">套餐小计</span><span class="v">¥38.00</span></div>'
   +'<div class="kv"><span class="k">配送方式</span><span class="v b">物业配送</span></div>'
   +'<div class="kv"><span class="k">配送费</span><span class="v">¥3.00</span></div>'
   +'<div class="kv"><span class="k">报餐日期</span><span class="v b">09-05</span></div>'
   +'<div class="kv"><span class="k">套餐规格</span><span class="v">A套餐 · 12:00送达</span></div>'
   +'</div>'
   +'<div class="ord-section"><div class="st">支付信息</div>'
-  +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥39.00</span></div>'
+  +'<div class="kv"><span class="k">预估金额</span><span class="v pr">¥41.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
   +'<div class="kv"><span class="k">支付方式</span><span class="v">顾好家币</span></div>'
   +'</div>'
+  + (st==='done'?'<div class="ord-section"><div class="st">送达图片</div><div class="photo-row">'
+      + DELIVER_PHOTOS.map(function(p,i){return '<div class="photo-thumb" onclick="openImgPreview(DELIVER_PHOTOS['+i+'])"><img src="'+p+'"/></div>';}).join('')
+      + '</div></div>':'')
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">'+ordLog([['提交',(curOrder&&curOrder.sub?curOrder.sub:'09-04 10:20')],['结算','—'],['取消',(st==='cancel'&&curOrder&&curOrder.cancelTime)?curOrder.cancelTime:'—'],['完成',(st==='done'&&curOrder&&curOrder.doneTime)?curOrder.doneTime:'—']])+'</div></div>'
-  + btns
-  + (st==='active'?'<div style="padding:6px var(--pad) 30px">'+hint('取消订单说明：报餐需在 <b>当日 20:00 前</b> 取消，逾期将无法取消；已支付金额将原路退回至您的顾好家币账户。'):'');
+  + (st==='active'?'<div style="padding:0 var(--pad) 6px">'+hint('<div style="text-align:left;line-height:1.9"><b>取消订单说明</b><br>· 早餐：前一天晚上7点之前下单，晚上7点后无法下单无法取消订单<br>· 午餐：当天早上10点之前下单，早上10点后无法下单无法取消订单<br>· 晚餐：当天中午2点之前下单，中午2点后无法下单无法取消订单</div>'):'')
+  + btns;
 }};
 /* 托管单详情状态演示：切换入口已移除，变量保留供订单列表状态同步 */
 var trustDemoStatus='active';
@@ -2863,7 +2959,6 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   +'<div class="bd">'
   +'<div class="ti">'+o.name+'<span class="qty">· '+o.count+' 人</span></div>'
   +'<div class="meta"><div class="m">'+ic('pin',11)+'提交：'+o.submit+'</div></div>'
-  +'<div class="sum"><div class="l">实付金额 <b>¥'+o.price.toFixed(2)+'</b></div><div><span class="pn">¥'+o.price.toFixed(2)+'</span></div></div>'
   +'</div></div>'
   +'<div class="ord-section"><div class="st">托管信息</div>'+info+'</div>'
   +'<div class="ord-section"><div class="st">支付信息</div>'
@@ -2899,15 +2994,14 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   var feeTotal=addFees.reduce(function(a,b){return a+b.amt;},0);
   var baseFee=240; /* 基础服务费（预估金额） */
   var payAmt=baseFee+(showFees?feeTotal:0); /* 支付金额 = 基础费 + 附加费总和 */
+  var durText=((pickState.escortDur||0)===0?'半天':'整天');
 
   var btns='';
   if(st==='pending'){
     btns='<div class="btn-row"><button class="btn warn" style="flex:1" onclick="toast(&apos;取消需物业后台审核&apos;)">取消订单</button>'
        +'<button class="btn" style="flex:1" onclick="openEscortPay()">订单支付</button></div>';
   }else if(st==='active'){
-    btns='<div class="pad"><button class="btn" onclick="toast(&apos;正在呼叫 管家…&apos;)">'+ic('phone',18)+' 联系管家</button></div>'
-      +'<div class="pad" style="padding-top:0"><button class="btn warn" onclick="toast(&apos;打开收银台&apos;);go(&apos;payment&apos;)">支付附加账单 ¥'+feeTotal+'.00</button></div>'
-      +'<div class="pad" style="padding-top:0"><button class="btn sec" onclick="go(&apos;refund&apos;)">申请退款</button></div>';
+    btns='<div class="pad"><button class="btn warn" onclick="openEscortOrderPay('+payAmt+')">订单支付</button></div>';
   }else if(st==='done'){
     btns='<div class="pad"><button class="btn acc" onclick="openAddReview(3)">'+ic('star',18)+' 服务评价</button></div>';
   }
@@ -2917,14 +3011,14 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div><div>陪诊单</div><div class="no">#'+curEscortOrder+'</div></div></div>'
   +'<div class="st s-'+scls+'">'+stext+'</div></div>'
   +'<div class="bd">'
-  +'<div class="ti">医院就诊全程陪诊<span class="qty">· 3 小时</span></div>'
+  +'<div class="ti">医院就诊全程陪诊<span class="qty">· '+durText+'</span></div>'
   +'<div class="meta"><div class="m">'+ic('clock',11)+'陪诊日期：09-05 09:00</div><div class="m">'+ic('pin',11)+'提交：2026-09-03 16:00</div></div>'
-  +'<div class="sum"><div class="l">服务时长 <b>3</b> 小时</div><div><span class="pn '+(st==='pending'?'pending':'')+'">¥240.00</span></div></div>'
+  +'<div class="sum"><div class="l">服务时长 <b>'+durText+'</b></div><div><span class="pn '+(st==='pending'?'pending':'')+'">¥240.00</span></div></div>'
   +'</div></div>'
   +'<div class="ord-section"><div class="st">陪诊信息</div>'
   +'<div class="kv"><span class="k">服务名称</span><span class="v b">医院就诊全程陪诊</span></div>'
   +'<div class="kv"><span class="k">陪诊日期</span><span class="v">09-05 09:00</span></div>'
-  +'<div class="kv"><span class="k">服务时长</span><span class="v">3 小时</span></div>'
+  +'<div class="kv"><span class="k">服务时长</span><span class="v">'+durText+'</span></div>'
   +'<div class="kv"><span class="k">陪诊地址</span><span class="v">市第一人民医院</span></div>'
   +(hasEscort
     ?'<div class="kv"><span class="k">陪诊员</span><span class="v" style="display:flex;align-items:center;gap:8px">张师傅<div class="cell-call" style="width:24px;height:24px" onclick="event.stopPropagation();toast(&apos;正在呼叫 张师傅…&apos;)">'+ic('phone',13,'#fff')+'</div></span></div>'
@@ -2944,7 +3038,7 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
   +'<div class="ord-section"><div class="st">支付信息</div>'
   +'<div class="kv"><span class="k">基础费用</span><span class="v">¥'+baseFee+'.00</span></div>'
   +'<div class="kv"><span class="k">附加费用</span><span class="v '+(showFees?'pr':'')+'">'+(showFees?'¥'+feeTotal+'.00':'¥0.00')+'</span></div>'
-  +'<div class="kv"><span class="k">支付金额</span><span class="v pr">¥'+payAmt+'.00</span></div>'
+  +'<div class="kv"><span class="k">订单总额</span><span class="v pr">¥'+payAmt+'.00</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
   +'<div class="kv"><span class="k">支付方式</span><span class="v">'+(paid?'支付宝':'/')+'</span></div>'
   +'</div>'
@@ -3056,12 +3150,17 @@ var addReviewType=1;          /* 1报餐 2托管 3陪诊 */
 var reviewScore=5;            /* 当前评分（默认 5 星） */
 var reviewTagsSel={};         /* 选中标签索引集合 */
 var REVIEW_TAGS=['专业耐心','准时可靠','服务周到','态度亲切','细心体贴','性价比高'];
-function openAddReview(type){addReviewType=type;reviewScore=5;reviewTagsSel={};go('addReview');}
+var reviewText='';             /* 文字评价内容 */
+var reviewPhotos=[];           /* 评价上传图片（原型占位） */
+function openAddReview(type){addReviewType=type;reviewScore=5;reviewTagsSel={};reviewText='';reviewPhotos=[];go('addReview');}
 function pickReviewScore(n){reviewScore=n;render();}
+function addReviewPhoto(){if(reviewPhotos.length>=6){toast('最多上传 6 张图片');return;}reviewPhotos.push(reviewPhotos.length+1);render();}
+function removeReviewPhoto(i){reviewPhotos.splice(i,1);render();}
+function setReviewText(v){reviewText=v;}
 function toggleReviewTag(i){reviewTagsSel[i]=!reviewTagsSel[i];render();}
 function submitReview(){toast('评价提交成功，感谢您的反馈');back();}
 S.addReview={title:'添加评价',render:function(){
-  var svcName=addReviewType===1?'明日午餐 · 营养套餐':addReviewType===2?'禄口一小课后托管 · 安心托付':'医院就诊全程陪诊 · 3 小时';
+  var svcName=addReviewType===1?'午餐 · 营养套餐':addReviewType===2?'禄口一小课后托管 · 安心托付':addReviewType===4?'家政保洁 · 全屋深度清洁':'医院就诊全程陪诊 · 半天';
   var stars='<div class="rv-stars">';
   for(var i=1;i<=5;i++)stars+='<span class="'+(i<=reviewScore?'on':'')+'" onclick="pickReviewScore('+i+')">★</span>';
   stars+='</div>';
@@ -3069,16 +3168,41 @@ S.addReview={title:'添加评价',render:function(){
   var tagHtml='<div class="rv-tags">';
   REVIEW_TAGS.forEach(function(tg,i){tagHtml+='<div class="rv-tag'+(reviewTagsSel[i]?' on':'')+'" onclick="toggleReviewTag('+i+')">'+tg+'</div>';});
   tagHtml+='</div>';
+  /* 陪诊/生活帮手评价专属：服务人员信息；陪诊另有文字输入 + 图片上传 */
+  var escortBlock='',textBlock='',photoBlock='';
+  if(addReviewType===3||addReviewType===4){
+    var staffName=addReviewType===3?'张师傅':'王师傅';
+    var staffRole=addReviewType===3?'陪诊员':'服务人员';
+    escortBlock='<div style="margin:0 var(--pad) 12px;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px">'
+      +'<div style="width:44px;height:44px;border-radius:50%;flex:0 0 44px;background:linear-gradient(145deg,#5AD1B5,#17A88A);display:flex;align-items:center;justify-content:center">'+ic('user',24,'#fff')+'</div>'
+      +'<div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--ink)">'+staffName+'</div><div style="font-size:12px;color:var(--label3);margin-top:2px">'+staffRole+'</div></div>'
+      +'</div>';
+  }
+  if(addReviewType===3){
+    textBlock=grpT('文字评价')
+      +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
+      +'<textarea rows="3" placeholder="说说本次陪诊服务的感受，或对陪诊人员的建议…" oninput="setReviewText(this.value)">'+reviewText+'</textarea></div></div>';
+    var photosHtml=reviewPhotos.map(function(p,i){
+      return '<div style="position:relative;width:72px;height:72px;border-radius:12px;background:rgba(43,196,160,.08);border:1px solid var(--line);display:flex;align-items:center;justify-content:center">'+ic('img',24,'var(--brand)')
+        +'<div style="position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:10px;background:#FF5A5F;color:#fff;font-size:13px;line-height:20px;text-align:center" onclick="removeReviewPhoto('+i+')">×</div></div>';
+    }).join('');
+    var addTile=reviewPhotos.length<6?'<div style="width:72px;height:72px;border-radius:12px;border:1.5px dashed #C9D2DA;background:#fff;display:flex;align-items:center;justify-content:center" onclick="addReviewPhoto()">'+ic('add',24,'#9AA6B0')+'</div>':'';
+    photoBlock=grpT('上传图片')
+      +'<div class="grp" style="padding:14px"><div style="display:flex;flex-wrap:wrap;gap:10px">'+photosHtml+addTile+'</div></div>';
+  }
   return '<div style="height:12px"></div>'
     +'<div class="rv-svc">'
       +'<div class="ic '+ordTypeCls[addReviewType]+'">'+ic(ordTypeIcons[addReviewType],20)+'</div>'
       +'<div><div class="t">'+ordTypeLabels[addReviewType-1]+'</div><div class="s">'+svcName+'</div></div>'
     +'</div>'
+    + escortBlock
     +'<div class="rv-rate">'
       +'<div class="rv-rate-t">为本次服务评分</div>'
       +stars
       +'<div class="rv-score-txt">'+scoreTxt+'</div>'
     +'</div>'
+    + textBlock
+    + photoBlock
     + btn('提交评价','submitReview()','acc');
 }};
 S.refund={title:'退款申请',render:function(){
@@ -3098,11 +3222,11 @@ S.refund={title:'退款申请',render:function(){
 
 /* ================= 我的（Tab）· 按业务场景分区 ================= */
 S.profile={tab:'profile',title:'我的',nav:false,render:function(){
-  return topLg('我的','',[['bell','','noticeList',noticeBadge()],['gear','','settings','']])
+  return topLg('我的','',[['bell','','sysMsg',sysMsgBadge()],['gear','','settings','']])
   /* ① 账户信息 */
   +'<div class="grp"><div class="cell tap" onclick="go(\'personInfo\')">'
-  +'<div class="cell-ic" style="width:56px;height:56px;flex:0 0 56px;border-radius:28px;background:linear-gradient(145deg,#5AD1B5,#17A88A)">'+ic('me',30,'#fff',1.7)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:18px;font-weight:700;letter-spacing:-.3px">顾家小林</div>'
+  +'<div class="cell-ic" style="width:56px;height:56px;flex:0 0 56px;border-radius:28px;background:'+userAvatar+'">'+ic('me',30,'#fff',1.7)+'</div>'
+  +'<div class="cell-bd"><div class="cell-t" style="font-size:18px;font-weight:700;letter-spacing:-.3px">'+userNickname+'</div>'
   +'<div class="cell-s" style="margin-top:4px">'
   +(CERT==='ok'?'阳光花园 3栋2单元-1802 · 已认证':(CERT==='pending'?'认证审核中 · 通过后开放全部服务':'未认证 · 点击完成业主认证'))
   +'</div></div>'
@@ -3126,7 +3250,6 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
   ],'家庭与设备',1)
   /* ⑤ 社区权益 */
   + grp([
-    {ic:'home2',icls:'bg-br',t:'物业后台（演示）',s:'按房号设置顾好家币额度',ar:1,on:'go(\'propBackend\')'},
     {ic:'wallet',icls:'bg-g',t:'小区钱袋子',ar:1,on:'needCert(\'moneyBag\')'},
     {ic:'hr',icls:'bg-t',t:'人力资源',ar:1,on:'go(\'hr\')'},
     {ic:'shield',icls:'bg-br',t:'业主认证',ar:1,on:'go(\'certList\')'}
@@ -3136,12 +3259,12 @@ S.profile={tab:'profile',title:'我的',nav:false,render:function(){
 /* ================= 个人信息 ================= */
 S.personInfo={title:'个人信息',render:function(){
   return '<div class="grp">'
-  +'<div class="cell tap" onclick="go(\'editProfile\')"><div class="cell-bd"><div class="cell-t">头像</div></div>'
-  +'<div class="cell-ic" style="width:44px;height:44px;flex:0 0 44px;border-radius:22px;background:linear-gradient(145deg,#5AD1B5,#17A88A)">'+ic('me',24,'#fff',1.7)+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'<div class="cell tap" onclick="openProfileSheet(\'avatar\')"><div class="cell-bd"><div class="cell-t">头像</div></div>'
+  +'<div class="cell-ic" style="width:44px;height:44px;flex:0 0 44px;border-radius:22px;background:'+userAvatar+'">'+ic('me',24,'#fff',1.7)+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="go(\'editProfile\')"><div class="cell-bd"><div class="cell-t">昵称</div></div><div class="cell-v">顾家小林</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'<div class="cell tap" onclick="openProfileSheet(\'nickname\')"><div class="cell-bd"><div class="cell-t">昵称</div></div><div class="cell-v">'+userNickname+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="go(\'changePhone\')"><div class="cell-bd"><div class="cell-t">手机号码</div></div><div class="cell-v">138****6688</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'<div class="cell"><div class="cell-bd"><div class="cell-t">手机号码</div></div><div class="cell-v">138****6688</div></div>'
   +'<div class="sep full"></div>'
   +'<div class="cell tap" onclick="go(\'certList\')"><div class="cell-bd"><div class="cell-t">认证状态</div></div><div class="cell-v" style="font-weight:600;color:'+(CERT==='ok'?'var(--green)':(CERT==='pending'?'var(--accent)':'var(--red)'))+'">'+CERT_TXT[CERT]+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'</div>'
@@ -3164,7 +3287,6 @@ S.coin={title:'房号共享额度',render:function(){
   +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">已使用<br><b style="font-size:15px">¥'+q.used.toFixed(2)+'</b></div>'
   +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">剩余<br><b style="font-size:15px">¥'+remain.toFixed(2)+'</b></div>'
   +'</div></div>'
-  +'<div class="pad">'+hint('同一房号下所有业主与家人账号合用同一额度，由物业后台按房号统一配置；本房号全部成员的托管、报餐等账单将整合后从该共享额度中扣减。')+'</div>'
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center"><span>共用该额度的成员</span><span style="font-size:12px;color:var(--label3)">4 人 · '+ROOM_KEY+'</span></div>'
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-ic" style="background:none">'+avt(34)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:15px">爸爸</div><div class="cell-s">家庭成员</div></div><span class="tag br">家庭成员</span></div>'
@@ -3176,8 +3298,6 @@ S.coin={title:'房号共享额度',render:function(){
   +'<div class="cell"><div class="cell-ic" style="background:none">'+avt(34)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:15px">租客小王</div><div class="cell-s">租户 · '+(tenantAuth.trust?'已授权托管/报餐':'未授权')+'</div></div><span class="tag gy">租户</span></div>'
   +'</div>'
   +'<div class="grp">'
-  +'<div class="cell tap" onclick="go(\'coinRecharge\')"><div class="cell-ic bg-t">'+ic('wallet',17)+'</div><div class="cell-bd"><div class="cell-t">额度充值</div><div class="cell-s">由业主统一为房号充值</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'<div class="sep full"></div>'
   +'<div class="cell tap" onclick="go(\'coinDetail\')"><div class="cell-ic bg-gy">'+ic('doc',17)+'</div><div class="cell-bd"><div class="cell-t">账户明细</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'</div>';
 }};
@@ -3246,7 +3366,36 @@ function billSettleCard(ico,icls,name,date,pay,refund,net,tab){
     +'<div class="cell-v" style="color:var(--green);font-weight:700;font-size:16px;white-space:nowrap">'+net+'</div>'
     +'<div class="cell-ar">'+ic('chevR',16)+'</div></div></div>';
 }
-/* 本房号账单整合卡：所有成员（业主 + 家人 + 租户）的托管/报餐/陪诊/生活帮手账单合并，统一从房号共享额度扣减 */
+/* 账单明细所属用户（业主 / 家庭成员 / 租户，共用房号额度） */
+var BILL_USERS=[
+  {nm:'顾家小林',role:'业主',av:'linear-gradient(145deg,#5AD1B5,#17A88A)'},
+  {nm:'顾小妹',role:'家庭成员',av:'linear-gradient(145deg,#FFB085,#FF8A5C)'},
+  {nm:'租客小王',role:'租户',av:'linear-gradient(145deg,#7FB2FF,#5A8DEF)'}
+];
+function billUserLine(ui){
+  var u=BILL_USERS[ui];
+  return '<div style="margin-top:6px;display:flex;align-items:center;gap:6px">'
+    +'<span style="width:20px;height:20px;border-radius:50%;background:'+u.av+';display:inline-flex;align-items:center;justify-content:center">'+ic('me',11,'#fff',1.4)+'</span>'
+    +'<span style="font-size:12px;color:var(--label2)">'+u.nm+'</span>'
+    +'<span style="font-size:11px;color:var(--label3)">· '+u.role+'</span></div>';
+}
+/* 待结算明细行（含可选退款金额） */
+function billItemRow(ico,bgCls,t,s,a,ui,r){
+  var right=(r&&r.indexOf('-')===0)
+    ? '<div style="text-align:right"><div style="font-weight:600">'+a+'</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">退款 '+r+'</div></div>'
+    : '<div style="text-align:right"><div style="font-weight:600">'+a+'</div>'+(r?('<div style="font-size:11px;color:var(--label3);margin-top:2px">退款 '+r+'</div>'):'')+'</div>';
+  return '<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">'+t+'</div>'
+    +'<div class="cell-s">'+s+'</div>'+billUserLine(ui)+'</div>'+right+'</div>';
+}
+/* 已结算明细行（带退款） */
+function billItemRowSet(ico,bgCls,t,s,a,refund,ui){
+  var isRef=refund && refund.indexOf('-')===0;
+  var right='<div style="text-align:right"><div style="font-weight:600">'+a+'</div>'
+    +'<div style="font-size:11px;color:'+(isRef?'var(--accent)':'var(--label3)')+';font-weight:'+(isRef?'600':'400')+';margin-top:2px">退款 '+(refund||'¥0.00')+'</div></div>';
+  return '<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">'+t+'</div>'
+    +'<div class="cell-s">'+s+'</div>'+billUserLine(ui)+'</div>'+right+'</div>';
+}
+/* 本房号账单整合卡：所有成员（业主 + 家人 + 租户）的托管/报餐账单合并，统一从房号共享额度扣减 */
 function billIntegrateCard(){
   var remain=roomRemaining();
   return '<div class="card" style="margin:14px var(--pad);background:linear-gradient(135deg,#2BC4A0,#17A88A);color:#fff;padding:16px 18px">'
@@ -3254,14 +3403,11 @@ function billIntegrateCard(){
     +'<div style="display:flex;gap:8px;margin-top:10px;font-size:12px;opacity:.92">'
     +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">托管<br><b style="font-size:15px">¥315.00</b></div>'
     +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">报餐<br><b style="font-size:15px">¥135.00</b></div>'
-    +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">陪诊<br><b style="font-size:15px">¥480.00</b></div>'
-    +'<div style="flex:1;background:rgba(255,255,255,.18);border-radius:10px;padding:8px 0;text-align:center">生活帮手<br><b style="font-size:15px">¥180.00</b></div>'
     +'</div>'
     +'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.28)">'
-    +'<div style="font-size:13px;opacity:.9">待结算合计 <b style="font-size:16px">¥1,110.00</b></div>'
+    +'<div style="font-size:13px;opacity:.9">待结算合计 <b style="font-size:16px">¥450.00</b></div>'
     +'<div style="font-size:13px;opacity:.9">共享额度剩余 <b style="font-size:16px">¥'+remain.toFixed(0)+'</b></div>'
-    +'</div></div>'
-    +'<div class="pad" style="padding-top:0">'+hint('同一房号下所有成员的托管、报餐、陪诊、生活帮手账单已整合，统一从房号共享额度中扣减；业主可为房号统一充值。')+'</div>';
+    +'</div></div>';
 }
 S.bill={title:'我的账单',render:function(){
   var cur=segState.bill||0;
@@ -3275,37 +3421,42 @@ S.bill={title:'我的账单',render:function(){
     +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结算合计</div><div class="cell-s">付款合计 <span style="color:var(--label)">¥990.00</span></div><div class="cell-s" style="margin-top:2px">退款合计 <span style="color:var(--accent)">¥99.00</span></div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥891.00</div></div>'
     +'</div>';
   }
+  var trustItems=[
+    {t:'课后托管 · 9月1日',s:'09-01 16:30',a:'¥45.00',u:0,r:'¥0.00'},
+    {t:'周末全天托管 · 9月6日',s:'09-06 09:00',a:'¥90.00',u:1,r:'¥0.00'},
+    {t:'周末全天托管 · 9月13日',s:'09-13 09:00',a:'¥90.00',u:0,r:'¥0.00'},
+    {t:'节假日全天托管 · 9月20日',s:'09-20 08:30',a:'¥90.00',u:2,r:'¥0.00'}
+  ];
+  var mealItems=[
+    {t:'午餐报餐 · 2 份',s:'09-04 10:20',a:'¥30.00',u:1},
+    {t:'午餐报餐 · 1 份',s:'09-01 12:10',a:'¥15.00',u:0},
+    {t:'午餐报餐 · 1 份',s:'09-02 11:45',a:'¥15.00',u:2},
+    {t:'午餐报餐 · 2 份',s:'09-08 10:30',a:'¥30.00',u:1},
+    {t:'晚餐报餐 · 1 份',s:'09-15 12:05',a:'¥15.00',u:0},
+    {t:'午餐报餐 · 1 份',s:'09-22 11:50',a:'¥15.00',u:1},
+    {t:'晚餐报餐 · 1 份',s:'09-28 12:15',a:'¥15.00',u:2}
+  ];
+  var trustHtml='';trustItems.forEach(function(it){trustHtml+=billItemRow('sTrust','bg-b',it.t,it.s,it.a,it.u,it.r);});
+  var mealHtml='';mealItems.forEach(function(it){mealHtml+=billItemRow('sMeal','bg-o',it.t,it.s,it.a,it.u);});
   return billIntegrateCard()
   +'<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center"><span>本房号待结算整合</span><span style="font-size:12px;color:var(--label3)">业主 + 家人 + 租户</span></div>'
   +'<div class="grp">'
   +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t">托管账单</div></div><div class="cell-v">¥315.00</div></div>'
   +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t">报餐账单</div></div><div class="cell-v">¥135.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-t">'+ic('sEscort',17)+'</div><div class="cell-bd"><div class="cell-t">陪诊账单</div></div><div class="cell-v">¥480.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-gy">'+ic('shield',17)+'</div><div class="cell-bd"><div class="cell-t">生活帮手账单</div></div><div class="cell-v">¥180.00</div></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">待结算合计</div></div>'
-  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥1,110.00</div></div>'
+  +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥450.00</div></div>'
   +'</div>'
+  + btn('立即付款 ¥450.00','openBillPay()')
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldT=!pickState.billFoldT;render()"><span>托管单明细 · 共 4 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldT?'收起':'展开')+'</span></div>'
   +(pickState.billFoldT
-  ?'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 9月1日</div><div class="cell-s">09-01 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="font-weight:600">¥45.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末全天托管 · 9月6日</div><div class="cell-s">09-06 09:00 · 全天看护 · ¥90/天</div></div><div class="cell-v">¥90.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">周末全天托管 · 9月13日</div><div class="cell-s">09-13 09:00 · 全天看护 · ¥90/天</div></div><div class="cell-v">¥90.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">节假日全天托管 · 9月20日</div><div class="cell-s">09-20 08:30 · 全天看护 · ¥90/天</div></div><div class="cell-v">¥90.00</div></div>'
+  ?'<div class="grp bill-rows">'+trustHtml
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">托管单小计</div><div class="cell-s">共 4 笔待结算</div></div>'
   +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥315.00</div></div>'
   +'</div>':'')
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldM=!pickState.billFoldM;render()"><span>报餐单明细 · 共 7 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldM?'收起':'展开')+'</span></div>'
   +(pickState.billFoldM
-  ?'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 2 份</div><div class="cell-s">09-04 10:20 · 两荤一素 · ¥15/份</div></div><div class="cell-v" style="font-weight:600">¥30.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 1 份</div><div class="cell-s">09-01 12:10 · 两荤一素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 1 份</div><div class="cell-s">09-02 11:45 · 两荤一素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 2 份</div><div class="cell-s">09-08 10:30 · 两荤一素 · ¥15/份</div></div><div class="cell-v">¥30.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚餐报餐 · 1 份</div><div class="cell-s">09-15 12:05 · 一荤两素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">午餐报餐 · 1 份</div><div class="cell-s">09-22 11:50 · 两荤一素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">晚餐报餐 · 1 份</div><div class="cell-s">09-28 12:15 · 一荤两素 · ¥15/份</div></div><div class="cell-v">¥15.00</div></div>'
+  ?'<div class="grp bill-rows">'+mealHtml
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">报餐单小计</div><div class="cell-s">共 7 笔待结算</div></div>'
   +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥135.00</div></div>'
   +'</div>':'');
@@ -3314,6 +3465,23 @@ S.bill={title:'我的账单',render:function(){
 /* ================= 账单详情（已结算二级页 · 托管/报餐分 tab） ================= */
 S.billDetail={title:'账单详情',render:function(){
   var cur=segState.billDetail||0;
+  var trustSetItems=[
+    {t:'全天托管 · 8月29日',s:'08-29 09:00',a:'¥90.00',r:'¥0.00',u:0},
+    {t:'课后托管 · 8月28日',s:'08-28 16:30',a:'¥45.00',r:'¥0.00',u:1},
+    {t:'全天托管 · 8月22日',s:'08-22 09:00',a:'¥90.00',r:'¥0.00',u:0},
+    {t:'课后托管 · 8月21日',s:'08-21 16:30',a:'¥45.00',r:'¥0.00',u:2},
+    {t:'课后托管 · 8月20日',s:'08-20 16:30 · 当日取消 · 全额退款',a:'¥45.00',r:'-¥45.00',u:1},
+    {t:'全天托管 · 8月15日',s:'08-15 09:00',a:'¥90.00',r:'¥0.00',u:0},
+    {t:'课后托管 · 8月14日',s:'08-14 16:30',a:'¥45.00',r:'¥0.00',u:2}
+  ];
+  var mealSetItems=[
+    {t:'报餐 · 2 份',s:'08-25 10:20 · 午餐',a:'¥36.00',r:'¥0.00',u:1},
+    {t:'报餐 · 1 份',s:'08-30 12:10 · 午餐',a:'¥18.00',r:'¥0.00',u:0},
+    {t:'报餐 · 3 份',s:'08-18 11:50 · 当日停餐 · 全额退款',a:'¥54.00',r:'-¥54.00',u:2},
+    {t:'报餐 · 1 份 × 14 天',s:'08-01 ~ 08-14 · 午餐套餐',a:'¥432.00',r:'¥0.00',u:1}
+  ];
+  var trustSetHtml='';trustSetItems.forEach(function(it){trustSetHtml+=billItemRowSet('sTrust','bg-b',it.t,it.s,it.a,it.r,it.u);});
+  var mealSetHtml='';mealSetItems.forEach(function(it){mealSetHtml+=billItemRowSet('sMeal','bg-o',it.t,it.s,it.a,it.r,it.u);});
   if(cur===0){
     return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
     +'<div class="grp">'
@@ -3323,15 +3491,7 @@ S.billDetail={title:'账单详情',render:function(){
     +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥405.00</div></div>'
     +'</div>'
     + grpT('结算明细')
-    +'<div class="grp">'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月29日</div><div class="cell-s">08-29 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥90.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月28日</div><div class="cell-s">08-28 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月22日</div><div class="cell-s">08-22 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥90.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月21日</div><div class="cell-s">08-21 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月20日</div><div class="cell-s">08-20 16:30 · 当日取消 · 全额退款</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">退款 -¥45.00</div></div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">全天托管 · 8月15日</div><div class="cell-s">08-15 09:00 · 全时段看护 · ¥90/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥90.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-    +'<div class="cell"><div class="cell-ic bg-b">'+ic('sTrust',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">课后托管 · 8月14日</div><div class="cell-s">08-14 16:30 · 课后时段 · ¥45/天</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥45.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-    +'</div>';
+    +'<div class="grp bill-rows">'+trustSetHtml+'</div>';
   }
   return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
   +'<div class="grp">'
@@ -3341,12 +3501,7 @@ S.billDetail={title:'账单详情',render:function(){
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥486.00</div></div>'
   +'</div>'
   + grpT('结算明细')
-  +'<div class="grp">'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 2 份</div><div class="cell-s">08-25 10:20 · 午餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥36.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份</div><div class="cell-s">08-30 12:10 · 午餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥18.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-  +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 3 份</div><div class="cell-s">08-18 11:50 · 当日停餐 · 全额退款</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥54.00</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">退款 -¥54.00</div></div></div>'
-    +'<div class="cell"><div class="cell-ic bg-o">'+ic('sMeal',17)+'</div><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">报餐 · 1 份 × 14 天</div><div class="cell-s">08-01 ~ 08-14 · 午餐套餐</div></div><div class="cell-v" style="text-align:right"><div style="font-weight:600">¥432.00</div><div style="font-size:11px;color:var(--label3);margin-top:2px">退款 ¥0.00</div></div></div>'
-    +'</div>';
+  +'<div class="grp bill-rows">'+mealSetHtml+'</div>';
 }};
 
 /* ================= 物业后台（演示）：按房号设置顾好家币额度 ================= */
@@ -3393,37 +3548,67 @@ S.family={title:'我的家庭',render:function(){
   +'<div class="sep full"></div>'
   +'<div class="item noind" onclick="go(\'familyMembers\')"><div class="cell-ic bg-b">'+ic('home2',17)+'</div>'
   +'<div class="it-bd"><div class="it-t">玫瑰新城 5栋1单元-0903</div><div class="it-s">家庭成员 1 · 租户 0</div></div>'+ic('chevR',16,'var(--label4)')+'</div>'
-  +'</div>'
-  + grp([
-    {ic:'qr',icls:'bg-br',t:'邀请成员',s:'生成邀请海报，扫码加入房号',ar:1,on:'go(\'invitePoster\')'}
-  ]);
+  +'</div>';
 }};
+/* 成员身份：每个成员账号各自的身份（修改的是他人账号，非第一人称体验身份） */
+var MEMBER_ROLES={爸爸:'family',妈妈:'family',小明:'family',租客小王:'tenant'};
+var MEMBER_JOIN={爸爸:'09-01',妈妈:'09-01',小明:'09-02',租客小王:'09-10'};
+var idSheetName=null; /* 当前打开身份切换弹窗的成员 */
+function openIdSheet(n){idSheetName=n;render();}
+function closeIdSheet(){idSheetName=null;render();}
+function setMemberRole(n,r){MEMBER_ROLES[n]=r;idSheetName=null;render();toast('已将「'+n+'」的身份切换为'+(r==='family'?'家庭成员':'租户'));}
+function memberIdSheetHTML(){
+  if(!idSheetName)return '';
+  var r=MEMBER_ROLES[idSheetName]||'family';
+  var isTen=r==='tenant';
+  function row(key,label,desc){
+    return '<div onclick="setMemberRole(\''+idSheetName+'\',\''+key+'\')" style="display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer">'
+      +'<div style="flex:1"><div style="font-size:16px;color:var(--ink)">'+label+'</div><div style="font-size:12px;color:var(--label3);margin-top:2px">'+desc+'</div></div>'
+      +(r===key?'<div style="color:var(--brand);display:flex">'+ic('check',20)+'</div>':'')
+    +'</div>';
+  }
+  return '<div class="mask" onclick="closeIdSheet()" style="background:rgba(0,0,0,.4)">'
+    +'<div class="sheet" onclick="event.stopPropagation()"'+(isTen?' style="min-height:500px;display:flex;flex-direction:column"':'')+'>'
+      +'<div class="sheet-bar"></div>'
+      +'<div class="sheet-title">切换「'+idSheetName+'」的身份</div>'
+      +'<div style="padding:4px 0 10px">'
+      + row('family','家庭成员','共用房号额度，无需业主授权')
+      +'<div style="height:1px;background:var(--line);margin:0 18px"></div>'
+      + row('tenant','租户','需业主授权后方可使用托管 / 报餐')
+      +'</div>'
+      +(isTen?'<div style="margin-top:auto;padding-top:8px">'
+      + grpT('顾好家币使用授权')
+      +'<div class="grp">'
+      +'<div class="cell"><div class="cell-bd"><div class="cell-t">托管授权</div><div class="cell-s">'+(tenantAuth.trust?'已授权 · 可使用托管服务':'未授权 · 不可使用托管')+'</div></div>'+sw(tenantAuth.trust,'toggleTenantAuth(\'trust\')')+'</div>'
+      +'<div class="sep full"></div>'
+      +'<div class="cell"><div class="cell-bd"><div class="cell-t">报餐授权</div><div class="cell-s">'+(tenantAuth.meal?'已授权 · 可使用报餐服务':'未授权 · 不可使用报餐')+'</div></div>'+sw(tenantAuth.meal,'toggleTenantAuth(\'meal\')')+'</div>'
+      +'</div>'
+      +'</div>':'')
+    +'</div></div>';
+}
 S.familyMembers={title:'成员列表',render:function(){
-  var rTxt=currentRole==='owner'?'业主':currentRole==='family'?'家庭成员':'租户';
-  return '<div class="pad">'+hint('演示：当前体验身份为「'+rTxt+'」。切换为「租户」后，可在未授权状态下验证其无法使用托管、报餐。')+'</div>'
-  + grpT('演示身份切换')
+  var ALL=['爸爸','妈妈','小明','租客小王'];
+  var fam=ALL.filter(function(n){return MEMBER_ROLES[n]!=='tenant';});
+  var ten=ALL.filter(function(n){return MEMBER_ROLES[n]==='tenant';});
+  function row(n,isTen){
+    return '<div class="cell tap" onclick="openIdSheet(\''+n+'\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
+      +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">'+n+'</div><div class="cell-s">'+MEMBER_JOIN[n]+' 加入'+(isTen?' · '+(tenantAuth.trust?'已授权':'未授权'):'')+'</div></div>'
+      +'<span class="tag '+(isTen?'gy':'br')+'">'+(isTen?'租户':'家庭成员')+'</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>';
+  }
+  function group(names,isTen){
+    var h='<div class="grp">';
+    names.forEach(function(n,i){
+      if(i>0)h+='<div class="sep full"></div>';
+      h+=row(n,isTen);
+    });
+    return h+'</div>';
+  }
+  return grpT('家庭成员 · '+fam.length)+group(fam,false)
+  + grpT('租户 · '+ten.length)+group(ten,true)
+  + grpT('邀请加入本房号')
   +'<div class="grp">'
-  +'<div class="cell tap" onclick="setRole(\'owner\')"><div class="cell-bd"><div class="cell-t">业主（我）</div><div class="cell-s">房号额度所有者，可授权租户</div></div>'+(currentRole==='owner'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="setRole(\'family\')"><div class="cell-bd"><div class="cell-t">家庭成员</div><div class="cell-s">共用房号额度，无需授权</div></div>'+(currentRole==='family'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="setRole(\'tenant\')"><div class="cell-bd"><div class="cell-t">租户</div><div class="cell-s">'+(tenantAuth.trust?'已授权托管/报餐':'未授权 · 不可用托管/报餐')+'</div></div>'+(currentRole==='tenant'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
-  +'</div>'
-  + grpT('家庭成员 · 3')
-  +'<div class="grp">'
-  +'<div class="cell tap" onclick="openMember(\'爸爸\',\'family\',false)"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">爸爸</div><div class="cell-s">09-01 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="openMember(\'妈妈\',\'family\',false)"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">妈妈</div><div class="cell-s">09-01 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="openMember(\'小明\',\'family\',false)"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">小明</div><div class="cell-s">09-02 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'</div>'
-  + grpT('租户 · 1')
-  +'<div class="grp">'
-  +'<div class="cell tap" onclick="openMember(\'租客小王\',\'tenant\',true)"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">租客小王</div><div class="cell-s">09-10 加入 · '+(tenantAuth.trust?'已授权':'未授权')+'</div></div><span class="tag gy">租户</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
+  +'<div class="cell tap" onclick="go(\'invitePoster\')"><div class="cell-ic bg-br">'+ic('qr',17)+'</div>'
+  +'<div class="cell-bd"><div class="cell-t">邀请海报</div><div class="cell-s">生成海报，扫码邀请他人加入本房号</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
   +'</div>';
 }};
 S.memberRole={title:'成员设置',render:function(){
@@ -3433,14 +3618,19 @@ S.memberRole={title:'成员设置',render:function(){
     +'<div class="bold" style="font-size:19px;margin-top:12px">'+m.name+'</div>'
     +'<div class="sub" style="margin-top:4px">'+ROOM_KEY+' · '+(m.tenant?'租户':'家庭成员')+'</div></div>';
   if(m.tenant){
-    h+= grpT('租户授权（业主操作）')
-      +'<div class="grp">'
-      +'<div class="cell"><div class="cell-bd"><div class="cell-t">托管授权</div><div class="cell-s">'+(tenantAuth.trust?'已授权 · 可使用托管服务':'未授权 · 不可使用托管')+'</div></div>'+sw(tenantAuth.trust,'toggleTenantAuth(\'trust\')')+'</div>'
-      +'<div class="sep full"></div>'
-      +'<div class="cell"><div class="cell-bd"><div class="cell-t">报餐授权</div><div class="cell-s">'+(tenantAuth.meal?'已授权 · 可使用报餐服务':'未授权 · 不可使用报餐')+'</div></div>'+sw(tenantAuth.meal,'toggleTenantAuth(\'meal\')')+'</div>'
-      +'</div>'
-      +'<div class="pad">'+hint('未授权或收回授权后，该租户账号将无法提交托管、报餐订单。')+'</div>'
-      +'<div class="grp">'
+    if(currentRole==='owner'){
+      h+= grpT('租户授权（业主操作）')
+        +'<div class="grp">'
+        +'<div class="cell"><div class="cell-bd"><div class="cell-t">托管授权</div><div class="cell-s">'+(tenantAuth.trust?'已授权 · 可使用托管服务':'未授权 · 不可使用托管')+'</div></div>'+sw(tenantAuth.trust,'toggleTenantAuth(\'trust\')')+'</div>'
+        +'<div class="sep full"></div>'
+        +'<div class="cell"><div class="cell-bd"><div class="cell-t">报餐授权</div><div class="cell-s">'+(tenantAuth.meal?'已授权 · 可使用报餐服务':'未授权 · 不可使用报餐')+'</div></div>'+sw(tenantAuth.meal,'toggleTenantAuth(\'meal\')')+'</div>'
+        +'</div>'
+        +'<div class="pad">'+hint('未授权或收回授权后，该租户账号将无法提交托管、报餐订单。')+'</div>';
+    }else{
+      h+= grpT('租户授权')
+        +'<div class="pad">'+hint('顾好家币使用权限由业主统一配置，租户账号不可自行修改授权设置。当前授权状态：托管'+(tenantAuth.trust?'已授权':'未授权')+'、报餐'+(tenantAuth.meal?'已授权':'未授权')+'。')+'</div>';
+    }
+    h+='<div class="grp">'
       +'<div class="cell tap" onclick="setRole(\'tenant\');toast(\'已切换为租户身份，可前往托管 / 报餐体验授权效果\');go(\'home\')"><div class="cell-bd"><div class="cell-t">以此租户身份体验</div><div class="cell-s">切换后测试授权 / 未授权下单</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
       +'</div>';
   }else{
@@ -3847,12 +4037,24 @@ function pickPay(m){payMethod=m;render();}
 function pickAmt(n){rechargeAmt=n;render();}
 var rechargeAmt=300;
 function payNow(){if(payCtx&&payCtx.label==='陪诊单')escortDemoStatus='active';go('payResult');}
+function openEscortOrderPay(amt){
+  /* 订单支付：支付整个订单金额（基础费 + 附加费） */
+  payCtx={amount:amt||300,label:'陪诊单',sub:'医院就诊全程陪诊 · 半天',no:'PZ20250905-001',count:'1 单'};
+  payMethod='alipay';
+  go('payment');
+}
+/* 账单支付：待结算账单整体付款，走收银台（微信/支付宝） */
+function openBillPay(){
+  payCtx={amount:450,label:'账单支付',sub:'本房号待结算账单 · 托管+报餐 · 共 11 笔',no:'ZD20260929-001',count:'11 笔'};
+  payMethod='alipay';
+  go('payment');
+}
 function openEscortPay(){
   var dur=(pickState.escortDur===undefined?0:pickState.escortDur);
   var _ei=(pickState.escortType===undefined?0:pickState.escortType);
   var _ek=ESCORT[_ei];
   var amount=(dur===0?_ek.ph:_ek.pd);
-  payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+(dur===0?'半天':'一天'),no:'PZ20250905-001',count:'1 单'};
+  payCtx={amount:amount,label:'陪诊单',sub:'陪诊时长 '+(dur===0?'半天':'整天'),no:'PZ20250905-001',count:'1 单'};
   payMethod='alipay';
   /* 支付完成后清除待支付拦截，并将待支付陪诊单标记为已支付 */
   escortUnpaid=false;
@@ -3884,6 +4086,7 @@ S.payResult={title:'支付结果',nav:false,render:function(){
   var c=payCtx||{amount:54,label:'报餐单批量结算',sub:'报餐单批量结算 · 共 2 单',no:'20260905095000123456',count:'2 单'};
   var amt=c.amount.toFixed(2);
   var mName=(payMethod==='wechat')?'微信':'支付宝';
+  var isBill=(payCtx&&payCtx.label==='账单支付');
   return '<div class="pad" style="padding-top:70px;text-align:center">'
   +'<div style="width:76px;height:76px;border-radius:38px;background:var(--brand);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:#fff;box-shadow:0 10px 26px rgba(23,168,138,.34)">'+ic('check',40,'#fff',2.2)+'</div>'
   +'<div class="bold" style="font-size:22px;letter-spacing:-.3px">支付成功</div>'
@@ -3895,7 +4098,7 @@ S.payResult={title:'支付结果',nav:false,render:function(){
   +'<div class="sep full"></div>'
   +'<div class="cell"><div class="cell-bd"><div class="cell-t">交易单号</div></div><div class="cell-v" style="font-size:12.5px">20260905095000123456</div></div>'
   +'</div>'
-  +'<div class="pad" style="padding-top:16px"><button class="btn" onclick="go(\'orders\')">查看订单</button></div>'
+  +'<div class="pad" style="padding-top:16px"><button class="btn" onclick="'+(isBill?'go(\'bill\')':'go(\'orders\')')+'">'+(isBill?'返回账单':'查看订单')+'</button></div>'
   +'<div class="pad"><button class="btn sec" onclick="go(\'home\')">返回首页</button></div>';
 }};
 S.wechatFail={title:'微信登录',nav:false,render:function(){
@@ -4074,26 +4277,28 @@ S.bandRename={title:'修改名称',render:function(){
 
 /* ================= 系统消息 / 系统设置 / 用户协议 / 隐私政策（补充页面） ================= */
 var SYS_MSGS=[
-  {id:'m5',cat:2,ic:'yen',cls:'bg-y',t:'账单到期待结算',s:'09-08 09:00 · 来自账务系统',un:true,
-   h:'您有账单已到期待结算',b:'您的 8 月报餐服务账单已到期待结算，本期金额 ¥54.00，请于 9 月 15 日前前往「我的-我的账单」完成缴费，逾期可能影响后续报餐服务正常使用。'},
-  {id:'m1',cat:0,ic:'bell',cls:'bg-o',t:'供水检修施工延期通知',s:'09-04 14:30 · 来自物业服务中心',un:true,
-   h:'供水检修施工延期通知',b:'各位业主：<br><br>因施工方设备调配原因，原定本周六的供水检修施工延期至下周三 08:00-18:00 进行。检修期间将停止供水约 8 小时，请各位业主提前做好储水准备。<br><br>给您带来不便，敬请谅解。'},
-  {id:'m2',cat:2,ic:'yen',cls:'bg-y',t:'托管账单出账提醒',s:'09-03 10:00 · 来自账务系统',un:true,
-   h:'9 月托管账单已出账',b:'您的 9 月托管服务账单已出账，本期金额 ¥315.00，请于 9 月 15 日前完成缴费。您可前往「我的-我的账单」查看账单明细并完成支付。'},
-  {id:'m3',cat:1,ic:'cal',cls:'bg-br',t:'报餐服务恢复通知',s:'09-02 09:00 · 来自社区食堂',un:false,
-   h:'社区食堂报餐服务恢复通知',b:'社区食堂设备检修已完成，报餐服务即日起恢复。下单截止时间仍为每日 10:00，欢迎各位业主继续使用。'},
-  {id:'m6',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'08-31 18:00 · 来自账务系统',un:false,
-   h:'8 月报餐账单已结算',b:'您的 8 月报餐服务账单已完成结算，合计金额 ¥486.00，结算时间 2026-08-31。您可前往「我的-我的账单」查看结算明细。'},
-  {id:'m7',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'08-01 18:00 · 来自账务系统',un:false,
-   h:'8 月托管账单已结算',b:'您的 8 月托管服务账单已完成结算，合计金额 ¥405.00，结算时间 2026-08-01。您可前往「我的-我的账单」查看结算明细。'},
-  {id:'m8',cat:2,ic:'yen',cls:'bg-y',t:'账单已结算',s:'07-01 18:00 · 来自账务系统',un:false,
-   h:'7 月托管账单已结算',b:'您的 7 月托管服务账单已完成结算，合计金额 ¥450.00，结算时间 2026-07-01。您可前往「我的-我的账单」查看结算明细。'},
-  {id:'m4',cat:1,ic:'wallet',cls:'bg-g',t:'账单退还结果',s:'09-01 16:20 · 来自结算系统',un:true,
-   h:'7 月账单差价已退还',b:'您 7 月的报餐单与托管单已完成结算核算，退还差价 ¥126.00 已退回至顾好家币账户余额，可前往「我的-我的账单」查看结算明细。'}
+  /* ===== 订单消息（按时间倒序） ===== */
+  {id:'o1',cat:0,ic:'heart',cls:'bg-b',t:'陪诊单下单结果',s:'09-29 10:20',un:true,
+   h:'您的陪诊单已下单成功',b:'您为「顾家小林」预约的体检陪诊服务（整天）已下单成功，陪诊员将于服务当天上午 8:30 到达小区南门接人，全程陪同前往医院体检。<br><br>您可在「订单」中查看陪诊单详情。'},
+  {id:'o2',cat:0,ic:'bell',cls:'bg-o',t:'报餐单取消订单',s:'09-28 12:30',un:true,
+   h:'报餐单已取消',b:'您 09-28 的晚餐报餐订单（1 份）已取消成功。该订单在当日中午 2 点前取消，不产生任何费用。<br><br>如需用餐，请重新下单。'},
+  {id:'o3',cat:0,ic:'cal',cls:'bg-br',t:'托管单取消订单',s:'09-27 16:40',un:false,
+   h:'托管单已取消',b:'您 09-27 的课后托管订单已取消成功，本次取消不扣减托管额度，也不产生费用。<br><br>如需继续托管服务，请重新下单。'},
+  {id:'o4',cat:0,ic:'shield',cls:'bg-gy',t:'陪诊单售后结果',s:'09-25 15:00',un:false,
+   h:'陪诊单售后处理完成',b:'您反馈的「陪诊员迟到」售后问题已处理完成：经核实情况属实，本次陪诊服务费用减免 20%，减免金额 ¥60.00 将随本期账单结算时自动抵扣。<br><br>感谢您的反馈与理解。'},
+  {id:'o5',cat:0,ic:'bell',cls:'bg-o',t:'报餐单下单结果',s:'09-24 09:15',un:false,
+   h:'报餐单下单成功',b:'您 09-24 的午餐报餐订单（2 份）已下单成功，将在午餐时段（11:30-12:30）送达阳光花园 3 栋 2 单元前台，请及时领取。<br><br>您可在「订单」中查看报餐单详情。'},
+  {id:'o6',cat:0,ic:'cal',cls:'bg-br',t:'托管单下单结果',s:'09-22 08:50',un:false,
+   h:'托管单下单成功',b:'您 09-22 的课后托管订单（小明 · 课后时段）已下单成功，托管老师将于 16:30 到校门口接孩子，托管至 18:00。<br><br>您可在「订单」中查看托管单详情。'},
+  /* ===== 账单消息（按时间倒序，点击跳转账单结算页） ===== */
+  {id:'b1',cat:1,ic:'yen',cls:'bg-y',t:'账单退还结果',s:'09-01 16:20',un:true,jump:'bill',
+   h:'8 月账单退还结果',b:'您 8 月的托管单与报餐单已完成结算核算，核算金额低于预缴金额，退还差价 ¥126.00 已退回至房号共享额度账户，可继续用于后续托管、报餐缴费。<br><br>点击下方按钮可查看账单结算明细。'},
+  {id:'b2',cat:1,ic:'yen',cls:'bg-y',t:'账单退还结果',s:'08-01 17:00',un:false,jump:'bill',
+   h:'7 月账单退还结果',b:'您 7 月的托管单与报餐单已完成结算核算，其中 1 笔课后托管单因当日取消全额退款 ¥45.00，退款已退回至房号共享额度账户。<br><br>点击下方按钮可查看账单结算明细。'}
 ];
-var curSysMsg='m1';
+var curSysMsg='o1';
 function sysMsgUnread(){var n=0;for(var i=0;i<SYS_MSGS.length;i++)if(SYS_MSGS[i].un)n++;return n;}
-function sysMsgBadge(){var n=sysMsgUnread();return n>0?String(n):'';}
+function sysMsgBadge(){var n=sysMsgUnread();return n>99?'99+':(n>0?String(n):'');}
 function curSysM(){for(var i=0;i<SYS_MSGS.length;i++)if(SYS_MSGS[i].id===curSysMsg)return SYS_MSGS[i];return SYS_MSGS[0];}
 function openSysMsg(id){
   curSysMsg=id;
@@ -4104,8 +4309,8 @@ function readAllSysMsg(){for(var i=0;i<SYS_MSGS.length;i++)SYS_MSGS[i].un=false;
 S.sysMsg={title:'系统消息',render:function(){
   if(segState.sysMsg===undefined)segState.sysMsg=0;
   var ci=segState.sysMsg;
-  var list=SYS_MSGS.filter(function(x){return ci===0?x.cat===0:x.cat===1;});
-  return seg(['订单消息','账单消息'],'sysMsg')
+  var list=SYS_MSGS.filter(function(x){return x.cat===ci;});
+  return seg(['订单','账单'],'sysMsg')
   +'<div class="grp">'
   + list.map(function(x,i){
       return (i?'<div class="sep full"></div>':'')
@@ -4114,7 +4319,7 @@ S.sysMsg={title:'系统消息',render:function(){
         +'<div class="it-s">'+x.s+'</div></div>'+ic('chevR',16,'var(--label4)')+'</div>';
     }).join('')
   +'</div>'
-  +'<div class="pad">'+btn('全部已读','readAllSysMsg()')+'</div>';
+  +'<div class="pad">'+btn('一键已读','readAllSysMsg()')+'</div>';
 }};
 S.sysMsgDetail={title:'消息详情',render:function(){
   var x=curSysM();
@@ -4122,7 +4327,9 @@ S.sysMsgDetail={title:'消息详情',render:function(){
   +'<div class="bold" style="font-size:17px;line-height:1.5">'+x.h+'</div>'
   +'<div class="sub" style="margin:6px 0 12px;font-size:12px">'+x.s+'</div>'
   +'<div class="sub" style="line-height:1.8;font-size:14px;color:var(--label)">'+x.b+'</div>'
-  +'</div>'+hint('左右滑动可切换其他消息');
+  +'</div>'
+  +(x.jump==='bill'?'<div class="pad"><button class="btn" onclick="go(\'billDetail\')">查看账单结算</button></div>':'')
+  +hint('左右滑动可切换其他消息');
 }};
 function clearCache(){toast('缓存已清除，共释放 36.2MB');}
 function doLogout(){toast('已退出登录');hist=[];go('home');}
