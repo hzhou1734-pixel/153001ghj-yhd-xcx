@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.311';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.312';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -1038,7 +1038,7 @@ function render(){var s=S[cur],h='',showTab=!!(s&&s.tab);
   sc.innerHTML=h;
   /* 底部下拉弹窗渲染到独立层：不进路由栈、不随内容滚动、不跳转页面 */
   var pk=document.getElementById('picker');
-  pk.innerHTML=pickerSheet()+schoolSheet()+houseSheet()+payDialogHTML()+timeSheet()+imgPreviewHTML()+profileSheetHTML();
+  pk.innerHTML=pickerSheet()+schoolSheet()+houseSheet()+payDialogHTML()+timeSheet()+imgPreviewHTML()+profileSheetHTML()+memberIdSheetHTML();
   var tb=document.getElementById('tabbar');
   tb.innerHTML=showTab?tabbar():'';
   tb.style.display=showTab?'flex':'none';
@@ -3553,25 +3553,53 @@ S.family={title:'我的家庭',render:function(){
     {ic:'qr',icls:'bg-br',t:'邀请成员',s:'生成邀请海报，扫码加入房号',ar:1,on:'go(\'invitePoster\')'}
   ]);
 }};
-function switchIdentity(role,name){setRole(role);toast('已切换为「'+name+'」身份');go('home');}
+/* 成员身份：每个成员账号各自的身份（修改的是他人账号，非第一人称体验身份） */
+var MEMBER_ROLES={爸爸:'family',妈妈:'family',小明:'family',租客小王:'tenant'};
+var MEMBER_JOIN={爸爸:'09-01',妈妈:'09-01',小明:'09-02',租客小王:'09-10'};
+var idSheetName=null; /* 当前打开身份切换弹窗的成员 */
+function openIdSheet(n){idSheetName=n;render();}
+function closeIdSheet(){idSheetName=null;render();}
+function setMemberRole(n,r){MEMBER_ROLES[n]=r;idSheetName=null;render();toast('已将「'+n+'」的身份切换为'+(r==='family'?'家庭成员':'租户'));}
+function memberIdSheetHTML(){
+  if(!idSheetName)return '';
+  var r=MEMBER_ROLES[idSheetName]||'family';
+  function row(key,label,desc){
+    return '<div onclick="setMemberRole(\''+idSheetName+'\',\''+key+'\')" style="display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer">'
+      +'<div style="flex:1"><div style="font-size:16px;color:var(--ink)">'+label+'</div><div style="font-size:12px;color:var(--label3);margin-top:2px">'+desc+'</div></div>'
+      +(r===key?'<div style="color:var(--brand);display:flex">'+ic('check',20)+'</div>':'')
+    +'</div>';
+  }
+  return '<div class="mask" onclick="closeIdSheet()" style="background:rgba(0,0,0,.4)">'
+    +'<div class="sheet" onclick="event.stopPropagation()">'
+      +'<div class="sheet-bar"></div>'
+      +'<div class="sheet-title">切换「'+idSheetName+'」的身份</div>'
+      +'<div style="padding:4px 0 10px">'
+      + row('family','家庭成员','共用房号额度，无需业主授权')
+      +'<div style="height:1px;background:var(--line);margin:0 18px"></div>'
+      + row('tenant','租户','需业主授权后方可使用托管 / 报餐')
+      +'</div>'
+      +'<div style="padding:0 16px 6px">'+hint('切换后修改的是该成员账号的身份，不影响您当前的使用身份。')+'</div>'
+    +'</div></div>';
+}
 S.familyMembers={title:'成员列表',render:function(){
-  return '<div class="pad">'+hint('点击任意成员，即可切换为该成员身份体验（家庭成员 / 租户）。')+'</div>'
-  + grpT('家庭成员 · 3')
-  +'<div class="grp">'
-  +'<div class="cell tap" onclick="switchIdentity(\'family\',\'家庭成员\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">爸爸</div><div class="cell-s">09-01 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="switchIdentity(\'family\',\'家庭成员\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">妈妈</div><div class="cell-s">09-01 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="switchIdentity(\'family\',\'家庭成员\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">小明</div><div class="cell-s">09-02 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'</div>'
-  + grpT('租户 · 1')
-  +'<div class="grp">'
-  +'<div class="cell tap" onclick="switchIdentity(\'tenant\',\'租户\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">租客小王</div><div class="cell-s">09-10 加入 · '+(tenantAuth.trust?'已授权':'未授权')+'</div></div><span class="tag gy">租户</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'</div>'
+  var ALL=['爸爸','妈妈','小明','租客小王'];
+  var fam=ALL.filter(function(n){return MEMBER_ROLES[n]!=='tenant';});
+  var ten=ALL.filter(function(n){return MEMBER_ROLES[n]==='tenant';});
+  function row(n,isTen){
+    return '<div class="cell tap" onclick="openIdSheet(\''+n+'\')"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
+      +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">'+n+'</div><div class="cell-s">'+MEMBER_JOIN[n]+' 加入'+(isTen?' · '+(tenantAuth.trust?'已授权':'未授权'):'')+'</div></div>'
+      +'<span class="tag '+(isTen?'gy':'br')+'">'+(isTen?'租户':'家庭成员')+'</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>';
+  }
+  function group(names,isTen){
+    var h='<div class="grp">';
+    names.forEach(function(n,i){
+      if(i>0)h+='<div class="sep full"></div>';
+      h+=row(n,isTen);
+    });
+    return h+'</div>';
+  }
+  return grpT('家庭成员 · '+fam.length)+group(fam,false)
+  + grpT('租户 · '+ten.length)+group(ten,true)
   + grpT('成员管理（业主）')
   +'<div class="grp">'
   +'<div class="cell tap" onclick="openMember(\'租客小王\',\'tenant\',true)"><div class="cell-ic bg-gy">'+ic('shield',17)+'</div>'
