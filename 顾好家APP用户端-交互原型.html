@@ -100,6 +100,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .cell-ar{color:var(--label4);display:flex;flex-shrink:0;}
 .cell-ar svg{width:16px;height:16px;}
 .sep{height:.5px;background:var(--sep);margin-left:55px;}
+.bill-rows > .cell:not(:last-child){border-bottom:.5px solid var(--sep);}
 .sep.full{margin-left:0;}
 .bg-g{background:var(--green);}.bg-b{background:var(--blue);}.bg-o{background:var(--orange);}
 .bg-r{background:var(--red);}.bg-p{background:var(--purple);}.bg-t{background:var(--teal);}
@@ -883,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.301';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.302';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -3381,20 +3382,20 @@ function billUserLine(ui){
     +'<span style="font-size:12px;color:var(--label2)">'+u.nm+'</span>'
     +'<span style="font-size:11px;color:var(--label3)">· '+u.role+'</span></div>';
 }
-/* 待结算明细行（无退款） */
-function billItemRow(ico,bgCls,t,s,a,ui){
-  return '<div class="cell"><div class="cell-ic '+bgCls+'">'+ic(ico,17)+'</div>'
-    +'<div class="cell-bd"><div class="cell-t" style="font-size:14.5px">'+t+'</div>'
-    +'<div class="cell-s">'+s+'</div>'+billUserLine(ui)+'</div>'
-    +'<div class="cell-v" style="font-weight:600">'+a+'</div></div>';
+/* 待结算明细行（含可选退款金额） */
+function billItemRow(ico,bgCls,t,s,a,ui,r){
+  var right=(r&&r.indexOf('-')===0)
+    ? '<div style="text-align:right"><div style="font-weight:600">'+a+'</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">退款 '+r+'</div></div>'
+    : '<div style="text-align:right"><div style="font-weight:600">'+a+'</div>'+(r?('<div style="font-size:11px;color:var(--label3);margin-top:2px">退款 '+r+'</div>'):'')+'</div>';
+  return '<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">'+t+'</div>'
+    +'<div class="cell-s">'+s+'</div>'+billUserLine(ui)+'</div>'+right+'</div>';
 }
 /* 已结算明细行（带退款） */
 function billItemRowSet(ico,bgCls,t,s,a,refund,ui){
   var isRef=refund && refund.indexOf('-')===0;
   var right='<div style="text-align:right"><div style="font-weight:600">'+a+'</div>'
     +'<div style="font-size:11px;color:'+(isRef?'var(--accent)':'var(--label3)')+';font-weight:'+(isRef?'600':'400')+';margin-top:2px">退款 '+(refund||'¥0.00')+'</div></div>';
-  return '<div class="cell"><div class="cell-ic '+bgCls+'">'+ic(ico,17)+'</div>'
-    +'<div class="cell-bd"><div class="cell-t" style="font-size:14.5px">'+t+'</div>'
+  return '<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-size:14.5px">'+t+'</div>'
     +'<div class="cell-s">'+s+'</div>'+billUserLine(ui)+'</div>'+right+'</div>';
 }
 /* 本房号账单整合卡：所有成员（业主 + 家人 + 租户）的托管/报餐账单合并，统一从房号共享额度扣减 */
@@ -3424,10 +3425,10 @@ S.bill={title:'我的账单',render:function(){
     +'</div>';
   }
   var trustItems=[
-    {t:'课后托管 · 9月1日',s:'09-01 16:30',a:'¥45.00',u:0},
-    {t:'周末全天托管 · 9月6日',s:'09-06 09:00',a:'¥90.00',u:1},
-    {t:'周末全天托管 · 9月13日',s:'09-13 09:00',a:'¥90.00',u:0},
-    {t:'节假日全天托管 · 9月20日',s:'09-20 08:30',a:'¥90.00',u:2}
+    {t:'课后托管 · 9月1日',s:'09-01 16:30',a:'¥45.00',u:0,r:'¥0.00'},
+    {t:'周末全天托管 · 9月6日',s:'09-06 09:00',a:'¥90.00',u:1,r:'¥0.00'},
+    {t:'周末全天托管 · 9月13日',s:'09-13 09:00',a:'¥90.00',u:0,r:'¥0.00'},
+    {t:'节假日全天托管 · 9月20日',s:'09-20 08:30',a:'¥90.00',u:2,r:'¥0.00'}
   ];
   var mealItems=[
     {t:'午餐报餐 · 2 份',s:'09-04 10:20',a:'¥30.00',u:1},
@@ -3438,7 +3439,7 @@ S.bill={title:'我的账单',render:function(){
     {t:'午餐报餐 · 1 份',s:'09-22 11:50',a:'¥15.00',u:1},
     {t:'晚餐报餐 · 1 份',s:'09-28 12:15',a:'¥15.00',u:2}
   ];
-  var trustHtml='';trustItems.forEach(function(it){trustHtml+=billItemRow('sTrust','bg-b',it.t,it.s,it.a,it.u);});
+  var trustHtml='';trustItems.forEach(function(it){trustHtml+=billItemRow('sTrust','bg-b',it.t,it.s,it.a,it.u,it.r);});
   var mealHtml='';mealItems.forEach(function(it){mealHtml+=billItemRow('sMeal','bg-o',it.t,it.s,it.a,it.u);});
   return billIntegrateCard()
   +'<div class="pad">'+seg(['待结算','已结算'],'bill')+'</div>'
@@ -3451,13 +3452,13 @@ S.bill={title:'我的账单',render:function(){
   +'</div>'
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldT=!pickState.billFoldT;render()"><span>托管单明细 · 共 4 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldT?'收起':'展开')+'</span></div>'
   +(pickState.billFoldT
-  ?'<div class="grp">'+trustHtml
+  ?'<div class="grp bill-rows">'+trustHtml
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">托管单小计</div><div class="cell-s">共 4 笔待结算</div></div>'
   +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥315.00</div></div>'
   +'</div>':'')
   +'<div class="grp-t" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="pickState.billFoldM=!pickState.billFoldM;render()"><span>报餐单明细 · 共 7 笔</span><span style="color:var(--brand);font-size:13px;font-weight:600">'+(pickState.billFoldM?'收起':'展开')+'</span></div>'
   +(pickState.billFoldM
-  ?'<div class="grp">'+mealHtml
+  ?'<div class="grp bill-rows">'+mealHtml
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">报餐单小计</div><div class="cell-s">共 7 笔待结算</div></div>'
   +'<div class="cell-v" style="color:var(--accent);font-weight:700;font-size:20px">¥135.00</div></div>'
   +'</div>':'');
@@ -3492,7 +3493,7 @@ S.billDetail={title:'账单详情',render:function(){
     +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥405.00</div></div>'
     +'</div>'
     + grpT('结算明细')
-    +'<div class="grp">'+trustSetHtml+'</div>';
+    +'<div class="grp bill-rows">'+trustSetHtml+'</div>';
   }
   return '<div class="pad">'+seg(['托管','报餐'],'billDetail')+'</div>'
   +'<div class="grp">'
@@ -3502,7 +3503,7 @@ S.billDetail={title:'账单详情',render:function(){
   +'<div class="cell"><div class="cell-bd"><div class="cell-t" style="font-weight:700">已结合计</div></div><div class="cell-v" style="color:var(--green);font-weight:700;font-size:20px">¥486.00</div></div>'
   +'</div>'
   + grpT('结算明细')
-  +'<div class="grp">'+mealSetHtml+'</div>';
+  +'<div class="grp bill-rows">'+mealSetHtml+'</div>';
 }};
 
 /* ================= 物业后台（演示）：按房号设置顾好家币额度 ================= */
