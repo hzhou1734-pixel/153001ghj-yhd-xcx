@@ -881,7 +881,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.294';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.295';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -3109,7 +3109,7 @@ function setReviewText(v){reviewText=v;}
 function toggleReviewTag(i){reviewTagsSel[i]=!reviewTagsSel[i];render();}
 function submitReview(){toast('评价提交成功，感谢您的反馈');back();}
 S.addReview={title:'添加评价',render:function(){
-  var svcName=addReviewType===1?'午餐 · 营养套餐':addReviewType===2?'禄口一小课后托管 · 安心托付':'医院就诊全程陪诊 · 半天';
+  var svcName=addReviewType===1?'午餐 · 营养套餐':addReviewType===2?'禄口一小课后托管 · 安心托付':addReviewType===4?'家政保洁 · 全屋深度清洁':'医院就诊全程陪诊 · 半天';
   var stars='<div class="rv-stars">';
   for(var i=1;i<=5;i++)stars+='<span class="'+(i<=reviewScore?'on':'')+'" onclick="pickReviewScore('+i+')">★</span>';
   stars+='</div>';
@@ -3117,13 +3117,17 @@ S.addReview={title:'添加评价',render:function(){
   var tagHtml='<div class="rv-tags">';
   REVIEW_TAGS.forEach(function(tg,i){tagHtml+='<div class="rv-tag'+(reviewTagsSel[i]?' on':'')+'" onclick="toggleReviewTag('+i+')">'+tg+'</div>';});
   tagHtml+='</div>';
-  /* 陪诊评价专属：陪诊人员信息 + 文字输入 + 图片上传 */
+  /* 陪诊/生活帮手评价专属：服务人员信息；陪诊另有文字输入 + 图片上传 */
   var escortBlock='',textBlock='',photoBlock='';
-  if(addReviewType===3){
+  if(addReviewType===3||addReviewType===4){
+    var staffName=addReviewType===3?'张师傅':'王师傅';
+    var staffRole=addReviewType===3?'陪诊员':'服务人员';
     escortBlock='<div style="margin:0 var(--pad) 12px;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px">'
       +'<div style="width:44px;height:44px;border-radius:50%;flex:0 0 44px;background:linear-gradient(145deg,#5AD1B5,#17A88A);display:flex;align-items:center;justify-content:center">'+ic('user',24,'#fff')+'</div>'
-      +'<div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--ink)">张师傅</div><div style="font-size:12px;color:var(--label3);margin-top:2px">陪诊员</div></div>'
+      +'<div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--ink)">'+staffName+'</div><div style="font-size:12px;color:var(--label3);margin-top:2px">'+staffRole+'</div></div>'
       +'</div>';
+  }
+  if(addReviewType===3){
     textBlock=grpT('文字评价')
       +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
       +'<textarea rows="3" placeholder="说说本次陪诊服务的感受，或对陪诊人员的建议…" oninput="setReviewText(this.value)">'+reviewText+'</textarea></div></div>';
