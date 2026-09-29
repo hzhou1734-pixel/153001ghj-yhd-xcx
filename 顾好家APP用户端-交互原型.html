@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.306';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.307';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -945,6 +945,7 @@ var P={
   shield:'M12 3.4 19 6v6.2c0 4.3-3 7.2-7 8.6-4-1.4-7-4.3-7-8.6V6zM9.2 12l2.3 2.3L15.4 10.2',
   butler:'M12 3.6l2.9 2 3-1v5.3c0 3-1.8 5.4-4.3 6.5M12 3.6 9.1 5.6l-3-1v5.3c0 3 1.8 5.4 4.3 6.5',
   yen:'M12 20.6a8.6 8.6 0 1 0 0-17.2 8.6 8.6 0 0 0 0 17.2zM8.6 8.2 12 12.4l3.4-4.2M9 12.4h6M9 15.4h6M12 12.4v5',
+  moneybag:'M9.6 6.4h4.8M9.6 6.4 8.2 3.6M14.4 6.4l1.4-2.8M9.6 6.4c-3 1.9-5 4.7-5 7.8a6.3 6.3 0 0 0 6.3 6.3h2.2a6.3 6.3 0 0 0 6.3-6.3c0-3.1-2-5.9-5-7.8M10.5 11.2l1.5 1.9 1.5-1.9M10.9 13.1h2.2M10.9 15h2.2M12 13.1v3.4',
   hr:'M3.6 8.6h16.8v10.2H3.6zM9 8.6V6.2h6v2.4M3.6 13.2h16.8',
   post:'M6 3.5h8.2l3.8 3.8v13.2H6zM9.4 12.4h5.2M9.4 16h3.6',
   msg:'M20 13.2a7 7 0 0 1-7 7H8.6l-4.2 2v-5.6a7 7 0 0 1 7.6-7h1.4a7 7 0 0 1 6.6 3.6z',
@@ -1244,7 +1245,7 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   + svc('sHealth','健康小屋','healthHome','g')+svc('sEscort','陪诊服务','escortList','o',1)
   + svc('sTrust','托管服务','trusteeship','b',1)+svc('sMeal','健康膳食','meal','p',1)
   + svc('sProp','物业服务','跳转物业服务管理小程序','',0,'toast')+svc('sHelper','生活帮手','helperList','y',1)
-  + svc('cal','社区活动','communityList','r')+svc('doc','精彩内容','featuredList','c')
+  + svc('cal','社区活动','communityList','r')+svc('moneybag','小区钱袋子','moneyBag','c')
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+actItems(ACTIVITIES.filter(function(a){return a.st==='报名中';}))+'</div>'
