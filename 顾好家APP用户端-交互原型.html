@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.309';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.310';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -3554,17 +3554,7 @@ S.family={title:'我的家庭',render:function(){
   ]);
 }};
 S.familyMembers={title:'成员列表',render:function(){
-  var rTxt=currentRole==='owner'?'业主':currentRole==='family'?'家庭成员':'租户';
-  return '<div class="pad">'+hint('演示：当前体验身份为「'+rTxt+'」。切换为「租户」后，可在未授权状态下验证其无法使用托管、报餐。')+'</div>'
-  + grpT('演示身份切换')
-  +'<div class="grp">'
-  +'<div class="cell tap" onclick="setRole(\'owner\')"><div class="cell-bd"><div class="cell-t">业主（我）</div><div class="cell-s">房号额度所有者，可授权租户</div></div>'+(currentRole==='owner'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="setRole(\'family\')"><div class="cell-bd"><div class="cell-t">家庭成员</div><div class="cell-s">共用房号额度，无需授权</div></div>'+(currentRole==='family'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
-  +'<div class="sep full"></div>'
-  +'<div class="cell tap" onclick="setRole(\'tenant\')"><div class="cell-bd"><div class="cell-t">租户</div><div class="cell-s">'+(tenantAuth.trust?'已授权托管/报餐':'未授权 · 不可用托管/报餐')+'</div></div>'+(currentRole==='tenant'?'<div style="color:var(--brand);display:flex">'+ic('check',19)+'</div>':'')+'</div>'
-  +'</div>'
-  + grpT('家庭成员 · 3')
+  return grpT('家庭成员 · 3')
   +'<div class="grp">'
   +'<div class="cell tap" onclick="openMember(\'爸爸\',\'family\',false)"><div class="cell-ic" style="background:none">'+avt(38)+'</div>'
   +'<div class="cell-bd"><div class="cell-t" style="font-size:15px">爸爸</div><div class="cell-s">09-01 加入</div></div><span class="tag br">家庭成员</span><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
