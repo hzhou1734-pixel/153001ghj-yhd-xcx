@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.319';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.322';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -980,12 +980,14 @@ var userNickname='顾家小林';
 function needCert(id){go(id);}
 /* 当前小区：name=小区名 detail=小区+楼栋副标题 */
 var CUR_COMMUNITY={name:'阳光花园',detail:'3栋2单元'};
-/* 切换小区：toast 提示 + 更新当前小区 + 返回首页 */
+/* 切换小区：toast 提示 + 更新当前小区；从人力资源页进入时切换后返回原页，否则回首页 */
+var communitySwitchBack=false;
 function pickCommunity(name,detail){
   CUR_COMMUNITY.name=name;
   CUR_COMMUNITY.detail=detail;
   toast('已切换至 '+name);
-  go('home');
+  if(communitySwitchBack){communitySwitchBack=false;back();}
+  else go('home');
 }
 /* 验证码 60 秒倒计时：局部更新按钮文本，不触发整页重绘 */
 function sendCode(b){
@@ -3897,6 +3899,7 @@ S.moneyBag={title:'小区钱袋子',render:function(){
 /* 流程：编辑技能/上传凭证 → 物业审核 → 进入人才库；业主需求由物业后台匹配派单；
    双方线下对接交易，平台仅生成订单留痕、不做收费；服务完成后业主可在线评分 */
 var hrState='none'; /* 'none' 未录入 | 'in' 已录入人才库（原型演示：提交审核后进入已录入态） */
+var hrCertCommunity='翠湖小区'; /* 提交认证时所选小区名称（快照，演示初始值） */
 var HR_ORDERS=[
   {no:'HR20250918-001',t:'家电维修',cov:'o',ic:'build',amt:150,qty:1,time:'09-21 14:00 - 16:00',addr:'阳光花园 3栋2单元1802',st:'active',cu:'张先生',tel:'13800001234',sub:'09-18 10:20',acc:'09-18 11:05',fin:''},
   {no:'HR20250910-003',t:'管道疏通',cov:'g',ic:'sHelper',amt:120,qty:1,time:'09-10 10:00 - 12:00',addr:'阳光花园 5栋1单元1101',st:'done',cu:'李女士',tel:'13900005678',sub:'09-09 16:40',acc:'09-09 17:20',fin:'09-10 12:05'},
@@ -3914,13 +3917,19 @@ function hrStats(){
 }
 function submitHrCert(){
   if(!pickState.hrCommunity){toast('请先选择意向服务小区');return;}
+  hrCertCommunity=pickState.hrCommunity;   /* 记录提交认证时所选小区 */
   var re=(hrState==='in');
   hrState='in';
   toast(re?'修改已提交，物业审核通过后更新':'已提交认证，审核通过后进入人才库');
   go('hr');
 }
+/* 完成凭证：服务人员上传的服务完成图片（最多6张，原型占位） */
+var hrDonePhotos=[];
+function addHrPhoto(){if(hrDonePhotos.length>=6){toast('最多上传 6 张图片');return;}hrDonePhotos.push(hrDonePhotos.length+1);render();}
+function removeHrPhoto(i){hrDonePhotos.splice(i,1);render();}
 function confirmHrDone(){
   var o=HR_ORDERS[curHrOrder];if(!o)return;
+  if(hrDonePhotos.length===0){toast('请先上传完成凭证');return;}
   o.st='done';if(!o.fin)o.fin='09-21 16:30';
   toast('订单已确认完成，金额由线下收取，线上仅留存订单记录');
   render();
@@ -3949,6 +3958,10 @@ S.hr={title:'人力资源',render:function(){
       +'<div style="margin-top:4px">'+hrStTag(o.st)+'</div></div></div>';
   });
   return '<div class="grp">'
+    +'<div class="item noind" onclick="communitySwitchBack=true;go(\'communitySwitch\')">'+thumb('','home2',34,34,'')
+    +'<div class="it-bd"><div class="it-t" style="margin:0">当前小区：'+CUR_COMMUNITY.name+'</div><div class="it-s">切换小区后查看对应人才库订单</div></div>'
+    +'<span style="font-size:12px;color:var(--brand);font-weight:600">切换</span>'+ic('chevR',16,'var(--label4)')+'</div></div>'
+    +'<div class="grp">'
     +'<div class="item noind" onclick="go(\'hrCertView\')">'+avt(46)
     +'<div class="it-bd"><div class="row" style="gap:6px;margin-bottom:3px"><div class="it-t" style="margin:0">李建国</div><span class="tag g">已认证</span></div>'
     +'<div class="it-s">家电维修 · 管道疏通</div></div>'+ic('chevR',16,'var(--label4)')+'</div></div>'
@@ -3965,6 +3978,7 @@ S.hr={title:'人力资源',render:function(){
 /* 认证资料（已录入）：查看提交的资料，可发起修改（修改需物业重新审核） */
 S.hrCertView={title:'认证资料',render:function(){
   return grp([
+    {t:'提交小区',v:(hrCertCommunity||pickState.hrCommunity||'翠湖小区')},
     {t:'姓名',v:'李建国'},
     {t:'联系电话',v:'138****6688'},
     {t:'意向服务小区',v:(pickState.hrCommunity||'阳光花园')},
@@ -4026,6 +4040,20 @@ S.hrOrderDetail={title:'订单详情',render:function(){
   +'</div>'
   +'<div class="ord-section"><div class="st">订单日志</div>'
   +'<div class="log">'+ordLog([['订单提交',o.sub],['接单',o.acc],['完成',o.fin]])+'</div></div>'
+  +(o.st!=='cancel'
+    ?'<div class="ord-section"><div class="st">完成凭证</div>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:10px;padding:12px 14px">'
+    + hrDonePhotos.map(function(p,i){
+        return '<div style="position:relative;width:72px;height:72px;border-radius:12px;background:rgba(43,196,160,.08);border:1px solid var(--line);display:flex;align-items:center;justify-content:center">'+ic('img',24,'var(--brand)')
+          +'<div style="position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:10px;background:#FF5A5F;color:#fff;font-size:13px;line-height:20px;text-align:center" onclick="removeHrPhoto('+i+')">×</div></div>';
+      }).join('')
+    + (o.st==='active'&&hrDonePhotos.length<6
+        ?'<div style="width:72px;height:72px;border-radius:12px;border:1.5px dashed #C9D2DA;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px" onclick="addHrPhoto()">'+ic('add',22,'#9AA6B0')+'<span style="font-size:10px;color:#9AA6B0">'+hrDonePhotos.length+'/6</span></div>'
+        :'')
+    +'</div>'
+    +(o.st==='active'?'<div style="padding:0 14px 12px"><div class="hint">请上传服务完成后的现场照片（最多 6 张），作为订单完成凭证。</div></div>':'')
+    +'</div>'
+    :'')
   + btns;
 }};
 
