@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.316';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.317';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -3560,6 +3560,7 @@ function setMemberRole(n,r){MEMBER_ROLES[n]=r;idSheetName=null;render();toast('�
 function memberIdSheetHTML(){
   if(!idSheetName)return '';
   var r=MEMBER_ROLES[idSheetName]||'family';
+  var isTen=r==='tenant';
   function row(key,label,desc){
     return '<div onclick="setMemberRole(\''+idSheetName+'\',\''+key+'\')" style="display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer">'
       +'<div style="flex:1"><div style="font-size:16px;color:var(--ink)">'+label+'</div><div style="font-size:12px;color:var(--label3);margin-top:2px">'+desc+'</div></div>'
@@ -3567,7 +3568,7 @@ function memberIdSheetHTML(){
     +'</div>';
   }
   return '<div class="mask" onclick="closeIdSheet()" style="background:rgba(0,0,0,.4)">'
-    +'<div class="sheet" onclick="event.stopPropagation()" style="min-height:500px;display:flex;flex-direction:column">'
+    +'<div class="sheet" onclick="event.stopPropagation()"'+(isTen?' style="min-height:500px;display:flex;flex-direction:column"':'')+'>'
       +'<div class="sheet-bar"></div>'
       +'<div class="sheet-title">切换「'+idSheetName+'」的身份</div>'
       +'<div style="padding:4px 0 10px">'
@@ -3575,14 +3576,14 @@ function memberIdSheetHTML(){
       +'<div style="height:1px;background:var(--line);margin:0 18px"></div>'
       + row('tenant','租户','需业主授权后方可使用托管 / 报餐')
       +'</div>'
-      +'<div style="margin-top:auto;padding-top:8px">'
+      +(isTen?'<div style="margin-top:auto;padding-top:8px">'
       + grpT('顾好家币使用授权')
       +'<div class="grp">'
       +'<div class="cell"><div class="cell-bd"><div class="cell-t">托管授权</div><div class="cell-s">'+(tenantAuth.trust?'已授权 · 可使用托管服务':'未授权 · 不可使用托管')+'</div></div>'+sw(tenantAuth.trust,'toggleTenantAuth(\'trust\')')+'</div>'
       +'<div class="sep full"></div>'
       +'<div class="cell"><div class="cell-bd"><div class="cell-t">报餐授权</div><div class="cell-s">'+(tenantAuth.meal?'已授权 · 可使用报餐服务':'未授权 · 不可使用报餐')+'</div></div>'+sw(tenantAuth.meal,'toggleTenantAuth(\'meal\')')+'</div>'
       +'</div>'
-      +'</div>'
+      +'</div>':'')
     +'</div></div>';
 }
 S.familyMembers={title:'成员列表',render:function(){
