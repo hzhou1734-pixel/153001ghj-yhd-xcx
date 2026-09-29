@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.314';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.315';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-09-29';
 
@@ -3596,11 +3596,6 @@ S.familyMembers={title:'成员列表',render:function(){
   }
   return grpT('家庭成员 · '+fam.length)+group(fam,false)
   + grpT('租户 · '+ten.length)+group(ten,true)
-  + grpT('成员管理（业主）')
-  +'<div class="grp">'
-  +'<div class="cell tap" onclick="openMember(\'租客小王\',\'tenant\',true)"><div class="cell-ic bg-gy">'+ic('shield',17)+'</div>'
-  +'<div class="cell-bd"><div class="cell-t">租户授权设置</div><div class="cell-s">配置租户的顾好家币使用权限</div></div><div class="cell-ar">'+ic('chevR',16)+'</div></div>'
-  +'</div>'
   + grpT('邀请加入本房号')
   +'<div class="grp">'
   +'<div class="cell tap" onclick="go(\'invitePoster\')"><div class="cell-ic bg-br">'+ic('qr',17)+'</div>'
