@@ -884,9 +884,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.322';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.324';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
-var APP_BUILT='2026-09-29';
+var APP_BUILT='2026-10-02';
 
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
@@ -1512,25 +1512,36 @@ S.communitySwitch={title:'我的小区',render:function(){
 S.healthHome={title:'健康小屋',render:function(){
   var on=(pickState.bandOn===undefined?true:pickState.bandOn);
   return '<div class="pad">'
-  +'<div class="card" style="background:linear-gradient(135deg,#E4FBF4,#C8F2E5);display:flex;align-items:center;justify-content:space-between;gap:8px">'
-  +'<div class="row" style="gap:9px;min-width:0"><div style="width:42px;height:42px;flex:none;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--brand)">'+ic('watch',23)+'</div>'
+  +'<div class="card" style="background:linear-gradient(135deg,#E4FBF4,#C8F2E5);padding:13px 14px;margin-bottom:10px">'
+  +'<div class="row" style="gap:10px;min-width:0"><div style="width:40px;height:40px;flex:none;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--brand)">'+ic('watch',22)+'</div>'
   +(on
-    ?'<div style="min-width:0"><div class="bold" style="font-size:14.5px;white-space:nowrap">Huawei Band 7</div><div class="sub" style="margin-top:3px;white-space:nowrap">最后同步：09-08 14:20</div></div></div>'
-      +'<div class="row" style="gap:6px;flex:none">'
-      +'<button class="btn sec" style="width:auto;padding:9px 10px;font-size:12px;margin:0" onclick="pickState.bandOn=false;toast(\'已取消连接，历史数据仍保留\');render()">取消连接</button>'
-      +'<button class="btn" style="width:auto;padding:9px 10px;font-size:12px;margin:0" onclick="toast(\'更换设备后新数据覆盖后续记录\')">更换设备</button></div>'
-    :'<div><div class="bold" style="font-size:15px">您还未连接健康手环，点击去连接</div><div class="sub" style="margin-top:3px">将通过注册手机号自动匹配并同步数据</div></div></div>'
-      +'<button class="btn" style="width:auto;padding:9px 16px;font-size:14px;margin:0" onclick="go(\'bandConnect\')">去连接</button>')
+    ?'<div style="min-width:0;flex:1"><div class="bold" style="font-size:14.5px">Huawei Band 7</div><div class="sub" style="margin-top:2px">最后同步：09-08 14:20</div></div></div>'
+      +'<div class="row" style="gap:8px;justify-content:flex-end;margin-top:11px">'
+      +'<button class="btn sec" style="width:auto;padding:8px 12px;font-size:12px;margin:0" onclick="pickState.bandOn=false;toast(\'已取消连接，历史数据仍保留\');render()">取消连接</button>'
+      +'<button class="btn" style="width:auto;padding:8px 12px;font-size:12px;margin:0" onclick="toast(\'更换设备后新数据覆盖后续记录\')">更换设备</button></div>'
+    :'<div style="min-width:0;flex:1"><div class="bold" style="font-size:14.5px">您还未连接健康手环，点击去连接</div><div class="sub" style="margin-top:2px">将通过注册手机号自动匹配并同步数据</div></div></div>'
+      +'<div class="row" style="justify-content:flex-end;margin-top:11px"><button class="btn" style="width:auto;padding:8px 16px;font-size:13px;margin:0" onclick="go(\'bandConnect\')">去连接</button></div>')
   +'</div></div>'
-  +'<div class="sect"><div class="t">健康数据</div></div>'
-  +'<div class="tiles">'
+  +'<div class="sect" style="margin:12px 20px 8px"><div class="t">健康数据</div></div>'
+  +'<div class="tiles" style="margin-bottom:10px">'
   + tile('pulse','实时健康数据','心率 · 血压 · 血脂','bg-r','healthData')
   + tile('chart','健康数据对比','近一次 / 近一周 / 近一月','bg-b','healthCompare')
   + tile('report','历史检测报告','日报 · 周报 · 月报 · 年报','bg-br','healthReport')
   + tile('risk','健康风险评估','每周自动更新评估结果','bg-o','healthRisk')
   +'</div>'
-  +'<div class="pad"><button class="btn acc" onclick="location.href=\'tel:120\';toast(\'正在呼叫 120 急救中心\')">'+ic('phone',19)+' 紧急呼叫</button></div>'
-  +'<div class="sect"><div class="t">生活服务帮手</div></div>'
+  +'<div class="pad" style="padding-top:0"><button class="btn acc" onclick="location.href=\'tel:120\';toast(\'正在呼叫 120 急救中心\')">'+ic('phone',19)+' 紧急呼叫</button></div>'
+  +'<div class="pad" style="padding-top:0" onclick="go(\'escortList\')"><div style="position:relative;overflow:hidden;border-radius:16px;background:linear-gradient(120deg,#FF9E73,#F2642A);padding:18px 16px;cursor:pointer;box-shadow:0 6px 16px rgba(242,100,42,.25)">'
+    +'<div style="position:absolute;top:-22px;right:-18px;width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.14)"></div>'
+    +'<div style="position:absolute;bottom:-30px;right:52px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.10)"></div>'
+    +'<div style="position:absolute;top:14px;right:22px;width:44px;height:44px;border-radius:13px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;color:#fff">'+ic('sEscort',26)+'</div>'
+    +'<div style="position:relative;color:#fff">'
+      +'<div style="font-size:11px;letter-spacing:2px;opacity:.85">暖心陪诊 · 一路相伴</div>'
+      +'<div class="bold" style="font-size:19px;margin-top:5px;letter-spacing:.5px">陪诊服务</div>'
+      +'<div style="font-size:12px;margin-top:6px;opacity:.92">挂号协助 · 问诊陪同 · 取药代领 · 报告解读</div>'
+      +'<div style="display:inline-flex;align-items:center;gap:4px;margin-top:10px;background:rgba(255,255,255,.24);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600">立即预约 '+ic('chevR',13,'#fff')+'</div>'
+    +'</div>'
+  +'</div></div>'
+  +'<div class="sect" style="margin:10px 20px 8px"><div class="t">生活服务帮手</div></div>'
   + grp([
     {ic:'heart',icls:'bg-r',t:'上门关爱探访',s:'管家上门探望老人，关注生活起居与健康状态',ar:1,on:'careOpen(0)'},
     {ic:'family',icls:'bg-o',t:'老幼家庭巡访',s:'上门看一眼家中老人与孩子情况，异常及时反馈家属',ar:1,on:'careOpen(1)'},
