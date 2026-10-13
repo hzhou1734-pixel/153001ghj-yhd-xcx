@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.329';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.330';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-10-13';
 
@@ -3074,12 +3074,14 @@ S.orderEscortDetail={title:'陪诊单详情',render:function(){
     :'')
   +'</div>'
   +'<div class="ord-section"><div class="st">附件资料</div>'
-  +'<div class="kv"><span class="k">图片</span><span class="v">'+attPhotos.length+' 张</span></div>'
-  +'<div class="kv"><span class="k">视频</span><span class="v">1 个</span></div>'
-  +'<div style="display:flex;flex-wrap:wrap;gap:10px;padding:4px 14px 12px">'
+  +'<div class="sub" style="padding:10px 14px 8px;font-weight:600;color:var(--text)">图片</div>'
+  +'<div style="display:flex;flex-wrap:wrap;gap:10px;padding:0 14px 8px">'
   + attPhotos.map(function(p,i){
       return '<div style="width:72px;height:72px;border-radius:12px;background:rgba(43,196,160,.08);border:1px solid var(--line);display:flex;align-items:center;justify-content:center" onclick="toast(&apos;查看附件图片 '+p+'&apos;)">'+ic('img',24,'var(--brand)')+'</div>';
     }).join('')
+  +'</div>'
+  +'<div class="sub" style="padding:8px 14px;font-weight:600;color:var(--text)">视频</div>'
+  +'<div style="display:flex;flex-wrap:wrap;gap:10px;padding:0 14px 12px">'
   +'<div style="width:72px;height:72px;border-radius:12px;background:rgba(43,196,160,.08);border:1px solid var(--line);display:flex;align-items:center;justify-content:center" onclick="toast(&apos;播放附件视频&apos;)">'
     +'<svg width="26" height="26" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="var(--brand)" stroke-width="1.6"/><path d="M10.2 9.3v5.4l4.8-2.7z" fill="var(--brand)"/></svg></div>'
   +'</div></div>'
