@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.335';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.336';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-10-13';
 
@@ -1948,18 +1948,18 @@ S.trustDetail={title:'托管详情',render:function(){
   +'<div class="grp">'+revCards(3)+'</div>'
   + grp([
     {ic:'family',icls:'bg-b',t:'孩子数量',s:'按孩子数量计费 · 1 - 5 人',ctl:step('trustCount',{def:1,min:1,max:5})},
-    {ic:'pin',icls:'bg-br',t:'是否需要接',ctl:sw(nj,'toggleTrustJie()')},
     {ic:'pin',icls:'bg-o',t:'是否需要送',ctl:sw(ns,'toggleTrustSong()')},
+    {ic:'pin',icls:'bg-br',t:'是否需要接',ctl:sw(nj,'toggleTrustJie()')},
     {ic:'shield',icls:'bg-g',t:'是否需要看护',ctl:sw(nt,'toggleTrustTutor()')}
   ])
   +((nj||ns)
     ? grpT('接送设置')
       +'<div class="grp">'
-      +(nj?'<div class="cell tap" onclick="openSchoolSheet(\'trustJieSchool\')"><div class="cell-bd"><div class="cell-t">接 · 学校</div><div class="cell-s">从学校送到家里</div></div><div class="cell-v">'+(pickState.trustJieSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
-      +(nj?'<div class="cell tap" onclick="openTrustTime(\'jie\')"><div class="cell-bd"><div class="cell-t">接 · 时间</div><div class="cell-s">'+(pickState.trustJieTime?'接到家时间':'请选择接孩子的时间')+'</div></div><div class="cell-v">'+(pickState.trustJieTime||'请选择时间')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
-      +(nj&&ns?'<div class="sep full"></div>':'')
       +(ns?'<div class="cell tap" onclick="openSchoolSheet(\'trustSchool\')"><div class="cell-bd"><div class="cell-t">送 · 学校</div><div class="cell-s">从小区送到学校</div></div><div class="cell-v">'+(pickState.trustSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
       +(ns?'<div class="cell tap" onclick="openTrustTime(\'song\')"><div class="cell-bd"><div class="cell-t">送 · 时间</div><div class="cell-s">'+(pickState.trustSongTime?'送到校时间':'请选择送孩子的时间')+'</div></div><div class="cell-v">'+(pickState.trustSongTime||'请选择时间')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
+      +(nj&&ns?'<div class="sep full"></div>':'')
+      +(nj?'<div class="cell tap" onclick="openSchoolSheet(\'trustJieSchool\')"><div class="cell-bd"><div class="cell-t">接 · 学校</div><div class="cell-s">从学校送到家里</div></div><div class="cell-v">'+(pickState.trustJieSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
+      +(nj?'<div class="cell tap" onclick="openTrustTime(\'jie\')"><div class="cell-bd"><div class="cell-t">接 · 时间</div><div class="cell-s">'+(pickState.trustJieTime?'接到家时间':'请选择接孩子的时间')+'</div></div><div class="cell-v">'+(pickState.trustJieTime||'请选择时间')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
       +((nj||ns)?'<div class="sep full"></div>':'')
       +'<div class="cell"><div class="cell-bd"><div class="cell-t">接送地址</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div>'
       +'</div>'
