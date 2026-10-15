@@ -884,7 +884,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.334';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.337';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
 var APP_BUILT='2026-10-13';
 
@@ -1245,10 +1245,10 @@ S.home={tab:'home',title:'首页',nav:false,render:function(){
   +'<div class="nx">本周六小区供水检修，请提前储水…</div><div class="nt">09-04</div></div>'
   +'<div class="sect"><div class="t">社区服务</div></div>'
   +'<div class="card"><div class="grid">'
-  + svc('sHealth','健康小屋','healthHome','g')+svc('shopbag','严选商城','敬请期待','o',0,'toast')
-  + svc('sTrust','托管服务','trusteeship','b',1)+svc('sMeal','健康膳食','meal','p',1)
-  + svc('sProp','物业服务','跳转物业服务管理小程序','',0,'toast')+svc('sHelper','生活帮手','helperList','y',1)
-  + svc('cal','社区活动','communityList','r')+svc('moneybag','小区钱袋子','moneyBag','c')
+  + svc('sHealth','健康小屋','healthHome','g')+svc('sTrust','托管服务','trusteeship','b',1)
+  + svc('sMeal','健康膳食','meal','p',1)+svc('sProp','物业服务','跳转物业服务管理小程序','',0,'toast')
+  + svc('sHelper','生活帮手','helperList','y',1)+svc('cal','社区活动','communityList','r')
+  + svc('shopbag','严选商城','敬请期待','o',0,'toast')+svc('moneybag','小区钱袋子','moneyBag','c')
   +'</div></div>'
   +'<div class="sect"><div class="t">社区活动</div><div class="m" onclick="go(\'communityList\')">全部'+ic('chevR',14)+'</div></div>'
   +'<div class="grp">'+actItems(ACTIVITIES.filter(function(a){return a.st==='报名中';}))+'</div>'
@@ -1948,18 +1948,19 @@ S.trustDetail={title:'托管详情',render:function(){
   +'<div class="grp">'+revCards(3)+'</div>'
   + grp([
     {ic:'family',icls:'bg-b',t:'孩子数量',s:'按孩子数量计费 · 1 - 5 人',ctl:step('trustCount',{def:1,min:1,max:5})},
-    {ic:'pin',icls:'bg-br',t:'是否需要接',ctl:sw(nj,'toggleTrustJie()')},
     {ic:'pin',icls:'bg-o',t:'是否需要送',ctl:sw(ns,'toggleTrustSong()')},
+    {ic:'pin',icls:'bg-br',t:'是否需要接',ctl:sw(nj,'toggleTrustJie()')},
     {ic:'shield',icls:'bg-g',t:'是否需要看护',ctl:sw(nt,'toggleTrustTutor()')}
   ])
+  +'<div class="grp"><div class="field"><span class="lb">联系电话</span><input id="trustPhoneInput" placeholder="请输入联系电话" type="tel" value="'+(pickState.trustPhone||'13800006688')+'" oninput="pickState.trustPhone=this.value"></div></div>'
   +((nj||ns)
     ? grpT('接送设置')
       +'<div class="grp">'
-      +(nj?'<div class="cell tap" onclick="openSchoolSheet(\'trustJieSchool\')"><div class="cell-bd"><div class="cell-t">接 · 学校</div><div class="cell-s">从学校送到家里</div></div><div class="cell-v">'+(pickState.trustJieSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
-      +(nj?'<div class="cell tap" onclick="openTrustTime(\'jie\')"><div class="cell-bd"><div class="cell-t">接 · 时间</div><div class="cell-s">'+(pickState.trustJieTime?'接到家时间':'请选择接孩子的时间')+'</div></div><div class="cell-v">'+(pickState.trustJieTime||'请选择时间')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
-      +(nj&&ns?'<div class="sep full"></div>':'')
       +(ns?'<div class="cell tap" onclick="openSchoolSheet(\'trustSchool\')"><div class="cell-bd"><div class="cell-t">送 · 学校</div><div class="cell-s">从小区送到学校</div></div><div class="cell-v">'+(pickState.trustSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
       +(ns?'<div class="cell tap" onclick="openTrustTime(\'song\')"><div class="cell-bd"><div class="cell-t">送 · 时间</div><div class="cell-s">'+(pickState.trustSongTime?'送到校时间':'请选择送孩子的时间')+'</div></div><div class="cell-v">'+(pickState.trustSongTime||'请选择时间')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
+      +(nj&&ns?'<div class="sep full"></div>':'')
+      +(nj?'<div class="cell tap" onclick="openSchoolSheet(\'trustJieSchool\')"><div class="cell-bd"><div class="cell-t">接 · 学校</div><div class="cell-s">从学校送到家里</div></div><div class="cell-v">'+(pickState.trustJieSchool||'请选择学校')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
+      +(nj?'<div class="cell tap" onclick="openTrustTime(\'jie\')"><div class="cell-bd"><div class="cell-t">接 · 时间</div><div class="cell-s">'+(pickState.trustJieTime?'接到家时间':'请选择接孩子的时间')+'</div></div><div class="cell-v">'+(pickState.trustJieTime||'请选择时间')+'</div><div class="cell-ar">'+ic('chevR',16)+'</div></div>':'')
       +((nj||ns)?'<div class="sep full"></div>':'')
       +'<div class="cell"><div class="cell-bd"><div class="cell-t">接送地址</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div>'
       +'</div>'
@@ -2024,13 +2025,14 @@ function buildTrustSnapshot(amount){
     name:pk.n,count:cnt,jie:nj,song:ns,meal:nm,tutor:nt,
     jieSchool:pickState.trustJieSchool||'',songSchool:pickState.trustSchool||'',
     jieTime:pickState.trustJieTime||'',songTime:pickState.trustSongTime||'',
+    phone:pickState.trustPhone||'13800006688',
     care:cl,house:'阳光花园 3栋2单元1802',
     amount:amount,price:amount,period:BK_DATES[(pickState.trustDate===undefined?0:pickState.trustDate)],submit:'09-01 09:00'
   };
 }
 function trustOrderSnapshot(){
   if(lastTrustOrder)return lastTrustOrder;
-  return {name:'禄口一小课后托管',count:1,jie:true,song:false,meal:false,tutor:false,jieSchool:'禄口一小',songSchool:'',jieTime:'08:00',songTime:'17:30',care:['上午 8-12','下午 12-18','晚上 18-21'],house:'阳光花园 3栋2单元1802',amount:45,price:45,period:'09-05',submit:'09-01 09:00'};
+  return {name:'禄口一小课后托管',count:1,jie:true,song:false,meal:false,tutor:false,jieSchool:'禄口一小',songSchool:'',jieTime:'08:00',songTime:'17:30',phone:'13800006688',care:['上午 8-12','下午 12-18','晚上 18-21'],house:'阳光花园 3栋2单元1802',amount:45,price:45,period:'09-05',submit:'09-01 09:00'};
 }
 function trkv(k,v,cls){return '<div class="kv"><span class="k">'+k+'</span><span class="v'+(cls?' '+cls:'')+'">'+v+'</span></div>';}
 var openSchool=null;
@@ -2744,6 +2746,7 @@ S.helper={title:'提交服务订单',render:function(){
   + grp([{t:'上门时间',s:(pickState.helperDate&&pickState.helperSlot)?(pickState.helperDate+' '+pickState.helperSlot):'请选择上门服务时间',ar:1,on:'openTimeSheet()'}])
   + grpT('服务地址')
   +'<div class="grp"><div class="cell"><div class="cell-bd"><div class="cell-t">服务地址</div></div><div class="cell-v">阳光花园 3栋2单元1802</div></div></div>'
+  +'<div class="grp"><div class="field"><span class="lb">联系电话</span><input id="helperPhoneInput" placeholder="请输入联系电话" type="tel" value="'+(pickState.helperPhone||'13800006688')+'" oninput="pickState.helperPhone=this.value"></div></div>'
   + grpT('备注')
   +'<div class="grp"><div class="field" style="align-items:flex-start;padding-top:13px">'
   +'<textarea rows="4" placeholder="请描述服务需求与备注…"></textarea></div></div>'
@@ -2774,12 +2777,14 @@ S.helper={title:'提交服务订单',render:function(){
 /* 生活帮手下单附件：图片多图（最多6张）+ 视频单个 */
 var helperPhotos=[],helperVideo=null;
 var helperOrderPhotos=[],helperOrderVideo=null; /* 提交后写入订单快照，详情页展示 */
+var helperOrderPhone='13800006688'; /* 生活帮手订单联系电话（提交时记录提交页所填手机号） */
 function addHelperPhoto(){if(helperPhotos.length>=6){toast('最多上传 6 张图片');return;}helperPhotos.push(helperPhotos.length+1);render();}
 function removeHelperPhoto(i){helperPhotos.splice(i,1);render();}
 function addHelperVideo(){if(helperVideo){toast('最多上传 1 个视频');return;}helperVideo='服务需求视频';render();}
 function removeHelperVideo(){helperVideo=null;render();}
 function helperSubmit(isCare,hk){
   helperOrderPhotos=helperPhotos.slice();helperOrderVideo=helperVideo;helperPhotos=[];helperVideo=null;
+  helperOrderPhone=pickState.helperPhone||'13800006688';
   toast(isCare?(hk.n+'服务已提交，请等待工作人员与您联系确认'):'订单已提交，等待物业后台派单');
   go(isCare?'healthHome':'ordersHelper');
 }
@@ -3233,7 +3238,8 @@ S.orderTrustDetail={title:'托管单详情',render:function(){
   +'<div class="ti">'+o.name+'<span class="qty">· '+o.count+' 人</span></div>'
   +'<div class="meta"><div class="m">'+ic('pin',11)+'提交：'+o.submit+'</div></div>'
   +'</div></div>'
-  +'<div class="ord-section"><div class="st">托管信息</div>'+info+'</div>'
+  +'<div class="ord-section"><div class="st">托管信息</div>'+info
+  +'<div class="kv"><span class="k">联系电话</span><span class="v">'+ (o.phone||'13800006688') +'</span></div>'+'</div>'
   +'<div class="ord-section"><div class="st">支付信息</div>'
   +'<div class="kv"><span class="k">实付金额</span><span class="v pr">¥'+o.price.toFixed(2)+'</span></div>'
   +'<div class="kv"><span class="k">支付状态</span><span class="v '+payCls+'">'+payText+'</span></div>'
@@ -3367,6 +3373,7 @@ S.orderHelperDetail={title:'生活帮手单详情',render:function(){
   +'<div class="kv"><span class="k">服务价格</span><span class="v">¥180.00</span></div>'
   +'<div class="kv"><span class="k">上门时间</span><span class="v">09-05 09:00</span></div>'
   +'<div class="kv"><span class="k">服务地址</span><span class="v">阳光花园 3栋2单元-1802</span></div>'
+  +'<div class="kv"><span class="k">联系电话</span><span class="v">'+ (helperOrderPhone||'13800006688') +'</span></div>'
   +'</div>'
   +(st!=='cancel'
    ?'<div class="ord-section"><div class="st">服务人员</div>'
