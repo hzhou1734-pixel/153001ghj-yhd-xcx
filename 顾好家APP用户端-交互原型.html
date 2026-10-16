@@ -884,9 +884,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 
 <script>
 /* ================= 应用元信息（版本号等，供发布脚本解析与替换） ================= */
-var APP_VER='v1.0.337';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
+var APP_VER='v1.0.338';        /* ← 发布脚本 publish.py 会自动递增此处 patch 号 */
 var APP_NAME='顾好家用户端交互原型';
-var APP_BUILT='2026-10-13';
+var APP_BUILT='2026-10-16';
 
 /* ================= SVG 图标库（SF Symbols 风格线性图标 24×24） ================= */
 var P={
@@ -4113,8 +4113,8 @@ var MEAL_BAG={
     {id:'me16',type:'inc',name:'午餐报餐收入 · 26 份',date:'06-18',amt:390,ic:'sMeal',icls:'bg-y'}
   ]}
 };
-/* 托管钱袋子：本月收入总额 + 接/送/用餐/托管单价 + 托管业务收支明细 */
-var TRUST_NOTES=[['接','¥8/趟'],['送','¥8/趟'],['用餐','¥15/餐'],['托管','¥45/餐']];
+/* 托管钱袋子：本月收入总额 + 接/送/看护单价 + 托管业务收支明细 */
+var TRUST_NOTES=[['接','¥8/趟'],['送','¥8/趟'],['看护','¥45/餐']];
 var TRUST_BAG={
   '2026-08':{inc:'¥1,202',items:[
     {id:'tr1',type:'inc',name:'托管费收入 · 全日托 12 人',date:'08-31',amt:540,ic:'sTrust',icls:'bg-g'},
